@@ -312,7 +312,6 @@ class Artwork():
 
         # Artwork is a dictionary
         for art in artwork:
-            
             if art == "Backdrop":
                 # Backdrop entry is a list
                 # Process extra fanart for artwork downloader (fanart, fanart1, fanart2...)

@@ -109,7 +109,7 @@ class UserClient(threading.Thread):
         if self.currToken:
             url = PlexAPI.PlexAPI().GetUserArtworkURL(self.currUser)
             if url:
-                utils.window('EmbyUserImage', value=url)
+                utils.window('PlexUserImage', value=url)
         # Set resume point max
         # url = "{server}/emby/System/Configuration?format=json"
         # result = doUtils.downloadUrl(url)
