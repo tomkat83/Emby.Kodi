@@ -424,6 +424,11 @@ class Movies(Items):
         # c23 - pathid
         # This information is used later by file browser.
 
+        # add/retrieve pathid and fileid
+        # if the path or file already exists, the calls return current value
+        pathid = self.kodi_db.addPath(path)
+        fileid = self.kodi_db.addFile(filename, pathid)
+
         # UPDATE THE MOVIE #####
         if update_item:
             log.info("UPDATE movie itemid: %s - Title: %s"
@@ -436,37 +441,36 @@ class Movies(Items):
                     "SET c00 = ?, c01 = ?, c02 = ?, c03 = ?, c04 = ?, c05 = ?,"
                     "c06 = ?, c07 = ?, c09 = ?, c10 = ?, c11 = ?, c12 = ?,"
                     "c14 = ?, c15 = ?, c16 = ?, c18 = ?, c19 = ?, c21 = ?,"
-                    "c22 = ?, c23 = ?, premiered = ?",
+                    "c22 = ?, c23 = ?, idFile=?, premiered = ?",
                     "WHERE idMovie = ?"
                 ))
                 kodicursor.execute(query, (title, plot, shortplot, tagline,
                     votecount, rating, writer, year, imdb, sorttitle, runtime,
                     mpaa, genre, director, title, studio, trailer, country,
-                    playurl, pathid, year, movieid))
+                    playurl, pathid, fileid, year, movieid))
             else:
                 query = ' '.join((
                     "UPDATE movie",
                     "SET c00 = ?, c01 = ?, c02 = ?, c03 = ?, c04 = ?, c05 = ?,"
                     "c06 = ?, c07 = ?, c09 = ?, c10 = ?, c11 = ?, c12 = ?,"
                     "c14 = ?, c15 = ?, c16 = ?, c18 = ?, c19 = ?, c21 = ?,"
-                    "c22 = ?, c23 = ?",
+                    "c22 = ?, c23 = ?, idFile=?",
                     "WHERE idMovie = ?"
                 ))
                 kodicursor.execute(query, (title, plot, shortplot, tagline,
                     votecount, rating, writer, year, imdb, sorttitle, runtime,
                     mpaa, genre, director, title, studio, trailer, country,
-                    playurl, pathid, movieid))
+                    playurl, pathid, fileid, movieid))
 
             # Update the checksum in emby table
-            emby_db.updateReference(itemid, checksum)
+            # emby_db.updateReference(itemid, checksum)
+            # Add reference is idempotent; the call here updates also fileid and pathid when item
+            # is moved or renamed
+            emby_db.addReference(itemid, movieid, "Movie", "movie", fileid, pathid, None, checksum, viewid)
 
         ##### OR ADD THE MOVIE #####
         else:
             log.info("ADD movie itemid: %s - Title: %s" % (itemid, title))
-            # Add path
-            pathid = self.kodi_db.addPath(path)
-            # Add the file
-            fileid = self.kodi_db.addFile(filename, pathid)
 
             # Create the movie entry
             query = (
