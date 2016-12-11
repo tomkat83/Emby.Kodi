@@ -1617,7 +1617,7 @@ class Music(Items):
             if not os.path.exists(xbmc.translatePath(songStrmFileDir)):
                 os.makedirs(xbmc.translatePath(songStrmFileDirTuple))
             #music and movie plugins are thesame anyway, just select one.
-            audioplugin = 'plugin://plugin.video.plexkodiconnect.music/' if os.path.exists(xbmc.translatePath(os.path.join('special://','addons','plugin.video.plexkodiconnect.music'))) else 'plugin://plugin.video.plexkodiconnect.movies/'
+            audioplugin = 'plugin://plugin.video.plexkodiconnect.music/' if os.path.isdir(xbmc.translatePath("/".join(('special:/', 'home', 'addons','plugin.video.plexkodiconnect.music','')))) else 'plugin://plugin.video.plexkodiconnect.movies/'
             with open(xbmc.translatePath("/".join((songStrmFileDir, songStrmFileName))), 'w') as songStrmFile:
                 songStrmFile.write(audioplugin + '?dbid=' + str(songid) + '&mode=play' + '&id=' + str(itemid))
             #Avoid telling kodi in which folder the music files are, so the scraper can't find them (and delete them).
