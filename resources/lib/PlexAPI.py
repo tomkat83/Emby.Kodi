@@ -1206,8 +1206,12 @@ class API():
     def getType(self):
         """
         Returns the type of media, e.g. 'movie' or 'clip' for trailers
+        in case of music, returns the type of the child.
         """
-        return self.item.attrib.get('type')
+        if self.item.attrib.get('type') is not None:
+            return self.item.attrib.get('type')
+        else:
+            return self.item[0].attrib.get('type')
 
     def getChecksum(self):
         """

@@ -131,6 +131,8 @@ class PlaybackUtils():
                     self.currentPosition+1,
                     dbid,
                     PF.KODITYPE_FROM_PLEXTYPE[API.getType()])
+                if kodiPl[self.currentPosition+1].getfilename().endswith(".strm"):
+                    kodiPl[self.currentPosition+1].setPath(playurl)
                 self.currentPosition += 1
 
             ############### -- CHECK FOR INTROS ################
@@ -174,6 +176,8 @@ class PlaybackUtils():
                         self.currentPosition+1,
                         dbid,
                         PF.KODITYPE_FROM_PLEXTYPE[API.getType()])
+                    if kodiPl[self.currentPosition+1].getfilename().endswith(".strm"):
+                        kodiPl[self.currentPosition+1].setPath(playurl)
                 self.currentPosition += 1
                 if seektime:
                     window('plex_customplaylist.seektime', value=str(seektime))
