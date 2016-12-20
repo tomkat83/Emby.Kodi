@@ -160,6 +160,9 @@ class PlayUtils():
             - video bitrate above specified settings bitrate
         if the corresponding file settings are set to 'true'
         """
+        if self.API.getType() == 'track':
+            #We are dealing with a music file here, returning False to asume Kodi can play all audio files 
+            return False
         videoCodec = self.API.getVideoCodec()
         log.info("videoCodec: %s" % videoCodec)
         if self.API.getType() in ('clip', 'track'):

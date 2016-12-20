@@ -9,6 +9,7 @@ from urllib import urlencode
 import xbmc
 import xbmcgui
 import xbmcplugin
+import os
 
 import playutils as putils
 import playlist
@@ -131,6 +132,9 @@ class PlaybackUtils():
                     self.currentPosition+1,
                     dbid,
                     PF.KODITYPE_FROM_PLEXTYPE[API.getType()])
+                if kodiPl[self.currentPosition+1].getfilename().endswith(".strm"):
+                    audioplugin = 'plugin://plugin.video.plexkodiconnect.music/' if os.path.isdir(xbmc.translatePath("/".join(('special:/', 'home', 'addons','plugin.video.plexkodiconnect.music','')))) else 'plugin://plugin.video.plexkodiconnect.movies/'
+                    kodiPl[self.currentPosition+1].setPath(audioplugin + "?dbid=" + str(dbid) + "&mode=play&id=" + str(itemid))
                 self.currentPosition += 1
 
             ############### -- CHECK FOR INTROS ################
@@ -174,6 +178,9 @@ class PlaybackUtils():
                         self.currentPosition+1,
                         dbid,
                         PF.KODITYPE_FROM_PLEXTYPE[API.getType()])
+                    if kodiPl[self.currentPosition+1].getfilename().endswith(".strm"):
+                        audioplugin = 'plugin://plugin.video.plexkodiconnect.music/' if os.path.isdir(xbmc.translatePath("/".join(('special:/', 'home', 'addons','plugin.video.plexkodiconnect.music','')))) else 'plugin://plugin.video.plexkodiconnect.movies/'
+                        kodiPl[self.currentPosition+1].setPath(audioplugin + "?dbid=" + str(dbid) + "&mode=play&id=" + str(itemid))
                 self.currentPosition += 1
                 if seektime:
                     window('plex_customplaylist.seektime', value=str(seektime))

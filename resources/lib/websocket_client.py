@@ -48,6 +48,8 @@ class WebSocket(threading.Thread):
             return False
         # Triage
         typus = message.get('type')
+        if 'NotificationContainer' in message:
+            typus = message['NotificationContainer'].get('type')
         if typus is None:
             log.error('No message type, dropping message: %s' % message)
             return False

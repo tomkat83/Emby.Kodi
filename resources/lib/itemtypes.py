@@ -3,11 +3,13 @@
 ###############################################################################
 
 import logging
+import os
 from urllib import urlencode
 from ntpath import dirname
 from datetime import datetime
 
 import xbmcgui
+import xbmc
 
 import artwork
 from utils import tryEncode, tryDecode, settings, window, kodiSQL, \
@@ -1605,9 +1607,22 @@ class Music(Items):
         if doIndirect:
             # Plex works a bit differently
             path = "%s%s" % (self.server, item[0][0].attrib.get('key'))
-            path = API.addPlexCredentialsToUrl(path)
-            filename = path.rsplit('/', 1)[1]
-            path = path.replace(filename, '')
+            ## The old way of doing stuff
+            #path = API.addPlexCredentialsToUrl(path)
+            #filename = path.rsplit('/', 1)[1]
+            #path = path.replace(filename, '')
+            ## now using .strm files instead to circumvent the inability to launch plugins directly from the library for music files
+            songStrmFileDir = "/".join(('special:/', 'userdata', 'addon_data', 'plugin.video.plexkodiconnect', 'musicstreamfiles', ''))
+            songStrmFileName = str(songid) + '.strm'
+            if not os.path.exists(xbmc.translatePath(songStrmFileDir)):
+                os.makedirs(xbmc.translatePath(songStrmFileDirTuple))
+            #music and movie plugins are thesame anyway, just select one.
+            audioplugin = 'plugin://plugin.video.plexkodiconnect.music/' if os.path.isdir(xbmc.translatePath("/".join(('special:/', 'home', 'addons','plugin.video.plexkodiconnect.music','')))) else 'plugin://plugin.video.plexkodiconnect.movies/'
+            with open(xbmc.translatePath("/".join((songStrmFileDir, songStrmFileName))), 'w') as songStrmFile:
+                songStrmFile.write(audioplugin + '?dbid=' + str(songid) + '&mode=play' + '&id=' + str(itemid))
+            #Avoid telling kodi in which folder the music files are, so the scraper can't find them (and delete them).
+            path = ''
+            filename = "/".join((songStrmFileDir, songStrmFileName))
 
         # UPDATE THE SONG #####
         if update_item:

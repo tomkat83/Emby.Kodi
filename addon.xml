@@ -8,6 +8,7 @@
     <import addon="script.module.requests" version="2.3.0" />
     <import addon="plugin.video.plexkodiconnect.movies" version="0.01" />
     <import addon="plugin.video.plexkodiconnect.tvshows" version="0.01" />
+    <import addon="plugin.video.plexkodiconnect.music" version="0.01" />
   </requires>
   <extension    point="xbmc.python.pluginsource"
                 library="default.py">
