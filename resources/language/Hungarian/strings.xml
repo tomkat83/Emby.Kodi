@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Add-on settings -->
+    <string id="29999">PlexKodiConnect</string>
+    <string id="30000">Server Address (IP)</string><!-- Verified -->
+    <string id="30002">Preferred playback method</string><!-- Verified -->
+    <string id="30004">Log level</string><!-- Verified -->
+    <string id="30005">Username: </string>
+    <string id="30006">Password: </string>
+    <string id="30007">Network Username: </string>
+    <string id="30008">Network Password: </string>
+    <string id="30009">Transcode: </string>
+    <string id="30010">Enable Performance Profiling</string>
+    <string id="30011">Local caching system</string>
+    <string id="30012">OK</string>
+    <string id="30013">Never show</string>
+
+    <string id="30014">Connection</string>
+    <string id="30015">Network</string>    
+    <string id="30016">Device Name</string>
+    <string id="30017">Unauthorized for PMS</string>     
+
+    <string id="30022">Advanced</string>
+    <string id="30024">Username</string><!-- Verified -->
+
+    <string id="30025">Display message if PMS goes offline</string>
+    
+    <string id="30030">Port Number</string><!-- Verified -->
+    <string id="30031">I own this Plex Media Server</string>
+    <string id="30036">Number of recent Movies to show:</string>    
+    <string id="30037">Number of recent TV episodes to show:</string>    
+    <string id="30035">Number of recent Music Albums to show:</string>    
+    <string id="30038">Mark watched at start of playback:</string>    
+    <string id="30039">Set Season poster for episodes</string>
+
+    <string id="30040">Genre Filter ...</string>
+    <string id="30041">Play All from Here</string>
+    <string id="30042">Refresh</string>
+    <string id="30043">Delete</string>
+    <string id="30046">Add Movie to CouchPotato</string>
+    
+    <string id="30044">Incorrect Username/Password</string>
+    <string id="30045">Username not found</string>
+    
+    <string id="30052">Deleting</string>
+    <string id="30053">Waiting for server to delete</string>
+    
+    <string id="30059">Server Default</string>
+    <string id="30060">Title</string>
+    <string id="30061">Year</string>
+    <string id="30062">Premiere Date</string>
+    <string id="30063">Date Created</string>
+    <string id="30064">Critic Rating</string>
+    <string id="30065">Community Rating</string>
+    <string id="30066">Play Count</string>
+    <string id="30067">Budget</string>
+    <!-- Runtime added as 30226 below -->
+    
+    <string id="30068">Sort By</string>
+    
+    <string id="30069">None</string>
+    <string id="30070">Action</string>
+    <string id="30071">Adventure</string>
+    <string id="30072">Animation</string>
+    <string id="30073">Crime</string>
+    <string id="30074">Comedy</string>
+    <string id="30075">Documentary</string>
+    <string id="30076">Drama</string>
+    <string id="30077">Fantasy</string>
+    <string id="30078">Foreign</string>
+    <string id="30079">History</string>
+    <string id="30080">Horror</string>
+    <string id="30081">Music</string>
+    <string id="30082">Musical</string>
+    <string id="30083">Mystery</string>
+    <string id="30084">Romance</string>
+    <string id="30085">Science Fiction</string>
+    <string id="30086">Short</string>
+    <string id="30087">Suspense</string>
+    <string id="30088">Thriller</string>
+    <string id="30089">Western</string>
+    
+    <string id="30090">Genre Filter</string>
+    <string id="30091">Confirm file deletion</string><!-- Verified -->
+    <string id="30092">Delete this item? This action will delete media and associated data files.</string>
+    
+    <string id="30093">Mark Watched</string>
+    <string id="30094">Mark Unwatched</string>
+    <string id="30095">Add to Favorites</string>
+    <string id="30096">Remove from Favorites</string>
+    <string id="30097">Sort By ...</string>
+    <string id="30098">Sort Order Descending</string>
+    <string id="30099">Sort Order Ascending</string>
+    <string id="30100">Show People</string>
+
+    <!-- resume dialog -->
+    <string id="30105">Resume</string>
+    <string id="30106">Resume from</string>
+    <string id="30107">Start from beginning</string>
+    
+    <string id="30110">Interface</string>
+    <string id="30111">Include Stream Info</string>
+    <string id="30112">Include People</string>
+    <string id="30113">Include Overview</string>
+    <string id="30114">Offer delete after playback</string><!-- Verified -->
+    <string id="30115">For Episodes</string><!-- Verified -->
+    <string id="30116">For Movies</string><!-- Verified -->
+    <string id="30117">Background Art Refresh Rate (seconds)</string>
+    <string id="30118">Add Resume Percent</string>
+    <string id="30119">Add Episode Number</string>
+    <string id="30120">Show Load Progress</string>
+    <string id="30121">Loading Content</string>
+    <string id="30122">Retrieving Data</string>
+    <string id="30125">Done</string>
+    <string id="30126">Processing Item : </string>
+    <string id="30128">Play Error</string>
+    <string id="30129">This item is not playable</string>    
+    <string id="30130">Local path detected</string>
+    <string id="30131">Your MB3 Server contains local paths.  Please change server paths to UNC or change XBMB3C setting 'Play from Stream' to true.  Path: </string>
+    <string id="30132">Warning</string>
+    <string id="30133">Debug logging enabled.</string>
+    <string id="30134">This will affect performance.</string>
+    <string id="30135">Error</string>
+    <string id="30136">Monitoring service is not running</string>
+    <string id="30137">If you have just installed please restart Kodi</string>
+    <string id="30138">Search</string>
+    
+    <string id="30139">Enable Theme Music (Requires Restart)</string>
+    <string id="30140"> - Loop Theme Music</string>
+    <string id="30141">Enable Background Image (Requires Restart)</string>
+    <string id="30142">Services</string>
+
+    <string id="30143">Always transcode if video bitrate is above</string>
+    
+    <string id="30150">Skin does not support setting views</string>
+    <string id="30151">Select item action (Requires Restart)</string>
+    
+    <string id="30156">Sort NextUp by Show Title</string>    
+    <string id="30157">Enable Enhanced Images (eg CoverArt)</string><!-- Verified -->
+    <string id="30158">Metadata</string>
+    <string id="30159">Artwork</string>
+    <string id="30160">Video Quality if Transcoding necessary</string><!-- Verified -->
+    
+    <string id="30161">Enable Suggested Loader (Requires Restart)</string>
+    <string id="30162">Add Season Number</string>     
+    <string id="30163">Flatten Seasons</string>     
+    
+    <string id="30164">Direct Play - HTTP</string>     
+    <string id="30165">Direct Play</string>     
+    <string id="30166">Transcoding</string>     
+    <string id="30167">Server Detection Succeeded</string>     
+    <string id="30168">Found server</string>     
+    <string id="30169">Address : </string>     
+    
+    <!-- Video nodes -->
+    <string id="30170">Recently Added TV Shows</string><!-- Verified -->
+    <string id="30171">In Progress TV Shows</string><!-- Verified -->
+    <string id="30172">All Music</string>              
+    <string id="30173">Channels</string><!-- Verified -->
+    <string id="30174">Recently Added</string><!-- Verified -->
+    <string id="30175">Recently Added Episodes</string><!-- Verified -->
+    <string id="30176">Recently Added Albums</string>  
+    <string id="30177">In Progress Movies</string><!-- Verified -->
+    <string id="30178">In Progress Episodes</string><!-- Verified -->
+    <string id="30179">Next Episodes</string><!-- Verified -->
+    <string id="30180">Favorite Movies</string><!-- Verified -->      
+    <string id="30181">Favorite Shows</string><!-- Verified -->
+    <string id="30182">Favorite Episodes</string>      
+    <string id="30183">Frequent Played Albums</string> 
+    <string id="30184">Upcoming TV</string>            
+    <string id="30185">BoxSets</string>                
+    <string id="30186">Trailers</string>               
+    <string id="30187">Music Videos</string>           
+    <string id="30188">Photos</string>                 
+    <string id="30189">Unwatched Movies</string><!-- Verified -->
+    <string id="30190">Movie Genres</string>           
+    <string id="30191">Movie Studios</string>          
+    <string id="30192">Movie Actors</string>           
+    <string id="30193">Unwatched Episodes</string>     
+    <string id="30194">TV Genres</string>              
+    <string id="30195">TV Networks</string>            
+    <string id="30196">TV Actors</string>              
+    <string id="30197">Playlists</string>              
+    <string id="30198">Search</string>              
+    <string id="30199">Set Views</string>              
+    
+    <string id="30200">Select User</string>              
+    <string id="30201">Profiling enabled.</string>              
+    <string id="30202">Please remember to turn off when finished testing.</string>              
+    <string id="30203">Error in ArtworkRotationThread</string>              
+    <string id="30204">Unable to connect to server</string>         
+    <string id="30205">Error in LoadMenuOptionsThread</string>     
+    
+    <string id="30206">Enable Playlists Loader (Requires Restart)</string>   
+    
+    <string id="30207">Songs</string>
+    <string id="30208">Albums</string>
+    <string id="30209">Album Artists</string>
+    <string id="30210">Artists</string>
+    <string id="30211">Music Genres</string>
+    
+    <string id="30212">Enable Theme Videos (Requires Restart)</string>
+    <string id="30213"> - Loop Theme Videos</string>
+    
+    <string id="30216">AutoPlay remaining episodes in a season</string> 
+    <string id="30218">Compress Artwork</string>
+    <string id="30220">Latest </string>
+    <string id="30221">In Progress </string>
+    <string id="30222">NextUp </string>
+    <string id="30223">User Views</string>
+    <string id="30224">Report Metrics</string>
+    <string id="30225">Use Kodi Sorting</string>
+    <string id="30226">Runtime</string>
+    
+    <string id="30227">Random</string>
+    <string id="30228">Recently releases</string>
+    <string id="30229">Random Items</string><!-- Verified -->
+    <string id="30230">Recommended</string><!-- Verified -->
+    
+    <string id="30235">Extras</string><!-- Verified -->
+    <string id="30236">Sync Theme Music</string>
+    <string id="30237">Sync Extra Fanart</string>
+    <string id="30238">Sync Movie BoxSets</string>
+    
+    <string id="30239">[COLOR yellow]Reset local Kodi database[/COLOR]</string><!-- Verified -->
+    <string id="30240">Enable watched/resume status sync</string>
+    <string id="30241">DB Sync Indication:</string>
+    <string id="30242">Play Count Sync Indication:</string>
+    <string id="30243">Enable HTTPS</string><!-- Verified -->
+    <string id="30245">Force Transcoding Codecs</string>
+    
+    <string id="30246">Enable Netflix style next up notification</string>
+    <string id="30247">  - The number of seconds before the end to show the notification</string>
+    <string id="30248">Show Emby Info dialog on play/select action</string>
+    <string id="30249">Enable server connection message on startup</string><!-- Verified -->
+    
+    <string id="30251">Recently added Home Videos</string><!-- Verified -->
+    <string id="30252">Recently added Photos</string><!-- Verified -->
+    <string id="30253">Favourite Home Videos</string><!-- Verified -->
+    <string id="30254">Favourite Photos</string><!-- Verified -->
+    <string id="30255">Favourite Albums</string>
+    
+    <string id="30256">Recently added Music videos</string><!-- Verified -->
+    <string id="30257">In progress Music videos</string><!-- Verified -->
+    <string id="30258">Unwatched Music videos</string><!-- Verified -->
+    
+    <!-- Default views -->
+    <string id="30300">Active</string>              
+    <string id="30301">Clear Settings</string>              
+    <string id="30302">Movies</string>              
+    <string id="30303">BoxSets</string>              
+    <string id="30304">Trailers</string>              
+    <string id="30305">Series</string>              
+    <string id="30306">Seasons</string>              
+    <string id="30307">Episodes</string>              
+    <string id="30308">Music Artists</string>              
+    <string id="30309">Music Albums</string>              
+    <string id="30310">Music Videos</string>              
+    <string id="30311">Music Tracks</string>
+    <string id="30312">Channels</string>  
+    
+    <!-- contextmenu -->
+    <string id="30401">Plex options</string>
+    <string id="30402">Clear like for this item</string>
+    <string id="30403">Like this item</string>
+    <string id="30404">Dislike this item</string>
+    <string id="30405">Add to Plex favorites</string>
+    <string id="30406">Remove from Plex favorites</string>
+    <string id="30407">Set custom song rating</string>
+    <string id="30408">Plex addon settings</string>
+    <string id="30409">Delete item from server</string>
+    <string id="30410">Refresh this item</string>
+    <string id="30411">Set custom song rating (0-5)</string>
+    <string id="30412">Force transcode</string>
+    <string id="30413">Enable Plex context menu in Kodi</string>
+    <string id="30414">Could not delete the Plex item. Is item deletion enabled on the Plex Media Server?</string>
+    <string id="30415">Start playback via PMS</string>
+
+    <!-- add-on settings -->
+    <string id="30500">Verify Host SSL Certificate (more secure)</string>
+    <string id="30501">Client SSL certificate</string>
+    <string id="30502">Use alternate address</string>
+    <string id="30503">Alternate Server Address</string>
+    <string id="30504">Use alternate device Name</string>
+    <string id="30505">[COLOR yellow]Reset login attempts[/COLOR]</string>
+    <string id="30506">Sync Options</string>
+    <string id="30507">Show syncing progress</string>
+    <string id="30508">Sync empty TV Shows</string>
+    <string id="30509">Enable Music Library</string>
+    <string id="30510">Direct stream music library</string>
+    <string id="30511">Playback Mode</string>
+    <string id="30512">Force artwork caching</string>
+    <string id="30513">Limit artwork cache threads (recommended for rpi)</string>
+    <string id="30514">Enable fast startup (requires server plugin)</string>
+    <string id="30515">Maximum items to request from the server at once</string>
+    <string id="30516">Playback</string>
+    <string id="30517">[COLOR yellow]Enter network credentials[/COLOR]</string>
+    <string id="30518">Enable Plex Trailers (Plexpass is needed)</string>
+    <string id="30519">Ask to play trailers</string>
+    <string id="30520">Skip Plex delete confirmation for the context menu (use at your own risk)</string>
+    <string id="30521">Jump back on resume (in seconds)</string>
+    <string id="30522">Force transcode h265/HEVC</string>
+    <string id="30523">Music metadata options (not compatible with direct stream)</string>
+    <string id="30524">Import music song rating directly from files</string>
+    <string id="30525">Convert music song rating to Emby rating</string>
+    <string id="30526">Allow rating in song files to be updated</string>
+    <string id="30527">Ignore specials in next episodes</string>
+    <string id="30528">Permanent users to add to the session</string>
+    <string id="30529">Startup delay (in seconds)</string>
+    <string id="30530">Enable server restart message</string>
+    <string id="30531">Enable new content notification</string>
+    <string id="30532">Duration of the video library pop up (in seconds)</string>
+    <string id="30533">Duration of the music library pop up (in seconds)</string>
+    <string id="30534">Server messages</string>
+    <string id="30535">[COLOR yellow]Generate a new unique device Id (e.g. when cloning Kodi)[/COLOR]</string>
+    <string id="30536">Users must log in every time Kodi restarts</string>
+    <string id="30537">RESTART KODI IF YOU MAKE ANY CHANGES</string>
+    <string id="30538">Complete Re-Sync necessary</string>
+    <string id="30539">Download additional art from FanArtTV</string>
+    <string id="30540">Download movie set/collection art from FanArtTV</string>
+    <string id="30541">Don't ask to pick a certain stream/quality</string>
+    <string id="30542">Always pick best quality for trailers</string>
+    <string id="30543">Kodi runs on a low-power device (e.g. Raspberry Pi)</string>
+    <string id="30544">Artwork</string>
+    <string id="30545">Force transcode pictures</string>
+
+    <!-- service add-on -->
+    <string id="33000">Welcome</string>
+    <string id="33001">Error connecting</string>
+    <string id="33002">Server is unreachable</string>
+    <string id="33003">Server is online</string>
+    <string id="33004">items added to playlist</string>
+    <string id="33005">items queued to playlist</string>
+    <string id="33006">Server is restarting</string>
+    <string id="33007">Access is enabled</string>
+    <string id="33008">Enter password for user:</string>
+    <string id="33009">Invalid username or password</string>
+    <string id="33010">Failed to authenticate too many times. Reset in the settings.</string>
+    <string id="33011">Unable to direct play</string>
+    <string id="33012">Direct play failed 3 times. Enabled play from HTTP.</string>
+    <string id="33013">Choose the audio stream</string>
+    <string id="33014">Choose the subtitles stream</string>
+    <string id="33015">Delete file from your Emby server?</string>
+    <string id="33016">Play trailers?</string>
+    <string id="33017">Gathering movies from:</string>
+    <string id="33018">Gathering boxsets</string>
+    <string id="33019">Gathering music videos from:</string>
+    <string id="33020">Gathering tv shows from:</string>
+    <string id="33021">Gathering:</string>
+    <string id="33022">Detected the database needs to be recreated for this version of Emby for Kodi. Proceed?</string>
+    <string id="33023">Emby for Kodi may not work correctly until the database is reset.</string>
+    <string id="33024">Cancelling the database syncing process. The current Kodi version is unsupported.</string>
+    <string id="33025">completed in:</string>
+    <string id="33026">Comparing movies from:</string>
+    <string id="33027">Comparing boxsets</string>
+    <string id="33028">Comparing music videos from:</string>
+    <string id="33029">Comparing tv shows from:</string>
+    <string id="33030">Comparing episodes from:</string>
+    <string id="33031">Comparing:</string>
+    <string id="33032">Failed to generate a new device Id. See your logs for more information.</string>
+    <string id="33033">Kodi will now restart to apply the changes.</string>
+    <string id="33041">Delete file(s) from Plex Server? This will also delete the file(s) from disk!</string>
+
+    <!-- New to Plex -->
+    <string id="39000">- Number of trailers to play before a movie</string>
+    <string id="39001">Boost audio when transcoding</string>
+    <string id="39002">Burnt-in subtitle size</string>
+    <string id="39003">Limit download sync threads (rec. for rpi: 1)</string>
+    <string id="39004">Enable Plex Companion (restart Kodi!)</string>
+    <string id="39005">Plex Companion Port (change only if needed)</string>
+    <string id="39006">Activate Plex Companion debug log</string>
+    <string id="39007">Activate Plex Companion GDM debug log</string>
+    <string id="39008">Plex Companion: Allows flinging media to Kodi through Plex</string>
+    <string id="39009">Could not login to plex.tv. Please try signing in again.</string>
+    <string id="39010">Problems connecting to plex.tv. Network or internet issue?</string>
+    <string id="39011">Could not find any Plex server in the network. Aborting...</string>
+    <string id="39012">Choose your Plex server</string>
+    <string id="39013">Not yet authorized for Plex server </string>
+    <string id="39014">Please sign in to plex.tv.</string>
+    <string id="39015">Problems connecting to server. Pick another server?</string>
+    <string id="39016">Disable Plex music library? (It is HIGHLY recommended to use Plex music only with direct paths for large music libraries. Kodi might crash otherwise)</string>
+    <string id="39017">Would you now like to go to the plugin's settings to fine-tune PKC? You will need to RESTART Kodi!</string>
+
+    <string id="39018">[COLOR yellow]Repair local database (force update all content)[/COLOR]</string>
+    <string id="39019">[COLOR red]Partial or full reset of Database and PKC[/COLOR]</string>
+    <string id="39020">[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]</string>
+    <string id="39021">[COLOR yellow]Sync Emby Theme Media to Kodi[/COLOR]</string>
+    <string id="39022">local</string>
+    <string id="39023">Failed to authenticate. Did you login to plex.tv?</string>
+    
+
+    <string id="39025">Automatically log into plex.tv on startup</string>
+    <string id="39026">Enable constant background sync</string>
+    <string id="39027">Playback Mode</string>
+    <string id="39028">CAUTION! If you choose "Native" mode , you might loose access to certain Plex features such as: Plex trailers and transcoding options. ALL Plex shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or \\myNAS/mymovie.mkv)!</string>
+    <string id="39029">Network credentials</string>
+    <string id="39030">Add network credentials to allow Kodi access to your content? Note: Skipping this step may generate a message during the initial scan of your content if Kodi can't locate your content.</string>
+    <string id="39031">Kodi can't locate file: </string>
+    <string id="39032">Please verify the path. You may need to verify your network credentials in the add-on settings or use different Plex paths. Stop syncing?</string>
+    <string id="39033">Transform Plex UNC library paths \\myNas\mymovie.mkv automatically to smb paths, smb://myNas/mymovie.mkv? (recommended)</string>
+    <string id="39034">Replace Plex UNC paths \\myNas with smb://myNas</string>
+
+    <string id="39035">Replace Plex paths /volume1/media or \\myserver\media with custom SMB paths smb://NAS/mystuff</string>
+    <string id="39037">Original Plex MOVIE path to replace:</string>
+    <string id="39038">Replace Plex MOVIE with:</string>
+    <string id="39039">Original Plex TV SHOWS path to replace:</string>
+    <string id="39040">Replace Plex TV SHOWS with:</string>
+    <string id="39041">Original Plex MUSIC path to replace:</string>
+    <string id="39042">Replace Plex MUSIC with:</string>
+    <string id="39043">Go a step further and completely replace all original Plex library paths (/volume1/media) with custom SMB paths (smb://NAS/MyStuff)?</string>
+    <string id="39044">Please enter your custom smb paths in the settings under "Sync Options" and then restart Kodi</string>
+    <string id="39045">Original Plex PHOTO path to replace:</string>
+    <string id="39046">Replace Plex PHOTO with:</string>
+    <string id="39047">On Deck: Append show title to episode</string>
+    <string id="39048">On Deck: Append season- and episode-number SxxExx</string>
+    <string id="39049">Nothing works? Try a full reset!</string>
+    <string id="39050">[COLOR yellow]Choose Plex Server from a list[/COLOR]</string>
+    <string id="39051">Wait before sync new/changed PMS item [s]</string>
+    <string id="39052">Background Sync</string>
+    <string id="39053">Do a full library sync every x minutes</string>
+    <string id="39054">remote</string>
+    <string id="39055">Searching for Plex Server</string>
+    <string id="39056">Used by Sync and when attempting to Direct Play</string>
+    <string id="39057">Customize Paths</string>
+    <string id="39058">Extend Plex TV Series "On Deck" view to all shows</string>
+    <string id="39059">Recently Added: Append show title to episode</string>
+    <string id="39060">Recently Added: Append season- and episode-number SxxExx</string>
+    <string id="39061">Would you like to download additional artwork from FanArtTV in the background?</string>
+    <string id="39062">Sync when screensaver is deactivated</string>
+    <string id="39063">Force Transcode Hi10P</string>
+    <string id="39064">Recently Added: Also show already watched episodes</string>
+    <string id="39066">Recently Added: Also show already watched movies (Refresh Plex playlist/nodes!)</string>
+    <string id="39067">Your current Plex Media Server:</string>
+    <string id="39068">[COLOR yellow]Manually enter Plex Media Server address[/COLOR]</string>
+    <string id="39069">Current address:</string>
+    <string id="39070">Current port:</string>
+    <string id="39071">Current plex.tv status:</string>
+    <string id="39072">Is your Kodi installed on a low-powered device like a Raspberry Pi? If yes, then we will reduce the strain on Kodi to prevent it from crashing.</string>
+    <string id="39073">Appearance Tweaks</string>
+    <string id="39074">TV Shows</string>
+    <string id="39075">Always use default Plex subtitle if possible</string>
+    <string id="39076">If you use several Plex libraries of one kind, e.g. "Kids Movies" and "Parents Movies", be sure to check the Wiki: https://goo.gl/JFtQV9</string>
+    <string id="39077">Number of PMS items to show in widgets (e.g. "On Deck")</string>
+    <string id="39078">Plex Companion Update Port (change only if needed)</string>
+    <string id="39079">Plex Companion could not open the GDM port. Please change it in the PKC settings.</string>
+
+    <!-- Plex Entrypoint.py -->
+    <string id="39200">Log-out Plex Home User </string>
+    <string id="39201">Settings</string>
+    <string id="39202">Network credentials</string>
+    <string id="39203">Refresh Plex playlists/nodes</string>
+    <string id="39204">Perform manual library sync</string>
+    <string id="39205">Unable to run the sync, the add-on is not connected to a Plex server.</string>
+    <string id="39206">Plex might lock your account if you fail to log in too many times. Proceed anyway?</string>
+    <string id="39207">Resetting PMS connections, please wait</string>
+    <string id="39208">Failed to reset PKC. Try to restart Kodi.</string>
+    <string id="39209">[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]</string>
+    <string id="39210">Not yet connected to Plex Server</string>
+    <string id="39211">Watch later</string>
+    <string id="39213">is offline</string>
+    <string id="39214">Even though we signed in to plex.tv, we could not authorize for PMS</string>
+    <string id="39215">Enter your Plex Media Server's IP or URL, Examples are:</string>
+
+    <string id="39217">Does your Plex Media Server support SSL connections? (https instead of http)?</string>
+    <string id="39218">Error contacting PMS</string>
+    <string id="39219">Abort (Yes) or save address anyway (No)?</string>
+    <string id="39220">connected</string>
+    <string id="39221">plex.tv toggle successful</string>
+    <string id="39222">[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]</string>
+    <string id="39223">Only look for missing fanart or refresh all fanart? The scan will take quite a while and happen in the background.</string>
+    <string id="39224">Refresh all</string>
+    <string id="39225">Missing only</string>    
+
+
+    <!-- Plex Artwork.py -->
+    <string id="39250">Running the image cache process can take some time. It will happen in the background. Are you sure you want continue?</string>
+    <string id="39251">Reset all existing cache data first?</string>
+
+    <!-- Plex PlexAPI.py -->
+    <string id="39300">: Enter plex.tv username. Or nothing to cancel.</string>
+    <string id="39301">Enter password for plex.tv user </string>
+    <string id="39302">Could not sign in user </string>
+    <string id="39303">Problems trying to contact plex.tv. Try again later</string>
+    <string id="39304">Go to https://plex.tv/pin and enter the code: </string>
+    <string id="39305">Could not sign in to plex.tv. Try again later</string>
+    <string id="39306">: Select User</string>
+    <string id="39307">Enter PIN for user </string>
+    <string id="39308">Could not log in user </string>
+    <string id="39309">Please try again.</string>
+    <string id="39310">unknown</string>
+    <string id="39311">or press No to not sign in.</string>
+
+    <!-- Plex Librarysync.py -->
+    <string id="39400">Library sync thread has crashed. You should restart Kodi now. Please report this on the forum</string>
+    <string id="39401">Detected Kodi database needs to be recreated for this version. This might take a while. Proceed?</string>
+    <string id="39402"> may not work correctly until the database is reset.</string>
+    <string id="39403">Cancelling the database syncing process. Current Kodi version is unsupported. Please verify your logs for more info.</string>
+    <string id="39404">Startup syncing process failed repeatedly. Try restarting Kodi. Stopping Sync for now.</string>
+    <string id="39405">Plex playlists/nodes refreshed</string>
+    <string id="39406">Plex playlists/nodes refresh failed</string>
+    <string id="39407">Full library sync finished</string>
+    <string id="39408">Sync had to skip some items because they could not be processed. Kodi may be instable now!! Please post your Kodi logs to the Plex forum.</string>
+    <string id="39409">The Plex Server did not like you asking for so much data at once and returned ERRORS. Try lowering the number of sync download threads in the settings. Skipped some items for now.</string>
+    <string id="39410">ERROR in library sync</string>
+
+    <!-- Plex videonodes.py -->
+    <string id="39500">On Deck</string>
+    <string id="39501">Collections</string>
+
+    <!-- Plex utils.py -->
+    <string id="39600">Are you sure you want to reset your local Kodi database? A re-sync of the Plex data will take time afterwards.</string>
+    <string id="39601">Could not stop the database from running. Please try again later.</string>
+    <string id="39602">Remove all cached artwork? (recommended!)</string>
+    <string id="39603">Reset all PlexKodiConnect Addon settings? (this is usually NOT recommended and unnecessary!)</string>
+</strings>
