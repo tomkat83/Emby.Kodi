@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon  id="plugin.video.plexkodiconnect"
+        name="PlexKodiConnect" 
+        version="1.5.11"
+        provider-name="croneter">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.requests" version="2.3.0" />
+  </requires>
+  <extension    point="xbmc.python.pluginsource"
+                library="default.py">
+        <provides>video audio image</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py" start="login">
+  </extension>
+  <extension point="kodi.context.item" library="contextmenu.py">
+      <item>
+        <label>30401</label>
+              <description>Settings for the Plex Server</description>
+              <visible>[!IsEmpty(ListItem.DBID) + !StringCompare(ListItem.DBID,-1) | !IsEmpty(ListItem.Property(plexid))] + !IsEmpty(Window(10000).Property(plex_context))</visible>
+      </item>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>https://forums.plex.tv</forum>
+    <website>https://github.com/croneter/PlexKodiConnect</website>
+    <source>https://github.com/croneter/PlexKodiConnect</source>
+    <summary lang="en">Native integration of Plex in Kodi</summary>
+    <description lang="en">Connect Kodi to your Plex Media Server. This plugin assumes that you manage all your videos with Plex (and none with Kodi). You might lose data already stored in the Kodi video and music databases (as this plugin directly changes them). Use at your own risk!</description>
+  </extension>
+</addon>
