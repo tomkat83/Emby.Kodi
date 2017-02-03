@@ -459,64 +459,66 @@ def getInProgressEpisodes(tagname, limit):
 ##### GET RECENT EPISODES FOR TAGNAME #####    
 # def getRecentEpisodes(tagname, limit):
 def getRecentEpisodes(viewid, mediatype, tagname, limit):
-    count = 0
-    # if the addon is called with recentepisodes parameter,
-    # we return the recentepisodes list of the given tagname
+    """
+    Retrieves Plex Recent Episodes items, currently only for TV shows
+
+    Input:
+        viewid:             Plex id of the library section, e.g. '1'
+        mediatype:          Kodi mediatype, e.g. 'tvshows', 'movies',
+                            'homevideos', 'photos'
+        tagname:            Name of the Plex library, e.g. "My Movies"
+        limit:              Max. number of items to retrieve, e.g. 50
+    """
+
     xbmcplugin.setContent(HANDLE, 'episodes')
-    appendShowTitle = settings('RecentTvAppendShow') == 'true'
-    appendSxxExx = settings('RecentTvAppendSeason') == 'true'
-    # First we get a list of all the TV shows - filtered by tag
-    params = {
-        'sort': {'order': "descending", 'method': "dateadded"},
-        'filter': {'operator': "is", 'field': "tag", 'value': "%s" % tagname},
-    }
-    result = JSONRPC('VideoLibrary.GetTVShows').execute(params)
-    # If we found any, find the oldest unwatched show for each one.
-    try:
-        items = result['result'][mediatype]
-    except (KeyError, TypeError):
-        # No items, empty folder
-        xbmcplugin.endOfDirectory(handle=HANDLE)
-        return
+    appendShowTitle = settings('OnDeckTvAppendShow') == 'true'
+    appendSxxExx = settings('OnDeckTvAppendSeason') == 'true'
+    directpaths = settings('useDirectPaths') == 'true'
+    # Chances are that this view is used on Kodi startup
+    # Wait till we've connected to a PMS. At most 30s
+    counter = 0
+    while window('plex_authenticated') != 'true':
+        counter += 1
+        if counter >= 300:
+            log.error('Aborting On Deck view, we were not authenticated '
+                          'for the PMS')
+            return xbmcplugin.endOfDirectory(HANDLE, False)
+        sleep(100)
+    xml = downloadutils.DownloadUtils().downloadUrl(
+            '{server}/library/sections/%s/recentlyAdded' % viewid)
+    if xml in (None, 401):
+        log.error('Could not download PMS xml for view %s' % viewid)
+        return xbmcplugin.endOfDirectory(HANDLE)
+    limitcounter = 0
+    for item in xml:
+        api = API(item)
+        listitem = api.CreateListItemFromPlexItem(
+                appendShowTitle=appendShowTitle,
+                appendSxxExx=appendSxxExx)
+        api.AddStreamInfo(listitem)
+        api.set_listitem_artwork(listitem)
+        if directpaths:
+            url = api.getFilePath()
+        else:
+            params = {
+                'mode': "play",
+                'id': api.getRatingKey(),
+                'dbid': listitem.getProperty('dbid')
+            }
+            url = "plugin://plugin.video.plexkodiconnect/tvshows/?%s" \
+                  % urlencode(params)
+        xbmcplugin.addDirectoryItem(
+            handle=HANDLE,
+            url=url,
+            listitem=listitem)
+        limitcounter += 1
+        if limitcounter == limit:
+            break
+    return xbmcplugin.endOfDirectory(
+        handle=HANDLE,
+        cacheToDisc=settings('enableTextureCache') == 'true')
 
-    allshowsIds = set()
-    for item in items:
-        allshowsIds.add(item['tvshowid'])
-    params = {
-        'sort': {'order': "descending", 'method': "dateadded"},
-        'properties': ["title", "playcount", "season", "episode", "showtitle",
-            "plot", "file", "rating", "resume", "tvshowid", "art",
-            "streamdetails", "firstaired", "runtime", "cast", "writer",
-            "dateadded", "lastplayed"],
-        "limits": {"end": limit}
-    }
-    if settings('TVShowWatched') == 'false':
-        params['filter'] = {
-            'operator': "lessthan",
-            'field': "playcount",
-            'value': "1"
-        }
-    result = JSONRPC('VideoLibrary.GetEpisodes').execute(params)
-    try:
-        episodes = result['result']['episodes']
-    except (KeyError, TypeError):
-        pass
-    else:
-        for episode in episodes:
-            if episode['tvshowid'] in allshowsIds:
-                li = createListItem(episode,
-                                    appendShowTitle=appendShowTitle,
-                                    appendSxxExx=appendSxxExx)
-                xbmcplugin.addDirectoryItem(
-                            handle=HANDLE,
-                            url=episode['file'],
-                            listitem=li)
-                count += 1
 
-            if count == limit:
-                break
-
-    xbmcplugin.endOfDirectory(handle=HANDLE)
 
 
 def getVideoFiles(plexId, params):
