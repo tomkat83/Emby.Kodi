@@ -444,6 +444,7 @@
     <string id="39077">Número de elementos del PMS a mostrar en widgets (por ejemplo "On Deck")</string>
     <string id="39078">Puerto de Actualización de Plex Companion (solo cambie si es necesario)</string>
     <string id="39079">Plex Companion no pudo abrir el puerto GDM. Por favor cámbielo en los ajustes de PKC.</string>
+    <string id="39080">Use season (instead show) posters for PMS items</string>
 
     <!-- Plex Entrypoint.py -->
     <string id="39200">Terminar sesión del usuario de Plex Home </string>
