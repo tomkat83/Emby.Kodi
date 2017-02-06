@@ -444,6 +444,7 @@
     <string id="39077">Anzahl anzuzeigender PMS Einträge in Widgets (z.B. "Aktuell")</string>
     <string id="39078">Plex Companion Update Port (nur bei Bedarf ändern)</string>
     <string id="39079">Plex Companion konnte den Update Port nicht öffnen. Bitte den Port in den PKC Einstellungen ändern.</string>
+    <string id="39080">Benütze Staffel (statt Serien) Poster für PMS Einträge</string>
 
     <!-- Plex Entrypoint.py -->
     <string id="39200">Plex Home Benutzer abmelden: </string>
