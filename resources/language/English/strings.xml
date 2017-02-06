@@ -444,6 +444,7 @@
     <string id="39077">Number of PMS items to show in widgets (e.g. "On Deck")</string>
     <string id="39078">Plex Companion Update Port (change only if needed)</string>
     <string id="39079">Plex Companion could not open the GDM port. Please change it in the PKC settings.</string>
+    <string id="39080">Use season (instead show) posters for PMS items</string>
 
     <!-- Plex Entrypoint.py -->
     <string id="39200">Log-out Plex Home User </string>

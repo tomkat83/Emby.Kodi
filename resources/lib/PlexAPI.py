@@ -1820,7 +1820,10 @@ class API():
         # Banner (usually only on tv series level)
         allartworks['Banner'] = self.__getOneArtwork('banner')
         # For e.g. TV shows, get series thumb
-        allartworks['Thumb'] = self.__getOneArtwork('grandparentThumb')
+        if settings('useSeasonPosterRatherThanShowPoster') == 'true':
+            allartworks['Thumb'] = self.__getOneArtwork('parentThumb')
+        else:
+            allartworks['Thumb'] = self.__getOneArtwork('grandparentThumb')
 
         # Process parent items if the main item is missing artwork
         if parentInfo:
