@@ -30,6 +30,7 @@ http://stackoverflow.com/questions/111945/is-there-any-way-to-do-http-put-in-pyt
 (and others...)
 """
 
+import os
 import logging
 from time import time
 import urllib2
@@ -2186,12 +2187,31 @@ class API():
             # Several streams/files available.
             dialoglist = []
             for entry in self.item.findall('./Media'):
+                fileName = ''
+                audioLanguage = ''
+
+                # Get additional info (filename / languages)
+                mediaPartEntry = self.item.find('./Media/Part')
+                if mediaPartEntry is not None:
+                    # Filename
+                    if 'file' in mediaPartEntry.attrib:
+                        fileName = os.path.basename(mediaPartEntry.attrib['file'])
+
+                    # Languages - subtitle does not seem to be directly included in this stream info
+                    mediaPartStreamEntry = self.item.find('./Media/Part/Stream')
+                    if mediaPartStreamEntry is not None:
+                        # Audio language
+                        if 'language' in mediaPartStreamEntry.attrib:
+                            audioLanguage = mediaPartStreamEntry.attrib['language']
+
                 dialoglist.append(
-                    "%sp %s - %s (%s)"
-                    % (entry.attrib.get('videoResolution', 'unknown'),
-                       entry.attrib.get('videoCodec', 'unknown'),
-                       entry.attrib.get('audioProfile', 'unknown'),
-                       entry.attrib.get('audioCodec', 'unknown'))
+                    "%sp %s - %s (%s) (%s) %s" %
+                    (entry.attrib.get('videoResolution', 'unknown'),
+                    entry.attrib.get('videoCodec', 'unknown'),
+                    entry.attrib.get('audioProfile', 'unknown'),
+                    entry.attrib.get('audioCodec', 'unknown'),
+                    audioLanguage,
+                    fileName)
                 )
             media = xbmcgui.Dialog().select('Select stream', dialoglist)
         else:
