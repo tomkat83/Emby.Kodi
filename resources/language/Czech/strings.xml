@@ -444,6 +444,7 @@
     <string id="39077">Počet položek pro zobrazení ve widgetech (např. "Aktuální")</string>
     <string id="39078">Port aktualizace Plex Companion (změňte pouze pokud je nutné)</string>
     <string id="39079">Plex Companion nemůže otevřít GDM port. Prosím změňte ho v nastavení PKC.</string>
+    <string id="39080">Use season (instead show) posters for PMS items</string>
 
     <!-- Plex Entrypoint.py -->
     <string id="39200">Odhlásit uživatele Plex Home </string>

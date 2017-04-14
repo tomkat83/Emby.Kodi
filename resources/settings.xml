@@ -133,6 +133,7 @@
 	<category label="39073"><!-- Appearance Tweaks -->
 		<setting id="fetch_pms_item_number" label="39077" type="number" default="25" option="int" />
 		<setting type="lsep" label="39074" /><!-- TV Shows -->
+        <setting id="useSeasonPosterRatherThanShowPoster" type="bool" label="39080" default="true" /><!-- Use season (instead show) posters for PMS items -->
 		<setting id="OnDeckTVextended" type="bool" label="39058" default="true" /><!-- Extend Plex TV Series "On Deck" view to all shows -->
 		<setting id="OnDeckTvAppendShow" type="bool" label="39047" default="false" /><!--On Deck view: Append show title to episode-->
 		<setting id="OnDeckTvAppendSeason" type="bool" label="39048" default="false" /><!--On Deck view: Append season number to episode-->
