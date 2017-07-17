@@ -92,6 +92,7 @@ class KodiMonitor(Monitor):
             # Manually marking as watched/unwatched
             playcount = data.get('playcount')
             item = data.get('item')
+
             try:
                 kodiid = item['id']
                 item_type = item['type']
@@ -114,7 +115,7 @@ class KodiMonitor(Monitor):
                         window('plex_skipWatched%s' % itemid, clear=True)
                     else:
                         # notify the server
-                        if playcount != 0:
+                        if playcount > 0:
                             scrobble(itemid, 'watched')
                         else:
                             scrobble(itemid, 'unwatched')
