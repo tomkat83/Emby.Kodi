@@ -251,6 +251,7 @@ class Movies(Items):
 
         rating = userdata['Rating']
         year = API.getYear()
+        premieredate = API.getPremiereDate()
         imdb = API.getProvider('imdb')
         mpaa = API.getMpaa()
         countries = API.getCountry()
@@ -350,7 +351,7 @@ class Movies(Items):
                 kodicursor.execute(query, (title, plot, shortplot, tagline,
                     votecount, rating_id, writer, year, uniqueid, sorttitle,
                     runtime, mpaa, genre, director, title, studio, trailer,
-                    country, playurl, pathid, fileid, year,
+                    country, playurl, pathid, fileid, premieredate,
                     userdata['UserRating'], movieid))
             else:
                 query = '''
@@ -398,7 +399,7 @@ class Movies(Items):
                 kodicursor.execute(query, (movieid, fileid, title, plot,
                     shortplot, tagline, votecount, rating_id, writer, year,
                     uniqueid, sorttitle, runtime, mpaa, genre, director,
-                    title, studio, trailer, country, playurl, pathid, year,
+                    title, studio, trailer, country, playurl, pathid, premieredate,
                     userdata['UserRating']))
             else:
                 query = '''
