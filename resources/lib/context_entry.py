@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
-
 ###############################################################################
+from logging import getLogger
 
-import logging
-
-import xbmc
-import xbmcaddon
+from xbmc import getInfoLabel, sleep, executebuiltin
+from xbmcaddon import Addon
 
 import plexdb_functions as plexdb
-from utils import window, settings, dialog, language as lang, kodiSQL
+from utils import window, settings, dialog, language as lang
 from dialogs import context
 from PlexFunctions import delete_item_from_pms
+import playqueue as PQ
 import variables as v
+import state
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 OPTIONS = {
     'Refresh': lang(30410),
@@ -32,81 +32,67 @@ OPTIONS = {
 
 
 class ContextMenu(object):
-
+    """
+    Class initiated if user opens "Plex options" on a PLEX item using the Kodi
+    context menu
+    """
     _selected_option = None
 
-    def __init__(self):
-        self.kodi_id = xbmc.getInfoLabel('ListItem.DBID').decode('utf-8')
-        self.item_type = self._get_item_type()
-        self.item_id = self._get_item_id(self.kodi_id, self.item_type)
-
-        log.info("Found item_id: %s item_type: %s"
-                 % (self.item_id, self.item_type))
-
-        if not self.item_id:
+    def __init__(self, kodi_id=None, kodi_type=None):
+        """
+        Simply instantiate with ContextMenu() - no need to call any methods
+        """
+        self.kodi_id = kodi_id
+        self.kodi_type = kodi_type
+        self.plex_id = self._get_plex_id(self.kodi_id, self.kodi_type)
+        if self.kodi_type:
+            self.plex_type = v.PLEX_TYPE_FROM_KODI_TYPE[self.kodi_type]
+        else:
+            self.plex_type = None
+        LOG.debug("Found plex_id: %s plex_type: %s",
+                  self.plex_id, self.plex_type)
+        if not self.plex_id:
             return
-
         if self._select_menu():
             self._action_menu()
-
             if self._selected_option in (OPTIONS['Delete'],
                                          OPTIONS['Refresh']):
-                log.info("refreshing container")
-                xbmc.sleep(500)
-                xbmc.executebuiltin('Container.Refresh')
+                LOG.info("refreshing container")
+                sleep(500)
+                executebuiltin('Container.Refresh')
 
-    @classmethod
-    def _get_item_type(cls):
-        item_type = xbmc.getInfoLabel('ListItem.DBTYPE').decode('utf-8')
-        if not item_type:
-            if xbmc.getCondVisibility('Container.Content(albums)'):
-                item_type = "album"
-            elif xbmc.getCondVisibility('Container.Content(artists)'):
-                item_type = "artist"
-            elif xbmc.getCondVisibility('Container.Content(songs)'):
-                item_type = "song"
-            elif xbmc.getCondVisibility('Container.Content(pictures)'):
-                item_type = "picture"
-            else:
-                log.info("item_type is unknown")
-        return item_type
-
-    @classmethod
-    def _get_item_id(cls, kodi_id, item_type):
-        item_id = xbmc.getInfoLabel('ListItem.Property(plexid)')
-        if not item_id and kodi_id and item_type:
+    @staticmethod
+    def _get_plex_id(kodi_id, kodi_type):
+        plex_id = getInfoLabel('ListItem.Property(plexid)') or None
+        if not plex_id and kodi_id and kodi_type:
             with plexdb.Get_Plex_DB() as plexcursor:
-                item = plexcursor.getItem_byKodiId(kodi_id, item_type)
+                item = plexcursor.getItem_byKodiId(kodi_id, kodi_type)
             try:
-                item_id = item[0]
+                plex_id = item[0]
             except TypeError:
-                log.error('Could not get the Plex id for context menu')
-        return item_id
+                LOG.info('Could not get the Plex id for context menu')
+        return plex_id
 
     def _select_menu(self):
-        # Display select dialog
+        """
+        Display select dialog
+        """
         options = []
-
         # if user uses direct paths, give option to initiate playback via PMS
-        if (window('useDirectPaths') == 'true' and
-                self.item_type in v.KODI_VIDEOTYPES):
+        if state.DIRECT_PATHS and self.kodi_type in v.KODI_VIDEOTYPES:
             options.append(OPTIONS['PMS_Play'])
-
-        if self.item_type in v.KODI_VIDEOTYPES:
+        if self.kodi_type in v.KODI_VIDEOTYPES:
             options.append(OPTIONS['Transcode'])
-
-        # userdata = self.api.getUserData()
+        # userdata = self.api.userdata()
         # if userdata['Favorite']:
         #     # Remove from emby favourites
         #     options.append(OPTIONS['RemoveFav'])
         # else:
         #     # Add to emby favourites
         #     options.append(OPTIONS['AddFav'])
-
-        # if self.item_type == "song":
+        # if self.kodi_type == "song":
         #     # Set custom song rating
         #     options.append(OPTIONS['RateSong'])
-
         # Refresh item
         # options.append(OPTIONS['Refresh'])
         # Delete item, only if the Plex Home main user is logged in
@@ -115,103 +101,64 @@ class ContextMenu(object):
             options.append(OPTIONS['Delete'])
         # Addon settings
         options.append(OPTIONS['Addon'])
-
         context_menu = context.ContextMenu(
             "script-emby-context.xml",
-            xbmcaddon.Addon(
-                'plugin.video.plexkodiconnect').getAddonInfo('path'),
-            "default", "1080i")
+            Addon('plugin.video.plexkodiconnect').getAddonInfo('path'),
+            "default",
+            "1080i")
         context_menu.set_options(options)
         context_menu.doModal()
-
         if context_menu.is_selected():
             self._selected_option = context_menu.get_selected()
-
         return self._selected_option
 
     def _action_menu(self):
-
+        """
+        Do whatever the user selected to do
+        """
         selected = self._selected_option
-
         if selected == OPTIONS['Transcode']:
-            window('plex_forcetranscode', value='true')
+            state.FORCE_TRANSCODE = True
             self._PMS_play()
-
         elif selected == OPTIONS['PMS_Play']:
             self._PMS_play()
-
         # elif selected == OPTIONS['Refresh']:
         #     self.emby.refreshItem(self.item_id)
-
         # elif selected == OPTIONS['AddFav']:
         #     self.emby.updateUserRating(self.item_id, favourite=True)
-
         # elif selected == OPTIONS['RemoveFav']:
         #     self.emby.updateUserRating(self.item_id, favourite=False)
-
         # elif selected == OPTIONS['RateSong']:
         #     self._rate_song()
-
         elif selected == OPTIONS['Addon']:
-            xbmc.executebuiltin('Addon.OpenSettings(plugin.video.plexkodiconnect)')
-
+            executebuiltin('Addon.OpenSettings(plugin.video.plexkodiconnect)')
         elif selected == OPTIONS['Delete']:
             self._delete_item()
 
-    def _rate_song(self):
-
-        conn = kodiSQL('music')
-        cursor = conn.cursor()
-        query = "SELECT rating FROM song WHERE idSong = ?"
-        cursor.execute(query, (self.kodi_id,))
-        try:
-            value = cursor.fetchone()[0]
-            current_value = int(round(float(value), 0))
-        except TypeError:
-            pass
-        else:
-            new_value = dialog("numeric", 0, lang(30411), str(current_value))
-            if new_value > -1:
-
-                new_value = int(new_value)
-                if new_value > 5:
-                    new_value = 5
-
-                if settings('enableUpdateSongRating') == "true":
-                    musicutils.updateRatingToFile(new_value, self.api.get_file_path())
-
-                query = "UPDATE song SET rating = ? WHERE idSong = ?"
-                cursor.execute(query, (new_value, self.kodi_id,))
-                conn.commit()
-        finally:
-            cursor.close()
-
     def _delete_item(self):
-
+        """
+        Delete item on PMS
+        """
         delete = True
         if settings('skipContextMenu') != "true":
-
-            if not dialog("yesno", heading=lang(29999), line1=lang(33041)):
-                log.info("User skipped deletion for: %s", self.item_id)
+            if not dialog("yesno", heading="{plex}", line1=lang(33041)):
+                LOG.info("User skipped deletion for: %s", self.plex_id)
                 delete = False
-
         if delete:
-            log.info("Deleting Plex item with id %s", self.item_id)
-            if delete_item_from_pms(self.item_id) is False:
+            LOG.info("Deleting Plex item with id %s", self.plex_id)
+            if delete_item_from_pms(self.plex_id) is False:
                 dialog("ok", heading="{plex}", line1=lang(30414))
 
     def _PMS_play(self):
         """
         For using direct paths: Initiates playback using the PMS
         """
-        window('plex_contextplay', value='true')
-        params = {
-            'filename': '/library/metadata/%s' % self.item_id,
-            'id': self.item_id,
-            'dbid': self.kodi_id,
-            'mode': "play"
-        }
-        from urllib import urlencode
-        handle = ("plugin://plugin.video.plexkodiconnect/movies?%s"
-                  % urlencode(params))
-        xbmc.executebuiltin('RunPlugin(%s)' % handle)
+        playqueue = PQ.get_playqueue_from_type(
+            v.KODI_PLAYLIST_TYPE_FROM_KODI_TYPE[self.kodi_type])
+        playqueue.clear()
+        state.CONTEXT_MENU_PLAY = True
+        handle = ('plugin://%s/?plex_id=%s&plex_type=%s&mode=play'
+                  % (v.ADDON_TYPE[self.plex_type],
+                     self.plex_id,
+                     self.plex_type))
+        executebuiltin('RunPlugin(%s)' % handle)

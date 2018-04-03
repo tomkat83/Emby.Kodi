@@ -23,8 +23,17 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr ""
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr ""
+
 msgctxt "#30002"
 msgid "Preferred playback method"
+msgstr ""
+
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes again! The exact wording can be found in the Kodi settings, player settings, videos
+msgctxt "#30003"
+msgid "Warning: Kodi setting \"Play next video automatically\" is enabled. This could break PKC. Deactivate?"
 msgstr ""
 
 msgctxt "#30004"
@@ -1424,12 +1433,9 @@ msgctxt "#39030"
 msgid "Add network credentials to allow Kodi access to your content? Note: Skipping this step may generate a message during the initial scan of your content if Kodi can't locate your content."
 msgstr ""
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr ""
-
-msgctxt "#39032"
-msgid "Please verify the path. You may need to verify your network credentials in the add-on settings or use different Plex paths. Stop syncing?"
+msgid "Kodi cannot locate the file %s. Please verify your PKC settings. Stop syncing?"
 msgstr ""
 
 msgctxt "#39033"
@@ -1556,6 +1562,11 @@ msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr ""
 
+# PKC settings, Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies (Refresh Plex playlist/nodes!)"
 msgstr ""
@@ -1664,10 +1675,6 @@ msgstr ""
 
 msgctxt "#39213"
 msgid "is offline"
-msgstr ""
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
 msgstr ""
 
 msgctxt "#39215"
@@ -1849,10 +1856,6 @@ msgstr ""
 
 msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
-msgstr ""
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
 msgstr ""
 
 msgctxt "#39603"

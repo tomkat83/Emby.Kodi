@@ -1,21 +1,31 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
-from urllib import urlencode
+from urllib import urlencode, quote_plus
 from ast import literal_eval
 from urlparse import urlparse, parse_qsl
-import re
+from re import compile as re_compile
 from copy import deepcopy
+from time import time
+from threading import Thread
 
-import downloadutils
-from utils import settings
+from xbmc import sleep
+
+from downloadutils import DownloadUtils as DU
+from utils import settings, try_encode, try_decode
 from variables import PLEX_TO_KODI_TIMEFACTOR
+import plex_tv
 
 ###############################################################################
-
-log = getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 CONTAINERSIZE = int(settings('limitindex'))
-REGEX_PLEX_KEY = re.compile(r'''/(.+)/(\d+)$''')
+REGEX_PLEX_KEY = re_compile(r'''/(.+)/(\d+)$''')
+
+# For discovery of PMS in the local LAN
+PLEX_GDM_IP = '239.0.0.250'  # multicast to PMS
+PLEX_GDM_PORT = 32414
+PLEX_GDM_MSG = 'M-SEARCH * HTTP/1.0'
+
 ###############################################################################
 
 
@@ -76,30 +86,372 @@ def GetMethodFromPlexType(plexType):
     return methods[plexType]
 
 
-def XbmcItemtypes():
-    return ['photo', 'video', 'audio']
-
-
-def PlexItemtypes():
-    return ['photo', 'video', 'audio']
-
-
-def PlexLibraryItemtypes():
-    return ['movie', 'show']
-    # later add: 'artist', 'photo'
-
-
-def EmbyItemtypes():
-    return ['Movie', 'Series', 'Season', 'Episode']
-
-
-def SelectStreams(url, args):
+def GetPlexLoginFromSettings():
     """
-    Does a PUT request to tell the PMS what audio and subtitle streams we have
-    chosen.
+    Returns a dict:
+        'plexLogin': settings('plexLogin'),
+        'plexToken': settings('plexToken'),
+        'plexhome': settings('plexhome'),
+        'plexid': settings('plexid'),
+        'myplexlogin': settings('myplexlogin'),
+        'plexAvatar': settings('plexAvatar'),
+        'plexHomeSize': settings('plexHomeSize')
+
+    Returns strings or unicode
+
+    Returns empty strings '' for a setting if not found.
+
+    myplexlogin is 'true' if user opted to log into plex.tv (the default)
+    plexhome is 'true' if plex home is used (the default)
     """
-    downloadutils.DownloadUtils().downloadUrl(
-        url + '?' + urlencode(args), action_type='PUT')
+    return {
+        'plexLogin': settings('plexLogin'),
+        'plexToken': settings('plexToken'),
+        'plexhome': settings('plexhome'),
+        'plexid': settings('plexid'),
+        'myplexlogin': settings('myplexlogin'),
+        'plexAvatar': settings('plexAvatar'),
+        'plexHomeSize': settings('plexHomeSize')
+    }
+
+
+def check_connection(url, token=None, verifySSL=None):
+    """
+    Checks connection to a Plex server, available at url. Can also be used
+    to check for connection with plex.tv.
+
+    Override SSL to skip the check by setting verifySSL=False
+    if 'None', SSL will be checked (standard requests setting)
+    if 'True', SSL settings from file settings are used (False/True)
+
+    Input:
+        url         URL to Plex server (e.g. https://192.168.1.1:32400)
+        token       appropriate token to access server. If None is passed,
+                    the current token is used
+    Output:
+        False       if server could not be reached or timeout occured
+        200         if connection was successfull
+        int         or other HTML status codes as received from the server
+    """
+    # Add '/clients' to URL because then an authentication is necessary
+    # If a plex.tv URL was passed, this does not work.
+    header_options = None
+    if token is not None:
+        header_options = {'X-Plex-Token': token}
+    if verifySSL is True:
+        verifySSL = None if settings('sslverify') == 'true' else False
+    if 'plex.tv' in url:
+        url = 'https://plex.tv/api/home/users'
+    else:
+        url = url + '/library/onDeck'
+    LOG.debug("Checking connection to server %s with verifySSL=%s",
+              url, verifySSL)
+    answer = DU().downloadUrl(url,
+                              authenticate=False,
+                              headerOptions=header_options,
+                              verifySSL=verifySSL,
+                              timeout=10)
+    if answer is None:
+        LOG.debug("Could not connect to %s", url)
+        return False
+    try:
+        # xml received?
+        answer.attrib
+    except AttributeError:
+        if answer is True:
+            # Maybe no xml but connection was successful nevertheless
+            answer = 200
+    else:
+        # Success - we downloaded an xml!
+        answer = 200
+    # We could connect but maybe were not authenticated. No worries
+    LOG.debug("Checking connection successfull. Answer: %s", answer)
+    return answer
+
+
+def discover_pms(token=None):
+    """
+    Optional parameter:
+        token       token for plex.tv
+
+    Returns a list of available PMS to connect to, one entry is the dict:
+    {
+        'machineIdentifier'     [str] unique identifier of the PMS
+        'name'                  [str] name of the PMS
+        'token'                 [str] token needed to access that PMS
+        'ownername'             [str] name of the owner of this PMS or None if
+                                the owner itself supplied tries to connect
+        'product'               e.g. 'Plex Media Server' or None
+        'version'               e.g. '1.11.2.4772-3e...' or None
+        'device':               e.g. 'PC' or 'Windows' or None
+        'platform':             e.g. 'Windows', 'Android' or None
+        'local'                 [bool] True if plex.tv supplied
+                                'publicAddressMatches'='1'
+                                or if found using Plex GDM in the local LAN
+        'owned'                 [bool] True if it's the owner's PMS
+        'relay'                 [bool] True if plex.tv supplied 'relay'='1'
+        'presence'              [bool] True if plex.tv supplied 'presence'='1'
+        'httpsRequired'         [bool] True if plex.tv supplied
+                                'httpsRequired'='1'
+        'scheme'                [str] either 'http' or 'https'
+        'ip':                   [str] IP of the PMS, e.g. '192.168.1.1'
+        'port':                 [str] Port of the PMS, e.g. '32400'
+        'baseURL':              [str] <scheme>://<ip>:<port> of the PMS
+    }
+    """
+    LOG.info('Start discovery of Plex Media Servers')
+    # Look first for local PMS in the LAN
+    local_pms_list = _plex_gdm()
+    LOG.debug('PMS found in the local LAN using Plex GDM: %s', local_pms_list)
+    # Get PMS from plex.tv
+    if token:
+        LOG.info('Checking with plex.tv for more PMS to connect to')
+        plex_pms_list = _pms_list_from_plex_tv(token)
+        LOG.debug('PMS found on plex.tv: %s', plex_pms_list)
+    else:
+        LOG.info('No plex token supplied, only checked LAN for available PMS')
+        plex_pms_list = []
+
+    # See if we found a PMS both locally and using plex.tv. If so, use local
+    # connection data
+    all_pms = []
+    for pms in local_pms_list:
+        for i, plex_pms in enumerate(plex_pms_list):
+            if pms['machineIdentifier'] == plex_pms['machineIdentifier']:
+                # Update with GDM data - potentially more reliable than plex.tv
+                LOG.debug('Found this PMS also in the LAN: %s', plex_pms)
+                plex_pms['ip'] = pms['ip']
+                plex_pms['port'] = pms['port']
+                plex_pms['local'] = True
+                # Use all the other data we know from plex.tv
+                pms = plex_pms
+                # Remove this particular pms since we already know it
+                plex_pms_list.pop(i)
+                break
+        https = _pms_https_enabled('%s:%s' % (pms['ip'], pms['port']))
+        if https is None:
+            # Error contacting url. Skip and ignore this PMS for now
+            continue
+        elif https is True:
+            pms['scheme'] = 'https'
+            pms['baseURL'] = 'https://%s:%s' % (pms['ip'], pms['port'])
+        else:
+            pms['scheme'] = 'http'
+            pms['baseURL'] = 'http://%s:%s' % (pms['ip'], pms['port'])
+        all_pms.append(pms)
+    # Now add the remaining PMS from plex.tv (where we already checked connect.)
+    for plex_pms in plex_pms_list:
+        all_pms.append(plex_pms)
+    LOG.debug('Found the following PMS in total: %s', all_pms)
+    return all_pms
+
+
+def _plex_gdm():
+    """
+    PlexGDM - looks for PMS in the local LAN and returns a list of the PMS found
+    """
+    # Import here because we might not need to do gdm because we already
+    # connected to a PMS successfully in the past
+    import struct
+    import socket
+
+    # setup socket for discovery -> multicast message
+    gdm = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    gdm.settimeout(2.0)
+    # Set the time-to-live for messages to 2 for local network
+    ttl = struct.pack('b', 2)
+    gdm.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
+
+    return_data = []
+    try:
+        # Send data to the multicast group
+        gdm.sendto(PLEX_GDM_MSG, (PLEX_GDM_IP, PLEX_GDM_PORT))
+
+        # Look for responses from all recipients
+        while True:
+            try:
+                data, server = gdm.recvfrom(1024)
+                return_data.append({'from': server, 'data': data})
+            except socket.timeout:
+                break
+    except Exception as e:
+        # Probably error: (101, 'Network is unreachable')
+        LOG.error(e)
+        import traceback
+        LOG.error("Traceback:\n%s", traceback.format_exc())
+    finally:
+        gdm.close()
+    LOG.debug('Plex GDM returned the data: %s', return_data)
+    pms_list = []
+    for response in return_data:
+        # Check if we had a positive HTTP response
+        if '200 OK' not in response['data']:
+            continue
+        pms = {
+            'ip': response['from'][0],
+            'scheme': None,
+            'local': True,  # Since we found it using GDM
+            'product': None,
+            'baseURL': None,
+            'name': None,
+            'version': None,
+            'token': None,
+            'ownername': None,
+            'device': None,
+            'platform': None,
+            'owned': None,
+            'relay': None,
+            'presence': True,  # Since we're talking to the PMS
+            'httpsRequired': None,
+        }
+        for line in response['data'].split('\n'):
+            if 'Content-Type:' in line:
+                pms['product'] = try_decode(line.split(':')[1].strip())
+            elif 'Host:' in line:
+                pms['baseURL'] = line.split(':')[1].strip()
+            elif 'Name:' in line:
+                pms['name'] = try_decode(line.split(':')[1].strip())
+            elif 'Port:' in line:
+                pms['port'] = line.split(':')[1].strip()
+            elif 'Resource-Identifier:' in line:
+                pms['machineIdentifier'] = line.split(':')[1].strip()
+            elif 'Version:' in line:
+                pms['version'] = line.split(':')[1].strip()
+        pms_list.append(pms)
+    return pms_list
+
+
+def _pms_list_from_plex_tv(token):
+    """
+    get Plex media Server List from plex.tv/pms/resources
+    """
+    xml = DU().downloadUrl('https://plex.tv/api/resources',
+                           authenticate=False,
+                           parameters={'includeHttps': 1},
+                           headerOptions={'X-Plex-Token': token})
+    try:
+        xml.attrib
+    except AttributeError:
+        LOG.error('Could not get list of PMS from plex.tv')
+        return
+
+    from Queue import Queue
+    queue = Queue()
+    thread_queue = []
+
+    max_age_in_seconds = 2*60*60*24
+    for device in xml.findall('Device'):
+        if 'server' not in device.get('provides'):
+            # No PMS - skip
+            continue
+        if device.find('Connection') is None:
+            # no valid connection - skip
+            continue
+        # check MyPlex data age - skip if >2 days
+        info_age = time() - int(device.get('lastSeenAt'))
+        if info_age > max_age_in_seconds:
+            LOG.debug("Skip server %s not seen for 2 days", device.get('name'))
+            continue
+        pms = {
+            'machineIdentifier': device.get('clientIdentifier'),
+            'name': device.get('name'),
+            'token': device.get('accessToken'),
+            'ownername': device.get('sourceTitle'),
+            'product': device.get('product'),  # e.g. 'Plex Media Server'
+            'version': device.get('productVersion'),  # e.g. '1.11.2.4772-3e...'
+            'device': device.get('device'),  # e.g. 'PC' or 'Windows'
+            'platform': device.get('platform'),  # e.g. 'Windows', 'Android'
+            'local': device.get('publicAddressMatches') == '1',
+            'owned': device.get('owned') == '1',
+            'relay': device.get('relay') == '1',
+            'presence': device.get('presence') == '1',
+            'httpsRequired': device.get('httpsRequired') == '1',
+            'connections': []
+        }
+        # Try a local connection first, no matter what plex.tv tells us
+        for connection in device.findall('Connection'):
+            if connection.get('local') == '1':
+                pms['connections'].append(connection)
+        # Then try non-local
+        for connection in device.findall('Connection'):
+            if connection.get('local') != '1':
+                pms['connections'].append(connection)
+        # Spawn threads to ping each PMS simultaneously
+        thread = Thread(target=_poke_pms, args=(pms, queue))
+        thread_queue.append(thread)
+
+    max_threads = 5
+    threads = []
+    # poke PMS, own thread for each PMS
+    while True:
+        # Remove finished threads
+        for thread in threads:
+            if not thread.isAlive():
+                threads.remove(thread)
+        if len(threads) < max_threads:
+            try:
+                thread = thread_queue.pop()
+            except IndexError:
+                # We have done our work
+                break
+            else:
+                thread.start()
+                threads.append(thread)
+        else:
+            sleep(50)
+    # wait for requests being answered
+    for thread in threads:
+        thread.join()
+    # declare new PMSs
+    pms_list = []
+    while not queue.empty():
+        pms = queue.get()
+        del pms['connections']
+        pms_list.append(pms)
+        queue.task_done()
+    return pms_list
+
+
+def _poke_pms(pms, queue):
+    data = pms['connections'][0].attrib
+    if data['local'] == '1':
+        protocol = data['protocol']
+        address = data['address']
+        port = data['port']
+        url = '%s://%s:%s' % (protocol, address, port)
+    else:
+        url = data['uri']
+        if url.count(':') == 1:
+            url = '%s:%s' % (url, data['port'])
+        protocol, address, port = url.split(':', 2)
+        address = address.replace('/', '')
+    xml = DU().downloadUrl('%s/identity' % url,
+                           authenticate=False,
+                           headerOptions={'X-Plex-Token': pms['token']},
+                           verifySSL=False,
+                           timeout=10)
+    try:
+        xml.attrib['machineIdentifier']
+    except (AttributeError, KeyError):
+        # No connection, delete the one we just tested
+        del pms['connections'][0]
+        if pms['connections']:
+            # Still got connections left, try them
+            return _poke_pms(pms, queue)
+        return
+    else:
+        # Connection successful - correct pms?
+        if xml.get('machineIdentifier') == pms['machineIdentifier']:
+            # process later
+            pms['baseURL'] = url
+            pms['scheme'] = protocol
+            pms['ip'] = address
+            pms['port'] = port
+            queue.put(pms)
+            return
+    LOG.info('Found a pms at %s, but the expected machineIdentifier of '
+             '%s did not match the one we found: %s',
+             url, pms['uuid'], xml.get('machineIdentifier'))
 
 
 def GetPlexMetadata(key):
@@ -128,7 +480,7 @@ def GetPlexMetadata(key):
         # 'includeConcerts': 1
     }
     url = url + '?' + urlencode(arguments)
-    xml = downloadutils.DownloadUtils().downloadUrl(url)
+    xml = DU().downloadUrl(url)
     if xml == 401:
         # Either unauthorized (taken care of by doUtils) or PMS under strain
         return 401
@@ -137,7 +489,7 @@ def GetPlexMetadata(key):
         xml.attrib
     # Nope we did not receive a valid XML
     except AttributeError:
-        log.error("Error retrieving metadata for %s" % url)
+        LOG.error("Error retrieving metadata for %s", url)
         xml = None
     return xml
 
@@ -179,22 +531,21 @@ def DownloadChunks(url):
     """
     xml = None
     pos = 0
-    errorCounter = 0
-    while errorCounter < 10:
+    error_counter = 0
+    while error_counter < 10:
         args = {
             'X-Plex-Container-Size': CONTAINERSIZE,
             'X-Plex-Container-Start': pos
         }
-        xmlpart = downloadutils.DownloadUtils().downloadUrl(
-            url + urlencode(args))
+        xmlpart = DU().downloadUrl(url + urlencode(args))
         # If something went wrong - skip in the hope that it works next time
         try:
             xmlpart.attrib
         except AttributeError:
-            log.error('Error while downloading chunks: %s'
-                      % (url + urlencode(args)))
+            LOG.error('Error while downloading chunks: %s',
+                      url + urlencode(args))
             pos += CONTAINERSIZE
-            errorCounter += 1
+            error_counter += 1
             continue
 
         # Very first run: starting xml (to retain data in xml's root!)
@@ -212,8 +563,8 @@ def DownloadChunks(url):
         if len(xmlpart) < CONTAINERSIZE:
             break
         pos += CONTAINERSIZE
-    if errorCounter == 10:
-        log.error('Fatal error while downloading chunks for %s' % url)
+    if error_counter == 10:
+        LOG.error('Fatal error while downloading chunks for %s', url)
         return None
     return xml
 
@@ -261,8 +612,7 @@ def get_plex_sections():
     """
     Returns all Plex sections (libraries) of the PMS as an etree xml
     """
-    return downloadutils.DownloadUtils().downloadUrl(
-        '{server}/library/sections')
+    return DU().downloadUrl('{server}/library/sections')
 
 
 def init_plex_playqueue(itemid, librarySectionUUID, mediatype='movie',
@@ -281,26 +631,16 @@ def init_plex_playqueue(itemid, librarySectionUUID, mediatype='movie',
     }
     if trailers is True:
         args['extrasPrefixCount'] = settings('trailerNumber')
-    xml = downloadutils.DownloadUtils().downloadUrl(
-        url + '?' + urlencode(args), action_type="POST")
+    xml = DU().downloadUrl(url + '?' + urlencode(args), action_type="POST")
     try:
         xml[0].tag
     except (IndexError, TypeError, AttributeError):
-        log.error("Error retrieving metadata for %s" % url)
+        LOG.error("Error retrieving metadata for %s", url)
         return None
     return xml
 
 
-def getPlexRepeat(kodiRepeat):
-    plexRepeat = {
-        'off': '0',
-        'one': '1',
-        'all': '2'   # does this work?!?
-    }
-    return plexRepeat.get(kodiRepeat)
-
-
-def PMSHttpsEnabled(url):
+def _pms_https_enabled(url):
     """
     Returns True if the PMS can talk https, False otherwise.
     None if error occured, e.g. the connection timed out
@@ -312,21 +652,20 @@ def PMSHttpsEnabled(url):
 
     Prefers HTTPS over HTTP
     """
-    doUtils = downloadutils.DownloadUtils().downloadUrl
-    res = doUtils('https://%s/identity' % url,
-                  authenticate=False,
-                  verifySSL=False)
+    res = DU().downloadUrl('https://%s/identity' % url,
+                           authenticate=False,
+                           verifySSL=False)
     try:
         res.attrib
     except AttributeError:
         # Might have SSL deactivated. Try with http
-        res = doUtils('http://%s/identity' % url,
-                      authenticate=False,
-                      verifySSL=False)
+        res = DU().downloadUrl('http://%s/identity' % url,
+                               authenticate=False,
+                               verifySSL=False)
         try:
             res.attrib
         except AttributeError:
-            log.error("Could not contact PMS %s" % url)
+            LOG.error("Could not contact PMS %s", url)
             return None
         else:
             # Received a valid XML. Server wants to talk HTTP
@@ -342,17 +681,17 @@ def GetMachineIdentifier(url):
 
     Returns None if something went wrong
     """
-    xml = downloadutils.DownloadUtils().downloadUrl('%s/identity' % url,
-                                                    authenticate=False,
-                                                    verifySSL=False,
-                                                    timeout=10)
+    xml = DU().downloadUrl('%s/identity' % url,
+                           authenticate=False,
+                           verifySSL=False,
+                           timeout=10)
     try:
         machineIdentifier = xml.attrib['machineIdentifier']
     except (AttributeError, KeyError):
-        log.error('Could not get the PMS machineIdentifier for %s' % url)
+        LOG.error('Could not get the PMS machineIdentifier for %s', url)
         return None
-    log.debug('Found machineIdentifier %s for the PMS %s'
-              % (machineIdentifier, url))
+    LOG.debug('Found machineIdentifier %s for the PMS %s',
+              machineIdentifier, url)
     return machineIdentifier
 
 
@@ -372,9 +711,8 @@ def GetPMSStatus(token):
     or an empty dict.
     """
     answer = {}
-    xml = downloadutils.DownloadUtils().downloadUrl(
-        '{server}/status/sessions',
-        headerOptions={'X-Plex-Token': token})
+    xml = DU().downloadUrl('{server}/status/sessions',
+                           headerOptions={'X-Plex-Token': token})
     try:
         xml.attrib
     except AttributeError:
@@ -412,8 +750,8 @@ def scrobble(ratingKey, state):
         url = "{server}/:/unscrobble?" + urlencode(args)
     else:
         return
-    downloadutils.DownloadUtils().downloadUrl(url)
-    log.info("Toggled watched state for Plex item %s" % ratingKey)
+    DU().downloadUrl(url)
+    LOG.info("Toggled watched state for Plex item %s", ratingKey)
 
 
 def delete_item_from_pms(plexid):
@@ -423,24 +761,76 @@ def delete_item_from_pms(plexid):
 
     Returns True if successful, False otherwise
     """
-    if downloadutils.DownloadUtils().downloadUrl(
-            '{server}/library/metadata/%s' % plexid,
-            action_type="DELETE") is True:
-        log.info('Successfully deleted Plex id %s from the PMS' % plexid)
+    if DU().downloadUrl('{server}/library/metadata/%s' % plexid,
+                        action_type="DELETE") is True:
+        LOG.info('Successfully deleted Plex id %s from the PMS', plexid)
         return True
-    else:
-        log.error('Could not delete Plex id %s from the PMS' % plexid)
-        return False
+    LOG.error('Could not delete Plex id %s from the PMS', plexid)
+    return False
 
 
 def get_PMS_settings(url, token):
     """
-    Retrieve the PMS' settings via <url>/:/
+    Retrieve the PMS' settings via <url>/:/prefs
 
     Call with url: scheme://ip:port
     """
-    return downloadutils.DownloadUtils().downloadUrl(
+    return DU().downloadUrl(
         '%s/:/prefs' % url,
         authenticate=False,
         verifySSL=False,
         headerOptions={'X-Plex-Token': token} if token else None)
+
+
+def GetUserArtworkURL(username):
+    """
+    Returns the URL for the user's Avatar. Or False if something went
+    wrong.
+    """
+    users = plex_tv.list_home_users(settings('plexToken'))
+    url = ''
+    # If an error is encountered, set to False
+    if not users:
+        LOG.info("Couldnt get user from plex.tv. No URL for user avatar")
+        return False
+    for user in users:
+        if username in user['title']:
+            url = user['thumb']
+    LOG.debug("Avatar url for user %s is: %s", username, url)
+    return url
+
+
+def transcode_image_path(key, AuthToken, path, width, height):
+    """
+    Transcode Image support
+
+    parameters:
+        key
+        AuthToken
+        path - source path of current XML: path[srcXML]
+        width
+        height
+    result:
+        final path to image file
+    """
+    # external address - can we get a transcoding request for external images?
+    if key.startswith('http://') or key.startswith('https://'):  
+        path = key
+    elif key.startswith('/'):  # internal full path.
+        path = 'http://127.0.0.1:32400' + key
+    else:  # internal path, add-on
+        path = 'http://127.0.0.1:32400' + path + '/' + key
+    path = try_encode(path)
+    # This is bogus (note the extra path component) but ATV is stupid when it
+    # comes to caching images, it doesn't use querystrings. Fortunately PMS is
+    # lenient...
+    transcode_path = ('/photo/:/transcode/%sx%s/%s'
+                      % (width, height, quote_plus(path)))
+    args = {
+        'width': width,
+        'height': height,
+        'url': path
+    }
+    if AuthToken:
+        args['X-Plex-Token'] = AuthToken
+    return transcode_path + '?' + urlencode(args)

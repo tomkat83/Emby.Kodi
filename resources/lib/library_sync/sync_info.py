@@ -52,14 +52,13 @@ class Threaded_Show_Sync_Info(Thread):
         # cache local variables because it's faster
         total = self.total
         dialog = DialogProgressBG('dialoglogProgressBG')
-        thread_stopped = self.thread_stopped
         dialog.create("%s %s: %s %s"
                       % (lang(39714), self.item_type, str(total), lang(39715)))
         player = Player()
 
         total = 2 * total
         totalProgress = 0
-        while thread_stopped() is False and not player.isPlaying():
+        while self.stopped() is False and not player.isPlaying():
             with LOCK:
                 get_progress = GET_METADATA_COUNT
                 process_progress = PROCESS_METADATA_COUNT

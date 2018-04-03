@@ -38,11 +38,21 @@
 		<setting type="lsep" label="39700" />
 		<setting id="enable_alexa" label="39701" type="bool" default="true"/>
 		<setting type="lsep" label="" />
-		<setting id="enableContext" type="bool" label="30413" default="true" />
-		<setting id="skipContextMenu" type="bool" label="30520" default="false" visible="eq(-1,true)" subsetting="true" />
+        <!-- Different settings that are not visible - to avoid warnings in the log -->
+		<setting id="skipContextMenu" type="bool" label="30520" default="false"/>
 		<setting id="plex_restricteduser" type="bool" default="false" visible="false"/>
 		<setting id="plex_allows_mediaDeletion" type="bool" default="true" visible="false"/>
 		<setting id="companion_show_gdm_port_warning" type="bool" default="true" visible="false"/>
+        <setting id="InstallQuestionsAnswered" type="bool" default="false" visible="false"/>
+        <setting id="SyncInstallRunDone" type="bool" default="false" visible="false"/>
+        <setting id="last_migrated_PKC_version" type="text" default="" visible="false"/>
+        <setting id="plexAvatar" type="text" default="" visible="false"/>
+        <setting id="plex_client_Id" type="text" default="" visible="false"/>
+        <setting id="plex_machineIdentifier" type="text" default="" visible="false"/>
+        <setting id="dbCreatedWithVersion" type="text" default="" visible="false"/>
+        <setting id="plexid" type="text" default="" visible="false"/>
+        <setting id="userid" type="text" default="" visible="false"/>
+        <setting id="username" type="text" default="" visible="false"/>
 	</category>
 
 	<category label="30506"><!-- Sync Options -->
@@ -112,6 +122,7 @@
 	    <setting id="bestTrailer" type="bool" label="30542" default="true" />
 	    <setting id="force_transcode_pix" type="bool" label="30545" default="false" />
 	    <setting id="kodi_video_cache" type="number" visible="false" default="20971520" />
+        <setting id="warned_setting_videoplayer.autoplaynextitem" type="bool" visible="false" default="false" />
 	</category>
 
 	<category label="30544"><!-- artwork -->
@@ -134,6 +145,7 @@
 
 	<category label="39073"><!-- Appearance Tweaks -->
 		<setting id="fetch_pms_item_number" label="39077" type="number" default="25" option="int" />
+        <setting id="forceReloadSkinOnPlaybackStop" type="bool" label="39065" default="false" /><!-- Force-refresh Kodi skin on stopping playback -->
 		<setting type="lsep" label="39074" /><!-- TV Shows -->
 		<setting id="OnDeckTVextended" type="bool" label="39058" default="true" /><!-- Extend Plex TV Series "On Deck" view to all shows -->
 		<setting id="OnDeckTvAppendShow" type="bool" label="39047" default="false" /><!--On Deck view: Append show title to episode-->

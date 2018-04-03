@@ -292,7 +292,7 @@ class ABNF(object):
         opcode: operation code. please see OPCODE_XXX.
         """
         if opcode == ABNF.OPCODE_TEXT and isinstance(data, unicode):
-            data = utils.tryEncode(data)
+            data = utils.try_encode(data)
         # mask must be set if send data from client
         return ABNF(1, 0, 0, 0, opcode, 1, data)
 
@@ -504,7 +504,8 @@ class WebSocket(object):
 
         self.connected = True
 
-    def _validate_header(self, headers, key):
+    @staticmethod
+    def _validate_header(headers, key):
         for k, v in _HEADERS_TO_CHECK.iteritems():
             r = headers.get(k, None)
             if not r:
@@ -598,7 +599,7 @@ class WebSocket(object):
 
         return value: string(byte array) value.
         """
-        opcode, data = self.recv_data()
+        _, data = self.recv_data()
         return data
 
     def recv_data(self):
@@ -620,7 +621,6 @@ class WebSocket(object):
                     self._cont_data[1] += frame.data
                 else:
                     self._cont_data = [frame.opcode, frame.data]
-                
                 if frame.fin:
                     data = self._cont_data
                     self._cont_data = None
@@ -740,7 +740,7 @@ class WebSocket(object):
 
     def _recv(self, bufsize):
         try:
-            bytes = self.sock.recv(bufsize)
+            bytes_ = self.sock.recv(bufsize)
         except socket.timeout as e:
             raise WebSocketTimeoutException(e.args[0])
         except SSLError as e:
@@ -748,17 +748,17 @@ class WebSocket(object):
                 raise WebSocketTimeoutException(e.args[0])
             else:
                 raise
-        if not bytes:
+        if not bytes_:
             raise WebSocketConnectionClosedException()
-        return bytes
+        return bytes_
 
 
     def _recv_strict(self, bufsize):
         shortage = bufsize - sum(len(x) for x in self._recv_buffer)
         while shortage > 0:
-            bytes = self._recv(shortage)
-            self._recv_buffer.append(bytes)
-            shortage -= len(bytes)
+            bytes_ = self._recv(shortage)
+            self._recv_buffer.append(bytes_)
+            shortage -= len(bytes_)
         unified = "".join(self._recv_buffer)
         if shortage == 0:
             self._recv_buffer = []
@@ -783,7 +783,7 @@ class WebSocketApp(object):
     Higher level of APIs are provided.
     The interface is like JavaScript WebSocket object.
     """
-    def __init__(self, url, header=[],
+    def __init__(self, url, header=None,
                  on_open=None, on_message=None, on_error=None,
                  on_close=None, keep_running=True, get_mask_key=None):
         """
@@ -807,7 +807,7 @@ class WebSocketApp(object):
          docstring for more information
         """
         self.url = url
-        self.header = header
+        self.header = [] if header is None else header
         self.on_open = on_open
         self.on_message = on_message
         self.on_error = on_error
@@ -830,12 +830,12 @@ class WebSocketApp(object):
         close websocket connection.
         """
         self.keep_running = False
-        if(self.sock != None):
-            self.sock.close()        
+        if self.sock != None:
+            self.sock.close()
 
     def _send_ping(self, interval):
         while True:
-            for i in range(interval):
+            for _ in range(interval):
                 time.sleep(1)
                 if not self.keep_running:
                     return
@@ -878,8 +878,7 @@ class WebSocketApp(object):
                     
                     if data is None or self.keep_running == False:
                         break
-                    self._callback(self.on_message, data)                    
-                    
+                    self._callback(self.on_message, data)
                 except Exception, e:
                     #print str(e.args[0])
                     if "timed out" not in e.args[0]:

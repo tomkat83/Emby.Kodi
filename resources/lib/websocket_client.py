@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 ###############################################################################
-import logging
+from logging import getLogger
 import websocket
 from json import loads
 import xml.etree.ElementTree as etree
 from threading import Thread
-from Queue import Queue
 from ssl import CERT_NONE
 
 from xbmc import sleep
@@ -14,10 +13,11 @@ from xbmc import sleep
 from utils import window, settings, thread_methods
 from companion import process_command
 import state
+import variables as v
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 ###############################################################################
 
@@ -25,11 +25,9 @@ log = logging.getLogger("PLEX."+__name__)
 class WebSocket(Thread):
     opcode_data = (websocket.ABNF.OPCODE_TEXT, websocket.ABNF.OPCODE_BINARY)
 
-    def __init__(self, callback=None):
-        if callback is not None:
-            self.mgr = callback
+    def __init__(self):
         self.ws = None
-        Thread.__init__(self)
+        super(WebSocket, self).__init__()
 
     def process(self, opcode, message):
         raise NotImplementedError
@@ -56,26 +54,23 @@ class WebSocket(Thread):
         raise NotImplementedError
 
     def run(self):
-        log.info("----===## Starting %s ##===----" % self.__class__.__name__)
+        LOG.info("----===## Starting %s ##===----", self.__class__.__name__)
 
         counter = 0
         handshake_counter = 0
-        thread_stopped = self.thread_stopped
-        thread_suspended = self.thread_suspended
-        while not thread_stopped():
+        stopped = self.stopped
+        suspended = self.suspended
+        while not stopped():
             # In the event the server goes offline
-            while thread_suspended():
+            while suspended():
                 # Set in service.py
                 if self.ws is not None:
-                    try:
-                        self.ws.shutdown()
-                    except:
-                        pass
+                    self.ws.close()
                     self.ws = None
-                if thread_stopped():
+                if stopped():
                     # Abort was requested while waiting. We should exit
-                    log.info("##===---- %s Stopped ----===##"
-                             % self.__class__.__name__)
+                    LOG.info("##===---- %s Stopped ----===##",
+                             self.__class__.__name__)
                     return
                 sleep(1000)
             try:
@@ -84,8 +79,8 @@ class WebSocket(Thread):
                 # No worries if read timed out
                 pass
             except websocket.WebSocketConnectionClosedException:
-                log.info("%s: connection closed, (re)connecting"
-                         % self.__class__.__name__)
+                LOG.info("%s: connection closed, (re)connecting",
+                         self.__class__.__name__)
                 uri, sslopt = self.getUri()
                 try:
                     # Low timeout - let's us shut this thread down!
@@ -96,7 +91,7 @@ class WebSocket(Thread):
                         enable_multithread=True)
                 except IOError:
                     # Server is probably offline
-                    log.info("%s: Error connecting" % self.__class__.__name__)
+                    LOG.info("%s: Error connecting", self.__class__.__name__)
                     self.ws = None
                     counter += 1
                     if counter > 3:
@@ -104,68 +99,54 @@ class WebSocket(Thread):
                         self.IOError_response()
                     sleep(1000)
                 except websocket.WebSocketTimeoutException:
-                    log.info("%s: Timeout while connecting, trying again"
-                             % self.__class__.__name__)
+                    LOG.info("%s: Timeout while connecting, trying again",
+                             self.__class__.__name__)
                     self.ws = None
                     sleep(1000)
                 except websocket.WebSocketException as e:
-                    log.info('%s: WebSocketException: %s'
-                             % (self.__class__.__name__, e))
-                    if 'Handshake Status 401' in e.args:
+                    LOG.info('%s: WebSocketException: %s',
+                             self.__class__.__name__, e)
+                    if ('Handshake Status 401' in e.args
+                            or 'Handshake Status 403' in e.args):
                         handshake_counter += 1
                         if handshake_counter >= 5:
-                            log.info('%s: Error in handshake detected. '
-                                     'Stopping now'
-                                     % self.__class__.__name__)
+                            LOG.info('%s: Error in handshake detected. '
+                                     'Stopping now', self.__class__.__name__)
                             break
                     self.ws = None
                     sleep(1000)
                 except Exception as e:
-                    log.error('%s: Unknown exception encountered when '
-                              'connecting: %s' % (self.__class__.__name__, e))
+                    LOG.error('%s: Unknown exception encountered when '
+                              'connecting: %s', self.__class__.__name__, e)
                     import traceback
-                    log.error("%s: Traceback:\n%s"
-                              % (self.__class__.__name__,
-                                 traceback.format_exc()))
+                    LOG.error("%s: Traceback:\n%s",
+                              self.__class__.__name__, traceback.format_exc())
                     self.ws = None
                     sleep(1000)
                 else:
                     counter = 0
                     handshake_counter = 0
             except Exception as e:
-                log.error("%s: Unknown exception encountered: %s"
-                          % (self.__class__.__name__, e))
+                LOG.error("%s: Unknown exception encountered: %s",
+                          self.__class__.__name__, e)
                 import traceback
-                log.error("%s: Traceback:\n%s"
-                          % (self.__class__.__name__,
-                             traceback.format_exc()))
-                try:
-                    self.ws.shutdown()
-                except:
-                    pass
+                LOG.error("%s: Traceback:\n%s",
+                          self.__class__.__name__, traceback.format_exc())
+                if self.ws is not None:
+                    self.ws.close()
                 self.ws = None
-        log.info("##===---- %s Stopped ----===##" % self.__class__.__name__)
-
-    def stopThread(self):
-        """
-        Overwrite this method from thread_methods to close websockets
-        """
-        log.info("Stopping %s thread." % self.__class__.__name__)
-        self.__threadStopped = True
-        try:
-            self.ws.shutdown()
-        except:
-            pass
+        # Close websocket connection on shutdown
+        if self.ws is not None:
+            self.ws.close()
+        LOG.info("##===---- %s Stopped ----===##", self.__class__.__name__)
 
 
-@thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD'])
+@thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD',
+                              'BACKGROUND_SYNC_DISABLED'])
 class PMS_Websocket(WebSocket):
     """
     Websocket connection with the PMS for Plex Companion
     """
-    # Communication with librarysync
-    queue = Queue()
-
     def getUri(self):
         server = window('pms_server')
         # Get the appropriate prefix for the websocket
@@ -180,8 +161,8 @@ class PMS_Websocket(WebSocket):
         sslopt = {}
         if settings('sslverify') == "false":
             sslopt["cert_reqs"] = CERT_NONE
-        log.debug("%s: Uri: %s, sslopt: %s"
-                  % (self.__class__.__name__, uri, sslopt))
+        LOG.debug("%s: Uri: %s, sslopt: %s",
+                  self.__class__.__name__, uri, sslopt)
         return uri, sslopt
 
     def process(self, opcode, message):
@@ -191,38 +172,38 @@ class PMS_Websocket(WebSocket):
         try:
             message = loads(message)
         except ValueError:
-            log.error('%s: Error decoding message from websocket'
-                      % self.__class__.__name__)
-            log.error(message)
+            LOG.error('%s: Error decoding message from websocket',
+                      self.__class__.__name__)
+            LOG.error(message)
             return
         try:
             message = message['NotificationContainer']
         except KeyError:
-            log.error('%s: Could not parse PMS message: %s'
-                      % (self.__class__.__name__, message))
+            LOG.error('%s: Could not parse PMS message: %s',
+                      self.__class__.__name__, message)
             return
         # Triage
         typus = message.get('type')
         if typus is None:
-            log.error('%s: No message type, dropping message: %s'
-                      % (self.__class__.__name__, message))
+            LOG.error('%s: No message type, dropping message: %s',
+                      self.__class__.__name__, message)
             return
-        log.debug('%s: Received message from PMS server: %s'
-                  % (self.__class__.__name__, message))
+        LOG.debug('%s: Received message from PMS server: %s',
+                  self.__class__.__name__, message)
         # Drop everything we're not interested in
         if typus not in ('playing', 'timeline', 'activity'):
             return
         elif typus == 'activity' and state.DB_SCAN is True:
             # Only add to processing if PKC is NOT doing a lib scan (and thus
             # possibly causing these reprocessing messages en mass)
-            log.debug('%s: Dropping message as PKC is currently synching'
-                      % self.__class__.__name__)
+            LOG.debug('%s: Dropping message as PKC is currently synching',
+                      self.__class__.__name__)
         else:
             # Put PMS message on queue and let libsync take care of it
-            self.queue.put(message)
+            state.WEBSOCKET_QUEUE.put(message)
 
     def IOError_response(self):
-        log.warn("Repeatedly could not connect to PMS, "
+        LOG.warn("Repeatedly could not connect to PMS, "
                  "declaring the connection dead")
         window('plex_online', value='false')
 
@@ -233,72 +214,70 @@ class Alexa_Websocket(WebSocket):
 
     Can't use thread_methods!
     """
-    __thread_stopped = False
-    __thread_suspended = False
+    thread_stopped = False
+    thread_suspended = False
 
     def getUri(self):
-        self.plex_client_Id = window('plex_client_Id')
         uri = ('wss://pubsub.plex.tv/sub/websockets/%s/%s?X-Plex-Token=%s'
                % (state.PLEX_USER_ID,
-                  self.plex_client_Id, state.PLEX_TOKEN))
+                  v.PKC_MACHINE_IDENTIFIER,
+                  state.PLEX_TOKEN))
         sslopt = {}
-        log.debug("%s: Uri: %s, sslopt: %s"
-                  % (self.__class__.__name__, uri, sslopt))
+        LOG.debug("%s: Uri: %s, sslopt: %s",
+                  self.__class__.__name__, uri, sslopt)
         return uri, sslopt
 
     def process(self, opcode, message):
         if opcode not in self.opcode_data:
             return
-        log.debug('%s: Received the following message from Alexa:'
-                  % self.__class__.__name__)
-        log.debug('%s: %s' % (self.__class__.__name__, message))
+        LOG.debug('%s: Received the following message from Alexa:',
+                  self.__class__.__name__)
+        LOG.debug('%s: %s', self.__class__.__name__, message)
         try:
             message = etree.fromstring(message)
         except Exception as ex:
-            log.error('%s: Error decoding message from Alexa: %s'
-                      % (self.__class__.__name__, ex))
+            LOG.error('%s: Error decoding message from Alexa: %s',
+                      self.__class__.__name__, ex)
             return
         try:
             if message.attrib['command'] == 'processRemoteControlCommand':
                 message = message[0]
             else:
-                log.error('%s: Unknown Alexa message received'
-                          % self.__class__.__name__)
+                LOG.error('%s: Unknown Alexa message received',
+                          self.__class__.__name__)
                 return
         except:
-            log.error('%s: Could not parse Alexa message'
-                      % self.__class__.__name__)
+            LOG.error('%s: Could not parse Alexa message',
+                      self.__class__.__name__)
             return
-        process_command(message.attrib['path'][1:],
-                        message.attrib,
-                        queue=self.mgr.plexCompanion.queue)
+        process_command(message.attrib['path'][1:], message.attrib)
 
     def IOError_response(self):
         pass
 
     # Path in thread_methods
-    def stop_thread(self):
-        self.__thread_stopped = True
+    def stop(self):
+        self.thread_stopped = True
 
-    def suspend_thread(self):
-        self.__thread_suspended = True
+    def suspend(self):
+        self.thread_suspended = True
 
-    def resume_thread(self):
-        self.__thread_suspended = False
+    def resume(self):
+        self.thread_suspended = False
 
-    def thread_stopped(self):
-        if self.__thread_stopped is True:
+    def stopped(self):
+        if self.thread_stopped is True:
             return True
         if state.STOP_PKC:
             return True
         return False
 
     # The culprit
-    def thread_suspended(self):
+    def suspended(self):
         """
         Overwrite method since we need to check for plex token
         """
-        if self.__thread_suspended is True:
+        if self.thread_suspended is True:
             return True
         if not state.PLEX_TOKEN:
             return True

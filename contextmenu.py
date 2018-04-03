@@ -1,41 +1,48 @@
 # -*- coding: utf-8 -*-
-
 ###############################################################################
-from os import path as os_path
-from sys import path as sys_path
+from sys import listitem
+from urllib import urlencode
 
-from xbmcaddon import Addon
-from xbmc import translatePath, sleep, log, LOGERROR
+from xbmc import getCondVisibility, sleep
 from xbmcgui import Window
 
-_addon = Addon(id='plugin.video.plexkodiconnect')
-try:
-    _addon_path = _addon.getAddonInfo('path').decode('utf-8')
-except TypeError:
-    _addon_path = _addon.getAddonInfo('path').decode()
-try:
-    _base_resource = translatePath(os_path.join(
-        _addon_path,
-        'resources',
-        'lib')).decode('utf-8')
-except TypeError:
-    _base_resource = translatePath(os_path.join(
-        _addon_path,
-        'resources',
-        'lib')).decode()
-sys_path.append(_base_resource)
-
-from pickler import unpickle_me, pickl_window
-
 ###############################################################################
 
-if __name__ == "__main__":
-    win = Window(10000)
-    while win.getProperty('plex_command'):
+
+def _get_kodi_type():
+    kodi_type = listitem.getVideoInfoTag().getMediaType().decode('utf-8')
+    if not kodi_type:
+        if getCondVisibility('Container.Content(albums)'):
+            kodi_type = "album"
+        elif getCondVisibility('Container.Content(artists)'):
+            kodi_type = "artist"
+        elif getCondVisibility('Container.Content(songs)'):
+            kodi_type = "song"
+        elif getCondVisibility('Container.Content(pictures)'):
+            kodi_type = "picture"
+    return kodi_type
+
+
+def main():
+    """
+    Grabs kodi_id and kodi_type and sends a request to our main python instance
+    that context menu needs to be displayed
+    """
+    window = Window(10000)
+    kodi_id = listitem.getVideoInfoTag().getDbId()
+    if kodi_id == -1:
+        # There is no getDbId() method for getMusicInfoTag
+        # YET TO BE IMPLEMENTED - lookup ID using path
+        kodi_id = listitem.getMusicInfoTag().getURL()
+    kodi_type = _get_kodi_type()
+    args = {
+        'kodi_id': kodi_id,
+        'kodi_type': kodi_type
+    }
+    while window.getProperty('plex_command'):
         sleep(20)
-    win.setProperty('plex_command', 'CONTEXT_menu')
-    while not pickl_window('plex_result'):
-        sleep(50)
-    result = unpickle_me()
-    if result is None:
-        log('PLEX.%s: Error encountered, aborting' % __name__, level=LOGERROR)
+    window.setProperty('plex_command', 'CONTEXT_menu?%s' % urlencode(args))
+
+
+if __name__ == "__main__":
+    main()

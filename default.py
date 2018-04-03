@@ -32,7 +32,7 @@ sys_path.append(_base_resource)
 ###############################################################################
 
 import entrypoint
-from utils import window, reset, passwordsXML, language as lang, dialog, \
+from utils import window, reset, passwords_xml, language as lang, dialog, \
     plex_command
 from pickler import unpickle_me, pickl_window
 from PKC_listitem import convert_PKC_to_listitem
@@ -115,7 +115,7 @@ class Main():
             entrypoint.resetAuth()
 
         elif mode == 'passwords':
-            passwordsXML()
+            passwords_xml()
 
         elif mode == 'switchuser':
             entrypoint.switchPlexUser()

@@ -1,5 +1,5 @@
-[![stable version](https://img.shields.io/badge/stable_version-1.8.12-blue.svg?maxAge=60&style=flat) ](https://dl.bintray.com/croneter/PlexKodiConnect/bin/repository.plexkodiconnect/repository.plexkodiconnect-1.0.0.zip) 
-[![beta version](https://img.shields.io/badge/beta_version-1.8.14-red.svg?maxAge=60&style=flat) ](https://dl.bintray.com/croneter/PlexKodiConnect_BETA/bin-BETA/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.0.zip)
+[![stable version](https://img.shields.io/badge/stable_version-1.8.18-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip) 
+[![beta version](https://img.shields.io/badge/beta_version-2.0.16-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip)
 
 [![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
@@ -14,6 +14,11 @@
 PKC combines the best of Kodi - ultra smooth navigation, beautiful and highly customizable user interfaces and playback of any file under the sun - and the Plex Media Server.
 
 Have a look at [some screenshots](https://github.com/croneter/PlexKodiConnect/wiki/Some-PKC-Screenshots) to see what's possible. 
+
+### UPDATE YOUR PKC REPO TO RECEIVE UPDATES!
+
+Unfortunately, the PKC Kodi repository had to move because it stopped working (thanks https://bintray.com). If you installed PKC before December 15, 2017, you need to [**MANUALLY** update the repo once](https://github.com/croneter/PlexKodiConnect/wiki/Update-PKC-Repository).
+
 
 ### Please Help Translating
 
@@ -69,15 +74,16 @@ PKC synchronizes your media from your Plex server to the native Kodi database. H
     + Chinese Simplified, thanks @everdream
     + Norwegian, thanks @mjorud
     + Portuguese, thanks @goncalo532 
+    + Russian, thanks @UncleStark
     + [Please help translating](https://www.transifex.com/croneter/pkc)
 
 ### Download and Installation
 
-Install PKC via the PlexKodiConnect Kodi repository below (we cannot use the official Kodi repository as PKC messes with Kodi's databases). See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Please use the stable version except if you really know what you're doing. Kodi will update PKC automatically. 
+Install PKC via the PlexKodiConnect Kodi repository download button just below (do NOT use the standard GitHub download!). See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Please use the stable version except if you really know what you're doing. Kodi will update PKC automatically. 
 
 | Stable version | Beta version |
 |----------------|--------------|
-| [![stable version](https://img.shields.io/badge/stable_version-latest-blue.svg?maxAge=60&style=flat) ](https://dl.bintray.com/croneter/PlexKodiConnect/bin/repository.plexkodiconnect/repository.plexkodiconnect-1.0.0.zip)  | [![beta version](https://img.shields.io/badge/beta_version-latest-red.svg?maxAge=60&style=flat) ](https://dl.bintray.com/croneter/PlexKodiConnect_BETA/bin-BETA/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.0.zip) |
+| [![stable version](https://img.shields.io/badge/stable_version-latest-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip)  | [![beta version](https://img.shields.io/badge/beta_version-latest-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip) |
 
 ### Additional Artwork
 PKC uses additional artwork for free from [TheMovieDB](https://www.themoviedb.org). Many thanks for lettings us use the API, guys!
@@ -92,10 +98,19 @@ PKC uses additional artwork for free from [TheMovieDB](https://www.themoviedb.or
     * If **another plugin is not working** like it's supposed to, try to use [PKC direct paths](https://github.com/croneter/PlexKodiConnect/wiki/Direct-Paths-Explained)
 
 ### Donations
-I'm not in any way affiliated with Plex. Thank you very much for a small donation via ko-fi.com and PayPal if you appreciate PKC.  
-**Full disclaimer:** I will see your name and address on my PayPal account. Rest assured that I will not share this with anyone. 
+I'm not in any way affiliated with Plex. Thank you very much for a small donation via ko-fi.com and PayPal, Bitcoin or Ether if you appreciate PKC.  
+**Full disclaimer:** I will see your name and address if you use PayPal. Rest assured that I will not share this with anyone. 
 
 [![Donations](https://az743702.vo.msecnd.net/cdn/kofi1.png?v=a)](https://ko-fi.com/A8182EB)
+
+![ETH-Donations](https://chart.googleapis.com/chart?chs=150x150&cht=qr&chld=L0&chl=0x0f57D98E08e617292D8bC0B3448dd79BF4Cf8e7F)    
+**Ethereum address:    
+0x0f57D98E08e617292D8bC0B3448dd79BF4Cf8e7F**
+
+![BTX-Donations](https://chart.googleapis.com/chart?chs=150x150&cht=qr&chld=L0&chl=3BhwvUsqAGtAZodGUx4mTP7pTECjf1AejT)    
+**Bitcoin address:    
+3BhwvUsqAGtAZodGUx4mTP7pTECjf1AejT**
+
 
 ### Request a New Feature
 

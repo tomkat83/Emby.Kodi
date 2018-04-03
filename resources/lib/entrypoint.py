@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
-import logging
+from logging import getLogger
 from shutil import copyfile
 from os import walk, makedirs
 from os.path import basename, join
@@ -11,17 +11,18 @@ import xbmcplugin
 from xbmc import sleep, executebuiltin, translatePath
 from xbmcgui import ListItem
 
-from utils import window, settings, language as lang, dialog, tryEncode, \
-    CatchExceptions, JSONRPC, exists_dir, plex_command, tryDecode
+from utils import window, settings, language as lang, dialog, try_encode, \
+    catch_exceptions, exists_dir, plex_command, try_decode
 import downloadutils
 
 from PlexFunctions import GetPlexMetadata, GetPlexSectionResults, \
     GetMachineIdentifier
 from PlexAPI import API
+import json_rpc as js
 import variables as v
 
 ###############################################################################
-log = logging.getLogger("PLEX."+__name__)
+log = getLogger("PLEX."+__name__)
 
 try:
     HANDLE = int(argv[1])
@@ -39,7 +40,7 @@ def chooseServer():
 
     import initialsetup
     setup = initialsetup.InitialSetup()
-    server = setup.PickPMS(showDialog=True)
+    server = setup.pick_pms(showDialog=True)
     if server is None:
         log.error('We did not connect to a new PMS, aborting')
         plex_command('SUSPEND_USER_CLIENT', 'False')
@@ -47,16 +48,14 @@ def chooseServer():
         return
 
     log.info("User chose server %s" % server['name'])
-    setup.WritePMStoSettings(server)
+    setup.write_pms_to_settings(server)
 
     if not __LogOut():
         return
 
-    from utils import deletePlaylists, deleteNodes
-    # First remove playlists
-    deletePlaylists()
-    # Remove video nodes
-    deleteNodes()
+    from utils import wipe_database
+    # Wipe Kodi and Plex database as well as playlists and video nodes
+    wipe_database()
 
     # Log in again
     __LogIn()
@@ -86,7 +85,7 @@ def togglePlexTV():
     else:
         log.info('Login to plex.tv')
         import initialsetup
-        initialsetup.InitialSetup().PlexTVSignIn()
+        initialsetup.InitialSetup().plex_tv_sign_in()
     dialog('notification',
            lang(29999),
            lang(39221),
@@ -174,10 +173,10 @@ def switchPlexUser():
         return
 
     # First remove playlists of old user
-    from utils import deletePlaylists, deleteNodes
-    deletePlaylists()
+    from utils import delete_playlists, delete_nodes
+    delete_playlists()
     # Remove video nodes
-    deleteNodes()
+    delete_nodes()
     __LogIn()
 
 
@@ -193,48 +192,41 @@ def GetSubFolders(nodeindex):
 
 
 ##### LISTITEM SETUP FOR VIDEONODES #####
-def createListItem(item, appendShowTitle=False, appendSxxExx=False):
+def createListItem(item, append_show_title=False, append_sxxexx=False):
+    log.debug('createListItem called with append_show_title %s, append_sxxexx '
+              '%s, item: %s', append_show_title, append_sxxexx, item)
     title = item['title']
     li = ListItem(title)
-    li.setProperty('IsPlayable', "true")
-
+    li.setProperty('IsPlayable', 'true')
     metadata = {
         'duration': str(item['runtime']/60),
         'Plot': item['plot'],
         'Playcount': item['playcount']
     }
 
-    if "episode" in item:
+    if 'episode' in item:
         episode = item['episode']
         metadata['Episode'] = episode
-
-    if "season" in item:
+    if 'season' in item:
         season = item['season']
         metadata['Season'] = season
-
     if season and episode:
-        li.setProperty('episodeno', "s%.2de%.2d" % (season, episode))
-        if appendSxxExx is True:
-            title = "S%.2dE%.2d - %s" % (season, episode, title)
-
-    if "firstaired" in item:
+        li.setProperty('episodeno', 's%.2de%.2d' % (season, episode))
+        if append_sxxexx is True:
+            title = 'S%.2dE%.2d - %s' % (season, episode, title)
+    if 'firstaired' in item:
         metadata['Premiered'] = item['firstaired']
-
-    if "showtitle" in item:
+    if 'showtitle' in item:
         metadata['TVshowTitle'] = item['showtitle']
-        if appendShowTitle is True:
+        if append_show_title is True:
             title = item['showtitle'] + ' - ' + title
-
-    if "rating" in item:
-        metadata['Rating'] = str(round(float(item['rating']),1))
-
-    if "director" in item:
-        metadata['Director'] = " / ".join(item['director'])
-
-    if "writer" in item:
-        metadata['Writer'] = " / ".join(item['writer'])
-
-    if "cast" in item:
+    if 'rating' in item:
+        metadata['Rating'] = str(round(float(item['rating']), 1))
+    if 'director' in item:
+        metadata['Director'] = item['director']
+    if 'writer' in item:
+        metadata['Writer'] = item['writer']
+    if 'cast' in item:
         cast = []
         castandrole = []
         for person in item['cast']:
@@ -245,16 +237,17 @@ def createListItem(item, appendShowTitle=False, appendSxxExx=False):
         metadata['CastAndRole'] = castandrole
 
     metadata['Title'] = title
+    metadata['mediatype'] = 'episode'
+    metadata['dbid'] = str(item['episodeid'])
     li.setLabel(title)
+    li.setInfo(type='Video', infoLabels=metadata)
 
-    li.setInfo(type="Video", infoLabels=metadata)  
     li.setProperty('resumetime', str(item['resume']['position']))
     li.setProperty('totaltime', str(item['resume']['total']))
     li.setArt(item['art'])
-    li.setThumbnailImage(item['art'].get('thumb',''))
+    li.setThumbnailImage(item['art'].get('thumb', ''))
     li.setArt({'icon': 'DefaultTVShows.png'})
-    li.setProperty('dbid', str(item['episodeid']))
-    li.setProperty('fanart_image', item['art'].get('tvshow.fanart',''))
+    li.setProperty('fanart_image', item['art'].get('tvshow.fanart', ''))
     try:
         li.addContextMenuItems([(lang(30032), 'XBMC.Action(Info)',)])
     except TypeError:
@@ -263,12 +256,10 @@ def createListItem(item, appendShowTitle=False, appendSxxExx=False):
     for key, value in item['streamdetails'].iteritems():
         for stream in value:
             li.addStreamInfo(key, stream)
-    
     return li
 
 ##### GET NEXTUP EPISODES FOR TAGNAME #####    
 def getNextUpEpisodes(tagname, limit):
-    
     count = 0
     # if the addon is called with nextup parameter,
     # we return the nextepisodes list of the given tagname
@@ -283,68 +274,50 @@ def getNextUpEpisodes(tagname, limit):
             ]},
         'properties': ['title', 'studio', 'mpaa', 'file', 'art']
     }
-    result = JSONRPC('VideoLibrary.GetTVShows').execute(params)
-
-    # If we found any, find the oldest unwatched show for each one.
-    try:
-        items = result['result']['tvshows']
-    except (KeyError, TypeError):
-        pass
-    else:
-        for item in items:
-            if settings('ignoreSpecialsNextEpisodes') == "true":
-                params = {
-                    'tvshowid': item['tvshowid'],
-                    'sort': {'method': "episode"},
-                    'filter': {
-                        'and': [
-                            {'operator': "lessthan",
-                             'field': "playcount",
-                             'value': "1"},
-                            {'operator': "greaterthan",
-                             'field': "season",
-                             'value': "0"}]},
-                    'properties': [
-                        "title", "playcount", "season", "episode", "showtitle",
-                        "plot", "file", "rating", "resume", "tvshowid", "art",
-                        "streamdetails", "firstaired", "runtime", "writer",
-                        "dateadded", "lastplayed"
-                    ],
-                    'limits': {"end": 1}
-                }
-            else:
-                params = {
-                    'tvshowid': item['tvshowid'],
-                    'sort': {'method': "episode"},
-                    'filter': {
-                        'operator': "lessthan",
-                        'field': "playcount",
-                        'value': "1"},
-                    'properties': [
-                        "title", "playcount", "season", "episode", "showtitle",
-                        "plot", "file", "rating", "resume", "tvshowid", "art",
-                        "streamdetails", "firstaired", "runtime", "writer",
-                        "dateadded", "lastplayed"
-                    ],
-                    'limits': {"end": 1}
-                }
-
-            result = JSONRPC('VideoLibrary.GetEpisodes').execute(params)
-            try:
-                episodes = result['result']['episodes']
-            except (KeyError, TypeError):
-                pass
-            else:
-                for episode in episodes:
-                    li = createListItem(episode)
-                    xbmcplugin.addDirectoryItem(handle=HANDLE,
-                                                url=episode['file'],
-                                                listitem=li)
-                    count += 1
-
-            if count == limit:
-                break
-
+    for item in js.get_tv_shows(params):
+        if settings('ignoreSpecialsNextEpisodes') == "true":
+            params = {
+                'tvshowid': item['tvshowid'],
+                'sort': {'method': "episode"},
+                'filter': {
+                    'and': [
+                        {'operator': "lessthan",
+                         'field': "playcount",
+                         'value': "1"},
+                        {'operator': "greaterthan",
+                         'field': "season",
+                         'value': "0"}]},
+                'properties': [
+                    "title", "playcount", "season", "episode", "showtitle",
+                    "plot", "file", "rating", "resume", "tvshowid", "art",
+                    "streamdetails", "firstaired", "runtime", "writer",
+                    "dateadded", "lastplayed"
+                ],
+                'limits': {"end": 1}
+            }
+        else:
+            params = {
+                'tvshowid': item['tvshowid'],
+                'sort': {'method': "episode"},
+                'filter': {
+                    'operator': "lessthan",
+                    'field': "playcount",
+                    'value': "1"},
+                'properties': [
+                    "title", "playcount", "season", "episode", "showtitle",
+                    "plot", "file", "rating", "resume", "tvshowid", "art",
+                    "streamdetails", "firstaired", "runtime", "writer",
+                    "dateadded", "lastplayed"
+                ],
+                'limits': {"end": 1}
+            }
+        for episode in js.get_episodes(params):
+            xbmcplugin.addDirectoryItem(handle=HANDLE,
+                                        url=episode['file'],
+                                        listitem=createListItem(episode))
+            count += 1
+        if count == limit:
+            break
     xbmcplugin.endOfDirectory(handle=HANDLE)
 
 
@@ -364,42 +337,26 @@ def getInProgressEpisodes(tagname, limit):
             ]},
         'properties': ['title', 'studio', 'mpaa', 'file', 'art']
     }
-    result = JSONRPC('VideoLibrary.GetTVShows').execute(params)
-    # If we found any, find the oldest unwatched show for each one.
-    try:
-        items = result['result']['tvshows']
-    except (KeyError, TypeError):
-        pass
-    else:
-        for item in items:
-            params = {
-                'tvshowid': item['tvshowid'],
-                'sort': {'method': "episode"},
-                'filter': {
-                    'operator': "true",
-                    'field': "inprogress",
-                    'value': ""},
-                'properties': ["title", "playcount", "season", "episode",
-                    "showtitle", "plot", "file", "rating", "resume",
-                    "tvshowid", "art", "cast", "streamdetails", "firstaired",
-                    "runtime", "writer", "dateadded", "lastplayed"]
-            }
-            result = JSONRPC('VideoLibrary.GetEpisodes').execute(params)
-            try:
-                episodes = result['result']['episodes']
-            except (KeyError, TypeError):
-                pass
-            else:
-                for episode in episodes:
-                    li = createListItem(episode)
-                    xbmcplugin.addDirectoryItem(handle=HANDLE,
-                                                url=episode['file'],
-                                                listitem=li)
-                    count += 1
-
-            if count == limit:
-                break
-
+    for item in js.get_tv_shows(params):
+        params = {
+            'tvshowid': item['tvshowid'],
+            'sort': {'method': "episode"},
+            'filter': {
+                'operator': "true",
+                'field': "inprogress",
+                'value': ""},
+            'properties': ["title", "playcount", "season", "episode",
+                "showtitle", "plot", "file", "rating", "resume",
+                "tvshowid", "art", "cast", "streamdetails", "firstaired",
+                "runtime", "writer", "dateadded", "lastplayed"]
+        }
+        for episode in js.get_episodes(params):
+            xbmcplugin.addDirectoryItem(handle=HANDLE,
+                                        url=episode['file'],
+                                        listitem=createListItem(episode))
+            count += 1
+        if count == limit:
+            break
     xbmcplugin.endOfDirectory(handle=HANDLE)
 
 ##### GET RECENT EPISODES FOR TAGNAME #####    
@@ -409,25 +366,16 @@ def getRecentEpisodes(viewid, mediatype, tagname, limit):
     # if the addon is called with recentepisodes parameter,
     # we return the recentepisodes list of the given tagname
     xbmcplugin.setContent(HANDLE, 'episodes')
-    appendShowTitle = settings('RecentTvAppendShow') == 'true'
-    appendSxxExx = settings('RecentTvAppendSeason') == 'true'
+    append_show_title = settings('RecentTvAppendShow') == 'true'
+    append_sxxexx = settings('RecentTvAppendSeason') == 'true'
     # First we get a list of all the TV shows - filtered by tag
+    allshowsIds = set()
     params = {
         'sort': {'order': "descending", 'method': "dateadded"},
         'filter': {'operator': "is", 'field': "tag", 'value': "%s" % tagname},
     }
-    result = JSONRPC('VideoLibrary.GetTVShows').execute(params)
-    # If we found any, find the oldest unwatched show for each one.
-    try:
-        items = result['result'][mediatype]
-    except (KeyError, TypeError):
-        # No items, empty folder
-        xbmcplugin.endOfDirectory(handle=HANDLE)
-        return
-
-    allshowsIds = set()
-    for item in items:
-        allshowsIds.add(item['tvshowid'])
+    for tv_show in js.get_tv_shows(params):
+        allshowsIds.add(tv_show['tvshowid'])
     params = {
         'sort': {'order': "descending", 'method': "dateadded"},
         'properties': ["title", "playcount", "season", "episode", "showtitle",
@@ -442,26 +390,18 @@ def getRecentEpisodes(viewid, mediatype, tagname, limit):
             'field': "playcount",
             'value': "1"
         }
-    result = JSONRPC('VideoLibrary.GetEpisodes').execute(params)
-    try:
-        episodes = result['result']['episodes']
-    except (KeyError, TypeError):
-        pass
-    else:
-        for episode in episodes:
-            if episode['tvshowid'] in allshowsIds:
-                li = createListItem(episode,
-                                    appendShowTitle=appendShowTitle,
-                                    appendSxxExx=appendSxxExx)
-                xbmcplugin.addDirectoryItem(
-                            handle=HANDLE,
-                            url=episode['file'],
-                            listitem=li)
-                count += 1
-
-            if count == limit:
-                break
-
+    for episode in js.get_episodes(params):
+        if episode['tvshowid'] in allshowsIds:
+            listitem = createListItem(episode,
+                                append_show_title=append_show_title,
+                                append_sxxexx=append_sxxexx)
+            xbmcplugin.addDirectoryItem(
+                        handle=HANDLE,
+                        url=episode['file'],
+                        listitem=listitem)
+            count += 1
+        if count == limit:
+            break
     xbmcplugin.endOfDirectory(handle=HANDLE)
 
 
@@ -506,14 +446,14 @@ def getVideoFiles(plexId, params):
     if exists_dir(path):
         for root, dirs, files in walk(path):
             for directory in dirs:
-                item_path = tryEncode(join(root, directory))
+                item_path = try_encode(join(root, directory))
                 li = ListItem(item_path, path=item_path)
                 xbmcplugin.addDirectoryItem(handle=HANDLE,
                                             url=item_path,
                                             listitem=li,
                                             isFolder=True)
             for file in files:
-                item_path = tryEncode(join(root, file))
+                item_path = try_encode(join(root, file))
                 li = ListItem(item_path, path=item_path)
                 xbmcplugin.addDirectoryItem(handle=HANDLE,
                                             url=file,
@@ -524,7 +464,7 @@ def getVideoFiles(plexId, params):
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-@CatchExceptions(warnuser=False)
+@catch_exceptions(warnuser=False)
 def getExtraFanArt(plexid, plexPath):
     """
     Get extrafanart for listitem
@@ -541,7 +481,7 @@ def getExtraFanArt(plexid, plexPath):
 
     # We need to store the images locally for this to work
     # because of the caching system in xbmc
-    fanartDir = tryDecode(translatePath(
+    fanartDir = try_decode(translatePath(
         "special://thumbnails/plex/%s/" % plexid))
     if not exists_dir(fanartDir):
         # Download the images to the cache directory
@@ -552,22 +492,22 @@ def getExtraFanArt(plexid, plexPath):
             return xbmcplugin.endOfDirectory(HANDLE)
 
         api = API(xml[0])
-        backdrops = api.getAllArtwork()['Backdrop']
+        backdrops = api.artwork()['Backdrop']
         for count, backdrop in enumerate(backdrops):
             # Same ordering as in artwork
-            fanartFile = tryEncode(join(fanartDir, "fanart%.3d.jpg" % count))
+            fanartFile = try_encode(join(fanartDir, "fanart%.3d.jpg" % count))
             li = ListItem("%.3d" % count, path=fanartFile)
             xbmcplugin.addDirectoryItem(
                 handle=HANDLE,
                 url=fanartFile,
                 listitem=li)
-            copyfile(backdrop, tryDecode(fanartFile))
+            copyfile(backdrop, try_decode(fanartFile))
     else:
         log.info("Found cached backdrop.")
         # Use existing cached images
         for root, dirs, files in walk(fanartDir):
             for file in files:
-                fanartFile = tryEncode(join(root, file))
+                fanartFile = try_encode(join(root, file))
                 li = ListItem(file, path=fanartFile)
                 xbmcplugin.addDirectoryItem(handle=HANDLE,
                                             url=fanartFile,
@@ -587,8 +527,8 @@ def getOnDeck(viewid, mediatype, tagname, limit):
         limit:              Max. number of items to retrieve, e.g. 50
     """
     xbmcplugin.setContent(HANDLE, 'episodes')
-    appendShowTitle = settings('OnDeckTvAppendShow') == 'true'
-    appendSxxExx = settings('OnDeckTvAppendSeason') == 'true'
+    append_show_title = settings('OnDeckTvAppendShow') == 'true'
+    append_sxxexx = settings('OnDeckTvAppendSeason') == 'true'
     directpaths = settings('useDirectPaths') == 'true'
     if settings('OnDeckTVextended') == 'false':
         # Chances are that this view is used on Kodi startup
@@ -609,19 +549,20 @@ def getOnDeck(viewid, mediatype, tagname, limit):
         limitcounter = 0
         for item in xml:
             api = API(item)
-            listitem = api.CreateListItemFromPlexItem(
-                appendShowTitle=appendShowTitle,
-                appendSxxExx=appendSxxExx)
+            listitem = api.create_listitem(
+                append_show_title=append_show_title,
+                append_sxxexx=append_sxxexx)
             if directpaths:
-                url = api.getFilePath()
+                url = api.file_path()
             else:
-                params = {
-                    'mode': "play",
-                    'id': api.getRatingKey(),
-                    'dbid': listitem.getProperty('dbid')
-                }
-                url = "plugin://plugin.video.plexkodiconnect/tvshows/?%s" \
-                      % urlencode(params)
+                url = ('plugin://%s.tvshows/?plex_id=%s&plex_type=%s&mode=play&filename=%s'
+                       % (v.ADDON_ID,
+                          api.plex_id(),
+                          api.plex_type(),
+                          api.file_name(force_first_media=True)))
+            if api.resume_point():
+                listitem.setProperty('resumetime',
+                                     str(api.resume_point()))
             xbmcplugin.addDirectoryItem(
                 handle=HANDLE,
                 url=url,
@@ -644,11 +585,8 @@ def getOnDeck(viewid, mediatype, tagname, limit):
                 {'operator': "is", 'field': "tag", 'value': "%s" % tagname}
             ]}
     }
-    result = JSONRPC('VideoLibrary.GetTVShows').execute(params)
-    # If we found any, find the oldest unwatched show for each one.
-    try:
-        items = result['result'][mediatype]
-    except (KeyError, TypeError):
+    items = js.get_tv_shows(params)
+    if not items:
         # Now items retrieved - empty directory
         xbmcplugin.endOfDirectory(handle=HANDLE)
         return
@@ -689,33 +627,26 @@ def getOnDeck(viewid, mediatype, tagname, limit):
     count = 0
     for item in items:
         inprog_params['tvshowid'] = item['tvshowid']
-        result = JSONRPC('VideoLibrary.GetEpisodes').execute(inprog_params)
-        try:
-            episodes = result['result']['episodes']
-        except (KeyError, TypeError):
+        episodes = js.get_episodes(inprog_params)
+        if not episodes:
             # No, there are no episodes not yet finished. Get "next up"
             params['tvshowid'] = item['tvshowid']
-            result = JSONRPC('VideoLibrary.GetEpisodes').execute(params)
-            try:
-                episodes = result['result']['episodes']
-            except (KeyError, TypeError):
+            episodes = js.get_episodes(params)
+            if not episodes:
                 # Also no episodes currently coming up
                 continue
         for episode in episodes:
             # There will always be only 1 episode ('limit=1')
-            li = createListItem(episode,
-                                appendShowTitle=appendShowTitle,
-                                appendSxxExx=appendSxxExx)
-            xbmcplugin.addDirectoryItem(
-                handle=HANDLE,
-                url=episode['file'],
-                listitem=li,
-                isFolder=False)
-
+            listitem = createListItem(episode,
+                                      append_show_title=append_show_title,
+                                      append_sxxexx=append_sxxexx)
+            xbmcplugin.addDirectoryItem(handle=HANDLE,
+                                        url=episode['file'],
+                                        listitem=listitem,
+                                        isFolder=False)
         count += 1
         if count >= limit:
             break
-
     xbmcplugin.endOfDirectory(handle=HANDLE)
 
 
@@ -752,10 +683,6 @@ def channels():
     """
     Listing for Plex Channels
     """
-    if window('plex_restricteduser') == 'true':
-        log.error('No Plex Channels - restricted user')
-        return xbmcplugin.endOfDirectory(HANDLE, False)
-
     xml = downloadutils.DownloadUtils().downloadUrl('{server}/channels/all')
     try:
         xml[0].attrib
@@ -888,25 +815,28 @@ def __build_folder(xml_element, plex_section_id=None):
 
 def __build_item(xml_element):
     api = API(xml_element)
-    listitem = api.CreateListItemFromPlexItem()
-    if (api.getKey().startswith('/system/services') or
-            api.getKey().startswith('http')):
+    listitem = api.create_listitem()
+    resume = api.resume_point()
+    if resume:
+        listitem.setProperty('resumetime', str(resume))
+    if (api.path_and_plex_id().startswith('/system/services') or
+            api.path_and_plex_id().startswith('http')):
         params = {
             'mode': 'plex_node',
             'key': xml_element.attrib.get('key'),
-            'view_offset': xml_element.attrib.get('viewOffset', '0'),
+            'offset': xml_element.attrib.get('viewOffset', '0'),
         }
         url = "plugin://%s?%s" % (v.ADDON_ID, urlencode(params))
-    elif api.getType() == v.PLEX_TYPE_PHOTO:
+    elif api.plex_type() == v.PLEX_TYPE_PHOTO:
         url = api.get_picture_path()
     else:
-        params = {
-            'mode': 'play',
-            'filename': api.getKey(),
-            'id': api.getRatingKey(),
-            'dbid': listitem.getProperty('dbid')
-        }
-        url = "plugin://%s?%s" % (v.ADDON_ID, urlencode(params))
+        url = 'plugin://%s/?plex_id=%s&plex_type=%s&mode=play&filename=%s' \
+              % (v.ADDON_TYPE[api.plex_type()],
+                 api.plex_id(),
+                 api.plex_type(),
+                 api.file_name(force_first_media=True))
+    if api.resume_point():
+        listitem.setProperty('resumetime', str(api.resume_point()))
     xbmcplugin.addDirectoryItem(handle=HANDLE,
                                 url=url,
                                 listitem=listitem)

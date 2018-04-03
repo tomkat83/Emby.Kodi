@@ -6,7 +6,7 @@ from xbmcaddon import Addon
 # For any file operations with KODI function, use encoded strings!
 
 
-def tryDecode(string, encoding='utf-8'):
+def try_decode(string, encoding='utf-8'):
     """
     Will try to decode string (encoded) using encoding. This possibly
     fails with e.g. Android TV's Python, which does not accept arguments for
@@ -22,15 +22,23 @@ def tryDecode(string, encoding='utf-8'):
     return string
 
 
+# Percent of playback progress for watching item as partially watched. Anything
+# more and item will NOT be marked as partially, but fully watched
+MARK_PLAYED_AT = 0.9
+# How many seconds of playback do we ignore before marking an item as partially
+# watched?
+IGNORE_SECONDS_AT_START = 60
+
 _ADDON = Addon()
 ADDON_NAME = 'PlexKodiConnect'
 ADDON_ID = 'plugin.video.plexkodiconnect'
 ADDON_VERSION = _ADDON.getAddonInfo('version')
+ADDON_FOLDER = try_decode(xbmc.translatePath('special://home'))
 
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 KODIVERSION = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
 KODILONGVERSION = xbmc.getInfoLabel('System.BuildVersion')
-KODI_PROFILE = tryDecode(xbmc.translatePath("special://profile"))
+KODI_PROFILE = try_decode(xbmc.translatePath("special://profile"))
 
 if xbmc.getCondVisibility('system.platform.osx'):
     PLATFORM = "MacOSX"
@@ -49,7 +57,7 @@ elif xbmc.getCondVisibility('system.platform.android'):
 else:
     PLATFORM = "Unknown"
 
-DEVICENAME = tryDecode(_ADDON.getSetting('deviceName'))
+DEVICENAME = try_decode(_ADDON.getSetting('deviceName'))
 DEVICENAME = DEVICENAME.replace(":", "")
 DEVICENAME = DEVICENAME.replace("/", "-")
 DEVICENAME = DEVICENAME.replace("\\", "-")
@@ -60,7 +68,15 @@ DEVICENAME = DEVICENAME.replace("?", "")
 DEVICENAME = DEVICENAME.replace('|', "")
 DEVICENAME = DEVICENAME.replace('(', "")
 DEVICENAME = DEVICENAME.replace(')', "")
-DEVICENAME = DEVICENAME.strip()
+DEVICENAME = DEVICENAME.replace(' ', "")
+
+COMPANION_PORT = int(_ADDON.getSetting('companionPort'))
+
+# Unique ID for this Plex client; also see clientinfo.py
+PKC_MACHINE_IDENTIFIER = None
+
+# Minimal PKC version needed for the Kodi database - otherwise need to recreate
+MIN_DB_VERSION = '2.0.11'
 
 # Database paths
 _DB_VIDEO_VERSION = {
@@ -71,7 +87,7 @@ _DB_VIDEO_VERSION = {
     17: 107,  # Krypton
     18: 108   # Leia
 }
-DB_VIDEO_PATH = tryDecode(xbmc.translatePath(
+DB_VIDEO_PATH = try_decode(xbmc.translatePath(
     "special://database/MyVideos%s.db" % _DB_VIDEO_VERSION[KODIVERSION]))
 
 _DB_MUSIC_VERSION = {
@@ -82,7 +98,7 @@ _DB_MUSIC_VERSION = {
     17: 60,   # Krypton
     18: 62    # Leia
 }
-DB_MUSIC_PATH = tryDecode(xbmc.translatePath(
+DB_MUSIC_PATH = try_decode(xbmc.translatePath(
     "special://database/MyMusic%s.db" % _DB_MUSIC_VERSION[KODIVERSION]))
 
 _DB_TEXTURE_VERSION = {
@@ -93,12 +109,12 @@ _DB_TEXTURE_VERSION = {
     17: 13,   # Krypton
     18: 13    # Leia
 }
-DB_TEXTURE_PATH = tryDecode(xbmc.translatePath(
+DB_TEXTURE_PATH = try_decode(xbmc.translatePath(
     "special://database/Textures%s.db" % _DB_TEXTURE_VERSION[KODIVERSION]))
 
-DB_PLEX_PATH = tryDecode(xbmc.translatePath("special://database/plex.db"))
+DB_PLEX_PATH = try_decode(xbmc.translatePath("special://database/plex.db"))
 
-EXTERNAL_SUBTITLE_TEMP_PATH = tryDecode(xbmc.translatePath(
+EXTERNAL_SUBTITLE_TEMP_PATH = try_decode(xbmc.translatePath(
     "special://profile/addon_data/%s/temp/" % ADDON_ID))
 
 
@@ -123,6 +139,20 @@ PLEX_TYPE_MUSICVIDEO = 'musicvideo'
 
 PLEX_TYPE_PHOTO = 'photo'
 
+# Used for /:/timeline XML messages
+PLEX_PLAYLIST_TYPE_VIDEO = 'video'
+PLEX_PLAYLIST_TYPE_AUDIO = 'music'
+PLEX_PLAYLIST_TYPE_PHOTO = 'photo'
+
+KODI_PLAYLIST_TYPE_VIDEO = 'video'
+KODI_PLAYLIST_TYPE_AUDIO = 'audio'
+KODI_PLAYLIST_TYPE_PHOTO = 'picture'
+
+KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE = {
+    PLEX_PLAYLIST_TYPE_VIDEO: KODI_PLAYLIST_TYPE_VIDEO,
+    PLEX_PLAYLIST_TYPE_AUDIO: KODI_PLAYLIST_TYPE_AUDIO,
+    PLEX_PLAYLIST_TYPE_PHOTO: KODI_PLAYLIST_TYPE_PHOTO
+}
 
 # All the Kodi types as e.g. used in the JSON API
 KODI_TYPE_VIDEO = 'video'
@@ -142,9 +172,6 @@ KODI_TYPE_MUSICVIDEO = 'musicvideo'
 
 KODI_TYPE_PHOTO = 'photo'
 
-
-# Translation tables
-
 KODI_VIDEOTYPES = (
     KODI_TYPE_VIDEO,
     KODI_TYPE_MOVIE,
@@ -154,11 +181,28 @@ KODI_VIDEOTYPES = (
     KODI_TYPE_SET
 )
 
+PLEX_VIDEOTYPES = (
+    PLEX_TYPE_MOVIE,
+    PLEX_TYPE_CLIP,
+    PLEX_TYPE_EPISODE,
+    PLEX_TYPE_SEASON,
+    PLEX_TYPE_SHOW
+)
+
 KODI_AUDIOTYPES = (
     KODI_TYPE_SONG,
     KODI_TYPE_ALBUM,
     KODI_TYPE_ARTIST,
 )
+
+# Translation tables
+
+ADDON_TYPE = {
+    PLEX_TYPE_MOVIE: 'plugin.video.plexkodiconnect.movies',
+    PLEX_TYPE_CLIP: 'plugin.video.plexkodiconnect.movies',
+    PLEX_TYPE_EPISODE: 'plugin.video.plexkodiconnect.tvshows',
+    PLEX_TYPE_SONG: 'plugin.video.plexkodiconnect'
+}
 
 ITEMTYPE_FROM_PLEXTYPE = {
     PLEX_TYPE_MOVIE: 'Movies',
@@ -193,6 +237,20 @@ KODITYPE_FROM_PLEXTYPE = {
     'XXXXXXX': 'genre'
 }
 
+PLEX_TYPE_FROM_KODI_TYPE = {
+    KODI_TYPE_VIDEO: PLEX_TYPE_VIDEO,
+    KODI_TYPE_MOVIE: PLEX_TYPE_MOVIE,
+    KODI_TYPE_EPISODE: PLEX_TYPE_EPISODE,
+    KODI_TYPE_SEASON: PLEX_TYPE_SEASON,
+    KODI_TYPE_SHOW: PLEX_TYPE_SHOW,
+    KODI_TYPE_CLIP: PLEX_TYPE_CLIP,
+    KODI_TYPE_ARTIST: PLEX_TYPE_ARTIST,
+    KODI_TYPE_ALBUM: PLEX_TYPE_ALBUM,
+    KODI_TYPE_SONG: PLEX_TYPE_SONG,
+    KODI_TYPE_AUDIO: PLEX_TYPE_AUDIO,
+    KODI_TYPE_PHOTO: PLEX_TYPE_PHOTO
+}
+
 KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE = {
     PLEX_TYPE_VIDEO: KODI_TYPE_VIDEO,
     PLEX_TYPE_MOVIE: KODI_TYPE_VIDEO,
@@ -207,6 +265,20 @@ KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE = {
     PLEX_TYPE_PHOTO: KODI_TYPE_PHOTO
 }
 
+
+KODI_PLAYLIST_TYPE_FROM_KODI_TYPE = {
+    KODI_TYPE_VIDEO: KODI_TYPE_VIDEO,
+    KODI_TYPE_MOVIE: KODI_TYPE_VIDEO,
+    KODI_TYPE_EPISODE: KODI_TYPE_VIDEO,
+    KODI_TYPE_SEASON: KODI_TYPE_VIDEO,
+    KODI_TYPE_SHOW: KODI_TYPE_VIDEO,
+    KODI_TYPE_CLIP: KODI_TYPE_VIDEO,
+    KODI_TYPE_ARTIST: KODI_TYPE_AUDIO,
+    KODI_TYPE_ALBUM: KODI_TYPE_AUDIO,
+    KODI_TYPE_SONG: KODI_TYPE_AUDIO,
+    KODI_TYPE_AUDIO: KODI_TYPE_AUDIO,
+    KODI_TYPE_PHOTO: KODI_TYPE_PHOTO
+}
 
 REMAP_TYPE_FROM_PLEXTYPE = {
     PLEX_TYPE_MOVIE: 'movie',
@@ -245,6 +317,40 @@ PLEX_TYPE_FROM_WEBSOCKET = {
     10: PLEX_TYPE_SONG,
     12: PLEX_TYPE_CLIP
 }
+
+
+KODI_TO_PLEX_ARTWORK = {
+    'poster': 'thumb',
+    'banner': 'banner',
+    'fanart': 'art'
+}
+
+# Might be implemented in the future: 'icon', 'landscape' (16:9)
+ALL_KODI_ARTWORK = (
+    'thumb',
+    'poster',
+    'banner',
+    'clearart',
+    'clearlogo',
+    'fanart',
+    'discart'
+)
+
+# we need to use a little mapping between fanart.tv arttypes and kodi artttypes
+FANART_TV_TO_KODI_TYPE = [
+    ('poster', 'poster'),
+    ('logo', 'clearlogo'),
+    ('musiclogo', 'clearlogo'),
+    ('disc', 'discart'),
+    ('clearart', 'clearart'),
+    ('banner', 'banner'),
+    ('clearlogo', 'clearlogo'),
+    ('background', 'fanart'),
+    ('showbackground', 'fanart'),
+    ('characterart', 'characterart')
+]
+# How many different backgrounds do we want to load from fanart.tv?
+MAX_BACKGROUND_COUNT = 10
 
 
 # extensions from:
@@ -360,3 +466,21 @@ SORT_METHODS_ALBUMS = (
     'SORT_METHOD_ARTIST',
     'SORT_METHOD_ALBUM',
 )
+
+
+XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>\n'
+
+COMPANION_OK_MESSAGE = XML_HEADER + '<Response code="200" status="OK" />'
+
+PLEX_REPEAT_FROM_KODI_REPEAT = {
+    'off': '0',
+    'one': '1',
+    'all': '2'   # does this work?!?
+}
+
+# Stream in PMS xml contains a streamType to distinguish the kind of stream
+PLEX_STREAM_TYPE_FROM_STREAM_TYPE = {
+    'video': '1',
+    'audio': '2',
+    'subtitle': '3'
+}

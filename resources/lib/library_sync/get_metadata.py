@@ -47,7 +47,7 @@ class Threaded_Get_Metadata(Thread):
                 continue
             else:
                 self.queue.task_done()
-        if self.thread_stopped():
+        if self.stopped():
             # Shutdown from outside requested; purge out_queue as well
             while not self.out_queue.empty():
                 # Still try because remaining item might have been taken
@@ -78,8 +78,8 @@ class Threaded_Get_Metadata(Thread):
         # cache local variables because it's faster
         queue = self.queue
         out_queue = self.out_queue
-        thread_stopped = self.thread_stopped
-        while thread_stopped() is False:
+        stopped = self.stopped
+        while stopped() is False:
             # grabs Plex item from queue
             try:
                 item = queue.get(block=False)

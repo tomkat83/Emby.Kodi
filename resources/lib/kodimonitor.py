@@ -1,31 +1,35 @@
-# -*- coding: utf-8 -*-
-
-###############################################################################
-
+"""
+PKC Kodi Monitoring implementation
+"""
 from logging import getLogger
 from json import loads
+from threading import Thread
+import copy
 
-from xbmc import Monitor, Player, sleep
+from xbmc import Monitor, Player, sleep, getCondVisibility, getInfoLabel, \
+    getLocalizedString
+from xbmcgui import Window
 
-from downloadutils import DownloadUtils
 import plexdb_functions as plexdb
-from utils import window, settings, CatchExceptions, tryDecode, tryEncode, \
-    plex_command
+from utils import window, settings, plex_command, thread_methods, try_encode
 from PlexFunctions import scrobble
-from kodidb_functions import get_kodiid_from_filename
-from PlexAPI import API
+from kodidb_functions import kodiid_from_filename
+from plexbmchelper.subscribers import LOCKER
+from playback import playback_triage
+from initialsetup import set_replace_paths
+import playqueue as PQ
+import json_rpc as js
+import playlist_func as PL
 import state
 
 ###############################################################################
 
-log = getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 # settings: window-variable
 WINDOW_SETTINGS = {
-    'enableContext': 'plex_context',
     'plex_restricteduser': 'plex_restricteduser',
-    'force_transcode_pix': 'plex_force_transcode_pix',
-    'fetch_pms_item_number': 'fetch_pms_item_number'
+    'force_transcode_pix': 'plex_force_transcode_pix'
 }
 
 # settings: state-variable (state.py)
@@ -42,28 +46,39 @@ STATE_SETTINGS = {
     'remapSMBphotoOrg': 'remapSMBphotoOrg',
     'remapSMBphotoNew': 'remapSMBphotoNew',
     'enableMusic': 'ENABLE_MUSIC',
-    'enableBackgroundSync': 'BACKGROUND_SYNC'
+    'forceReloadSkinOnPlaybackStop': 'FORCE_RELOAD_SKIN',
+    'fetch_pms_item_number': 'FETCH_PMS_ITEM_NUMBER'
 }
+
 ###############################################################################
 
 
 class KodiMonitor(Monitor):
-
-    def __init__(self, callback):
-        self.mgr = callback
-        self.doUtils = DownloadUtils().downloadUrl
+    """
+    PKC implementation of the Kodi Monitor class. Invoke only once.
+    """
+    def __init__(self):
         self.xbmcplayer = Player()
-        self.playqueue = self.mgr.playqueue
+        self._already_slept = False
         Monitor.__init__(self)
-        log.info("Kodi monitor started.")
+        for playerid in state.PLAYER_STATES:
+            state.PLAYER_STATES[playerid] = copy.deepcopy(state.PLAYSTATE)
+            state.OLD_PLAYER_STATES[playerid] = copy.deepcopy(state.PLAYSTATE)
+        LOG.info("Kodi monitor started.")
 
     def onScanStarted(self, library):
-        log.debug("Kodi library scan %s running." % library)
+        """
+        Will be called when Kodi starts scanning the library
+        """
+        LOG.debug("Kodi library scan %s running.", library)
         if library == "video":
             window('plex_kodiScan', value="true")
 
     def onScanFinished(self, library):
-        log.debug("Kodi library scan %s finished." % library)
+        """
+        Will be called when Kodi finished scanning the library
+        """
+        LOG.debug("Kodi library scan %s finished.", library)
         if library == "video":
             window('plex_kodiScan', clear=True)
 
@@ -71,18 +86,15 @@ class KodiMonitor(Monitor):
         """
         Monitor the PKC settings for changes made by the user
         """
-        log.debug('PKC settings change detected')
+        LOG.debug('PKC settings change detected')
         changed = False
         # Reset the window variables from the settings variables
         for settings_value, window_value in WINDOW_SETTINGS.iteritems():
             if window(window_value) != settings(settings_value):
                 changed = True
-                log.debug('PKC window settings changed: %s is now %s'
-                          % (settings_value, settings(settings_value)))
+                LOG.debug('PKC window settings changed: %s is now %s',
+                          settings_value, settings(settings_value))
                 window(window_value, value=settings(settings_value))
-                if settings_value == 'fetch_pms_item_number':
-                    log.info('Requesting playlist/nodes refresh')
-                    plex_command('RUN_LIB_SCAN', 'views')
         # Reset the state variables in state.py
         for settings_value, state_name in STATE_SETTINGS.iteritems():
             new = settings(settings_value)
@@ -92,14 +104,22 @@ class KodiMonitor(Monitor):
                 new = False
             if getattr(state, state_name) != new:
                 changed = True
-                log.debug('PKC state settings %s changed from %s to %s'
-                          % (settings_value, getattr(state, state_name), new))
+                LOG.debug('PKC state settings %s changed from %s to %s',
+                          settings_value, getattr(state, state_name), new)
                 setattr(state, state_name, new)
+                if state_name == 'FETCH_PMS_ITEM_NUMBER':
+                    LOG.info('Requesting playlist/nodes refresh')
+                    plex_command('RUN_LIB_SCAN', 'views')
         # Special cases, overwrite all internal settings
-        state.FULL_SYNC_INTERVALL = int(settings('fullSyncInterval'))*60
+        set_replace_paths()
+        state.BACKGROUND_SYNC_DISABLED = settings(
+            'enableBackgroundSync') == 'false'
+        state.FULL_SYNC_INTERVALL = int(settings('fullSyncInterval')) * 60
         state.BACKGROUNDSYNC_SAFTYMARGIN = int(
             settings('backgroundsync_saftyMargin'))
         state.SYNC_THREAD_NUMBER = int(settings('syncThreadNumber'))
+        state.SSL_CERT_PATH = settings('sslcert') \
+            if settings('sslcert') != 'None' else None
         # Never set through the user
         # state.KODI_PLEX_TIME_OFFSET = float(settings('kodiplextimeoffset'))
         if changed is True:
@@ -108,183 +128,312 @@ class KodiMonitor(Monitor):
             state.STOP_SYNC = False
             state.PATH_VERIFIED = False
 
-    @CatchExceptions(warnuser=False)
     def onNotification(self, sender, method, data):
-
+        """
+        Called when a bunch of different stuff happens on the Kodi side
+        """
         if data:
             data = loads(data, 'utf-8')
-            log.debug("Method: %s Data: %s" % (method, data))
+            LOG.debug("Method: %s Data: %s", method, data)
 
         if method == "Player.OnPlay":
             self.PlayBackStart(data)
-
         elif method == "Player.OnStop":
             # Should refresh our video nodes, e.g. on deck
             # xbmc.executebuiltin('ReloadSkin()')
             pass
-
+        elif method == 'Playlist.OnAdd':
+            self._playlist_onadd(data)
+        elif method == 'Playlist.OnRemove':
+            self._playlist_onremove(data)
+        elif method == 'Playlist.OnClear':
+            self._playlist_onclear(data)
         elif method == "VideoLibrary.OnUpdate":
             # Manually marking as watched/unwatched
             playcount = data.get('playcount')
             item = data.get('item')
-
+            if playcount is None or item is None:
+                return
             try:
                 kodiid = item['id']
                 item_type = item['type']
             except (KeyError, TypeError):
-                log.info("Item is invalid for playstate update.")
+                LOG.info("Item is invalid for playstate update.")
+                return
+            # Send notification to the server.
+            with plexdb.Get_Plex_DB() as plexcur:
+                plex_dbitem = plexcur.getItem_byKodiId(kodiid, item_type)
+            try:
+                itemid = plex_dbitem[0]
+            except TypeError:
+                LOG.error("Could not find itemid in plex database for a "
+                          "video library update")
             else:
-                # Send notification to the server.
-                with plexdb.Get_Plex_DB() as plexcur:
-                    plex_dbitem = plexcur.getItem_byKodiId(kodiid, item_type)
-                try:
-                    itemid = plex_dbitem[0]
-                except TypeError:
-                    log.error("Could not find itemid in plex database for a "
-                              "video library update")
+                # Stop from manually marking as watched unwatched, with
+                # actual playback.
+                if window('plex_skipWatched%s' % itemid) == "true":
+                    # property is set in player.py
+                    window('plex_skipWatched%s' % itemid, clear=True)
                 else:
-                    # Stop from manually marking as watched unwatched, with
-                    # actual playback.
-                    if window('plex_skipWatched%s' % itemid) == "true":
-                        # property is set in player.py
-                        window('plex_skipWatched%s' % itemid, clear=True)
+                    # notify the server
+                    if playcount > 0:
+                        scrobble(itemid, 'watched')
                     else:
-                        # notify the server
-                        if playcount > 0:
-                            scrobble(itemid, 'watched')
-                        else:
-                            scrobble(itemid, 'unwatched')
-
+                        scrobble(itemid, 'unwatched')
         elif method == "VideoLibrary.OnRemove":
             pass
-
         elif method == "System.OnSleep":
             # Connection is going to sleep
-            log.info("Marking the server as offline. SystemOnSleep activated.")
+            LOG.info("Marking the server as offline. SystemOnSleep activated.")
             window('plex_online', value="sleep")
-
         elif method == "System.OnWake":
             # Allow network to wake up
             sleep(10000)
             window('plex_onWake', value="true")
             window('plex_online', value="false")
-
         elif method == "GUI.OnScreensaverDeactivated":
             if settings('dbSyncScreensaver') == "true":
                 sleep(5000)
                 plex_command('RUN_LIB_SCAN', 'full')
-
         elif method == "System.OnQuit":
-            log.info('Kodi OnQuit detected - shutting down')
+            LOG.info('Kodi OnQuit detected - shutting down')
             state.STOP_PKC = True
 
-    def PlayBackStart(self, data):
+    @LOCKER.lockthis
+    def _playlist_onadd(self, data):
         """
-        Called whenever a playback is started
+        Called if an item is added to a Kodi playlist. Example data dict:
+        {
+            u'item': {
+                u'type': u'movie',
+                u'id': 2},
+            u'playlistid': 1,
+            u'position': 0
+        }
+        Will NOT be called if playback initiated by Kodi widgets
         """
-        # Get currently playing file - can take a while. Will be utf-8!
-        try:
-            currentFile = self.xbmcplayer.getPlayingFile()
-        except:
-            currentFile = None
-            count = 0
-            while currentFile is None:
-                sleep(100)
-                try:
-                    currentFile = self.xbmcplayer.getPlayingFile()
-                except:
-                    pass
-                if count == 50:
-                    log.info("No current File, cancel OnPlayBackStart...")
-                    return
-                else:
-                    count += 1
-        # Just to be on the safe side
-        currentFile = tryDecode(currentFile)
-        log.debug("Currently playing file is: %s" % currentFile)
-
-        # Get the type of media we're playing
-        try:
-            typus = data['item']['type']
-        except (TypeError, KeyError):
-            log.info("Item is invalid for PMS playstate update.")
+        if 'id' not in data['item']:
             return
-        log.debug("Playing itemtype is (or appears to be): %s" % typus)
+        old = state.OLD_PLAYER_STATES[data['playlistid']]
+        if (not state.DIRECT_PATHS and data['position'] == 0 and
+                not PQ.PLAYQUEUES[data['playlistid']].items and
+                data['item']['type'] == old['kodi_type'] and
+                data['item']['id'] == old['kodi_id']):
+            # Hack we need for RESUMABLE items because Kodi lost the path of the
+            # last played item that is now being replayed (see playback.py's
+            # Player().play()) Also see playqueue.py _compare_playqueues()
+            LOG.info('Detected re-start of playback of last item')
+            kwargs = {
+                'plex_id': old['plex_id'],
+                'plex_type': old['plex_type'],
+                'path': old['file'],
+                'resolve': False
+            }
+            thread = Thread(target=playback_triage, kwargs=kwargs)
+            thread.start()
+            return
 
-        # Try to get a Kodi ID
-        # If PKC was used - native paths, not direct paths
-        plex_id = window('plex_%s.itemid' % tryEncode(currentFile))
-        # Get rid of the '' if the window property was not set
-        plex_id = None if not plex_id else plex_id
-        kodiid = None
-        if plex_id is None:
-            log.debug('Did not get Plex id from window properties')
-            try:
-                kodiid = data['item']['id']
-            except (TypeError, KeyError):
-                log.debug('Did not get a Kodi id from Kodi, darn')
-        # For direct paths, if we're not streaming something
-        # When using Widgets, Kodi doesn't tell us shit so we need this hack
-        if (kodiid is None and plex_id is None and typus != 'song'
-                and not currentFile.startswith('http')):
-            (kodiid, typus) = get_kodiid_from_filename(currentFile)
-            if kodiid is None:
-                return
+    def _playlist_onremove(self, data):
+        """
+        Called if an item is removed from a Kodi playlist. Example data dict:
+        {
+            u'playlistid': 1,
+            u'position': 0
+        }
+        """
+        pass
 
-        if plex_id is None:
-            # Get Plex' item id
-            with plexdb.Get_Plex_DB() as plexcursor:
-                plex_dbitem = plexcursor.getItem_byKodiId(kodiid, typus)
+    @LOCKER.lockthis
+    def _playlist_onclear(self, data):
+        """
+        Called if a Kodi playlist is cleared. Example data dict:
+        {
+            u'playlistid': 1,
+        }
+        """
+        playqueue = PQ.PLAYQUEUES[data['playlistid']]
+        if not playqueue.is_pkc_clear():
+            playqueue.clear(kodi=False)
+        else:
+            LOG.debug('Detected PKC clear - ignoring')
+
+    def _get_ids(self, kodi_id, kodi_type, path):
+        """
+        Returns the tuple (plex_id, plex_type) or (None, None)
+        """
+        # No Kodi id returned by Kodi, even if there is one. Ex: Widgets
+        plex_id = None
+        plex_type = None
+        # If using direct paths and starting playback from a widget
+        if not kodi_id and kodi_type and path:
+            kodi_id = kodiid_from_filename(path, kodi_type)
+        if kodi_id:
+            with plexdb.Get_Plex_DB() as plex_db:
+                plex_dbitem = plex_db.getItem_byKodiId(kodi_id, kodi_type)
             try:
                 plex_id = plex_dbitem[0]
+                plex_type = plex_dbitem[2]
             except TypeError:
-                log.info("No Plex id returned for kodiid %s. Aborting playback"
-                         " report" % kodiid)
-                return
-        log.debug("Found Plex id %s for Kodi id %s for type %s"
-                  % (plex_id, kodiid, typus))
+                # No plex id, hence item not in the library. E.g. clips
+                pass
+        return plex_id, plex_type
 
-        # Switch subtitle tracks if applicable
-        subtitle = window('plex_%s.subtitle' % tryEncode(currentFile))
-        if window(tryEncode('plex_%s.playmethod' % currentFile)) \
-                == 'Transcode' and subtitle:
-            if window('plex_%s.subtitle' % currentFile) == 'None':
-                self.xbmcplayer.showSubtitles(False)
-            else:
-                self.xbmcplayer.setSubtitleStream(int(subtitle))
-
-        # Set some stuff if Kodi initiated playback
-        if ((settings('useDirectPaths') == "1" and not typus == "song")
-                or
-                (typus == "song" and settings('enableMusic') == "true")):
-            if self.StartDirectPath(plex_id,
-                                    typus,
-                                    tryEncode(currentFile)) is False:
-                log.error('Could not initiate monitoring; aborting')
-                return
-
-        # Save currentFile for cleanup later and to be able to access refs
-        window('plex_lastPlayedFiled', value=currentFile)
-        window('plex_currently_playing_itemid', value=plex_id)
-        window("plex_%s.itemid" % tryEncode(currentFile), value=plex_id)
-        log.info('Finish playback startup')
-
-    def StartDirectPath(self, plex_id, type, currentFile):
+    @staticmethod
+    def _add_remaining_items_to_playlist(playqueue):
         """
-        Set some additional stuff if playback was initiated by Kodi, not PKC
+        Adds all but the very first item of the Kodi playlist to the Plex
+        playqueue
         """
-        xml = self.doUtils('{server}/library/metadata/%s' % plex_id)
+        items = js.playlist_get_items(playqueue.playlistid)
+        if not items:
+            LOG.error('Could not retrieve Kodi playlist items')
+            return
+        # Remove first item
+        items.pop(0)
         try:
-            xml[0].attrib
-        except:
-            log.error('Did not receive a valid XML for plex_id %s.' % plex_id)
-            return False
-        # Setup stuff, because playback was started by Kodi, not PKC
-        api = API(xml[0])
-        listitem = api.CreateListItemFromPlexItem()
-        api.set_playback_win_props(currentFile, listitem)
-        if type == "song" and settings('streamMusic') == "true":
-            window('plex_%s.playmethod' % currentFile, value="DirectStream")
+            for i, item in enumerate(items):
+                PL.add_item_to_PMS_playlist(playqueue, i + 1, kodi_item=item)
+        except PL.PlaylistError:
+            LOG.info('Could not build Plex playlist for: %s', items)
+
+    def _json_item(self, playerid):
+        """
+        Uses JSON RPC to get the playing item's info and returns the tuple
+            kodi_id, kodi_type, path
+        or None each time if not found.
+        """
+        if not self._already_slept:
+            # SLEEP before calling this for the first time just after playback
+            # start as Kodi updates this info very late!! Might get previous
+            # element otherwise
+            self._already_slept = True
+            sleep(1000)
+        json_item = js.get_item(playerid)
+        LOG.debug('Kodi playing item properties: %s', json_item)
+        return (json_item.get('id'),
+                json_item.get('type'),
+                json_item.get('file'))
+
+    @LOCKER.lockthis
+    def PlayBackStart(self, data):
+        """
+        Called whenever playback is started. Example data:
+        {
+            u'item': {u'type': u'movie', u'title': u''},
+            u'player': {u'playerid': 1, u'speed': 1}
+        }
+        Unfortunately when using Widgets, Kodi doesn't tell us shit
+        """
+        self._already_slept = False
+        # Get the type of media we're playing
+        try:
+            playerid = data['player']['playerid']
+        except (TypeError, KeyError):
+            LOG.info('Aborting playback report - item invalid for updates %s',
+                     data)
+            return
+        if playerid == -1:
+            # Kodi might return -1 for "last player"
+            try:
+                playerid = js.get_player_ids()[0]
+            except IndexError:
+                LOG.error('Could not retreive active player - aborting')
+                return
+        playqueue = PQ.PLAYQUEUES[playerid]
+        info = js.get_player_props(playerid)
+        pos = info['position'] if info['position'] != -1 else 0
+        LOG.debug('Detected position %s for %s', pos, playqueue)
+        status = state.PLAYER_STATES[playerid]
+        kodi_id = data.get('id')
+        kodi_type = data.get('type')
+        path = data.get('file')
+        try:
+            item = playqueue.items[pos]
+        except IndexError:
+            # PKC playqueue not yet initialized
+            LOG.debug('Position %s not in PKC playqueue yet', pos)
+            initialize = True
         else:
-            window('plex_%s.playmethod' % currentFile, value="DirectPlay")
-        log.debug('Window properties set for direct paths!')
+            if not kodi_id:
+                kodi_id, kodi_type, path = self._json_item(playerid)
+            if kodi_id and item.kodi_id:
+                if item.kodi_id != kodi_id or item.kodi_type != kodi_type:
+                    LOG.debug('Detected different Kodi id')
+                    initialize = True
+                else:
+                    initialize = False
+            else:
+                # E.g. clips set-up previously with no Kodi DB entry
+                if not path:
+                    kodi_id, kodi_type, path = self._json_item(playerid)
+                if item.file != path:
+                    LOG.debug('Detected different path')
+                    initialize = True
+                else:
+                    initialize = False
+        if initialize:
+            LOG.debug('Need to initialize Plex and PKC playqueue')
+            if not kodi_id or not kodi_type:
+                kodi_id, kodi_type, path = self._json_item(playerid)
+            plex_id, plex_type = self._get_ids(kodi_id, kodi_type, path)
+            if not plex_id:
+                LOG.debug('No Plex id obtained - aborting playback report')
+                state.PLAYER_STATES[playerid] = copy.deepcopy(state.PLAYSTATE)
+                return
+            item = PL.init_Plex_playlist(playqueue, plex_id=plex_id)
+            # Set the Plex container key (e.g. using the Plex playqueue)
+            container_key = None
+            if info['playlistid'] != -1:
+                # -1 is Kodi's answer if there is no playlist
+                container_key = PQ.PLAYQUEUES[playerid].id
+            if container_key is not None:
+                container_key = '/playQueues/%s' % container_key
+            elif plex_id is not None:
+                container_key = '/library/metadata/%s' % plex_id
+        else:
+            LOG.debug('No need to initialize playqueues')
+            kodi_id = item.kodi_id
+            kodi_type = item.kodi_type
+            plex_id = item.plex_id
+            plex_type = item.plex_type
+            if playqueue.id:
+                container_key = '/playQueues/%s' % playqueue.id
+            else:
+                container_key = '/library/metadata/%s' % plex_id
+        # Remember that this player has been active
+        state.ACTIVE_PLAYERS.append(playerid)
+        status.update(info)
+        LOG.debug('Set the Plex container_key to: %s', container_key)
+        status['container_key'] = container_key
+        status['file'] = path
+        status['kodi_id'] = kodi_id
+        status['kodi_type'] = kodi_type
+        status['plex_id'] = plex_id
+        status['plex_type'] = plex_type
+        status['playmethod'] = item.playmethod
+        status['playcount'] = item.playcount
+        LOG.debug('Set the player state: %s', status)
+
+
+@thread_methods
+class SpecialMonitor(Thread):
+    """
+    Detect the resume dialog for widgets.
+    Could also be used to detect external players (see Emby implementation)
+    """
+    def run(self):
+        LOG.info("----====# Starting Special Monitor #====----")
+        # "Start from beginning", "Play from beginning"
+        strings = (try_encode(getLocalizedString(12021)),
+                   try_encode(getLocalizedString(12023)))
+        while not self.stopped():
+            if getCondVisibility('Window.IsVisible(DialogContextMenu.xml)'):
+                if getInfoLabel('Control.GetLabel(1002)') in strings:
+                    # Remember that the item IS indeed resumable
+                    control = int(Window(10106).getFocusId())
+                    state.RESUME_PLAYBACK = True if control == 1001 else False
+                else:
+                    # Different context menu is displayed
+                    state.RESUME_PLAYBACK = False
+            sleep(200)
+        LOG.info("#====---- Special Monitor Stopped ----====#")

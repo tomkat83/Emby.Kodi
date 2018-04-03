@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
-import logging
+from logging import getLogger
 from shutil import copytree
 import xml.etree.ElementTree as etree
 from os import makedirs
@@ -8,13 +8,14 @@ from os import makedirs
 import xbmc
 from xbmcvfs import exists
 
-from utils import window, settings, language as lang, tryEncode, indent, \
-    normalize_nodes, exists_dir, tryDecode
+from utils import window, settings, language as lang, try_encode, indent, \
+    normalize_nodes, exists_dir, try_decode
 import variables as v
+import state
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+log = getLogger("PLEX."+__name__)
 
 ###############################################################################
 # Paths are strings, NOT unicode!
@@ -46,7 +47,7 @@ class VideoNodes(object):
     def viewNode(self, indexnumber, tagname, mediatype, viewtype, viewid, delete=False):
         # Plex: reassign mediatype due to Kodi inner workings
         # How many items do we get at most?
-        limit = window('fetch_pms_item_number')
+        limit = state.FETCH_PMS_ITEM_NUMBER
         mediatypes = {
             'movie': 'movies',
             'show': 'tvshows',
@@ -62,9 +63,9 @@ class VideoNodes(object):
             dirname = viewid
 
         # Returns strings
-        path = tryDecode(xbmc.translatePath(
+        path = try_decode(xbmc.translatePath(
             "special://profile/library/video/"))
-        nodepath = tryDecode(xbmc.translatePath(
+        nodepath = try_decode(xbmc.translatePath(
             "special://profile/library/video/Plex-%s/" % dirname))
 
         if delete:
@@ -77,9 +78,9 @@ class VideoNodes(object):
         # Verify the video directory
         if not exists_dir(path):
             copytree(
-                src=tryDecode(xbmc.translatePath(
+                src=try_decode(xbmc.translatePath(
                     "special://xbmc/system/library/video")),
-                dst=tryDecode(xbmc.translatePath(
+                dst=try_decode(xbmc.translatePath(
                     "special://profile/library/video")))
 
         # Create the node directory
@@ -292,7 +293,7 @@ class VideoNodes(object):
                 # To do: add our photos nodes to kodi picture sources somehow
                 continue
 
-            if exists(tryEncode(nodeXML)):
+            if exists(try_encode(nodeXML)):
                 # Don't recreate xml if already exists
                 continue
 
@@ -378,9 +379,9 @@ class VideoNodes(object):
             etree.ElementTree(root).write(nodeXML, encoding="UTF-8")
 
     def singleNode(self, indexnumber, tagname, mediatype, itemtype):
-        tagname = tryEncode(tagname)
-        cleantagname = tryDecode(normalize_nodes(tagname))
-        nodepath = tryDecode(xbmc.translatePath(
+        tagname = try_encode(tagname)
+        cleantagname = try_decode(normalize_nodes(tagname))
+        nodepath = try_decode(xbmc.translatePath(
             "special://profile/library/video/"))
         nodeXML = "%splex_%s.xml" % (nodepath, cleantagname)
         path = "library://video/plex_%s.xml" % cleantagname
@@ -394,9 +395,9 @@ class VideoNodes(object):
         if not exists_dir(nodepath):
             # We need to copy over the default items
             copytree(
-                src=tryDecode(xbmc.translatePath(
+                src=try_decode(xbmc.translatePath(
                     "special://xbmc/system/library/video")),
-                dst=tryDecode(xbmc.translatePath(
+                dst=try_decode(xbmc.translatePath(
                     "special://profile/library/video")))
 
         labels = {
@@ -411,7 +412,7 @@ class VideoNodes(object):
         window('%s.content' % embynode, value=path)
         window('%s.type' % embynode, value=itemtype)
 
-        if exists(tryEncode(nodeXML)):
+        if exists(try_encode(nodeXML)):
             # Don't recreate xml if already exists
             return
 

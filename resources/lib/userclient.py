@@ -1,39 +1,33 @@
 # -*- coding: utf-8 -*-
-
 ###############################################################################
-import logging
-import threading
+from logging import getLogger
+from threading import Thread
 
-import xbmc
-import xbmcgui
+from xbmc import sleep, executebuiltin, translatePath
 import xbmcaddon
 from xbmcvfs import exists
 
-
-from utils import window, settings, language as lang, thread_methods
-import downloadutils
-
-import PlexAPI
-from PlexFunctions import GetMachineIdentifier
+from utils import window, settings, language as lang, thread_methods, dialog
+from downloadutils import DownloadUtils as DU
+import plex_tv
+import PlexFunctions as PF
 import state
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 ###############################################################################
 
 
 @thread_methods(add_suspends=['SUSPEND_USER_CLIENT'])
-class UserClient(threading.Thread):
+class UserClient(Thread):
 
     # Borg - multiple instances, shared state
     __shared_state = {}
 
-    def __init__(self, callback=None):
+    def __init__(self):
         self.__dict__ = self.__shared_state
-        if callback is not None:
-            self.mgr = callback
 
         self.auth = True
         self.retry = 0
@@ -47,9 +41,9 @@ class UserClient(threading.Thread):
         self.userSettings = None
 
         self.addon = xbmcaddon.Addon()
-        self.doUtils = downloadutils.DownloadUtils()
+        self.doUtils = DU()
 
-        threading.Thread.__init__(self)
+        Thread.__init__(self)
 
     def getUsername(self):
         """
@@ -57,10 +51,10 @@ class UserClient(threading.Thread):
         """
         username = settings('username')
         if not username:
-            log.debug("No username saved, trying to get Plex username")
+            LOG.debug("No username saved, trying to get Plex username")
             username = settings('plexLogin')
             if not username:
-                log.debug("Also no Plex username found")
+                LOG.debug("Also no Plex username found")
                 return ""
         return username
 
@@ -75,7 +69,7 @@ class UserClient(threading.Thread):
         server = host + ":" + port
 
         if not host:
-            log.debug("No server information saved.")
+            LOG.debug("No server information saved.")
             return False
 
         # If https is true
@@ -86,11 +80,11 @@ class UserClient(threading.Thread):
             server = "http://%s" % server
         # User entered IP; we need to get the machineIdentifier
         if self.machineIdentifier == '' and prefix is True:
-            self.machineIdentifier = GetMachineIdentifier(server)
+            self.machineIdentifier = PF.GetMachineIdentifier(server)
             if self.machineIdentifier is None:
                 self.machineIdentifier = ''
             settings('plex_machineIdentifier', value=self.machineIdentifier)
-        log.debug('Returning active server: %s' % server)
+        LOG.debug('Returning active server: %s', server)
         return server
 
     def getSSLverify(self):
@@ -103,10 +97,10 @@ class UserClient(threading.Thread):
             else settings('sslcert')
 
     def setUserPref(self):
-        log.debug('Setting user preferences')
+        LOG.debug('Setting user preferences')
         # Only try to get user avatar if there is a token
         if self.currToken:
-            url = PlexAPI.PlexAPI().GetUserArtworkURL(self.currUser)
+            url = PF.GetUserArtworkURL(self.currUser)
             if url:
                 window('PlexUserImage', value=url)
         # Set resume point max
@@ -118,7 +112,7 @@ class UserClient(threading.Thread):
         return True
 
     def loadCurrUser(self, username, userId, usertoken, authenticated=False):
-        log.debug('Loading current user')
+        LOG.debug('Loading current user')
         doUtils = self.doUtils
 
         self.currToken = usertoken
@@ -129,25 +123,26 @@ class UserClient(threading.Thread):
         if authenticated is False:
             if self.currServer is None:
                 return False
-            log.debug('Testing validity of current token')
-            res = PlexAPI.PlexAPI().CheckConnection(self.currServer,
-                                                    token=self.currToken,
-                                                    verifySSL=self.ssl)
+            LOG.debug('Testing validity of current token')
+            res = PF.check_connection(self.currServer,
+                                      token=self.currToken,
+                                      verifySSL=self.ssl)
             if res is False:
                 # PMS probably offline
                 return False
             elif res == 401:
-                log.error('Token is no longer valid')
+                LOG.error('Token is no longer valid')
                 return 401
             elif res >= 400:
-                log.error('Answer from PMS is not as expected. Retrying')
+                LOG.error('Answer from PMS is not as expected. Retrying')
                 return False
 
         # Set to windows property
         state.PLEX_USER_ID = userId or None
         state.PLEX_USERNAME = username
         # This is the token for the current PMS (might also be '')
-        window('pms_token', value=self.currToken)
+        window('pms_token', value=usertoken)
+        state.PMS_TOKEN = usertoken
         # This is the token for plex.tv for the current user
         # Is only '' if user is not signed in to plex.tv
         window('plex_token', value=settings('plexToken'))
@@ -184,31 +179,29 @@ class UserClient(threading.Thread):
         return True
 
     def authenticate(self):
-        log.debug('Authenticating user')
-        dialog = xbmcgui.Dialog()
+        LOG.debug('Authenticating user')
 
         # Give attempts at entering password / selecting user
         if self.retry >= 2:
-            log.error("Too many retries to login.")
+            LOG.error("Too many retries to login.")
             state.PMS_STATUS = 'Stop'
-            dialog.ok(lang(33001),
-                      lang(39023))
-            xbmc.executebuiltin(
+            dialog('ok', lang(33001), lang(39023))
+            executebuiltin(
                 'Addon.OpenSettings(plugin.video.plexkodiconnect)')
             return False
 
         # Get /profile/addon_data
-        addondir = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+        addondir = translatePath(self.addon.getAddonInfo('profile'))
 
         # If there's no settings.xml
         if not exists("%ssettings.xml" % addondir):
-            log.error("Error, no settings.xml found.")
+            LOG.error("Error, no settings.xml found.")
             self.auth = False
             return False
         server = self.getServer()
         # If there is no server we can connect to
         if not server:
-            log.info("Missing server information.")
+            LOG.info("Missing server information.")
             self.auth = False
             return False
 
@@ -219,7 +212,7 @@ class UserClient(threading.Thread):
         enforceLogin = settings('enforceUserLogin')
         # Found a user in the settings, try to authenticate
         if username and enforceLogin == 'false':
-            log.debug('Trying to authenticate with old settings')
+            LOG.debug('Trying to authenticate with old settings')
             answ = self.loadCurrUser(username,
                                      userId,
                                      usertoken,
@@ -228,21 +221,19 @@ class UserClient(threading.Thread):
                 # SUCCESS: loaded a user from the settings
                 return True
             elif answ == 401:
-                log.error("User token no longer valid. Sign user out")
+                LOG.error("User token no longer valid. Sign user out")
                 settings('username', value='')
                 settings('userid', value='')
                 settings('accessToken', value='')
             else:
-                log.debug("Could not yet authenticate user")
+                LOG.debug("Could not yet authenticate user")
                 return False
-
-        plx = PlexAPI.PlexAPI()
 
         # Could not use settings - try to get Plex user list from plex.tv
         plextoken = settings('plexToken')
         if plextoken:
-            log.info("Trying to connect to plex.tv to get a user list")
-            userInfo = plx.ChoosePlexHomeUser(plextoken)
+            LOG.info("Trying to connect to plex.tv to get a user list")
+            userInfo = plex_tv.choose_home_user(plextoken)
             if userInfo is False:
                 # FAILURE: Something went wrong, try again
                 self.auth = True
@@ -252,7 +243,7 @@ class UserClient(threading.Thread):
             userId = userInfo['userid']
             usertoken = userInfo['token']
         else:
-            log.info("Trying to authenticate without a token")
+            LOG.info("Trying to authenticate without a token")
             username = ''
             userId = ''
             usertoken = ''
@@ -260,20 +251,21 @@ class UserClient(threading.Thread):
         if self.loadCurrUser(username, userId, usertoken, authenticated=False):
             # SUCCESS: loaded a user from the settings
             return True
-        else:
-            # FAILUR: Something went wrong, try again
-            self.auth = True
-            self.retry += 1
-            return False
+        # Something went wrong, try again
+        self.auth = True
+        self.retry += 1
+        return False
 
     def resetClient(self):
-        log.debug("Reset UserClient authentication.")
+        LOG.debug("Reset UserClient authentication.")
         self.doUtils.stopSession()
 
         window('plex_authenticated', clear=True)
         state.AUTHENTICATED = False
         window('pms_token', clear=True)
         state.PLEX_TOKEN = None
+        state.PLEX_TRANSIENT_TOKEN = None
+        state.PMS_TOKEN = None
         window('plex_token', clear=True)
         window('pms_server', clear=True)
         window('plex_machineIdentifier', clear=True)
@@ -287,9 +279,6 @@ class UserClient(threading.Thread):
         settings('userid', value='')
         settings('accessToken', value='')
 
-        # Reset token in downloads
-        self.doUtils.setToken('')
-
         self.currToken = None
         self.auth = True
         self.currUser = None
@@ -297,17 +286,17 @@ class UserClient(threading.Thread):
         self.retry = 0
 
     def run(self):
-        log.info("----===## Starting UserClient ##===----")
-        thread_stopped = self.thread_stopped
-        thread_suspended = self.thread_suspended
-        while not thread_stopped():
-            while thread_suspended():
-                if thread_stopped():
+        LOG.info("----===## Starting UserClient ##===----")
+        stopped = self.stopped
+        suspended = self.suspended
+        while not stopped():
+            while suspended():
+                if stopped():
                     break
-                xbmc.sleep(1000)
+                sleep(1000)
 
             if state.PMS_STATUS == "Stop":
-                xbmc.sleep(500)
+                sleep(500)
                 continue
 
             # Verify the connection status to server
@@ -320,7 +309,7 @@ class UserClient(threading.Thread):
                 state.PMS_STATUS = 'Auth'
                 window('plex_serverStatus', value='Auth')
                 self.resetClient()
-                xbmc.sleep(3000)
+                sleep(3000)
 
             if self.auth and (self.currUser is None):
                 # Try to authenticate user
@@ -330,9 +319,9 @@ class UserClient(threading.Thread):
                     self.auth = False
                     if self.authenticate():
                         # Successfully authenticated and loaded a user
-                        log.info("Successfully authenticated!")
-                        log.info("Current user: %s" % self.currUser)
-                        log.info("Current userId: %s" % state.PLEX_USER_ID)
+                        LOG.info("Successfully authenticated!")
+                        LOG.info("Current user: %s", self.currUser)
+                        LOG.info("Current userId: %s", state.PLEX_USER_ID)
                         self.retry = 0
                         state.SUSPEND_LIBRARY_THREAD = False
                         window('plex_serverStatus', clear=True)
@@ -346,10 +335,10 @@ class UserClient(threading.Thread):
                 # Or retried too many times
                 if server and state.PMS_STATUS != "Stop":
                     # Only if there's information found to login
-                    log.debug("Server found: %s" % server)
+                    LOG.debug("Server found: %s", server)
                     self.auth = True
 
             # Minimize CPU load
-            xbmc.sleep(100)
+            sleep(100)
 
-        log.info("##===---- UserClient Stopped ----===##")
+        LOG.info("##===---- UserClient Stopped ----===##")

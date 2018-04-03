@@ -12,7 +12,7 @@ LEVELS = {
 ###############################################################################
 
 
-def tryEncode(uniString, encoding='utf-8'):
+def try_encode(uniString, encoding='utf-8'):
     """
     Will try to encode uniString (in unicode) to encoding. This possibly
     fails with e.g. Android TV's Python, which does not accept arguments for
@@ -43,5 +43,5 @@ class LogHandler(logging.StreamHandler):
         try:
             xbmc.log(self.format(record), level=LEVELS[record.levelno])
         except UnicodeEncodeError:
-            xbmc.log(tryEncode(self.format(record)),
+            xbmc.log(try_encode(self.format(record)),
                      level=LEVELS[record.levelno])

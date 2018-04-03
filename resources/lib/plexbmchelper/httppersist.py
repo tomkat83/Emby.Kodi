@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 import httplib
 import traceback
 import string
@@ -7,7 +7,7 @@ from socket import error as socket_error
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 ###############################################################################
 
@@ -17,20 +17,20 @@ class RequestMgr:
         self.conns = {}
 
     def getConnection(self, protocol, host, port):
-        conn = self.conns.get(protocol+host+str(port), False)
+        conn = self.conns.get(protocol + host + str(port), False)
         if not conn:
             if protocol == "https":
                 conn = httplib.HTTPSConnection(host, port)
             else:
                 conn = httplib.HTTPConnection(host, port)
-            self.conns[protocol+host+str(port)] = conn
+            self.conns[protocol + host + str(port)] = conn
         return conn
 
     def closeConnection(self, protocol, host, port):
-        conn = self.conns.get(protocol+host+str(port), False)
+        conn = self.conns.get(protocol + host + str(port), False)
         if conn:
             conn.close()
-            self.conns.pop(protocol+host+str(port), None)
+            self.conns.pop(protocol + host + str(port), None)
 
     def dumpConnections(self):
         for conn in self.conns.values():
@@ -45,7 +45,7 @@ class RequestMgr:
             conn.request("POST", path, body, header)
             data = conn.getresponse()
             if int(data.status) >= 400:
-                log.error("HTTP response error: %s" % str(data.status))
+                LOG.error("HTTP response error: %s" % str(data.status))
                 # this should return false, but I'm hacking it since iOS
                 # returns 404 no matter what
                 return data.read() or True
@@ -56,14 +56,14 @@ class RequestMgr:
             if serr.errno in (errno.WSAECONNABORTED, errno.WSAECONNREFUSED):
                 pass
             else:
-                log.error("Unable to connect to %s\nReason:" % host)
-                log.error(traceback.print_exc())
-            self.conns.pop(protocol+host+str(port), None)
+                LOG.error("Unable to connect to %s\nReason:" % host)
+                LOG.error(traceback.print_exc())
+            self.conns.pop(protocol + host + str(port), None)
             if conn:
                 conn.close()
             return False
         except Exception as e:
-            log.error("Exception encountered: %s" % e)
+            LOG.error("Exception encountered: %s", e)
             # Close connection just in case
             try:
                 conn.close()
@@ -76,7 +76,7 @@ class RequestMgr:
         newpath = path + '?'
         pairs = []
         for key in params:
-            pairs.append(str(key)+'='+str(params[key]))
+            pairs.append(str(key) + '=' + str(params[key]))
         newpath += string.join(pairs, '&')
         return self.get(host, port, newpath, header, protocol)
 
@@ -87,7 +87,7 @@ class RequestMgr:
             conn.request("GET", path, headers=header)
             data = conn.getresponse()
             if int(data.status) >= 400:
-                log.error("HTTP response error: %s" % str(data.status))
+                LOG.error("HTTP response error: %s", str(data.status))
                 return False
             else:
                 return data.read() or True
@@ -96,8 +96,8 @@ class RequestMgr:
             if serr.errno in (errno.WSAECONNABORTED, errno.WSAECONNREFUSED):
                 pass
             else:
-                log.error("Unable to connect to %s\nReason:" % host)
-                log.error(traceback.print_exc())
-            self.conns.pop(protocol+host+str(port), None)
+                LOG.error("Unable to connect to %s\nReason:", host)
+                LOG.error(traceback.print_exc())
+            self.conns.pop(protocol + host + str(port), None)
             conn.close()
             return False

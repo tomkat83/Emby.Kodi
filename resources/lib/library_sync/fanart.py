@@ -54,14 +54,14 @@ class Process_Fanart_Thread(Thread):
         Do the work
         """
         log.debug("---===### Starting FanartSync ###===---")
-        thread_stopped = self.thread_stopped
-        thread_suspended = self.thread_suspended
+        stopped = self.stopped
+        suspended = self.suspended
         queue = self.queue
-        while not thread_stopped():
+        while not stopped():
             # In the event the server goes offline
-            while thread_suspended():
+            while suspended():
                 # Set in service.py
-                if thread_stopped():
+                if stopped():
                     # Abort was requested while waiting. We should exit
                     log.info("---===### Stopped FanartSync ###===---")
                     return

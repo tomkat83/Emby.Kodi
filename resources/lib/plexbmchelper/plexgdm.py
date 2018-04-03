@@ -30,6 +30,7 @@ from xbmc import sleep
 
 import downloadutils
 from utils import window, settings, dialog, language
+import variables as v
 
 ###############################################################################
 
@@ -44,7 +45,6 @@ class plexgdm:
         self.discover_message = 'M-SEARCH * HTTP/1.0'
         self.client_header = '* HTTP/1.0'
         self.client_data = None
-        self.client_id = None
 
         self._multicast_address = '239.0.0.250'
         self.discover_group = (self._multicast_address, 32414)
@@ -60,7 +60,7 @@ class plexgdm:
         self.client_registered = False
         self.download = downloadutils.DownloadUtils().downloadUrl
 
-    def clientDetails(self, options):
+    def clientDetails(self):
         self.client_data = (
             "Content-Type: plex/media-player\n"
             "Resource-Identifier: %s\n"
@@ -74,13 +74,12 @@ class plexgdm:
             "playqueues\n"
             "Device-Class: HTPC\n"
         ) % (
-            options['uuid'],
-            options['client_name'],
-            options['myport'],
-            options['addonName'],
-            options['version']
+            v.PKC_MACHINE_IDENTIFIER,
+            v.DEVICENAME,
+            v.COMPANION_PORT,
+            v.ADDON_NAME,
+            v.ADDON_VERSION
         )
-        self.client_id = options['uuid']
 
     def getClientDetails(self):
         return self.client_data
@@ -211,7 +210,7 @@ class plexgdm:
         registered = False
         for client in xml:
             if (client.attrib.get('machineIdentifier') ==
-                    self.client_id):
+                    v.PKC_MACHINE_IDENTIFIER):
                 registered = True
         if registered:
             return True

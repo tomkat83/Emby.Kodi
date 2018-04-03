@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="1.8.14" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.0.16" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.requests" version="2.3.0" />
+    <import addon="script.module.requests" version="2.9.1" />
+    <import addon="plugin.video.plexkodiconnect.movies" version="2.0.0" />
+    <import addon="plugin.video.plexkodiconnect.tvshows" version="2.0.1" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video audio image</provides>
@@ -13,7 +15,7 @@
       <item>
         <label>30401</label>
               <description>30416</description>
-              <visible>[!IsEmpty(ListItem.DBID) + !StringCompare(ListItem.DBID,-1) | !IsEmpty(ListItem.Property(plexid))] + !IsEmpty(Window(10000).Property(plex_context))</visible>
+              <visible>[!IsEmpty(ListItem.DBID) + !StringCompare(ListItem.DBID,-1) | !IsEmpty(ListItem.Property(plexid))]</visible>
       </item>
   </extension>
   <extension point="xbmc.addon.metadata">
@@ -59,7 +61,148 @@
     <summary lang="da_DK">Indbygget Integration af Plex i Kodi</summary>
     <description lang="da_DK">Tilslut Kodi til din Plex Media Server. Dette plugin forudsætter, at du administrere alle dine videoer med Plex (og ikke med Kodi). Du kan miste data som allerede er gemt i Kodi video og musik-databaser (dette plugin ændrer direkte i dem). Brug på eget ansvar!</description>
     <disclaimer lang="da_DK">Brug på eget ansvar</disclaimer>
-    <news>version 1.8.14 (beta only):
+    <news>version 2.0.16 (beta only):
+- Do NOT delete playstates before getting new ones from the PMS
+
+version 2.0.15 (beta only):
+- Fix Plex Companion thinking video is playing again
+- Warn if "Play next video automatically" is enabled, cause it breaks PKC playback report 
+- Don't clean the Kodi file table
+- Only remember which player has been active if we got a Plex id
+- Hopefully fix ValueError for datetime.utcnow() 
+
+version 2.0.14 (beta only):
+- Fix resetting PKC player state - should fix PKC telling the PMS that an old, just-played item is playing
+- Play the selected element first, then add the Kodi playqueue to the Plex playqueue
+- Ensure that playstate for ended (not stopped) video is recorded correctly
+- Make sure that LOCK is released after adding one element
+
+version 2.0.13 (beta only):
+- Fix resume for On Deck and browse by folder
+- Fix PKC sometimes telling wrong item being played
+- Don't tell PMS last item is playing if non-Plex item is played
+- Fix rare KeyError for playback including trailers
+- Use an empty video file to "fail" playback
+- Use identical add-on paths for On Deck and browsing folders
+
+version 2.0.12 (beta only):
+- Fix resume not working for some Kodi interface languages
+- Fix widget navigating to entire TV show not working
+- Fix library sync crash TypeError
+- Revert "Revert "Fix for "In Progress" not appearing""
+- Simplify error message
+
+version 2.0.11 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Fix playback for add-on paths
+- Fix artwork for episodes for add-on paths
+- Revert "Fix for "In Progress" not appearing"
+- Fix playback resuming potentially too often
+
+version 2.0.10 (beta only):
+- Fix wrong item being reported using direct paths
+- Direct paths: correctly clean up after context menu play
+- Always resume playback if playback initiated via context menu
+- Do not play trailers for resumable movies using playback via PMS
+- Fix for "In Progress" widget not appearing 
+- Fix correctly recording ended (not stopped!) video
+- Don't record last played date if state unwatched
+- Clean Kodi DB more thoroughly after playback start via PMS
+
+version 2.0.9 (beta only):
+- Fix AttributeError on playback start
+
+version 2.0.8 (beta only):
+- Fix videos not being correctly marked as played
+- Improve playback startup resiliance
+- Fix playerstates not being copied/reset correctly
+- Fix tv shows not being correctly deleted
+- Fix episode rating not being correct
+- Make generally sure that we're correctly deleting videos from the Kodi DB
+- Fix disabling of background sync (websockets) 
+
+version 2.0.7 (beta only):
+- Fix another UnicodeDecodeError for playlists
+- Hardcode plugin-calls instead of using urlencode
+- Fix Kodi 18 log warnings by declaring all settings variables
+
+version 2.0.6 (beta only):
+- Addon paths playback was basically broken - hope it works again!
+- Fixes to add-on paths playback startup
+- Fix UnicodeDecodeError for playqueue logging 
+
+version 2.0.5 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Fix art and show info not showing for addon paths
+- Fix episode information not working
+- Big Kodi DB overhaul - ensure video metadata updates/deletes correctly
+- Artwork code overhaul
+- Greatly speed up switch of PMS
+- And a lot of other stuff
+
+version 2.0.4 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Many improvements to the Kodi database handling which should get rid of some weird bugs
+- Many improvements to playback startup
+- Fix info screen and actors not working
+- Fix Companion displaying and selecting wrong subtitle
+- Don't cache subtitles if direct playing
+- Wipe all existing resume point, e.g. on user switch
+- Don't mess with Kodi's screensaver settings
+- Inhibit idle shutdown only during initial sync
+- Fix KeyError for server discovery 
+- Increase Python requests dependency to version 2.9.1
+- Re-introduce PlexKodiConnect dependency add-ons for movies and tv shows
+- And a lot of other stuff
+
+version 2.0.3 (beta only):
+- Fix Alexa playback
+- Fix Kodi boot loop
+- Fix playback being reported to the wrong Plex user
+- Fix GB/BBFC content ratings
+- Fix KeyError when browsing On Deck
+- Make sure that empty XML elements get deleted
+- Code optimizations
+
+version 2.0.2 (beta only):
+- Fix playback reporting not starting up correctly
+- Fix playback cleanup if PKC causes stop
+- Always detect if user resumes playback
+- Enable resume within a playqueue
+- Compare playqueue items more reliably
+
+version 2.0.1 (beta only):
+- Fix empty On Deck for tv shows
+- Fix trailers not playing
+
+version 2.0.0 (beta only):
+- HUGE code overhaul - Remember that you can go back to earlier version ;-)
+- Completely rewritten Plex Companion
+- Completely rewritten playback startup
+- Tons of fixes, see the Github changelog for more details
+- WARNING: You will need to reset the Kodi database!
+
+version 1.8.18:
+- Russian translation, thanks @UncleStark, @xom2000,  @AlexFreit
+- Fix Plex context menu not showing up
+- Deal better with missing stream info (e.g. channels)
+- Fix AttributeError if Plex key is missing
+
+version 1.8.17:
+- Hopefully fix stable repo
+- Fix subtitles not working or showing up as Unknown
+- Enable channels for Plex home users
+- Remove obsolete PKC settings show contextmenu
+
+version 1.8.16:
+- Add premiere dates for movies, thanks @dazedcrazy
+- Fix items not getting marked as fully watched
+
+version 1.8.15:
+- version 1.8.14 for everyone
+- Update translations
+
+version 1.8.14 (beta only):
 - Greatly speed up displaying context menu 
 - Fix IndexError e.g. for channels if stream info missing
 - Sleep a bit before marking item as fully watched

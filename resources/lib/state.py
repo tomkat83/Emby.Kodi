@@ -28,6 +28,10 @@ DIRECT_PATHS = False
 INDICATE_MEDIA_VERSIONS = False
 # Do we need to run a special library scan?
 RUN_LIB_SCAN = None
+# Number of items to fetch and display in widgets
+FETCH_PMS_ITEM_NUMBER = None
+# Hack to force Kodi widget for "in progress" to show up if it was empty before
+FORCE_RELOAD_SKIN = True
 
 # Stemming from the PKC settings.xml
 # Shall we show Kodi dialogs when synching?
@@ -38,8 +42,8 @@ KODI_DB_CHECKED = False
 ENABLE_MUSIC = True
 # How often shall we sync?
 FULL_SYNC_INTERVALL = 0
-# Background Sync enabled at all?
-BACKGROUND_SYNC = True
+# Background Sync disabled?
+BACKGROUND_SYNC_DISABLED = False
 # How long shall we wait with synching a new item to make sure Plex got all
 # metadata?
 BACKGROUNDSYNC_SAFTYMARGIN = 0
@@ -63,14 +67,93 @@ remapSMBmusicNew = None
 remapSMBphotoOrg = None
 remapSMBphotoNew = None
 
+# Shall we verify SSL certificates?
+VERIFY_SSL_CERT = False
+# Do we have an ssl certificate for PKC we need to use?
+SSL_CERT_PATH = None
 # Along with window('plex_authenticated')
 AUTHENTICATED = False
 # plex.tv username
 PLEX_USERNAME = None
 # Token for that user for plex.tv
 PLEX_TOKEN = None
+# Plex token for the active PMS for the active user
+# (might be diffent to PLEX_TOKEN)
+PMS_TOKEN = None
 # Plex ID of that user (e.g. for plex.tv) as a STRING
 PLEX_USER_ID = None
 # Token passed along, e.g. if playback initiated by Plex Companion. Might be
 # another user playing something! Token identifies user
 PLEX_TRANSIENT_TOKEN = None
+
+# Plex Companion Queue()
+COMPANION_QUEUE = None
+# Command Pipeline Queue()
+COMMAND_PIPELINE_QUEUE = None
+# Websocket_client queue to communicate with librarysync
+WEBSOCKET_QUEUE = None
+
+# Which Kodi player is/has been active? (either int 1, 2 or 3)
+ACTIVE_PLAYERS = []
+# Failsafe for throwing failing ListItems() back to Kodi's setResolvedUrl
+PKC_CAUSED_STOP = False
+
+# Kodi player states - here, initial values are set
+PLAYER_STATES = {
+    0: {},
+    1: {},
+    2: {}
+}
+# The LAST playstate once playback is finished
+OLD_PLAYER_STATES = {
+    0: {},
+    1: {},
+    2: {}
+}
+# "empty" dict for the PLAYER_STATES above. Use copy.deepcopy to duplicate!
+PLAYSTATE = {
+    'type': None,
+    'time': {
+        'hours': 0,
+        'minutes': 0,
+        'seconds': 0,
+        'milliseconds': 0},
+    'totaltime': {
+        'hours': 0,
+        'minutes': 0,
+        'seconds': 0,
+        'milliseconds': 0},
+    'speed': 0,
+    'shuffled': False,
+    'repeat': 'off',
+    'position': None,
+    'playlistid': None,
+    'currentvideostream': -1,
+    'currentaudiostream': -1,
+    'subtitleenabled': False,
+    'currentsubtitle': -1,
+    'file': None,
+    'kodi_id': None,
+    'kodi_type': None,
+    'plex_id': None,
+    'plex_type': None,
+    'container_key': None,
+    'volume': 100,
+    'muted': False,
+    'playmethod': None,
+    'playcount': None
+}
+PLAYED_INFO = {}
+# Set by SpecialMonitor - did user choose to resume playback or start from the
+# beginning?
+RESUME_PLAYBACK = False
+# Was the playback initiated by the user using the Kodi context menu?
+CONTEXT_MENU_PLAY = False
+# Set by context menu - shall we force-transcode the next playing item?
+FORCE_TRANSCODE = False
+
+# Kodi webserver details
+WEBSERVER_PORT = 8080
+WEBSERVER_USERNAME = 'kodi'
+WEBSERVER_PASSWORD = ''
+WEBSERVER_HOST = 'localhost'

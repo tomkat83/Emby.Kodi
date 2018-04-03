@@ -1,53 +1,68 @@
-# -*- coding: utf-8 -*-
-import logging
+"""
+Plex Companion listener
+"""
+from logging import getLogger
 from re import sub
 from SocketServer import ThreadingMixIn
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from urlparse import urlparse, parse_qs
 
-from xbmc import sleep
+from xbmc import sleep, Player, Monitor
+
 from companion import process_command
-from utils import window
-
-from functions import *
-
-
-###############################################################################
-
-log = logging.getLogger("PLEX."+__name__)
+import json_rpc as js
+from clientinfo import getXArgsDeviceInfo
+import variables as v
 
 ###############################################################################
 
+LOG = getLogger("PLEX." + __name__)
+PLAYER = Player()
+MONITOR = Monitor()
+
+# Hack we need in order to keep track of the open connections from Plex Web
+CLIENT_DICT = {}
+
+###############################################################################
+
+RESOURCES_XML = ('%s<MediaContainer>\n'
+    '  <Player'
+        ' title="{title}"'
+        ' protocol="plex"'
+        ' protocolVersion="1"'
+        ' protocolCapabilities="timeline,playback,navigation,playqueues"'
+        ' machineIdentifier="{machineIdentifier}"'
+        ' product="%s"'
+        ' platform="%s"'
+        ' platformVersion="%s"'
+        ' deviceClass="pc"/>\n'
+    '</MediaContainer>\n') % (v.XML_HEADER,
+                              v.ADDON_NAME,
+                              v.PLATFORM,
+                              v.ADDON_VERSION)
 
 class MyHandler(BaseHTTPRequestHandler):
+    """
+    BaseHTTPRequestHandler implementation of Plex Companion listener
+    """
     protocol_version = 'HTTP/1.1'
 
     def __init__(self, *args, **kwargs):
-        BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
         self.serverlist = []
-
-    def getServerByHost(self, host):
-        if len(self.serverlist) == 1:
-            return self.serverlist[0]
-        for server in self.serverlist:
-            if (server.get('serverName') in host or
-                    server.get('server') in host):
-                return server
-        return {}
+        BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
 
     def do_HEAD(self):
-        log.debug("Serving HEAD request...")
+        LOG.debug("Serving HEAD request...")
         self.answer_request(0)
 
     def do_GET(self):
-        log.debug("Serving GET request...")
+        LOG.debug("Serving GET request...")
         self.answer_request(1)
 
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header('Content-Length', '0')
-        self.send_header('X-Plex-Client-Identifier',
-                         self.server.settings['uuid'])
+        self.send_header('X-Plex-Client-Identifier', v.PKC_MACHINE_IDENTIFIER)
         self.send_header('Content-Type', 'text/plain')
         self.send_header('Connection', 'close')
         self.send_header('Access-Control-Max-Age', '1209600')
@@ -66,7 +81,8 @@ class MyHandler(BaseHTTPRequestHandler):
     def sendOK(self):
         self.send_response(200)
 
-    def response(self, body, headers={}, code=200):
+    def response(self, body, headers=None, code=200):
+        headers = {} if headers is None else headers
         try:
             self.send_response(code)
             for key in headers:
@@ -79,112 +95,135 @@ class MyHandler(BaseHTTPRequestHandler):
         except:
             pass
 
-    def answer_request(self, sendData):
+    def answer_request(self, send_data):
         self.serverlist = self.server.client.getServerList()
-        subMgr = self.server.subscriptionManager
-        js = self.server.jsonClass
-        settings = self.server.settings
+        sub_mgr = self.server.subscription_manager
 
-        try:
-            request_path = self.path[1:]
-            request_path = sub(r"\?.*", "", request_path)
-            url = urlparse(self.path)
-            paramarrays = parse_qs(url.query)
-            params = {}
-            for key in paramarrays:
-                params[key] = paramarrays[key][0]
-            log.debug("remote request_path: %s" % request_path)
-            log.debug("params received from remote: %s" % params)
-            subMgr.updateCommandID(self.headers.get(
-                'X-Plex-Client-Identifier',
-                self.client_address[0]),
-                params.get('commandID', False))
-            if request_path == "version":
+        request_path = self.path[1:]
+        request_path = sub(r"\?.*", "", request_path)
+        url = urlparse(self.path)
+        paramarrays = parse_qs(url.query)
+        params = {}
+        for key in paramarrays:
+            params[key] = paramarrays[key][0]
+        LOG.debug("remote request_path: %s", request_path)
+        LOG.debug("params received from remote: %s", params)
+        sub_mgr.update_command_id(self.headers.get(
+                'X-Plex-Client-Identifier', self.client_address[0]),
+            params.get('commandID'))
+        if request_path == "version":
+            self.response(
+                "PlexKodiConnect Plex Companion: Running\nVersion: %s"
+                % v.ADDON_VERSION)
+        elif request_path == "verify":
+            self.response("XBMC JSON connection test:\n" + js.ping())
+        elif request_path == 'resources':
+            self.response(
+                RESOURCES_XML.format(
+                    title=v.DEVICENAME,
+                    machineIdentifier=v.PKC_MACHINE_IDENTIFIER),
+                getXArgsDeviceInfo(include_token=False))
+        elif request_path == 'player/timeline/poll':
+            # Plex web does polling if connected to PKC via Companion
+            # Only reply if there is indeed something playing
+            # Otherwise, all clients seem to keep connection open
+            if params.get('wait') == '1':
+                MONITOR.waitForAbort(0.95)
+            if self.client_address[0] not in CLIENT_DICT:
+                CLIENT_DICT[self.client_address[0]] = []
+            tracker = CLIENT_DICT[self.client_address[0]]
+            tracker.append(self.client_address[1])
+            while (not PLAYER.isPlaying() and
+                   not MONITOR.abortRequested() and
+                   sub_mgr.stop_sent_to_web and not
+                   (len(tracker) >= 4 and
+                    tracker[0] == self.client_address[1])):
+                # Keep at most 3 connections open, then drop the first one
+                # Doesn't need to be thread-save
+                # Silly stuff really
+                MONITOR.waitForAbort(1)
+            # Let PKC know that we're releasing this connection
+            tracker.pop(0)
+            msg = sub_mgr.msg(js.get_players()).format(
+                command_id=params.get('commandID', 0))
+            if sub_mgr.isplaying:
                 self.response(
-                    "PlexKodiConnect Plex Companion: Running\nVersion: %s"
-                    % settings['version'])
-            elif request_path == "verify":
-                self.response("XBMC JSON connection test:\n" +
-                              js.jsonrpc("ping"))
-            elif "resources" == request_path:
-                resp = ('%s'
-                        '<MediaContainer>'
-                        '<Player'
-                        ' title="%s"'
-                        ' protocol="plex"'
-                        ' protocolVersion="1"'
-                        ' protocolCapabilities="timeline,playback,navigation,playqueues"'
-                        ' machineIdentifier="%s"'
-                        ' product="PlexKodiConnect"'
-                        ' platform="%s"'
-                        ' platformVersion="%s"'
-                        ' deviceClass="pc"'
-                        '/>'
-                        '</MediaContainer>'
-                        % (getXMLHeader(),
-                           settings['client_name'],
-                           settings['uuid'],
-                           settings['platform'],
-                           settings['plexbmc_version']))
-                log.debug("crafted resources response: %s" % resp)
-                self.response(resp, js.getPlexHeaders())
-            elif "/subscribe" in request_path:
-                self.response(getOKMsg(), js.getPlexHeaders())
-                protocol = params.get('protocol', False)
-                host = self.client_address[0]
-                port = params.get('port', False)
-                uuid = self.headers.get('X-Plex-Client-Identifier', "")
-                commandID = params.get('commandID', 0)
-                subMgr.addSubscriber(protocol,
-                                     host,
-                                     port,
-                                     uuid,
-                                     commandID)
-            elif "/poll" in request_path:
-                if params.get('wait', False) == '1':
-                    sleep(950)
-                commandID = params.get('commandID', 0)
-                self.response(
-                    sub(r"INSERTCOMMANDID",
-                        str(commandID),
-                        subMgr.msg(js.getPlayers())),
+                    msg,
                     {
-                        'X-Plex-Client-Identifier': settings['uuid'],
+                        'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
+                        'X-Plex-Protocol': '1.0',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Max-Age': '1209600',
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
-                        'Access-Control-Allow-Origin': '*',
-                        'Content-Type': 'text/xml'
+                        'Content-Type': 'text/xml;charset=utf-8'
                     })
-            elif "/unsubscribe" in request_path:
-                self.response(getOKMsg(), js.getPlexHeaders())
-                uuid = self.headers.get('X-Plex-Client-Identifier', False) \
-                    or self.client_address[0]
-                subMgr.removeSubscriber(uuid)
+            elif not sub_mgr.stop_sent_to_web:
+                sub_mgr.stop_sent_to_web = True
+                LOG.debug('Signaling STOP to Plex Web')
+                self.response(
+                    msg,
+                    {
+                        'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
+                        'X-Plex-Protocol': '1.0',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Max-Age': '1209600',
+                        'Access-Control-Expose-Headers':
+                            'X-Plex-Client-Identifier',
+                        'Content-Type': 'text/xml;charset=utf-8'
+                    })
             else:
-                # Throw it to companion.py
-                process_command(request_path, params, self.server.queue)
-                self.response('', js.getPlexHeaders())
-                subMgr.notify()
-        except:
-            log.error('Error encountered. Traceback:')
-            import traceback
-            log.error(traceback.print_exc())
+                # Fail connection with HTTP 500 error - has been open too long
+                self.response(
+                    'Need to close this connection on the PKC side',
+                    {
+                        'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
+                        'X-Plex-Protocol': '1.0',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Max-Age': '1209600',
+                        'Access-Control-Expose-Headers':
+                            'X-Plex-Client-Identifier',
+                        'Content-Type': 'text/xml;charset=utf-8'
+                    },
+                    code=500)
+        elif "/subscribe" in request_path:
+            self.response(v.COMPANION_OK_MESSAGE,
+                          getXArgsDeviceInfo(include_token=False))
+            protocol = params.get('protocol')
+            host = self.client_address[0]
+            port = params.get('port')
+            uuid = self.headers.get('X-Plex-Client-Identifier')
+            command_id = params.get('commandID', 0)
+            sub_mgr.add_subscriber(protocol,
+                                   host,
+                                   port,
+                                   uuid,
+                                   command_id)
+        elif "/unsubscribe" in request_path:
+            self.response(v.COMPANION_OK_MESSAGE,
+                          getXArgsDeviceInfo(include_token=False))
+            uuid = self.headers.get('X-Plex-Client-Identifier') \
+                or self.client_address[0]
+            sub_mgr.remove_subscriber(uuid)
+        else:
+            # Throw it to companion.py
+            process_command(request_path, params)
+            self.response('', getXArgsDeviceInfo(include_token=False))
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    """
+    Using ThreadingMixIn Thread magic
+    """
     daemon_threads = True
 
-    def __init__(self, client, subscriptionManager, jsonClass, settings,
-                 queue, *args, **kwargs):
+    def __init__(self, client, subscription_manager, *args, **kwargs):
         """
         client: Class handle to plexgdm.plexgdm. We can thus ask for an up-to-
         date serverlist without instantiating anything
 
-        same for SubscriptionManager and jsonClass
+        same for SubscriptionMgr
         """
         self.client = client
-        self.subscriptionManager = subscriptionManager
-        self.jsonClass = jsonClass
-        self.settings = settings
-        self.queue = queue
+        self.subscription_manager = subscription_manager
         HTTPServer.__init__(self, *args, **kwargs)

@@ -1,49 +1,135 @@
-import logging
-import re
-import threading
+"""
+Manages getting playstate from Kodi and sending it to the PMS as well as
+subscribed Plex Companion clients.
+"""
+from logging import getLogger
+from threading import Thread, RLock
 
-import downloadutils
-from clientinfo import getXArgsDeviceInfo
-from utils import window
-import PlexFunctions as pf
+from downloadutils import DownloadUtils as DU
+from utils import window, kodi_time_to_millis, LockFunction
 import state
-from functions import *
+import variables as v
+import json_rpc as js
+import playqueue as PQ
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
+# Need to lock all methods and functions messing with subscribers or state
+LOCK = RLock()
+LOCKER = LockFunction(LOCK)
 
 ###############################################################################
 
+# What is Companion controllable?
+CONTROLLABLE = {
+    v.PLEX_PLAYLIST_TYPE_VIDEO: 'playPause,stop,volume,shuffle,audioStream,'
+        'subtitleStream,seekTo,skipPrevious,skipNext,'
+        'stepBack,stepForward',
+    v.PLEX_PLAYLIST_TYPE_AUDIO: 'playPause,stop,volume,shuffle,repeat,seekTo,'
+        'skipPrevious,skipNext,stepBack,stepForward',
+    v.PLEX_PLAYLIST_TYPE_PHOTO: 'playPause,stop,skipPrevious,skipNext'
+}
 
-class SubscriptionManager:
-    def __init__(self, jsonClass, RequestMgr, player, mgr):
+STREAM_DETAILS = {
+    'video': 'currentvideostream',
+    'audio': 'currentaudiostream',
+    'subtitle': 'currentsubtitle'
+}
+
+XML = ('%s<MediaContainer commandID="{command_id}" location="{location}">\n'
+       '  <Timeline {%s}/>\n'
+       '  <Timeline {%s}/>\n'
+       '  <Timeline {%s}/>\n'
+       '</MediaContainer>\n') % (v.XML_HEADER,
+                                 v.PLEX_PLAYLIST_TYPE_VIDEO,
+                                 v.PLEX_PLAYLIST_TYPE_AUDIO,
+                                 v.PLEX_PLAYLIST_TYPE_PHOTO)
+
+# Headers are different for Plex Companion - use these for PMS notifications
+HEADERS_PMS = {
+    'Connection': 'keep-alive',
+    'Accept': 'text/plain, */*; q=0.01',
+    'Accept-Language': 'en',
+    'Accept-Encoding': 'gzip, deflate',
+    'User-Agent': '%s %s (%s)' % (v.ADDON_NAME, v.ADDON_VERSION, v.PLATFORM)
+}
+
+
+def params_pms():
+    """
+    Returns the url parameters for communicating with the PMS
+    """
+    return {
+        # 'X-Plex-Client-Capabilities': 'protocols=shoutcast,http-video;'
+        #     'videoDecoders=h264{profile:high&resolution:2160&level:52};'
+        #     'audioDecoders=mp3,aac,dts{bitrate:800000&channels:2},'
+        #     'ac3{bitrate:800000&channels:2}',
+        'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
+        'X-Plex-Device': v.PLATFORM,
+        'X-Plex-Device-Name': v.DEVICENAME,
+        # 'X-Plex-Device-Screen-Resolution': '1916x1018,1920x1080',
+        'X-Plex-Model': 'unknown',
+        'X-Plex-Platform': v.PLATFORM,
+        'X-Plex-Platform-Version': 'unknown',
+        'X-Plex-Product': v.ADDON_NAME,
+        'X-Plex-Provider-Version': v.ADDON_VERSION,
+        'X-Plex-Version': v.ADDON_VERSION,
+        'hasMDE': '1',
+        # 'X-Plex-Session-Identifier': ['vinuvirm6m20iuw9c4cx1dcx'],
+    }
+
+
+def headers_companion_client():
+    """
+    Headers are different for Plex Companion - use these for a Plex Companion
+    client
+    """
+    return {
+        'Content-Type': 'application/xml',
+        'Connection': 'Keep-Alive',
+        'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
+        'X-Plex-Device-Name': v.DEVICENAME,
+        'X-Plex-Platform': v.PLATFORM,
+        'X-Plex-Platform-Version': 'unknown',
+        'X-Plex-Product': v.ADDON_NAME,
+        'X-Plex-Version': v.ADDON_VERSION,
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'en,*'
+    }
+
+
+def update_player_info(playerid):
+    """
+    Updates all player info for playerid [int] in state.py.
+    """
+    state.PLAYER_STATES[playerid].update(js.get_player_props(playerid))
+    state.PLAYER_STATES[playerid]['volume'] = js.get_volume()
+    state.PLAYER_STATES[playerid]['muted'] = js.get_muted()
+
+
+class SubscriptionMgr(object):
+    """
+    Manages Plex companion subscriptions
+    """
+    def __init__(self, request_mgr, player):
         self.serverlist = []
         self.subscribers = {}
         self.info = {}
-        self.lastkey = ""
-        self.containerKey = ""
-        self.ratingkey = ""
-        self.lastplayers = {}
-        self.lastinfo = {
-            'video': {},
-            'audio': {},
-            'picture': {}
-        }
-        self.volume = 0
-        self.mute = '0'
         self.server = ""
         self.protocol = "http"
         self.port = ""
-        self.playerprops = {}
-        self.doUtils = downloadutils.DownloadUtils().downloadUrl
+        self.isplaying = False
+        # In order to be able to signal a stop at the end
+        self.last_params = {}
+        self.lastplayers = {}
+        # In order to signal a stop to Plex Web ONCE on playback stop
+        self.stop_sent_to_web = True
+
         self.xbmcplayer = player
-        self.playqueue = mgr.playqueue
+        self.request_mgr = request_mgr
 
-        self.js = jsonClass
-        self.RequestMgr = RequestMgr
-
-    def getServerByHost(self, host):
+    def _server_by_host(self, host):
         if len(self.serverlist) == 1:
             return self.serverlist[0]
         for server in self.serverlist:
@@ -52,281 +138,347 @@ class SubscriptionManager:
                 return server
         return {}
 
-    def getVolume(self):
-        self.volume, self.mute = self.js.getVolume()
-
+    @LOCKER.lockthis
     def msg(self, players):
-        msg = getXMLHeader()
-        msg += '<MediaContainer size="3" commandID="INSERTCOMMANDID"'
-        msg += ' machineIdentifier="%s" location="fullScreenVideo">' % window('plex_client_Id')
-        msg += self.getTimelineXML(self.js.getAudioPlayerId(players), plex_audio())
-        msg += self.getTimelineXML(self.js.getPhotoPlayerId(players), plex_photo())
-        msg += self.getTimelineXML(self.js.getVideoPlayerId(players), plex_video())
-        msg += "\n</MediaContainer>"
-        return msg
+        """
+        Returns a timeline xml as str
+        (xml containing video, audio, photo player state)
+        """
+        self.isplaying = False
+        answ = str(XML)
+        timelines = {
+            v.PLEX_PLAYLIST_TYPE_VIDEO: None,
+            v.PLEX_PLAYLIST_TYPE_AUDIO: None,
+            v.PLEX_PLAYLIST_TYPE_PHOTO: None
+        }
+        for typus in timelines:
+            if players.get(v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[typus]) is None:
+                timeline = {
+                    'controllable': CONTROLLABLE[typus],
+                    'type': typus,
+                    'state': 'stopped'
+                }
+            else:
+                timeline = self._timeline_dict(players[
+                        v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[typus]],
+                    typus)
+            timelines[typus] = self._dict_to_xml(timeline)
+        location = 'fullScreenVideo' if self.isplaying else 'navigation'
+        timelines.update({'command_id': '{command_id}', 'location': location})
+        return answ.format(**timelines)
 
-    def getTimelineXML(self, playerid, ptype):
-        if playerid is not None:
-            info = self.getPlayerProperties(playerid)
-            # save this info off so the server update can use it too
-            self.playerprops[playerid] = info;
-            status = info['state']
-            time = info['time']
-        else:
-            status = "stopped"
-            time = 0
-        ret = "\n"+'  <Timeline state="%s" time="%s" type="%s"' % (status, time, ptype)
-        if playerid is None:
-            ret += ' />'
-            return ret
+    @staticmethod
+    def _dict_to_xml(dictionary):
+        """
+        Returns the string 'key1="value1" key2="value2" ...' for dictionary
+        """
+        answ = ''
+        for key, value in dictionary.iteritems():
+            answ += '%s="%s" ' % (key, value)
+        return answ
 
+    def _timeline_dict(self, player, ptype):
+        playerid = player['playerid']
+        info = state.PLAYER_STATES[playerid]
+        playqueue = PQ.PLAYQUEUES[playerid]
+        pos = info['position']
+        try:
+            item = playqueue.items[pos]
+        except IndexError:
+            # E.g. for direct path playback for single item
+            return {
+                'controllable': CONTROLLABLE[ptype],
+                'type': ptype,
+                'state': 'stopped'
+            }
+        self.isplaying = True
+        self.stop_sent_to_web = False
         pbmc_server = window('pms_server')
         if pbmc_server:
-            (self.protocol, self.server, self.port) = \
-                pbmc_server.split(':')
+            (self.protocol, self.server, self.port) = pbmc_server.split(':')
             self.server = self.server.replace('/', '')
-        keyid = None
-        count = 0
-        while not keyid:
-            if count > 300:
-                break
-            keyid = window('plex_currently_playing_itemid')
-            xbmc.sleep(100)
-            count += 1
-        if keyid:
-            self.lastkey = "/library/metadata/%s" % keyid
-            self.ratingkey = keyid
-            ret += ' key="%s"' % self.lastkey
-            ret += ' ratingKey="%s"' % self.ratingkey
-        serv = self.getServerByHost(self.server)
-        if info.get('playQueueID'):
-            self.containerKey = "/playQueues/%s" % info.get('playQueueID')
-            ret += ' playQueueID="%s"' % info.get('playQueueID')
-            ret += ' playQueueVersion="%s"' % info.get('playQueueVersion')
-            ret += ' playQueueItemID="%s"' % info.get('playQueueItemID')
-            ret += ' containerKey="%s"' % self.containerKey
-            ret += ' guid="%s"' % info['guid']
-        elif keyid:
-            self.containerKey = self.lastkey
-            ret += ' containerKey="%s"' % self.containerKey
-
-        ret += ' duration="%s"' % info['duration']
-        ret += ' controllable="%s"' % self.controllable()
-        ret += ' machineIdentifier="%s"' % serv.get('uuid', "")
-        ret += ' protocol="%s"' % serv.get('protocol', "http")
-        ret += ' address="%s"' % serv.get('server', self.server)
-        ret += ' port="%s"' % serv.get('port', self.port)
-        ret += ' volume="%s"' % info['volume']
-        ret += ' shuffle="%s"' % info['shuffle']
-        ret += ' mute="%s"' % self.mute
-        ret += ' repeat="%s"' % info['repeat']
-        ret += ' itemType="%s"' % info['itemType']
+        status = 'paused' if int(info['speed']) == 0 else 'playing'
+        duration = kodi_time_to_millis(info['totaltime'])
+        shuffle = '1' if info['shuffled'] else '0'
+        mute = '1' if info['muted'] is True else '0'
+        answ = {
+            'location': 'fullScreenVideo',
+            'controllable': CONTROLLABLE[ptype],
+            'protocol': self.protocol,
+            'address': self.server,
+            'port': self.port,
+            'machineIdentifier': window('plex_machineIdentifier'),
+            'state': status,
+            'type': ptype,
+            'itemType': ptype,
+            'time': kodi_time_to_millis(info['time']),
+            'duration': duration,
+            'seekRange': '0-%s' % duration,
+            'shuffle': shuffle,
+            'repeat': v.PLEX_REPEAT_FROM_KODI_REPEAT[info['repeat']],
+            'volume': info['volume'],
+            'mute': mute,
+            'mediaIndex': 0,  # Still to implement from here
+            'partIndex':0,
+            'partCount': 1,
+            'providerIdentifier': 'com.plexapp.plugins.library',
+        }
+        # Get the plex id from the PKC playqueue not info, as Kodi jumps to next
+        # playqueue element way BEFORE kodi monitor onplayback is called
+        if item.plex_id:
+            answ['key'] = '/library/metadata/%s' % item.plex_id
+            answ['ratingKey'] = item.plex_id
+        # PlayQueue stuff
+        if info['container_key']:
+            answ['containerKey'] = info['container_key']
+        if (info['container_key'] is not None and
+                info['container_key'].startswith('/playQueues')):
+            answ['playQueueID'] = playqueue.id
+            answ['playQueueVersion'] = playqueue.version
+            answ['playQueueItemID'] = item.id
+        if playqueue.items[pos].guid:
+            answ['guid'] = item.guid
+        # Temp. token set?
         if state.PLEX_TRANSIENT_TOKEN:
-            ret += ' token="%s"' % state.PLEX_TRANSIENT_TOKEN
-        elif info['plex_transient_token']:
-            ret += ' token="%s"' % info['plex_transient_token']
-        # Might need an update in the future
-        if ptype == 'video':
-            ret += ' subtitleStreamID="-1"'
-            ret += ' audioStreamID="-1"'
+            answ['token'] = state.PLEX_TRANSIENT_TOKEN
+        elif playqueue.plex_transient_token:
+            answ['token'] = playqueue.plex_transient_token
+        # Process audio and subtitle streams
+        if ptype == v.PLEX_PLAYLIST_TYPE_VIDEO:
+            strm_id = self._plex_stream_index(playerid, 'audio')
+            if strm_id:
+                answ['audioStreamID'] = strm_id
+            else:
+                LOG.error('We could not select a Plex audiostream')
+            strm_id = self._plex_stream_index(playerid, 'video')
+            if strm_id:
+                answ['videoStreamID'] = strm_id
+            else:
+                LOG.error('We could not select a Plex videostream')
+            if info['subtitleenabled']:
+                try:
+                    strm_id = self._plex_stream_index(playerid, 'subtitle')
+                except KeyError:
+                    # subtitleenabled can be True while currentsubtitle can
+                    # still be {}
+                    strm_id = None
+                if strm_id is not None:
+                    # If None, then the subtitle is only present on Kodi side
+                    answ['subtitleStreamID'] = strm_id
+        return answ
 
-        ret += '/>'
-        return ret
+    def signal_stop(self):
+        """
+        Externally called on PKC shutdown to ensure that PKC signals a stop to
+        the PMS. Otherwise, PKC might be stuck at "currently playing"
+        """
+        LOG.info('Signaling a complete stop to PMS')
+        # To avoid RuntimeError, don't use self.lastplayers
+        for playerid in (0, 1, 2):
+            self.last_params['state'] = 'stopped'
+            self._send_pms_notification(playerid, self.last_params)
 
-    def updateCommandID(self, uuid, commandID):
-        if commandID and self.subscribers.get(uuid, False):
-            self.subscribers[uuid].commandID = int(commandID)
+    def _plex_stream_index(self, playerid, stream_type):
+        """
+        Returns the current Plex stream index [str] for the player playerid
 
-    def notify(self, event=False):
-        self.cleanup()
-        # Don't tell anyone if we don't know a Plex ID and are still playing
-        # (e.g. no stop called). Used for e.g. PVR/TV without PKC usage
-        if (not window('plex_currently_playing_itemid')
-                and not self.lastplayers):
-            return True
-        players = self.js.getPlayers()
-        # fetch the message, subscribers or not, since the server
-        # will need the info anyway
-        msg = self.msg(players)
-        if self.subscribers:
-            with threading.RLock():
-                for sub in self.subscribers.values():
-                    sub.send_update(msg, len(players) == 0)
-        self.notifyServer(players)
-        self.lastplayers = players
+        stream_type: 'video', 'audio', 'subtitle'
+        """
+        playqueue = PQ.PLAYQUEUES[playerid]
+        info = state.PLAYER_STATES[playerid]
+        return playqueue.items[info['position']].plex_stream_index(
+            info[STREAM_DETAILS[stream_type]]['index'], stream_type)
+
+    @LOCKER.lockthis
+    def update_command_id(self, uuid, command_id):
+        """
+        Updates the Plex Companien client with the machine identifier uuid with
+        command_id
+        """
+        if command_id and self.subscribers.get(uuid):
+            self.subscribers[uuid].command_id = int(command_id)
+
+    def _playqueue_init_done(self, players):
+        """
+        update_player_info() can result in values BEFORE kodi monitor is called.
+        Hence we'd have a missmatch between the state.PLAYER_STATES and our
+        playqueues.
+        """
+        for player in players.values():
+            info = state.PLAYER_STATES[player['playerid']]
+            playqueue = PQ.PLAYQUEUES[player['playerid']]
+            try:
+                item = playqueue.items[info['position']]
+            except IndexError:
+                # E.g. for direct path playback for single item
+                return False
+            if item.plex_id != info['plex_id']:
+                # Kodi playqueue already progressed; need to wait until
+                # everything is loaded
+                return False
         return True
 
-    def notifyServer(self, players):
-        for typus, p in players.iteritems():
-            info = self.playerprops[p.get('playerid')]
-            self._sendNotification(info, int(p['playerid']))
-            self.lastinfo[typus] = info
-            # Cross the one of the list
+    @LOCKER.lockthis
+    def notify(self):
+        """
+        Causes PKC to tell the PMS and Plex Companion players to receive a
+        notification what's being played.
+        """
+        self._cleanup()
+        # Get all the active/playing Kodi players (video, audio, pictures)
+        players = js.get_players()
+        # Update the PKC info with what's playing on the Kodi side
+        for player in players.values():
+            update_player_info(player['playerid'])
+        # Check whether we can use the CURRENT info or whether PKC is still
+        # initializing
+        if self._playqueue_init_done(players) is False:
+            LOG.debug('PKC playqueue is still initializing - skipping update')
+            return
+        self._notify_server(players)
+        if self.subscribers:
+            msg = self.msg(players)
+            for subscriber in self.subscribers.values():
+                subscriber.send_update(msg)
+        self.lastplayers = players
+
+    def _notify_server(self, players):
+        for typus, player in players.iteritems():
+            self._send_pms_notification(
+                player['playerid'], self._get_pms_params(player['playerid']))
             try:
                 del self.lastplayers[typus]
             except KeyError:
                 pass
         # Process the players we have left (to signal a stop)
-        for typus, p in self.lastplayers.iteritems():
-            self.lastinfo[typus]['state'] = 'stopped'
-            self._sendNotification(self.lastinfo[typus], int(p['playerid']))
+        for player in self.lastplayers.values():
+            self.last_params['state'] = 'stopped'
+            self._send_pms_notification(player['playerid'], self.last_params)
 
-    def _sendNotification(self, info, playerid):
-        playqueue = self.playqueue.playqueues[playerid]
-        xargs = getXArgsDeviceInfo()
+    def _get_pms_params(self, playerid):
+        info = state.PLAYER_STATES[playerid]
+        playqueue = PQ.PLAYQUEUES[playerid]
+        try:
+            item = playqueue.items[info['position']]
+        except IndexError:
+            return self.last_params
+        status = 'paused' if int(info['speed']) == 0 else 'playing'
         params = {
-            'containerKey': self.containerKey or "/library/metadata/900000",
-            'key': self.lastkey or "/library/metadata/900000",
-            'ratingKey': self.ratingkey or "900000",
-            'state': info['state'],
-            'time': info['time'],
-            'duration': info['duration']
+            'state': status,
+            'ratingKey': item.plex_id,
+            'key': '/library/metadata/%s' % item.plex_id,
+            'time': kodi_time_to_millis(info['time']),
+            'duration': kodi_time_to_millis(info['totaltime'])
         }
+        if info['container_key'] is not None:
+            # params['containerKey'] = info['container_key']
+            if info['container_key'].startswith('/playQueues/'):
+                # params['playQueueVersion'] = playqueue.version
+                # params['playQueueID'] = playqueue.id
+                params['playQueueItemID'] = item.id
+        self.last_params = params
+        return params
+
+    def _send_pms_notification(self, playerid, params):
+        serv = self._server_by_host(self.server)
+        playqueue = PQ.PLAYQUEUES[playerid]
+        xargs = params_pms()
+        xargs.update(params)
         if state.PLEX_TRANSIENT_TOKEN:
             xargs['X-Plex-Token'] = state.PLEX_TRANSIENT_TOKEN
         elif playqueue.plex_transient_token:
             xargs['X-Plex-Token'] = playqueue.plex_transient_token
-        if info.get('playQueueID'):
-            params['containerKey'] = '/playQueues/%s' % info['playQueueID']
-            params['playQueueVersion'] = info['playQueueVersion']
-            params['playQueueItemID'] = info['playQueueItemID']
-        serv = self.getServerByHost(self.server)
+        elif state.PMS_TOKEN:
+            xargs['X-Plex-Token'] = state.PMS_TOKEN
         url = '%s://%s:%s/:/timeline' % (serv.get('protocol', 'http'),
                                          serv.get('server', 'localhost'),
                                          serv.get('port', '32400'))
-        self.doUtils(url, parameters=params, headerOptions=xargs)
-        log.debug("Sent server notification with parameters: %s to %s"
-                  % (params, url))
+        DU().downloadUrl(url,
+                         authenticate=False,
+                         parameters=xargs,
+                         headerOverride=HEADERS_PMS)
+        LOG.debug("Sent server notification with parameters: %s to %s",
+                  xargs, url)
 
-    def controllable(self):
-        return "volume,shuffle,repeat,audioStream,videoStream,subtitleStream,skipPrevious,skipNext,seekTo,stepBack,stepForward,stop,playPause"
+    @LOCKER.lockthis
+    def add_subscriber(self, protocol, host, port, uuid, command_id):
+        """
+        Adds a new Plex Companion subscriber to PKC.
+        """
+        subscriber = Subscriber(protocol,
+                                host,
+                                port,
+                                uuid,
+                                command_id,
+                                self,
+                                self.request_mgr)
+        self.subscribers[subscriber.uuid] = subscriber
+        return subscriber
 
-    def addSubscriber(self, protocol, host, port, uuid, commandID):
-        sub = Subscriber(protocol,
-                         host,
-                         port,
-                         uuid,
-                         commandID,
-                         self,
-                         self.RequestMgr)
-        with threading.RLock():
-            self.subscribers[sub.uuid] = sub
-        return sub
+    @LOCKER.lockthis
+    def remove_subscriber(self, uuid):
+        """
+        Removes a connected Plex Companion subscriber with machine identifier
+        uuid from PKC notifications.
+        (Calls the cleanup() method of the subscriber)
+        """
+        for subscriber in self.subscribers.values():
+            if subscriber.uuid == uuid or subscriber.host == uuid:
+                subscriber.cleanup()
+                del self.subscribers[subscriber.uuid]
 
-    def removeSubscriber(self, uuid):
-        with threading.RLock():
-            for sub in self.subscribers.values():
-                if sub.uuid == uuid or sub.host == uuid:
-                    sub.cleanup()
-                    del self.subscribers[sub.uuid]
-
-    def cleanup(self):
-        with threading.RLock():
-            for sub in self.subscribers.values():
-                if sub.age > 30:
-                    sub.cleanup()
-                    del self.subscribers[sub.uuid]
-
-    def getPlayerProperties(self, playerid):
-        try:
-            # Get the playqueue
-            playqueue = self.playqueue.playqueues[playerid]
-            # get info from the player
-            props = self.js.jsonrpc(
-                "Player.GetProperties",
-                {"playerid": playerid,
-                 "properties": ["type",
-                                "time",
-                                "totaltime",
-                                "speed",
-                                "shuffled",
-                                "repeat"]})
-
-            info = {
-                'time': timeToMillis(props['time']),
-                'duration': timeToMillis(props['totaltime']),
-                'state': ("paused", "playing")[int(props['speed'])],
-                'shuffle': ("0", "1")[props.get('shuffled', False)],
-                'repeat': pf.getPlexRepeat(props.get('repeat')),
-            }
-            # Get the playlist position
-            pos = self.js.jsonrpc(
-                "Player.GetProperties",
-                {"playerid": playerid,
-                 "properties": ["position"]})['position']
-            try:
-                info['playQueueItemID'] = playqueue.items[pos].ID or 'null'
-                info['guid'] = playqueue.items[pos].guid or 'null'
-                info['playQueueID'] = playqueue.ID or 'null'
-                info['playQueueVersion'] = playqueue.version or 'null'
-                info['itemType'] = playqueue.items[pos].plex_type or 'null'
-            except:
-                info['itemType'] = props.get('type') or 'null'
-        except:
-            import traceback
-            log.error("Traceback:\n%s" % traceback.format_exc())
-            info = {
-                'time': 0,
-                'duration': 0,
-                'state': 'stopped',
-                'shuffle': False,
-                'repeat': 0
-            }
-
-        # get the volume from the application
-        info['volume'] = self.volume
-        info['mute'] = self.mute
-
-        info['plex_transient_token'] = playqueue.plex_transient_token
-
-        return info
+    def _cleanup(self):
+        for subscriber in self.subscribers.values():
+            if subscriber.age > 30:
+                subscriber.cleanup()
+                del self.subscribers[subscriber.uuid]
 
 
-class Subscriber:
-    def __init__(self, protocol, host, port, uuid, commandID,
-                 subMgr, RequestMgr):
+class Subscriber(object):
+    """
+    Plex Companion subscribing device
+    """
+    def __init__(self, protocol, host, port, uuid, command_id, sub_mgr,
+                 request_mgr):
         self.protocol = protocol or "http"
         self.host = host
         self.port = port or 32400
         self.uuid = uuid or host
-        self.commandID = int(commandID) or 0
-        self.navlocationsent = False
+        self.command_id = int(command_id) or 0
         self.age = 0
-        self.doUtils = downloadutils.DownloadUtils().downloadUrl
-        self.subMgr = subMgr
-        self.RequestMgr = RequestMgr
+        self.sub_mgr = sub_mgr
+        self.request_mgr = request_mgr
 
     def __eq__(self, other):
         return self.uuid == other.uuid
 
-    def tostr(self):
-        return "uuid=%s,commandID=%i" % (self.uuid, self.commandID)
-
     def cleanup(self):
-        self.RequestMgr.closeConnection(self.protocol, self.host, self.port)
-
-    def send_update(self, msg, is_nav):
-        self.age += 1
-        if not is_nav:
-            self.navlocationsent = False
-        elif self.navlocationsent:
-            return True
-        else:
-            self.navlocationsent = True
-        msg = re.sub(r"INSERTCOMMANDID", str(self.commandID), msg)
-        log.debug("sending xml to subscriber %s:\n%s" % (self.tostr(), msg))
-        url = self.protocol + '://' + self.host + ':' + self.port \
-            + "/:/timeline"
-        t = threading.Thread(target=self.threadedSend, args=(url, msg))
-        t.start()
-
-    def threadedSend(self, url, msg):
         """
-        Threaded POST request, because they stall due to PMS response missing
+        Closes the connection to the Plex Companion client
+        """
+        self.request_mgr.closeConnection(self.protocol, self.host, self.port)
+
+    def send_update(self, msg):
+        """
+        Sends msg to the Plex Companion client (via .../:/timeline)
+        """
+        self.age += 1
+        msg = msg.format(command_id=self.command_id)
+        LOG.debug("sending xml to subscriber uuid=%s,commandID=%i:\n%s",
+                  self.uuid, self.command_id, msg)
+        url = '%s://%s:%s/:/timeline' % (self.protocol, self.host, self.port)
+        thread = Thread(target=self._threaded_send, args=(url, msg))
+        thread.start()
+
+    def _threaded_send(self, url, msg):
+        """
+        Threaded POST request, because they stall due to response missing
         the Content-Length header :-(
         """
-        response = self.doUtils(url,
-                                postBody=msg,
-                                action_type="POST")
-        if response in [False, None, 401]:
-            self.subMgr.removeSubscriber(self.uuid)
+        response = DU().downloadUrl(url,
+                                    action_type="POST",
+                                    postBody=msg,
+                                    authenticate=False,
+                                    headerOverride=headers_companion_client())
+        if response in (False, None, 401):
+            self.sub_mgr.remove_subscriber(self.uuid)

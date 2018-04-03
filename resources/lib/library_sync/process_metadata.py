@@ -68,9 +68,9 @@ class Threaded_Process_Metadata(Thread):
         item_fct = getattr(itemtypes, self.item_type)
         # cache local variables because it's faster
         queue = self.queue
-        thread_stopped = self.thread_stopped
+        stopped = self.stopped
         with item_fct() as item_class:
-            while thread_stopped() is False:
+            while stopped() is False:
                 # grabs item from queue
                 try:
                     item = queue.get(block=False)
