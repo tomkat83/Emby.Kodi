@@ -24,9 +24,24 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr "Server Adresse (IP)"
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr "Suche PMS"
+
 msgctxt "#30002"
 msgid "Preferred playback method"
 msgstr "Gewünschte Wiedergabe-Methode"
+
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
+"Achtung: Kodi Einstellung \"Nächsten Video automatisch abspielen\" ist "
+"aktiviert. Dies kann PKC stören. Deaktivieren?"
 
 msgctxt "#30004"
 msgid "Log level"
@@ -1487,18 +1502,12 @@ msgstr ""
 "überspringen, wird möglicherweise die Synchronisierung Ihrer Bibliothek "
 "fehlschlagen, wenn Kodi nicht auf Ihre Medien zugreifen kann."
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr "Kodi kann die folgende Datei nicht finden: "
-
-msgctxt "#39032"
 msgid ""
-"Please verify the path. You may need to verify your network credentials in "
-"the add-on settings or use different Plex paths. Stop syncing?"
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
 msgstr ""
-"Bitte verifizieren Sie den Pfad. Möglichweise müssen Sie in den Addon "
-"Einstellungen die Netzwerk-Anmeldeinformationen korrekt eingeben, oder Plex "
-"muss andere Pfade nutzen. Soll die Synchronisation gestoppt werden?"
 
 msgctxt "#39033"
 msgid ""
@@ -1643,6 +1652,11 @@ msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr "\"Zuletzt hinzugefügt\": gesehene Episoden anzeigen"
 
+# PKC settings, Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
 msgctxt "#39066"
 msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
@@ -1776,11 +1790,6 @@ msgstr "Später ansehen"
 msgctxt "#39213"
 msgid "is offline"
 msgstr "ist offline"
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
-msgstr ""
-"Obwohl mit plex.tv verbunden, konnte keine Verbindung hergestellt werden mit"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -2007,10 +2016,6 @@ msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
 msgstr ""
 "Kodi Datenbank konnte nicht gestoppt werden. Bitte später erneut versuchen."
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
-msgstr "Alle zwischengespeicherten Bilder löschen? (empfohlen!)"
 
 msgctxt "#39603"
 msgid ""
