@@ -74,11 +74,7 @@
 		<setting id="useDirectPaths" type="enum" label="30511" values="Addon(Default)|Native(Direct paths)" default="0" visible="true"/> <!-- Playback mode -->
 
 		<setting id="streamMusic" type="bool" label="30510" default="false" visible="false" subsetting="true"/> <!-- Direct stream Music library -->
-		<setting type="lsep" label="30523" visible="false"/> <!-- Music metadata options -->
-        <setting id="enableImportSongRating" type="bool" label="30524" default="true" visible="false"/>
-        <setting id="enableExportSongRating" type="bool" label="30525" default="false" visible="false" />
         <setting id="kodiplextimeoffset" type="number" label="Time difference in seconds (Koditime - Plextime)" default="0" visible="false" option="int" />
-        <setting id="enableUpdateSongRating" type="bool" label="30526" default="false" visible="false" />
         <setting id="themoviedbAPIKey" type="text" default="19c90103adb9e98f2172c6a6a3d85dc4" visible="false"/>
         <setting id="FanArtTVAPIKey" type="text" default="639191cb0774661597f28a47e7e2bad5" visible="false"/>
 	</category>
@@ -136,7 +132,6 @@
 	    <setting id="enableCoverArt" type="bool" label="30157" default="true" visible="false"/>
 		<setting id="additionalUsers" type="text" label="30528" default="" visible="false"/>
 		<setting type="lsep" label="30534" visible="false" />
-        <setting id="restartMsg" type="bool" label="30530" default="false" visible="false" />
         <setting id="newContent" type="bool" label="30531" default="false" visible="false" />
 	    <setting id="newvideotime" type="number" label="30532" visible="false" default="5" option="int" subsetting="true" />
         <setting id="newmusictime" type="number" label="30533" visible="false" default="2" option="int" subsetting="true" />
@@ -161,7 +156,6 @@
 		<setting id="startupDelay" type="number" label="30529" default="0" option="int" />
 		<setting label="39018" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=repair)" option="close" /> <!-- Repair local database (force update all content) -->
 		<setting label="30535" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=deviceid)" /><!-- Reset device id uuid -->
-		<setting label="39021" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=thememedia)" option="close" visible="false" /> <!-- Sync Plex Theme Media to Kodi -->
 		<setting type="lsep" label="39049" /><!-- Nothing works? Try a full reset -->
 		<setting label="39019" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=reset)" option="close" /> <!-- Partial or full reset of Database and PKC -->
 	</category>

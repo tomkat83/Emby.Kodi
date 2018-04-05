@@ -869,28 +869,20 @@ class KodiDBMethods(object):
         return seasonid
 
     def addArtist(self, name, musicbrainz):
-
-        query = ' '.join((
-
-            "SELECT idArtist, strArtist",
-            "FROM artist",
-            "WHERE strMusicBrainzArtistID = ?"
-        ))
+        query = '''
+            SELECT idArtist, strArtist
+            FROM artist
+            WHERE strMusicBrainzArtistID = ?
+        '''
         self.cursor.execute(query, (musicbrainz,))
         try:
             result = self.cursor.fetchone()
             artistid = result[0]
             artistname = result[1]
-
         except TypeError:
-
-            query = ' '.join((
-
-                "SELECT idArtist",
-                "FROM artist",
-                "WHERE strArtist = ?",
-                "COLLATE NOCASE"
-            ))
+            query = '''
+                SELECT idArtist FROM artist WHERE strArtist = ? COLLATE NOCASE
+            '''
             self.cursor.execute(query, (name,))
             try:
                 artistid = self.cursor.fetchone()[0]
@@ -899,113 +891,87 @@ class KodiDBMethods(object):
                 # [Missing Tag] strMusicBrainzArtistID: Artist Tag Missing
                 if v.KODIVERSION >= 17:
                     self.cursor.execute(
-                        "select coalesce(max(idArtist),1) from artist")
+                        "SELECT COALESCE(MAX(idArtist),1) FROM artist")
                 else:
                     self.cursor.execute(
-                        "select coalesce(max(idArtist),0) from artist")
+                        "SELECT COALESCE(MAX(idArtist),0) FROM artist")
                 artistid = self.cursor.fetchone()[0] + 1
-                query = (
-                    '''
-                    INSERT INTO artist(idArtist, strArtist, strMusicBrainzArtistID)
-
+                query = '''
+                    INSERT INTO artist(idArtist, strArtist,
+                                       strMusicBrainzArtistID)
                     VALUES (?, ?, ?)
-                    '''
-                )
+                '''
                 self.cursor.execute(query, (artistid, name, musicbrainz))
         else:
             if artistname != name:
                 query = "UPDATE artist SET strArtist = ? WHERE idArtist = ?"
                 self.cursor.execute(query, (name, artistid,))
-
         return artistid
 
     def addAlbum(self, name, musicbrainz):
-
-        query = ' '.join((
-
-            "SELECT idAlbum",
-            "FROM album",
-            "WHERE strMusicBrainzAlbumID = ?"
-        ))
+        query = 'SELECT idAlbum FROM album WHERE strMusicBrainzAlbumID = ?'
         self.cursor.execute(query, (musicbrainz,))
         try:
             albumid = self.cursor.fetchone()[0]
         except TypeError:
             # Create the album
-            self.cursor.execute("select coalesce(max(idAlbum),0) from album")
+            self.cursor.execute('SELECT COALESCE(MAX(idAlbum),0) FROM album')
             albumid = self.cursor.fetchone()[0] + 1
-            query = (
-                '''
-                INSERT INTO album(idAlbum, strAlbum, strMusicBrainzAlbumID, strReleaseType)
-
+            query = '''
+                INSERT INTO album(idAlbum, strAlbum, strMusicBrainzAlbumID,
+                                  strReleaseType)
                 VALUES (?, ?, ?, ?)
-                '''
-            )
-            self.cursor.execute(query, (albumid, name, musicbrainz, "album"))
+            '''
+            self.cursor.execute(query, (albumid, name, musicbrainz, 'album'))
         return albumid
 
     def addMusicGenres(self, kodiid, genres, mediatype):
-
         if mediatype == "album":
-
             # Delete current genres for clean slate
-            query = ' '.join((
-
-                "DELETE FROM album_genre",
-                "WHERE idAlbum = ?"
-            ))
+            query = 'DELETE FROM album_genre WHERE idAlbum = ?'
             self.cursor.execute(query, (kodiid,))
-
             for genre in genres:
-                query = ' '.join((
-
-                    "SELECT idGenre",
-                    "FROM genre",
-                    "WHERE strGenre = ?",
-                    "COLLATE NOCASE"
-                ))
+                query = '''
+                    SELECT idGenre FROM genre WHERE strGenre = ? COLLATE NOCASE
+                '''
                 self.cursor.execute(query, (genre,))
                 try:
                     genreid = self.cursor.fetchone()[0]
                 except TypeError:
                     # Create the genre
-                    self.cursor.execute("select coalesce(max(idGenre),0) from genre")
+                    query = 'SELECT COALESCE(MAX(idGenre),0) FROM genre'
+                    self.cursor.execute(query)
                     genreid = self.cursor.fetchone()[0] + 1
-                    query = "INSERT INTO genre(idGenre, strGenre) values(?, ?)"
+                    query = 'INSERT INTO genre(idGenre, strGenre) VALUES(?, ?)'
                     self.cursor.execute(query, (genreid, genre))
-
-                query = "INSERT OR REPLACE INTO album_genre(idGenre, idAlbum) values(?, ?)"
+                query = '''
+                    INSERT OR REPLACE INTO album_genre(idGenre, idAlbum)
+                    VALUES (?, ?)
+                '''
                 self.cursor.execute(query, (genreid, kodiid))
-
         elif mediatype == "song":
-            
             # Delete current genres for clean slate
-            query = ' '.join((
-
-                "DELETE FROM song_genre",
-                "WHERE idSong = ?"
-            ))
+            query = 'DELETE FROM song_genre WHERE idSong = ?'
             self.cursor.execute(query, (kodiid,))
-
             for genre in genres:
-                query = ' '.join((
-
-                    "SELECT idGenre",
-                    "FROM genre",
-                    "WHERE strGenre = ?",
-                    "COLLATE NOCASE"
-                ))
+                query = '''
+                    SELECT idGenre FROM genre WHERE strGenre = ?
+                    COLLATE NOCASE
+                '''
                 self.cursor.execute(query, (genre,))
                 try:
                     genreid = self.cursor.fetchone()[0]
                 except TypeError:
                     # Create the genre
-                    self.cursor.execute("select coalesce(max(idGenre),0) from genre")
+                    query = 'SELECT COALESCE(MAX(idGenre),0) FROM genre'
+                    self.cursor.execute(query)
                     genreid = self.cursor.fetchone()[0] + 1
-                    query = "INSERT INTO genre(idGenre, strGenre) values(?, ?)"
+                    query = 'INSERT INTO genre(idGenre, strGenre) values(?, ?)'
                     self.cursor.execute(query, (genreid, genre))
-
-                query = "INSERT OR REPLACE INTO song_genre(idGenre, idSong) values(?, ?)"
+                query = '''
+                    INSERT OR REPLACE INTO song_genre(idGenre, idSong)
+                    VALUES (?, ?)
+                '''
                 self.cursor.execute(query, (genreid, kodiid))
 
 # Krypton only stuff ##############################

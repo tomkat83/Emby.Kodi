@@ -1290,7 +1290,20 @@ class Music(Items):
                                  checksum=checksum)
 
         # Process the album info
-        if v.KODIVERSION >= 17:
+        if v.KODIVERSION >= 18:
+            # Kodi Leia
+            query = '''
+                UPDATE album
+                SET strArtistDisp = ?, iYear = ?, strGenres = ?, strReview = ?,
+                    strImage = ?, iUserrating = ?, lastScraped = ?,
+                    strReleaseType = ?, strLabel = ?, bCompilation = ?
+                WHERE idAlbum = ?
+            '''
+            kodicursor.execute(query, (artistname, year, self.genre, bio,
+                                       thumb, rating, lastScraped,
+                                       v.KODI_TYPE_ALBUM, studio,
+                                       self.compilation, albumid))
+        elif v.KODIVERSION == 17:
             # Kodi Krypton
             query = '''
                 UPDATE album
@@ -1316,30 +1329,6 @@ class Music(Items):
                                        thumb, rating, lastScraped,
                                        v.KODI_TYPE_ALBUM, studio,
                                        self.compilation, albumid))
-        elif v.KODIVERSION == 15:
-            # Kodi Isengard
-            query = '''
-                UPDATE album
-                SET strArtists = ?, iYear = ?, strGenres = ?, strReview = ?,
-                    strImage = ?, iRating = ?, lastScraped = ?, dateAdded = ?,
-                    strReleaseType = ?, strLabel = ?
-                WHERE idAlbum = ?
-            '''
-            kodicursor.execute(query, (artistname, year, self.genre, bio,
-                                       thumb, rating, lastScraped, dateadded,
-                                       v.KODI_TYPE_ALBUM, studio, albumid))
-        else:
-            # Kodi Helix
-            query = '''
-                UPDATE album
-                SET strArtists = ?, iYear = ?, strGenres = ?, strReview = ?,
-                    strImage = ?, iRating = ?, lastScraped = ?, dateAdded = ?,
-                    strLabel = ?
-                WHERE idAlbum = ?
-            '''
-            kodicursor.execute(query, (artistname, year, self.genre, bio,
-                                       thumb, rating, lastScraped, dateadded,
-                                       studio, albumid))
 
         # Associate the parentid for plex reference
         parent_id = api.parent_plex_id()
@@ -1400,8 +1389,8 @@ class Music(Items):
         kodicursor.execute(query, (artistid, name, year))
         # Update plex reference with parentid
         plex_db.updateParentId(artist_id, albumid)
-        # Add genres
-        self.kodi_db.addMusicGenres(albumid, self.genres, v.KODI_TYPE_ALBUM)
+        if v.KODIVERSION < 18:
+            self.kodi_db.addMusicGenres(albumid, self.genres, v.KODI_TYPE_ALBUM)
         # Update artwork
         artwork.modify_artwork(artworks, albumid, v.KODI_TYPE_ALBUM, kodicursor)
         # Add all children - all tracks
@@ -1517,18 +1506,33 @@ class Music(Items):
             kodicursor.execute(query, (path, '123', pathid))
 
             # Update the song entry
-            query = '''
-                UPDATE song
-                SET idAlbum = ?, strArtists = ?, strGenres = ?, strTitle = ?,
-                    iTrack = ?, iDuration = ?, iYear = ?, strFilename = ?,
-                    iTimesPlayed = ?, lastplayed = ?, rating = ?, comment = ?,
-                    mood = ?
-                WHERE idSong = ?
-            '''
-            kodicursor.execute(query, (albumid, artists, genre, title, track,
-                                       duration, year, filename, playcount,
-                                       dateplayed, rating, comment, mood,
-                                       songid))
+            if v.KODIVERSION >= 18:
+                # Kodi Leia
+                query = '''
+                    UPDATE song
+                    SET idAlbum = ?, strArtistDisp = ?, strGenres = ?,
+                        strTitle = ?, iTrack = ?, iDuration = ?, iYear = ?,
+                        strFilename = ?, iTimesPlayed = ?, lastplayed = ?,
+                        rating = ?, comment = ?, mood = ?
+                    WHERE idSong = ?
+                '''
+                kodicursor.execute(query, (albumid, artists, genre, title,
+                                           track, duration, year, filename,
+                                           playcount, dateplayed, rating,
+                                           comment, mood, songid))
+            else:
+                query = '''
+                    UPDATE song
+                    SET idAlbum = ?, strArtists = ?, strGenres = ?,
+                        strTitle = ?, iTrack = ?, iDuration = ?, iYear = ?,
+                        strFilename = ?, iTimesPlayed = ?, lastplayed = ?,
+                        rating = ?, comment = ?, mood = ?
+                    WHERE idSong = ?
+                '''
+                kodicursor.execute(query, (albumid, artists, genre, title,
+                                           track, duration, year, filename,
+                                           playcount, dateplayed, rating,
+                                           comment, mood, songid))
 
             # Update the checksum in plex table
             plex_db.updateReference(itemid, checksum)
@@ -1615,18 +1619,33 @@ class Music(Items):
                                                    dateadded))
 
             # Create the song entry
-            query = '''
-                INSERT INTO song(
-                    idSong, idAlbum, idPath, strArtists, strGenres, strTitle,
-                    iTrack, iDuration, iYear, strFileName,
-                    strMusicBrainzTrackID, iTimesPlayed, lastplayed,
-                    rating, iStartOffset, iEndOffset, mood)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                '''
-            kodicursor.execute(
-                query, (songid, albumid, pathid, artists, genre, title, track,
-                        duration, year, filename, musicBrainzId, playcount,
-                        dateplayed, rating, 0, 0, mood))
+            if v.KODIVERSION >= 18:
+                # Kodi Leia
+                query = '''
+                    INSERT INTO song(
+                        idSong, idAlbum, idPath, strArtistDisp, strGenres,
+                        strTitle, iTrack, iDuration, iYear, strFileName,
+                        strMusicBrainzTrackID, iTimesPlayed, lastplayed,
+                        rating, iStartOffset, iEndOffset, mood)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    '''
+                kodicursor.execute(
+                    query, (songid, albumid, pathid, artists, genre, title,
+                            track, duration, year, filename, musicBrainzId,
+                            playcount, dateplayed, rating, 0, 0, mood))
+            else:
+                query = '''
+                    INSERT INTO song(
+                        idSong, idAlbum, idPath, strArtists, strGenres,
+                        strTitle, iTrack, iDuration, iYear, strFileName,
+                        strMusicBrainzTrackID, iTimesPlayed, lastplayed,
+                        rating, iStartOffset, iEndOffset, mood)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    '''
+                kodicursor.execute(
+                    query, (songid, albumid, pathid, artists, genre, title,
+                            track, duration, year, filename, musicBrainzId,
+                            playcount, dateplayed, rating, 0, 0, mood))
 
             # Create the reference in plex table
             plex_db.addReference(itemid,
@@ -1637,15 +1656,14 @@ class Music(Items):
                                  parent_id=albumid,
                                  checksum=checksum,
                                  view_id=viewid)
-
-        # Link song to album
-        query = '''
-            INSERT OR REPLACE INTO albuminfosong(
-                idAlbumInfoSong, idAlbumInfo, iTrack, strTitle, iDuration)
-            VALUES (?, ?, ?, ?, ?)
-        '''
-        kodicursor.execute(query, (songid, albumid, track, title, duration))
-
+        if v.KODIVERSION < 18:
+            # Link song to album
+            query = '''
+                INSERT OR REPLACE INTO albuminfosong(
+                    idAlbumInfoSong, idAlbumInfo, iTrack, strTitle, iDuration)
+                VALUES (?, ?, ?, ?, ?)
+            '''
+            kodicursor.execute(query, (songid, albumid, track, title, duration))
         # Link song to artists
         artist_loop = [{
             'Name': api.grandparent_title(),

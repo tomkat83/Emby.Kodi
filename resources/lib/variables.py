@@ -85,7 +85,7 @@ _DB_VIDEO_VERSION = {
     15: 93,   # Isengard
     16: 99,   # Jarvis
     17: 107,  # Krypton
-    18: 108   # Leia
+    18: 109   # Leia
 }
 DB_VIDEO_PATH = try_decode(xbmc.translatePath(
     "special://database/MyVideos%s.db" % _DB_VIDEO_VERSION[KODIVERSION]))
@@ -96,7 +96,7 @@ _DB_MUSIC_VERSION = {
     15: 52,   # Isengard
     16: 56,   # Jarvis
     17: 60,   # Krypton
-    18: 62    # Leia
+    18: 70    # Leia
 }
 DB_MUSIC_PATH = try_decode(xbmc.translatePath(
     "special://database/MyMusic%s.db" % _DB_MUSIC_VERSION[KODIVERSION]))
