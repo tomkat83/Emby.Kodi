@@ -2,8 +2,8 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
 # Vladimir Supranenok <stark_v@mail.ru>, 2017
+# Павел Хоменко, 2017
 # Алексей Коробцов <korobcoff@gmail.com>, 2017
-# Павел Хоменко <xom2000@gmail.com>, 2017
 # Alex Freit <alex.nx@mail.ru>, 2017
 msgid ""
 msgstr ""
@@ -28,42 +28,28 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr "Адрес сервера (IP)"
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr ""
+
 msgctxt "#30002"
 msgid "Preferred playback method"
 msgstr "Предпочтительное воспроизведение"
 
-msgctxt "#30004"
-msgid "Log level"
-msgstr "Логирование"
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
 
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Имя пользователя: "
 
-msgctxt "#30006"
-msgid "Password: "
-msgstr "Пароль: "
-
-msgctxt "#30007"
-msgid "Network Username: "
-msgstr "Логин: "
-
-msgctxt "#30008"
-msgid "Network Password: "
-msgstr "Пароль: "
-
-msgctxt "#30009"
-msgid "Transcode: "
-msgstr "Транскодинг: "
-
-msgctxt "#30010"
-msgid "Enable Performance Profiling"
-msgstr "Задействовать профили производительности"
-
-msgctxt "#30011"
-msgid "Local caching system"
-msgstr "Локальная система кеширования"
-
+# Button text
 msgctxt "#30012"
 msgid "OK"
 msgstr "Ок"
@@ -72,22 +58,21 @@ msgctxt "#30013"
 msgid "Never show"
 msgstr "Никогда не показывать "
 
+# PKC settings category
 msgctxt "#30014"
 msgid "Connection"
 msgstr "Подключение"
-
-msgctxt "#30015"
-msgid "Network"
-msgstr "Сеть"
 
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "Имя устройства"
 
+# Error message
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "Не авторизован на сервере Plex"
 
+# PKC settings category
 msgctxt "#30022"
 msgid "Advanced"
 msgstr "Расширенные"
@@ -113,34 +98,6 @@ msgctxt "#30032"
 msgid "Information"
 msgstr "Информация"
 
-msgctxt "#30035"
-msgid "Number of recent Music Albums to show:"
-msgstr "Количество последних музыкальных альбомов для отображения:"
-
-msgctxt "#30036"
-msgid "Number of recent Movies to show:"
-msgstr "Количество последних фильмов для отображения:"
-
-msgctxt "#30037"
-msgid "Number of recent TV episodes to show:"
-msgstr "Количество последних телевизионных эпизодов для отображения:"
-
-msgctxt "#30038"
-msgid "Mark watched at start of playback:"
-msgstr "Отметить просмотренным при начале воспроизведения:"
-
-msgctxt "#30039"
-msgid "Set Season poster for episodes"
-msgstr "Установить обложку для сезона"
-
-msgctxt "#30040"
-msgid "Genre Filter ..."
-msgstr "Фильтр жанра"
-
-msgctxt "#30041"
-msgid "Play All from Here"
-msgstr "Воспроизвести Все начиная отсюда"
-
 msgctxt "#30042"
 msgid "Refresh"
 msgstr "Обновить"
@@ -149,163 +106,14 @@ msgctxt "#30043"
 msgid "Delete"
 msgstr "Удалить"
 
-msgctxt "#30044"
-msgid "Incorrect Username/Password"
-msgstr "неправильные имя пользователя/пароль"
-
-msgctxt "#30045"
-msgid "Username not found"
-msgstr "Имя пользователя не найдено"
-
-msgctxt "#30046"
-msgid "Add Movie to CouchPotato"
-msgstr "Добавить фильм в CouchPotato"
-
+# Notification displayed if there is a LOT to be deleted
 msgctxt "#30052"
 msgid "Deleting"
 msgstr "Удаление"
 
-msgctxt "#30053"
-msgid "Waiting for server to delete"
-msgstr "Ожидание удаления c сервера"
-
-msgctxt "#30059"
-msgid "Server Default"
-msgstr "Сервер по умолчанию"
-
-msgctxt "#30060"
-msgid "Title"
-msgstr "Название"
-
-msgctxt "#30061"
-msgid "Year"
-msgstr "Год"
-
-msgctxt "#30062"
-msgid "Premiere Date"
-msgstr "Дата премьеры"
-
-msgctxt "#30063"
-msgid "Date Created"
-msgstr "Дата создания"
-
-msgctxt "#30064"
-msgid "Critic Rating"
-msgstr "Рейтинг критиков"
-
-msgctxt "#30065"
-msgid "Community Rating"
-msgstr "Рейтинг пользователей"
-
-msgctxt "#30066"
-msgid "Play Count"
-msgstr "Количество просмотров"
-
-msgctxt "#30067"
-msgid "Budget"
-msgstr "Бюджет "
-
-# Runtime added as 30226 below
-msgctxt "#30068"
-msgid "Sort By"
-msgstr "Сортировать по"
-
 msgctxt "#30069"
 msgid "None"
 msgstr "Ничего"
-
-msgctxt "#30070"
-msgid "Action"
-msgstr "Экшен"
-
-msgctxt "#30071"
-msgid "Adventure"
-msgstr "Приключение"
-
-msgctxt "#30072"
-msgid "Animation"
-msgstr "Мультипликация"
-
-msgctxt "#30073"
-msgid "Crime"
-msgstr "Криминал"
-
-msgctxt "#30074"
-msgid "Comedy"
-msgstr "Комедия"
-
-msgctxt "#30075"
-msgid "Documentary"
-msgstr "Документальный"
-
-msgctxt "#30076"
-msgid "Drama"
-msgstr "Драма"
-
-msgctxt "#30077"
-msgid "Fantasy"
-msgstr "Фэнтези"
-
-msgctxt "#30078"
-msgid "Foreign"
-msgstr "Иностранные"
-
-msgctxt "#30079"
-msgid "History"
-msgstr "Исторический"
-
-msgctxt "#30080"
-msgid "Horror"
-msgstr "Ужасы"
-
-msgctxt "#30081"
-msgid "Music"
-msgstr "Музыка"
-
-msgctxt "#30082"
-msgid "Musical"
-msgstr "Музыкальный"
-
-msgctxt "#30083"
-msgid "Mystery"
-msgstr "Мистика"
-
-msgctxt "#30084"
-msgid "Romance"
-msgstr "Любовный"
-
-msgctxt "#30085"
-msgid "Science Fiction"
-msgstr "Научная фантастика"
-
-msgctxt "#30086"
-msgid "Short"
-msgstr "Короткометражка"
-
-msgctxt "#30087"
-msgid "Suspense"
-msgstr "Саспенс"
-
-msgctxt "#30088"
-msgid "Thriller"
-msgstr "Триллер"
-
-msgctxt "#30089"
-msgid "Western"
-msgstr "Вестерн"
-
-msgctxt "#30090"
-msgid "Genre Filter"
-msgstr "Фильтр жанров"
-
-msgctxt "#30091"
-msgid "Confirm file deletion"
-msgstr "Подтвердить удаление файла"
-
-msgctxt "#30092"
-msgid ""
-"Delete this item? This action will delete media and associated data files."
-msgstr "Удалить? Это действие удалит элемент и связанные файлы."
 
 msgctxt "#30093"
 msgid "Mark Watched"
@@ -323,51 +131,6 @@ msgctxt "#30096"
 msgid "Remove from Favorites"
 msgstr "Удалить из Избранного"
 
-msgctxt "#30097"
-msgid "Sort By ..."
-msgstr "Сортировать по ..."
-
-msgctxt "#30098"
-msgid "Sort Order Descending"
-msgstr "Сортировать по убыванию"
-
-msgctxt "#30099"
-msgid "Sort Order Ascending"
-msgstr "Сортировать по возрастанию"
-
-msgctxt "#30100"
-msgid "Show People"
-msgstr "Показать людей"
-
-# resume dialog
-msgctxt "#30105"
-msgid "Resume"
-msgstr "Продолжить"
-
-msgctxt "#30106"
-msgid "Resume from"
-msgstr "Продолжить с"
-
-msgctxt "#30107"
-msgid "Start from beginning"
-msgstr "Начать с начала"
-
-msgctxt "#30110"
-msgid "Interface"
-msgstr "Интерфейс"
-
-msgctxt "#30111"
-msgid "Include Stream Info"
-msgstr "Добавить информацию о потоке"
-
-msgctxt "#30112"
-msgid "Include People"
-msgstr "Добавить Людей"
-
-msgctxt "#30113"
-msgid "Include Overview"
-msgstr "Добавить описание"
-
 msgctxt "#30114"
 msgid "Offer delete after playback"
 msgstr "Предлагать удалить после просмотра"
@@ -380,81 +143,22 @@ msgctxt "#30116"
 msgid "For Movies"
 msgstr "Для фильмов"
 
-msgctxt "#30117"
-msgid "Background Art Refresh Rate (seconds)"
-msgstr "Время обновления фоновой иллюстрации (в секундах)"
-
-msgctxt "#30118"
-msgid "Add Resume Percent"
-msgstr "Добавить процент продолжения"
-
-msgctxt "#30119"
-msgid "Add Episode Number"
-msgstr "Добавить номер Эпизода"
-
-msgctxt "#30120"
-msgid "Show Load Progress"
-msgstr "Показывать процесс загрузки"
-
-msgctxt "#30121"
-msgid "Loading Content"
-msgstr "Загрузка содержимого"
-
-msgctxt "#30122"
-msgid "Retrieving Data"
-msgstr "Получение данных"
-
 msgctxt "#30125"
 msgid "Done"
 msgstr "Готово"
 
-msgctxt "#30126"
-msgid "Processing Item : "
-msgstr "Текущий элемент:"
-
+# Error popup message text
 msgctxt "#30128"
 msgid "Play Error"
 msgstr "Ошибка воспроизведения"
-
-msgctxt "#30129"
-msgid "This item is not playable"
-msgstr "Невозможно воспроизвести"
-
-msgctxt "#30130"
-msgid "Local path detected"
-msgstr "Обнаружен локальный путь"
-
-msgctxt "#30131"
-msgid ""
-"Your MB3 Server contains local paths.  Please change server paths to UNC or "
-"change XBMB3C setting 'Play from Stream' to true.  Path: "
-msgstr ""
-"Ваш сервер MB3 содержит локальные пути. Пожалуйста измените их на UNC, либо "
-"включите настройку \"Воспроизводить потоком\" в XBMB3C. Путь:"
 
 msgctxt "#30132"
 msgid "Warning"
 msgstr "Предупреждение"
 
-msgctxt "#30133"
-msgid "Debug logging enabled."
-msgstr "Включен режим отладки"
-
-msgctxt "#30134"
-msgid "This will affect performance."
-msgstr "Это повлияет на производительность."
-
 msgctxt "#30135"
 msgid "Error"
 msgstr "Ошибка"
-
-msgctxt "#30136"
-msgid "Monitoring service is not running"
-msgstr "Служба мониторинга не работает"
-
-msgctxt "#30137"
-msgid "If you have just installed please restart Kodi"
-msgstr "Если только что установили - перезапустите Kodi"
 
 msgctxt "#30138"
 msgid "Search"
@@ -464,33 +168,9 @@ msgctxt "#30139"
 msgid "Enable Theme Music (Requires Restart)"
 msgstr "Включить музыкальную тему (требуется перезагрузка)"
 
-msgctxt "#30140"
-msgid " - Loop Theme Music"
-msgstr "- Зациклить музыкальную тему"
-
-msgctxt "#30141"
-msgid "Enable Background Image (Requires Restart)"
-msgstr "Включить фоновое изображение (требуется перезагрузка)"
-
-msgctxt "#30142"
-msgid "Services"
-msgstr "Службы"
-
 msgctxt "#30143"
 msgid "Always transcode if video bitrate is above"
 msgstr "Транскодировать, если битрейт видео больше"
-
-msgctxt "#30150"
-msgid "Skin does not support setting views"
-msgstr "Обложка не поддерживает настройки просмотра"
-
-msgctxt "#30151"
-msgid "Select item action (Requires Restart)"
-msgstr "Выбрать действие элемента (необходим перезапуск)"
-
-msgctxt "#30156"
-msgid "Sort NextUp by Show Title"
-msgstr "Сортировать \"Следующее\" по названию"
 
 msgctxt "#30157"
 msgid "Enable Enhanced Images (eg CoverArt)"
@@ -500,29 +180,9 @@ msgctxt "#30158"
 msgid "Metadata"
 msgstr "Метаданные"
 
-msgctxt "#30159"
-msgid "Artwork"
-msgstr "Иллюстрация"
-
 msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Качество при транскодинге"
-
-msgctxt "#30161"
-msgid "Enable Suggested Loader (Requires Restart)"
-msgstr "Включить загрузку \"предлагаемого\" (требуется перезапуск)"
-
-msgctxt "#30162"
-msgid "Add Season Number"
-msgstr "Добавить номер Сезона"
-
-msgctxt "#30163"
-msgid "Flatten Seasons"
-msgstr "Сквозная нумерация"
-
-msgctxt "#30164"
-msgid "Direct Play - HTTP"
-msgstr "Прямое воспроизведение - HTTP"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -532,19 +192,6 @@ msgctxt "#30166"
 msgid "Transcoding"
 msgstr "Транскодирование"
 
-msgctxt "#30167"
-msgid "Server Detection Succeeded"
-msgstr "Успешное обнаружение сервера"
-
-msgctxt "#30168"
-msgid "Found server"
-msgstr "Найден сервер"
-
-msgctxt "#30169"
-msgid "Address : "
-msgstr "Адрес : "
-
-# Video nodes
 msgctxt "#30170"
 msgid "Recently Added TV Shows"
 msgstr "Недавно добавленные Сериалы"
@@ -553,10 +200,6 @@ msgctxt "#30171"
 msgid "In Progress TV Shows"
 msgstr "Просматриваемые Сериалы"
 
-msgctxt "#30172"
-msgid "All Music"
-msgstr "Вся Музыка"
-
 msgctxt "#30173"
 msgid "Channels"
 msgstr "Каналы"
@@ -564,14 +207,6 @@ msgstr "Каналы"
 msgctxt "#30174"
 msgid "Recently Added"
 msgstr "Недавно добавленные"
-
-msgctxt "#30175"
-msgid "Recently Added Episodes"
-msgstr "Недавно добавленные Серии"
-
-msgctxt "#30176"
-msgid "Recently Added Albums"
-msgstr "Недавно добавленные Альбомы"
 
 msgctxt "#30177"
 msgid "In Progress Movies"
@@ -597,178 +232,20 @@ msgctxt "#30182"
 msgid "Favorite Episodes"
 msgstr "Избранные Эпизоды"
 
-msgctxt "#30183"
-msgid "Frequent Played Albums"
-msgstr "Часто проигрываемые альбомы"
-
-msgctxt "#30184"
-msgid "Upcoming TV"
-msgstr "Скоро на ТВ"
-
-msgctxt "#30185"
-msgid "BoxSets"
-msgstr "Сборники"
-
-msgctxt "#30186"
-msgid "Trailers"
-msgstr "Трейлеры"
-
-msgctxt "#30187"
-msgid "Music Videos"
-msgstr "Видеоклипы"
-
-msgctxt "#30188"
-msgid "Photos"
-msgstr "Фотографии"
-
 msgctxt "#30189"
 msgid "Unwatched Movies"
 msgstr "Непросмотренные Фильмы"
-
-msgctxt "#30190"
-msgid "Movie Genres"
-msgstr "Жанры фильмов"
-
-msgctxt "#30191"
-msgid "Movie Studios"
-msgstr "Киностудии"
-
-msgctxt "#30192"
-msgid "Movie Actors"
-msgstr "Киноактеры"
-
-msgctxt "#30193"
-msgid "Unwatched Episodes"
-msgstr "Непросмотренные Серии"
-
-msgctxt "#30194"
-msgid "TV Genres"
-msgstr "ТВ Жанры"
-
-msgctxt "#30195"
-msgid "TV Networks"
-msgstr "Телевизионные сети"
-
-msgctxt "#30196"
-msgid "TV Actors"
-msgstr "Телеактеры"
-
-msgctxt "#30197"
-msgid "Playlists"
-msgstr "Плейлисты"
 
 msgctxt "#30198"
 msgid "Search"
 msgstr "Поиск"
 
-msgctxt "#30199"
-msgid "Set Views"
-msgstr "Задать просмотры"
-
-msgctxt "#30200"
-msgid "Select User"
-msgstr "Выбрать пользователя"
-
-msgctxt "#30201"
-msgid "Profiling enabled."
-msgstr "Профили задействованы"
-
-msgctxt "#30202"
-msgid "Please remember to turn off when finished testing."
-msgstr "Пожалуйста, не забудьте отключить, когда закончится тестирование"
-
-msgctxt "#30203"
-msgid "Error in ArtworkRotationThread"
-msgstr "Ошибка в ArtworkRotationThread"
-
-msgctxt "#30204"
-msgid "Unable to connect to server"
-msgstr "Невозможно подключиться к серверу"
-
-msgctxt "#30205"
-msgid "Error in LoadMenuOptionsThread"
-msgstr "Ошибка в LoadMenuOptionsThread"
-
-msgctxt "#30206"
-msgid "Enable Playlists Loader (Requires Restart)"
-msgstr "Включить загрузку Плейлистов (требуется перезагрузка)"
-
-msgctxt "#30207"
-msgid "Songs"
-msgstr "Песни"
-
-msgctxt "#30208"
-msgid "Albums"
-msgstr "Альбомы"
-
-msgctxt "#30209"
-msgid "Album Artists"
-msgstr "Исполнители Альбома"
-
-msgctxt "#30210"
-msgid "Artists"
-msgstr "Исполнители"
-
-msgctxt "#30211"
-msgid "Music Genres"
-msgstr "Музыкальные жанры"
-
-msgctxt "#30212"
-msgid "Enable Theme Videos (Requires Restart)"
-msgstr "Включить музыкальную тему (требуется перезагрузка)"
-
-msgctxt "#30213"
-msgid " - Loop Theme Videos"
-msgstr " - Зациклить музыкальную тему"
-
-msgctxt "#30216"
-msgid "AutoPlay remaining episodes in a season"
-msgstr "Авто воспроизведение остававшихся серий в сезоне"
-
-msgctxt "#30218"
-msgid "Compress Artwork"
-msgstr "Сжимать дополнительные изображения"
-
-msgctxt "#30220"
-msgid "Latest "
-msgstr "Последний"
-
-msgctxt "#30221"
-msgid "In Progress "
-msgstr "В процессе"
-
-msgctxt "#30222"
-msgid "NextUp "
-msgstr "Следующее"
-
-msgctxt "#30223"
-msgid "User Views"
-msgstr "Пользовательские просмотры"
-
-msgctxt "#30224"
-msgid "Report Metrics"
-msgstr "Отправить данные"
-
-msgctxt "#30225"
-msgid "Use Kodi Sorting"
-msgstr "Использовать сортировку Kodi"
-
-msgctxt "#30226"
-msgid "Runtime"
-msgstr "Время работы"
-
+# Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
 msgstr "Случайно"
 
-msgctxt "#30228"
-msgid "Recently releases"
-msgstr "Недавно добавлено"
-
-msgctxt "#30229"
-msgid "Random Items"
-msgstr "Случайные"
-
+# Video node naming for e.g. movies
 msgctxt "#30230"
 msgid "Recommended"
 msgstr "Рекомендуемые"
@@ -777,57 +254,9 @@ msgctxt "#30235"
 msgid "Extras"
 msgstr "Дополнительно"
 
-msgctxt "#30236"
-msgid "Sync Theme Music"
-msgstr "Синхронизировать музыкальную тему"
-
-msgctxt "#30237"
-msgid "Sync Extra Fanart"
-msgstr "Синхронизировать дополнительные иллюстрации"
-
-msgctxt "#30238"
-msgid "Sync Movie BoxSets"
-msgstr "Синхронизировать сборники фильмов"
-
-msgctxt "#30239"
-msgid "[COLOR yellow]Reset local Kodi database[/COLOR]"
-msgstr "[COLOR yellow]Сбросить локальную базу данных Kodi[/COLOR]"
-
-msgctxt "#30240"
-msgid "Enable watched/resume status sync"
-msgstr "Включить синхронизацию статуса просмотра / возобновления"
-
-msgctxt "#30241"
-msgid "DB Sync Indication:"
-msgstr "Индикатор синхронизации ДБ:"
-
-msgctxt "#30242"
-msgid "Play Count Sync Indication:"
-msgstr "Индикатор синхронизации количества воспроизведений:"
-
 msgctxt "#30243"
 msgid "Enable HTTPS"
 msgstr "Включить HTTPS"
-
-msgctxt "#30245"
-msgid "Force Transcoding Codecs"
-msgstr "Принудительные кодеки транскодирования"
-
-msgctxt "#30246"
-msgid "Enable Netflix style next up notification"
-msgstr "Включить уведомления в стиле Netflix"
-
-msgctxt "#30247"
-msgid "  - The number of seconds before the end to show the notification"
-msgstr "- количество секунд до конца для показа уведомления"
-
-msgctxt "#30248"
-msgid "Show Emby Info dialog on play/select action"
-msgstr "Показать диалог информации Emby при выборе/воспроизведении"
-
-msgctxt "#30249"
-msgid "Enable server connection message on startup"
-msgstr "Включить сообщение о подключении к серверу при запуске"
 
 msgctxt "#30251"
 msgid "Recently added Home Videos"
@@ -861,118 +290,59 @@ msgctxt "#30258"
 msgid "Unwatched Music videos"
 msgstr "Непросмотренные Видеоклипы"
 
-# Default views
-msgctxt "#30300"
-msgid "Active"
-msgstr "Активно"
-
-msgctxt "#30301"
-msgid "Clear Settings"
-msgstr "Сбросить настройки"
-
+# PKC settings sub category under appearance tweaks
 msgctxt "#30302"
 msgid "Movies"
 msgstr "Фильмы"
 
-msgctxt "#30303"
-msgid "BoxSets"
-msgstr "Сборники"
-
-msgctxt "#30304"
-msgid "Trailers"
-msgstr "Трейлеры"
-
-msgctxt "#30305"
-msgid "Series"
-msgstr "Серии"
-
-msgctxt "#30306"
-msgid "Seasons"
-msgstr "Сезоны"
-
-msgctxt "#30307"
-msgid "Episodes"
-msgstr "Эпизоды"
-
-msgctxt "#30308"
-msgid "Music Artists"
-msgstr "Исполнители"
-
-msgctxt "#30309"
-msgid "Music Albums"
-msgstr "Альбомы"
-
-msgctxt "#30310"
-msgid "Music Videos"
-msgstr "Видеоклипы"
-
-msgctxt "#30311"
-msgid "Music Tracks"
-msgstr "Треки"
-
-msgctxt "#30312"
-msgid "Channels"
-msgstr "Каналы"
-
-# contextmenu
+# contextmenu entry
 msgctxt "#30401"
 msgid "Plex options"
 msgstr "Параметры Plex"
 
-msgctxt "#30402"
-msgid "Clear like for this item"
-msgstr "Убрать лайк с элемента"
-
-msgctxt "#30403"
-msgid "Like this item"
-msgstr "Like на элемент"
-
-msgctxt "#30404"
-msgid "Dislike this item"
-msgstr "Dislike на элемент"
-
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr "Добавить в избранное"
 
+# contextmenu entry
 msgctxt "#30406"
 msgid "Remove from Plex favorites"
 msgstr "Удалить из избранного"
 
+# contextmenu entry
 msgctxt "#30407"
 msgid "Set custom song rating"
 msgstr "Задать свой рейтинг песни"
 
+# contextmenu entry
 msgctxt "#30408"
 msgid "Plex addon settings"
 msgstr "Настройки аддонов Plex"
 
+# contextmenu entry
 msgctxt "#30409"
 msgid "Delete item from server"
 msgstr "Удалить элемент с сервера"
 
+# contextmenu entry
 msgctxt "#30410"
 msgid "Refresh this item"
 msgstr "Обновить этот элемент"
 
-msgctxt "#30411"
-msgid "Set custom song rating (0-5)"
-msgstr "Установить пользовательский рейтинг песни (0-5)"
-
+# contextmenu entry
 msgctxt "#30412"
 msgid "Force transcode"
 msgstr "Принудительное транскодирование"
 
-msgctxt "#30413"
-msgid "Enable Plex context menu in Kodi"
-msgstr "Включить контекстное меню Plex в Kodi"
-
+# Error dialog text
 msgctxt "#30414"
 msgid ""
 "Could not delete the Plex item. Is item deletion enabled on the Plex Media "
 "Server?"
 msgstr "Не возможно удалить элемент. На сервере Plex разрешено удаление?"
 
+# contextmenu entry
 msgctxt "#30415"
 msgid "Start playback via PMS"
 msgstr "Начать воспроизведение через Plex"
@@ -981,43 +351,37 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Настройки для сервера Plex"
 
-# add-on settings
+# PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
 msgstr "Проверять SSL сертификат хоста (более безопасно)"
 
+# PKC Settings - Connection
 msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "SSL сертификат клиента"
 
-msgctxt "#30502"
-msgid "Use alternate address"
-msgstr "Использовать альтернативный адрес"
-
-msgctxt "#30503"
-msgid "Alternate Server Address"
-msgstr "Адрес альтернативного сервера"
-
-msgctxt "#30504"
-msgid "Use alternate device Name"
-msgstr "Использовать альтернативное имя устройства"
-
+# PKC Settings - Connection
 msgctxt "#30505"
 msgid "[COLOR yellow]Reset login attempts[/COLOR]"
 msgstr "[COLOR yellow]Сбросить попытки входа[/COLOR]"
 
+# PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
 msgstr "Синхронизация"
 
+# PKC Settings - Sync Options
 msgctxt "#30507"
 msgid "Show syncing progress"
 msgstr "Отображать прогресс синхронизации"
 
+# PKC Settings - Sync Options
 msgctxt "#30508"
 msgid "Sync empty TV Shows"
 msgstr "Синхронизировать пустые Сериалы"
 
+# PKC Settings - Sync Options
 msgctxt "#30509"
 msgid "Enable Music Library"
 msgstr "Включить музыкальную библиотеку"
@@ -1026,74 +390,63 @@ msgctxt "#30510"
 msgid "Direct stream music library"
 msgstr "Прямое воспроизведение музыки из библиотеки"
 
+# PKC Settings - Sync Options
 msgctxt "#30511"
 msgid "Playback Mode"
 msgstr "Режим воспроизведения"
 
+# PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Force artwork caching"
 msgstr "Принудительное кеширование иллюстраций"
 
+# PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr ""
 "Ограничить потоки кешированиa иллюстраций (рекомендуется для Raspberry)"
 
-msgctxt "#30514"
-msgid "Enable fast startup (requires server plugin)"
-msgstr "Включить быстрый запуск (требуется серверный плагин)"
-
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Число элементов запрашиваемых с сервера за раз"
 
+# PKC Settings, category name
 msgctxt "#30516"
 msgid "Playback"
 msgstr "Воспроизведение"
 
+# PKC Settings - Connection
 msgctxt "#30517"
 msgid "[COLOR yellow]Enter network credentials[/COLOR]"
 msgstr "[COLOR yellow]Введите сетевые учетные данные[/COLOR]"
 
+# PKC Settings - Playback
 msgctxt "#30518"
 msgid "Enable Plex Trailers (Plexpass is needed)"
 msgstr "Включить Plex Trailers (требуется Plexpass)"
 
+# PKC Settings - Playback
 msgctxt "#30519"
 msgid "Ask to play trailers"
 msgstr "Предложить воспроизвести трейлер"
 
+# PKC Settings - Plex
 msgctxt "#30520"
-msgid ""
-"Skip Plex delete confirmation for the context menu (use at your own risk)"
+msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
-"Пропустить подтверждение удаления с Plex из контекстного меню (используйте "
-"на свой страх и риск)"
 
+# PKC Settings - Playback
 msgctxt "#30521"
 msgid "Jump back on resume (in seconds)"
 msgstr "Вернуться назад при возобновлении (в секундах)"
 
+# PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Транскодировать h265/HEVC"
 
-msgctxt "#30523"
-msgid "Music metadata options (not compatible with direct stream)"
-msgstr "Опции метаданных для музыки (не доступно при прямом воспроизведении)"
-
-msgctxt "#30524"
-msgid "Import music song rating directly from files"
-msgstr "Импортировать рейтинг песни из файла"
-
-msgctxt "#30525"
-msgid "Convert music song rating to Emby rating"
-msgstr "Преобразование рейтинга музыкальной песни в рейтинг Emby"
-
-msgctxt "#30526"
-msgid "Allow rating in song files to be updated"
-msgstr "Разрешить обновлять рейтинг в файлах музыки"
-
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Игнорировать бонусные в следующих сериях"
@@ -1102,13 +455,10 @@ msgctxt "#30528"
 msgid "Permanent users to add to the session"
 msgstr "Добавить пользователя в сессию навсегда"
 
+# PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
 msgstr "Задержка запуска (в секундах)"
-
-msgctxt "#30530"
-msgid "Enable server restart message"
-msgstr "Включить уведомление о перезапуске сервера"
 
 msgctxt "#30531"
 msgid "Enable new content notification"
@@ -1126,6 +476,7 @@ msgctxt "#30534"
 msgid "Server messages"
 msgstr "Сообщения сервера"
 
+# PKC Settings - Advanced
 msgctxt "#30535"
 msgid ""
 "[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
@@ -1134,83 +485,71 @@ msgstr ""
 "[COLOR yellow]Сгенерировать новый ID (например если вы скопировали Kodi на "
 "новое устройство)[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
 msgstr "Пользователь должен входить при каждом запуске Kodi"
 
+# PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
 msgstr "ПЕРЕЗАПУСТИТЕ KODI, ЕСЛИ ВНОСИЛИ КАКИЕ-ТО ИЗМЕНЕНИЯ"
 
+# PKC Settings warning
 msgctxt "#30538"
 msgid "Complete Re-Sync necessary"
 msgstr "Необходима полная пересинхронизация"
 
+# PKC Settings - Artwork
 msgctxt "#30539"
 msgid "Download additional art from FanArtTV"
 msgstr "Загрузить дополнительные иллюстрации с FanArtTV"
 
+# PKC Settings - Artwork
 msgctxt "#30540"
 msgid "Download movie set/collection art from FanArtTV"
 msgstr "Загружать иллюстрации сборников с FanArtTV"
 
+# PKC Settings - Playback
 msgctxt "#30541"
 msgid "Don't ask to pick a certain stream/quality"
 msgstr "Не просить выбрать качество потока"
 
+# PKC Settings - Playback
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Всегда выбирать лучшее качество для трейлеров"
-
-msgctxt "#30543"
-msgid "Kodi runs on a low-power device (e.g. Raspberry Pi)"
-msgstr "Kodi запущен на слабом устройстве (например Raspberry Pi)"
 
 msgctxt "#30544"
 msgid "Artwork"
 msgstr "Иллюстрации"
 
+# PKC Settings - Playback
 msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr "Принудительно транскодировать изображения"
 
-# service add-on
+# Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
+# Error message
 msgctxt "#33001"
 msgid "Error connecting"
 msgstr "Ошибка соединения"
 
+# Error message
 msgctxt "#33002"
 msgid "Server is unreachable"
 msgstr "Сервер недоступен"
 
+# Plex notification
 msgctxt "#33003"
 msgid "Server is online"
 msgstr "Сервер в сети"
 
-msgctxt "#33004"
-msgid "items added to playlist"
-msgstr "элементы добавлены в плейлист"
-
-msgctxt "#33005"
-msgid "items queued to playlist"
-msgstr "элементы добавлены в очередь плейлиста"
-
-msgctxt "#33006"
-msgid "Server is restarting"
-msgstr "Сервер перезагружается"
-
-msgctxt "#33007"
-msgid "Access is enabled"
-msgstr "Доступ разрешен"
-
-msgctxt "#33008"
-msgid "Enter password for user:"
-msgstr "Введите пароль Пользователя:"
-
+# Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
 msgstr "Неверное имя пользователя или пароль"
@@ -1219,179 +558,111 @@ msgctxt "#33010"
 msgid "Failed to authenticate too many times. Reset in the settings."
 msgstr "Множественная ошибка авторизации. Сбросьте настройки."
 
-msgctxt "#33011"
-msgid "Unable to direct play"
-msgstr "Прямое воспроизведение невозможно"
-
-msgctxt "#33012"
-msgid "Direct play failed 3 times. Enabled play from HTTP."
-msgstr ""
-"Прямое воспроизведение не удалось 3 раза. Установлено воспроизведение через "
-"HTTP."
-
+# Dialog before playback
 msgctxt "#33013"
 msgid "Choose the audio stream"
 msgstr "Выберите звуковую дорожку"
 
+# Dialog before playback
 msgctxt "#33014"
 msgid "Choose the subtitles stream"
 msgstr "Выберите субтитры"
 
-msgctxt "#33015"
-msgid "Delete file from your Emby server?"
-msgstr "Удалить файл с Emby-сервера?"
-
+# Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
 msgstr "Воспроизвести трейлер?"
 
-msgctxt "#33017"
-msgid "Gathering movies from:"
-msgstr "Получение фильмов с"
-
-msgctxt "#33018"
-msgid "Gathering boxsets"
-msgstr "Получение сборников"
-
-msgctxt "#33019"
-msgid "Gathering music videos from:"
-msgstr "Получение видеоклипов с"
-
-msgctxt "#33020"
-msgid "Gathering tv shows from:"
-msgstr "Получение сериалов с"
-
-msgctxt "#33021"
-msgid "Gathering:"
-msgstr "Получение:"
-
-msgctxt "#33022"
-msgid ""
-"Detected the database needs to be recreated for this version of Emby for "
-"Kodi. Proceed?"
-msgstr ""
-"Обнаружено что база данных должна быть пересоздана для этой версии Emby for "
-"Kodi. Выполнить?"
-
-msgctxt "#33023"
-msgid "Emby for Kodi may not work correctly until the database is reset."
-msgstr "Emby for Kodi может работать неправильно до сброса базы данных."
-
-msgctxt "#33024"
-msgid ""
-"Cancelling the database syncing process. The current Kodi version is "
-"unsupported."
-msgstr "Отмена синхронизации базы данных. Эта версия Kodi не поддерживается."
-
-msgctxt "#33025"
-msgid "completed in:"
-msgstr "выполнено:"
-
-msgctxt "#33026"
-msgid "Comparing movies from:"
-msgstr "Сравнение фильмов с:"
-
-msgctxt "#33027"
-msgid "Comparing boxsets"
-msgstr "Сравнение сборников"
-
-msgctxt "#33028"
-msgid "Comparing music videos from:"
-msgstr "Сравнение видеоклипов с:"
-
-msgctxt "#33029"
-msgid "Comparing tv shows from:"
-msgstr "Сравнение сериалов с:"
-
-msgctxt "#33030"
-msgid "Comparing episodes from:"
-msgstr "Сравнение серий с:"
-
-msgctxt "#33031"
-msgid "Comparing:"
-msgstr "Сравнение:"
-
+# Error message
 msgctxt "#33032"
 msgid ""
 "Failed to generate a new device Id. See your logs for more information."
 msgstr ""
 "Генерация нового ID устройства неудачна. Смотрите логи для подробностей."
 
+# Pop-up informing about Kodi restart
 msgctxt "#33033"
 msgid "Kodi will now restart to apply the changes."
 msgstr "Kodi будет перезапущен для применения изменений."
 
+# Confirmation dialog before item gets deleted from the PMS
 msgctxt "#33041"
 msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
 "disk!"
 msgstr "Удалить файл(ы) с сервера Plex? Это также удалит их с диска!"
 
-# New to Plex
+# PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
 msgstr "- Количество трейлеров, проигрываемых перед фильмом."
 
+# PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
 msgstr "Усиливать звук при транскодировании"
 
+# PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
 msgstr "Размер субтитров внедряемых в видео"
 
+# PKC Settings - Sync
 msgctxt "#39003"
 msgid "Limit download sync threads (rec. for rpi: 1)"
 msgstr "Количество потоков синхронизации(для RPi:1)"
 
+# PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
 msgstr "Включить Plex Companion (перезапустите Kodi!)"
 
+# PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
 msgstr "Порт Plex Companion (меняйте только если необходимо)"
 
-msgctxt "#39006"
-msgid "Activate Plex Companion debug log"
-msgstr "Включить лог отладки Plex Companion"
-
-msgctxt "#39007"
-msgid "Activate Plex Companion GDM debug log"
-msgstr "Включить лог отладки Plex Companion для GDM"
-
+# PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
 msgstr "Plex Companion: позволяет отправлять медиа в Kodi через Plex"
 
+# Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
 msgstr "Не удалось войти в plex.tv. Пожалуйста попробуйте ещё раз"
 
+# Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
 msgstr "Невозможно подключиться к plex.tv. Проблемы с интернетом?"
 
+# Error message
 msgctxt "#39011"
 msgid "Could not find any Plex server in the network. Aborting..."
 msgstr "Не найдено ни одного сервера Plex в сети. Отмена..."
 
+# Dialog text for choosing PMS
 msgctxt "#39012"
 msgid "Choose your Plex server"
 msgstr "Выберите Ваш сервер Plex"
 
+# Error message
 msgctxt "#39013"
 msgid "Not yet authorized for Plex server "
 msgstr "Не авторизован на сервере Plex"
 
+# Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
 msgstr "Пожалуйста войдите в plex.tv."
 
+# Error message
 msgctxt "#39015"
 msgid "Problems connecting to server. Pick another server?"
 msgstr "Проблемы при подключении к серверу. Выбрать другой?"
 
+# Pop-up on initial sync
 msgctxt "#39016"
 msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
@@ -1401,6 +672,7 @@ msgstr ""
 "использовании прямых путей и большой библиотеке музыки. Kodi может "
 "крашиться)"
 
+# Pop-up on initial sync
 msgctxt "#39017"
 msgid ""
 "Would you now like to go to the plugin's settings to fine-tune PKC? You will"
@@ -1409,45 +681,45 @@ msgstr ""
 "Хотите войти в настройки чтобы донастроить PKC? Вам нужно будет "
 "ПЕРЕЗАПУСТИТЬ Kodi!"
 
+# PKC Settings - Advanced
 msgctxt "#39018"
 msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
 msgstr ""
 "[COLOR yellow]Исправить базу данных (принудительно обновить весь "
 "контент)[/COLOR]"
 
+# PKC Settings - Advanced
 msgctxt "#39019"
 msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
 msgstr "[COLOR red]Частичный или полный сброс базы данных и PKC[/COLOR]"
 
+# PKC Settings - Artwork
 msgctxt "#39020"
 msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
 msgstr ""
 "[COLOR yellow]Кешировать все изображения сейчас в Kodi texture cache[/COLOR]"
 
-msgctxt "#39021"
-msgid "[COLOR yellow]Sync Emby Theme Media to Kodi[/COLOR]"
-msgstr "[COLOR yellow]Синхронизировать музыку темы из Emby в Kodi[/COLOR]"
-
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
 msgid "local"
 msgstr "local"
 
+# Error message
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
 msgstr "Ошибка авторизации. Вы вошли в plex.tv?"
 
+# PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
 msgstr "Автоматический вход в plex.tv при запуске"
 
+# PKC Settings - Sync
 msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr "Включить фоновую синхронизацию"
 
-msgctxt "#39027"
-msgid "Playback Mode"
-msgstr "Режим воспроизведения"
-
+# Pop-up on initial sync
 msgctxt "#39028"
 msgid ""
 "CAUTION! If you choose \"Native\" mode , you might loose access to certain "
@@ -1460,10 +732,12 @@ msgstr ""
 "Plex должны иметь прямые пути (например smb://myNAS/mymovie.mkv либо "
 "\\\\myNAS/mymovie.mkv)!"
 
+# Pop-up on initial sync
 msgctxt "#39029"
 msgid "Network credentials"
 msgstr "Сетевые учетные данные"
 
+# Pop-up on initial sync
 msgctxt "#39030"
 msgid ""
 "Add network credentials to allow Kodi access to your content? Note: Skipping"
@@ -1474,19 +748,14 @@ msgstr ""
 "Если пропустить этот шаг могут появляться сообщения при первичном "
 "сканировании контента, если Kodi не сможет его найти"
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr "Kodi не может найти файл: "
-
-msgctxt "#39032"
 msgid ""
-"Please verify the path. You may need to verify your network credentials in "
-"the add-on settings or use different Plex paths. Stop syncing?"
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
 msgstr ""
-"Пожалуйста проверьте путь. Возможно Вам нужно ввести сетевые учетные данные "
-"в настройках плагина либо использовать другие пути Plex. Остановить "
-"синхронизацию?"
 
+# Pop-up on initial sync
 msgctxt "#39033"
 msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
@@ -1495,10 +764,12 @@ msgstr ""
 "Изменить UNC пути библиотек Plex \\\\myNas\\mymovie.mkv автоматически в "
 "Samba пути: smb://myNas/mymovie.mkv? (рекомендуется)"
 
+# PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
 msgstr "Заменить UNC пути Plex \\\\myNas на smb://myNas"
 
+# PKC Settings - Customize Paths
 msgctxt "#39035"
 msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
@@ -1507,30 +778,37 @@ msgstr ""
 "Заменить пути Plex /volume1/media либо \\\\myserver\\media на "
 "пользовательские Samba пути smb://NAS/mystuff"
 
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Исходный путь ФИЛЬМОВ Plex для замены:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39038"
 msgid "Replace Plex MOVIE with:"
 msgstr "Заменить путь ФИЛЬМОВ Plex на:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
 msgstr "Исходный путь СЕРИАЛОВ Plex для замены:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39040"
 msgid "Replace Plex TV SHOWS with:"
 msgstr "Заменить путь СЕРИАЛОВ Plex на:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39041"
 msgid "Original Plex MUSIC path to replace:"
 msgstr "Исходный путь МУЗЫКИ Plex для замены:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39042"
 msgid "Replace Plex MUSIC with:"
 msgstr "Заменить путь МУЗЫКИ Plex на:"
 
+# Pop-up on initial sync
 msgctxt "#39043"
 msgid ""
 "Go a step further and completely replace all original Plex library paths "
@@ -1539,6 +817,7 @@ msgstr ""
 "Выполнить ещё один шаг и полностью заменить все оригинальные пути библиотек "
 "Plex (/volume1/media) на свои Samba пути (smb://NAS/MyStuff)?"
 
+# Pop-up on initial sync
 msgctxt "#39044"
 msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
@@ -1547,88 +826,114 @@ msgstr ""
 "Пожалуйста введите свои Samba пути в настройках \"Параметры синхронизации\" "
 "и перезапустите Kodi"
 
+# PKC Settings - Customize Paths
 msgctxt "#39045"
 msgid "Original Plex PHOTO path to replace:"
 msgstr "Исходный путь ФОТОГРАФИЙ Plex для замены:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39046"
 msgid "Replace Plex PHOTO with:"
 msgstr "Заменить путь ФОТОГРАФИЙ Plex на:"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39047"
 msgid "On Deck: Append show title to episode"
 msgstr "Текущие: Показывать название эпизода"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39048"
 msgid "On Deck: Append season- and episode-number SxxExx"
 msgstr "Текущие: Показывать номер сезона и эпизода как SxxExx"
 
+# PKC Settings - Advanced
 msgctxt "#39049"
 msgid "Nothing works? Try a full reset!"
 msgstr "Ничего не работает? Попробуйте общий сброс!"
 
+# PKC Settings - Connection
 msgctxt "#39050"
 msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
 msgstr "[COLOR yellow]Выберите сервер Plex из списка[/COLOR]"
 
+# PKC Settings - Sync
 msgctxt "#39051"
 msgid "Wait before sync new/changed PMS item [s]"
 msgstr "Ожидание новый/измененный элемент [с]"
 
+# PKC Settings - Sync
 msgctxt "#39052"
 msgid "Background Sync"
 msgstr "Фоновая синхронизация"
 
+# PKC Settings - Sync
 msgctxt "#39053"
 msgid "Do a full library sync every x minutes"
 msgstr "Полная синхронизация библиотеки каждые x минут"
 
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39054"
 msgid "remote"
 msgstr "remote"
 
+# Notification pop-up
 msgctxt "#39055"
 msgid "Searching for Plex Server"
 msgstr "Поиск сервера Plex"
 
+# PKC Settings - Customize paths
 msgctxt "#39056"
 msgid "Used by Sync and when attempting to Direct Play"
 msgstr "Используется при синхронизации и прямом воспроизведении"
 
+# PKC Settings, category name
 msgctxt "#39057"
 msgid "Customize Paths"
 msgstr "Изменить пути"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39058"
 msgid "Extend Plex TV Series \"On Deck\" view to all shows"
 msgstr "В \"Текущем\" показывать все сериалы"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "Недавно добавлено: Показывать название эпизода"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39060"
 msgid "Recently Added: Append season- and episode-number SxxExx"
 msgstr "Недавно добавлено: Показывать номер сезона и эпизода как SxxExx"
 
+# Pop-up during initial sync
 msgctxt "#39061"
 msgid ""
 "Would you like to download additional artwork from FanArtTV in the "
 "background?"
 msgstr "Хотите загружать дополнительные иллюстрации с FanArtTV в фоне?"
 
+# PKC Settings - Sync
 msgctxt "#39062"
 msgid "Sync when screensaver is deactivated"
 msgstr "Синхронизация если заставка отключена"
 
+# PKC Settings - Playback
 msgctxt "#39063"
 msgid "Force Transcode Hi10P"
 msgstr "Принудительно транскодировать Hi10P"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr "Недавно добавлено: также показывать просмотренные эпизоды"
 
+# PKC Settings - Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
+# PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
@@ -1637,46 +942,47 @@ msgstr ""
 "Недавно добавлено: также показывать просмотренные фильмы (обновите "
 "плейлисты/списки Plex)"
 
+# PKC Settings - Connection
 msgctxt "#39067"
 msgid "Your current Plex Media Server:"
 msgstr "Ваш текущий сервер Plex:"
 
+# PKC Settings - Connection
 msgctxt "#39068"
 msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
 msgstr "[COLOR yellow]Вручную ввести адрес сервера Plex[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#39069"
 msgid "Current address:"
 msgstr "Текущий адрес:"
 
+# PKC Settings - Connection
 msgctxt "#39070"
 msgid "Current port:"
 msgstr "Текущий порт:"
 
+# PKC Settings - Connection
 msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "Текущий статус на plex.tv:"
 
-msgctxt "#39072"
-msgid ""
-"Is your Kodi installed on a low-powered device like a Raspberry Pi? If yes, "
-"then we will reduce the strain on Kodi to prevent it from crashing."
-msgstr ""
-"Kodi установлен на слабое устройство типа Raspberry Pi? Если да, мы уменьшим"
-" нагрузку чтобы предотвратить его сбой."
-
+# PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
 msgstr "Дополнительно"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "Сериалы"
 
+# PKC Settings - Playback
 msgctxt "#39075"
 msgid "Always use default Plex subtitle if possible"
 msgstr "Использовать субтитры по умолчанию из Plex, если доступны"
 
+# Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
@@ -1686,14 +992,17 @@ msgstr ""
 "детей\" и \"Фильмы родителей\" не забудьте почитать Wiki: "
 "https://goo.gl/JFtQV9 (пока на английском)"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
 msgstr "Количество элементов, отображаемых в виджетах (например \"Текущие\")"
 
+# PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
 msgstr "Порт обновления Plex Companion (меняйте только если необходимо)"
 
+# Error message
 msgctxt "#39079"
 msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
@@ -1701,7 +1010,6 @@ msgid ""
 msgstr ""
 "Plex Companion не может открыть порт GDM. Смените его в настройках PKC."
 
-# Plex Entrypoint.py
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Выйти из Plex"
@@ -1709,10 +1017,6 @@ msgstr "Выйти из Plex"
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Настройки"
-
-msgctxt "#39202"
-msgid "Network credentials"
-msgstr "Сетевые учетные данные"
 
 msgctxt "#39203"
 msgid "Refresh Plex playlists/nodes"
@@ -1722,6 +1026,7 @@ msgctxt "#39204"
 msgid "Perform manual library sync"
 msgstr "Синхронизировать вручную"
 
+# Error message
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr ""
@@ -1743,6 +1048,7 @@ msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
 msgstr "Невозможно сбросить PKC. Попробуйте перезапустить Kodi."
 
+# PKC Settings - Plex
 msgctxt "#39209"
 msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
 msgstr ""
@@ -1756,15 +1062,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr "Смотреть позже"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39213"
 msgid "is offline"
 msgstr "Нет соединения"
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
-msgstr ""
-"Несмотря на то, что логин в plex.tv удачен не удалось авторизоваться на "
-"сервере Plex"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1784,6 +1085,7 @@ msgctxt "#39219"
 msgid "Abort (Yes) or save address anyway (No)?"
 msgstr "Отменить (Да) или сохранить адрес (Нет)?"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39220"
 msgid "connected"
 msgstr "подключен"
@@ -1828,7 +1130,6 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Пользователь Plex:"
 
-# Plex Artwork.py
 msgctxt "#39250"
 msgid ""
 "Running the image cache process can take some time. It will happen in the "
@@ -1840,19 +1141,6 @@ msgstr ""
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
 msgstr "Сначала удалить весь имеющийся кеш?"
-
-# Plex PlexAPI.py
-msgctxt "#39300"
-msgid ": Enter plex.tv username. Or nothing to cancel."
-msgstr ": Введите имя пользователя plex.tv. Либо ничего, чтобы отменить."
-
-msgctxt "#39301"
-msgid "Enter password for plex.tv user "
-msgstr "Введите пароль пользователя plex.tv"
-
-msgctxt "#39302"
-msgid "Could not sign in user "
-msgstr "Ошибка входа"
 
 msgctxt "#39303"
 msgid "Problems trying to contact plex.tv. Try again later"
@@ -1890,7 +1178,6 @@ msgctxt "#39311"
 msgid "or press No to not sign in."
 msgstr "или нажмите Нет, чтобы отменить вход."
 
-# Plex Librarysync.py
 msgctxt "#39400"
 msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
@@ -1918,14 +1205,6 @@ msgid ""
 msgstr ""
 "Синхронизация отменена, текущая версия Kodi не поддерживается. Больше "
 "информации Вы найдёте в логах."
-
-msgctxt "#39404"
-msgid ""
-"Startup syncing process failed repeatedly. Try restarting Kodi. Stopping "
-"Sync for now."
-msgstr ""
-"Процесс синхронизации несколько раз был неудачен. Попробуйте перезапустить "
-"Kodi. На данный момент синхронизация отключена."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1962,7 +1241,6 @@ msgctxt "#39410"
 msgid "ERROR in library sync"
 msgstr "Ошибка синхронизации библиотеки"
 
-# Plex videonodes.py
 msgctxt "#39500"
 msgid "On Deck"
 msgstr "Текущие"
@@ -1971,7 +1249,6 @@ msgctxt "#39501"
 msgid "Collections"
 msgstr "Коллекции"
 
-# Plex utils.py
 msgctxt "#39600"
 msgid ""
 "Are you sure you want to reset your local Kodi database? A re-sync of the "
@@ -1983,10 +1260,6 @@ msgstr ""
 msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
 msgstr "Не удалось остановить работу базы данных. Попробуйте позже."
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
-msgstr "Удалить все кешированные иллюстрации? (рекомендуется)"
 
 msgctxt "#39603"
 msgid ""

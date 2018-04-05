@@ -24,42 +24,28 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr "Server Adresse (IP)"
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr ""
+
 msgctxt "#30002"
 msgid "Preferred playback method"
 msgstr "Foretrukken afspilnings metode"
 
-msgctxt "#30004"
-msgid "Log level"
-msgstr "Logføringsniveau"
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
 
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Brugernavn: "
 
-msgctxt "#30006"
-msgid "Password: "
-msgstr "Adgangskode: "
-
-msgctxt "#30007"
-msgid "Network Username: "
-msgstr "Netværks Brugernavn: "
-
-msgctxt "#30008"
-msgid "Network Password: "
-msgstr "Netværks Adgangskode: "
-
-msgctxt "#30009"
-msgid "Transcode: "
-msgstr "Transkode: "
-
-msgctxt "#30010"
-msgid "Enable Performance Profiling"
-msgstr "Aktivér Ydelse Profilering"
-
-msgctxt "#30011"
-msgid "Local caching system"
-msgstr "Lokal caching-system"
-
+# Button text
 msgctxt "#30012"
 msgid "OK"
 msgstr "OK"
@@ -68,22 +54,21 @@ msgctxt "#30013"
 msgid "Never show"
 msgstr "Vis Aldrig"
 
+# PKC settings category
 msgctxt "#30014"
 msgid "Connection"
 msgstr "Forbindelser"
-
-msgctxt "#30015"
-msgid "Network"
-msgstr "Netværk"
 
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "Enhedens navn"
 
+# Error message
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "Uautoriseret for PMS"
 
+# PKC settings category
 msgctxt "#30022"
 msgid "Advanced"
 msgstr "Avanceret"
@@ -109,34 +94,6 @@ msgctxt "#30032"
 msgid "Information"
 msgstr ""
 
-msgctxt "#30035"
-msgid "Number of recent Music Albums to show:"
-msgstr "Seneste af antal viste Musik albums:"
-
-msgctxt "#30036"
-msgid "Number of recent Movies to show:"
-msgstr "Seneste af antal viste film:"
-
-msgctxt "#30037"
-msgid "Number of recent TV episodes to show:"
-msgstr "Seneste af antal viste Tv episoder:"
-
-msgctxt "#30038"
-msgid "Mark watched at start of playback:"
-msgstr "Mark set på start afspilning:"
-
-msgctxt "#30039"
-msgid "Set Season poster for episodes"
-msgstr "Sæt sæson plakat for episoder"
-
-msgctxt "#30040"
-msgid "Genre Filter ..."
-msgstr "Genre Filter..."
-
-msgctxt "#30041"
-msgid "Play All from Here"
-msgstr "Afspil alle herfra"
-
 msgctxt "#30042"
 msgid "Refresh"
 msgstr "Opdater"
@@ -145,165 +102,14 @@ msgctxt "#30043"
 msgid "Delete"
 msgstr "Slet"
 
-msgctxt "#30044"
-msgid "Incorrect Username/Password"
-msgstr "Forkert brugernavn/adgangskode"
-
-msgctxt "#30045"
-msgid "Username not found"
-msgstr "Brugernavn blev ikke fundet"
-
-msgctxt "#30046"
-msgid "Add Movie to CouchPotato"
-msgstr "Tilføj film til CouchPotato"
-
+# Notification displayed if there is a LOT to be deleted
 msgctxt "#30052"
 msgid "Deleting"
 msgstr "Sletter"
 
-msgctxt "#30053"
-msgid "Waiting for server to delete"
-msgstr "Venter på at serveren sletter"
-
-msgctxt "#30059"
-msgid "Server Default"
-msgstr "Server standard"
-
-msgctxt "#30060"
-msgid "Title"
-msgstr "Titel"
-
-msgctxt "#30061"
-msgid "Year"
-msgstr "År"
-
-msgctxt "#30062"
-msgid "Premiere Date"
-msgstr "Premiere dato"
-
-msgctxt "#30063"
-msgid "Date Created"
-msgstr "Oprettelsesdato"
-
-msgctxt "#30064"
-msgid "Critic Rating"
-msgstr "Kritiker Rating"
-
-msgctxt "#30065"
-msgid "Community Rating"
-msgstr "Fællesskabs Rating"
-
-msgctxt "#30066"
-msgid "Play Count"
-msgstr "Antal afspilninger"
-
-msgctxt "#30067"
-msgid "Budget"
-msgstr "Budget"
-
-# Runtime added as 30226 below
-msgctxt "#30068"
-msgid "Sort By"
-msgstr "Sortér efter"
-
 msgctxt "#30069"
 msgid "None"
 msgstr "Ingen"
-
-msgctxt "#30070"
-msgid "Action"
-msgstr "Action"
-
-msgctxt "#30071"
-msgid "Adventure"
-msgstr "Eventyr"
-
-msgctxt "#30072"
-msgid "Animation"
-msgstr "Animation"
-
-msgctxt "#30073"
-msgid "Crime"
-msgstr "Krimi"
-
-msgctxt "#30074"
-msgid "Comedy"
-msgstr "Komedie"
-
-msgctxt "#30075"
-msgid "Documentary"
-msgstr "Dokumentar"
-
-msgctxt "#30076"
-msgid "Drama"
-msgstr "Drama"
-
-msgctxt "#30077"
-msgid "Fantasy"
-msgstr "Fantasi"
-
-msgctxt "#30078"
-msgid "Foreign"
-msgstr "Udenlandske"
-
-msgctxt "#30079"
-msgid "History"
-msgstr "Historie"
-
-msgctxt "#30080"
-msgid "Horror"
-msgstr "Gyser"
-
-msgctxt "#30081"
-msgid "Music"
-msgstr "Musik"
-
-msgctxt "#30082"
-msgid "Musical"
-msgstr "Musical"
-
-msgctxt "#30083"
-msgid "Mystery"
-msgstr "Mystik"
-
-msgctxt "#30084"
-msgid "Romance"
-msgstr "Romantik"
-
-msgctxt "#30085"
-msgid "Science Fiction"
-msgstr "Science Fiction"
-
-msgctxt "#30086"
-msgid "Short"
-msgstr "Kort"
-
-msgctxt "#30087"
-msgid "Suspense"
-msgstr "Spænding"
-
-msgctxt "#30088"
-msgid "Thriller"
-msgstr "Thriller"
-
-msgctxt "#30089"
-msgid "Western"
-msgstr "Western"
-
-msgctxt "#30090"
-msgid "Genre Filter"
-msgstr "Genre Filter..."
-
-msgctxt "#30091"
-msgid "Confirm file deletion"
-msgstr "Bekræft sletning"
-
-msgctxt "#30092"
-msgid ""
-"Delete this item? This action will delete media and associated data files."
-msgstr ""
-"Vil du slette dette element? Denne handling vil slette medier og tilknyttede"
-" datafiler."
 
 msgctxt "#30093"
 msgid "Mark Watched"
@@ -321,51 +127,6 @@ msgctxt "#30096"
 msgid "Remove from Favorites"
 msgstr "Fjern fra favoritter"
 
-msgctxt "#30097"
-msgid "Sort By ..."
-msgstr "Sorter efter..."
-
-msgctxt "#30098"
-msgid "Sort Order Descending"
-msgstr "Sorter faldende"
-
-msgctxt "#30099"
-msgid "Sort Order Ascending"
-msgstr "Sorter stigende"
-
-msgctxt "#30100"
-msgid "Show People"
-msgstr "Vis personer"
-
-# resume dialog
-msgctxt "#30105"
-msgid "Resume"
-msgstr "Fortsæt"
-
-msgctxt "#30106"
-msgid "Resume from"
-msgstr "Genoptage fra"
-
-msgctxt "#30107"
-msgid "Start from beginning"
-msgstr "Start fra begyndelsen"
-
-msgctxt "#30110"
-msgid "Interface"
-msgstr "Interface"
-
-msgctxt "#30111"
-msgid "Include Stream Info"
-msgstr "Inkludere stream info"
-
-msgctxt "#30112"
-msgid "Include People"
-msgstr "Inkludere mennesker"
-
-msgctxt "#30113"
-msgid "Include Overview"
-msgstr "Inkludere oversigt"
-
 msgctxt "#30114"
 msgid "Offer delete after playback"
 msgstr "Tilbud sletning efter afspilning"
@@ -378,81 +139,22 @@ msgctxt "#30116"
 msgid "For Movies"
 msgstr "Sortér film"
 
-msgctxt "#30117"
-msgid "Background Art Refresh Rate (seconds)"
-msgstr "Baggrund kunst opdateringshastigheden (sekunder)"
-
-msgctxt "#30118"
-msgid "Add Resume Percent"
-msgstr "Tilføj genoptagelses procent"
-
-msgctxt "#30119"
-msgid "Add Episode Number"
-msgstr "Tilføj episode nummer"
-
-msgctxt "#30120"
-msgid "Show Load Progress"
-msgstr "Vis læse fremskridt"
-
-msgctxt "#30121"
-msgid "Loading Content"
-msgstr "Indlæser indhold"
-
-msgctxt "#30122"
-msgid "Retrieving Data"
-msgstr "Henter data"
-
 msgctxt "#30125"
 msgid "Done"
 msgstr "Udført"
 
-msgctxt "#30126"
-msgid "Processing Item : "
-msgstr "Behandling af emnet: "
-
+# Error popup message text
 msgctxt "#30128"
 msgid "Play Error"
 msgstr "Afspilnings fejl"
-
-msgctxt "#30129"
-msgid "This item is not playable"
-msgstr "Emnet kan ikke afspilles"
-
-msgctxt "#30130"
-msgid "Local path detected"
-msgstr "Lokale sti opdaget"
-
-msgctxt "#30131"
-msgid ""
-"Your MB3 Server contains local paths.  Please change server paths to UNC or "
-"change XBMB3C setting 'Play from Stream' to true.  Path: "
-msgstr ""
-"MB3 serveren indeholder lokale stier.  Venligst ændre server stier til UNC- "
-"eller Skift XBMB3C indstilling 'afspil fra Stream' til true.  Sti: "
 
 msgctxt "#30132"
 msgid "Warning"
 msgstr "Advarsel"
 
-msgctxt "#30133"
-msgid "Debug logging enabled."
-msgstr "Debug logføring aktiveret."
-
-msgctxt "#30134"
-msgid "This will affect performance."
-msgstr "Dette vil påvirke ydeevnen."
-
 msgctxt "#30135"
 msgid "Error"
 msgstr "Fejl"
-
-msgctxt "#30136"
-msgid "Monitoring service is not running"
-msgstr "Overvågning service kører ikke"
-
-msgctxt "#30137"
-msgid "If you have just installed please restart Kodi"
-msgstr "Hvis du lige har installeret genstart Kodi"
 
 msgctxt "#30138"
 msgid "Search"
@@ -462,33 +164,9 @@ msgctxt "#30139"
 msgid "Enable Theme Music (Requires Restart)"
 msgstr "Aktiver temamusik (kræver genstart)"
 
-msgctxt "#30140"
-msgid " - Loop Theme Music"
-msgstr " -Loop temamusik"
-
-msgctxt "#30141"
-msgid "Enable Background Image (Requires Restart)"
-msgstr "Aktivere baggrundsbillede (kræver genstart)"
-
-msgctxt "#30142"
-msgid "Services"
-msgstr "Services"
-
 msgctxt "#30143"
 msgid "Always transcode if video bitrate is above"
 msgstr "Altid transcode hvis video bitrate er over"
-
-msgctxt "#30150"
-msgid "Skin does not support setting views"
-msgstr "Skin understøtter ikke visning indstillinger"
-
-msgctxt "#30151"
-msgid "Select item action (Requires Restart)"
-msgstr "Vælg handling (kræver genstart)"
-
-msgctxt "#30156"
-msgid "Sort NextUp by Show Title"
-msgstr "Sorter efter titel visning"
 
 msgctxt "#30157"
 msgid "Enable Enhanced Images (eg CoverArt)"
@@ -498,29 +176,9 @@ msgctxt "#30158"
 msgid "Metadata"
 msgstr "Metadata"
 
-msgctxt "#30159"
-msgid "Artwork"
-msgstr "Illustrationer"
-
 msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Video kvalitet hvis Transcoding nødvendigt"
-
-msgctxt "#30161"
-msgid "Enable Suggested Loader (Requires Restart)"
-msgstr "Aktivere baggrundsbillede (kræver genstart)"
-
-msgctxt "#30162"
-msgid "Add Season Number"
-msgstr "Tilføje sæson nummer"
-
-msgctxt "#30163"
-msgid "Flatten Seasons"
-msgstr "Flade sæsoner"
-
-msgctxt "#30164"
-msgid "Direct Play - HTTP"
-msgstr "Direkte afspilning - HTTP"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -530,19 +188,6 @@ msgctxt "#30166"
 msgid "Transcoding"
 msgstr "Transcoding"
 
-msgctxt "#30167"
-msgid "Server Detection Succeeded"
-msgstr "Server søgning lykkedes"
-
-msgctxt "#30168"
-msgid "Found server"
-msgstr "Server fundet"
-
-msgctxt "#30169"
-msgid "Address : "
-msgstr "Adresse: "
-
-# Video nodes
 msgctxt "#30170"
 msgid "Recently Added TV Shows"
 msgstr "Senest tilføjet TV shows"
@@ -551,10 +196,6 @@ msgctxt "#30171"
 msgid "In Progress TV Shows"
 msgstr "Igangværende TV Shows"
 
-msgctxt "#30172"
-msgid "All Music"
-msgstr "Alt musik"
-
 msgctxt "#30173"
 msgid "Channels"
 msgstr "Kanaler"
@@ -562,14 +203,6 @@ msgstr "Kanaler"
 msgctxt "#30174"
 msgid "Recently Added"
 msgstr "Senest tilføjet"
-
-msgctxt "#30175"
-msgid "Recently Added Episodes"
-msgstr "Senest tilføjet episoder"
-
-msgctxt "#30176"
-msgid "Recently Added Albums"
-msgstr "Senest tilføjet Albums"
 
 msgctxt "#30177"
 msgid "In Progress Movies"
@@ -595,178 +228,20 @@ msgctxt "#30182"
 msgid "Favorite Episodes"
 msgstr "Favorit episoder"
 
-msgctxt "#30183"
-msgid "Frequent Played Albums"
-msgstr "Hyppigt afspillede Albums"
-
-msgctxt "#30184"
-msgid "Upcoming TV"
-msgstr "Kommende TV"
-
-msgctxt "#30185"
-msgid "BoxSets"
-msgstr "BoxSets"
-
-msgctxt "#30186"
-msgid "Trailers"
-msgstr "Trailer"
-
-msgctxt "#30187"
-msgid "Music Videos"
-msgstr "Musikvideoer"
-
-msgctxt "#30188"
-msgid "Photos"
-msgstr "Billeder"
-
 msgctxt "#30189"
 msgid "Unwatched Movies"
 msgstr "Usete film"
-
-msgctxt "#30190"
-msgid "Movie Genres"
-msgstr "Film genrer"
-
-msgctxt "#30191"
-msgid "Movie Studios"
-msgstr "Film studios"
-
-msgctxt "#30192"
-msgid "Movie Actors"
-msgstr "Skuespillere"
-
-msgctxt "#30193"
-msgid "Unwatched Episodes"
-msgstr "Usete episoder"
-
-msgctxt "#30194"
-msgid "TV Genres"
-msgstr "TV genrer"
-
-msgctxt "#30195"
-msgid "TV Networks"
-msgstr "TV netværk"
-
-msgctxt "#30196"
-msgid "TV Actors"
-msgstr "TV skuespillere"
-
-msgctxt "#30197"
-msgid "Playlists"
-msgstr "Afspilningsliste"
 
 msgctxt "#30198"
 msgid "Search"
 msgstr "Søg"
 
-msgctxt "#30199"
-msgid "Set Views"
-msgstr "Visning"
-
-msgctxt "#30200"
-msgid "Select User"
-msgstr "Vælg bruger"
-
-msgctxt "#30201"
-msgid "Profiling enabled."
-msgstr "Profilering aktiveret."
-
-msgctxt "#30202"
-msgid "Please remember to turn off when finished testing."
-msgstr "Husk at slukke, når testen er færdig"
-
-msgctxt "#30203"
-msgid "Error in ArtworkRotationThread"
-msgstr "Fejl i ArtworkRotationThread"
-
-msgctxt "#30204"
-msgid "Unable to connect to server"
-msgstr "Kan ikke forbinde til server"
-
-msgctxt "#30205"
-msgid "Error in LoadMenuOptionsThread"
-msgstr "Fejl i LoadMenuOptionsThread"
-
-msgctxt "#30206"
-msgid "Enable Playlists Loader (Requires Restart)"
-msgstr "Aktivere baggrundsbillede (kræver genstart)"
-
-msgctxt "#30207"
-msgid "Songs"
-msgstr "Sange"
-
-msgctxt "#30208"
-msgid "Albums"
-msgstr "Albums"
-
-msgctxt "#30209"
-msgid "Album Artists"
-msgstr "Album kunstner"
-
-msgctxt "#30210"
-msgid "Artists"
-msgstr "Kunstner:"
-
-msgctxt "#30211"
-msgid "Music Genres"
-msgstr "Musikgenrer"
-
-msgctxt "#30212"
-msgid "Enable Theme Videos (Requires Restart)"
-msgstr "Aktiverer tema videoer (kræver genstart)"
-
-msgctxt "#30213"
-msgid " - Loop Theme Videos"
-msgstr " -Loop tema videoer"
-
-msgctxt "#30216"
-msgid "AutoPlay remaining episodes in a season"
-msgstr "Auto afspil de resterende episoder af sæsonen"
-
-msgctxt "#30218"
-msgid "Compress Artwork"
-msgstr "Komprimere billeder"
-
-msgctxt "#30220"
-msgid "Latest "
-msgstr "Nyeste "
-
-msgctxt "#30221"
-msgid "In Progress "
-msgstr "Igangværende "
-
-msgctxt "#30222"
-msgid "NextUp "
-msgstr "Næste "
-
-msgctxt "#30223"
-msgid "User Views"
-msgstr "Visning"
-
-msgctxt "#30224"
-msgid "Report Metrics"
-msgstr "Tekstmålinger"
-
-msgctxt "#30225"
-msgid "Use Kodi Sorting"
-msgstr "Brug Kodi sortering"
-
-msgctxt "#30226"
-msgid "Runtime"
-msgstr "Spilletid"
-
+# Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
 msgstr "Tilfældig"
 
-msgctxt "#30228"
-msgid "Recently releases"
-msgstr "Seneste udgivelse"
-
-msgctxt "#30229"
-msgid "Random Items"
-msgstr "Tilfældige emner"
-
+# Video node naming for e.g. movies
 msgctxt "#30230"
 msgid "Recommended"
 msgstr "Anbefalet"
@@ -775,57 +250,9 @@ msgctxt "#30235"
 msgid "Extras"
 msgstr "Ekstra"
 
-msgctxt "#30236"
-msgid "Sync Theme Music"
-msgstr "Sync temamusik"
-
-msgctxt "#30237"
-msgid "Sync Extra Fanart"
-msgstr "Synkronisere ekstra Fanart"
-
-msgctxt "#30238"
-msgid "Sync Movie BoxSets"
-msgstr "Sync film BoxSets"
-
-msgctxt "#30239"
-msgid "[COLOR yellow]Reset local Kodi database[/COLOR]"
-msgstr "[COLOR yellow] Nulstille lokale Kodi database[/COLOR]"
-
-msgctxt "#30240"
-msgid "Enable watched/resume status sync"
-msgstr "Vælg Set / Genoptag status sync"
-
-msgctxt "#30241"
-msgid "DB Sync Indication:"
-msgstr "DB Sync angivelse:"
-
-msgctxt "#30242"
-msgid "Play Count Sync Indication:"
-msgstr "Afspil sync angivelse:"
-
 msgctxt "#30243"
 msgid "Enable HTTPS"
 msgstr "Aktivere HTTPS"
-
-msgctxt "#30245"
-msgid "Force Transcoding Codecs"
-msgstr "Vælg Transcoding Codecs"
-
-msgctxt "#30246"
-msgid "Enable Netflix style next up notification"
-msgstr "Aktivere Netflix style notifikationer"
-
-msgctxt "#30247"
-msgid "  - The number of seconds before the end to show the notification"
-msgstr "  -Antallet af sekunder før slutningen til at vise notifiaktioner"
-
-msgctxt "#30248"
-msgid "Show Emby Info dialog on play/select action"
-msgstr "Vis dialogboks for Emby Info på play/Vælg handling"
-
-msgctxt "#30249"
-msgid "Enable server connection message on startup"
-msgstr "Aktivere server forbindelse besked ved opstart"
 
 msgctxt "#30251"
 msgid "Recently added Home Videos"
@@ -859,112 +286,52 @@ msgctxt "#30258"
 msgid "Unwatched Music videos"
 msgstr "Usete musikvideoer"
 
-# Default views
-msgctxt "#30300"
-msgid "Active"
-msgstr "Aktiv"
-
-msgctxt "#30301"
-msgid "Clear Settings"
-msgstr "Nulstil indstillinger"
-
+# PKC settings sub category under appearance tweaks
 msgctxt "#30302"
 msgid "Movies"
 msgstr "Film"
 
-msgctxt "#30303"
-msgid "BoxSets"
-msgstr "BoxSets"
-
-msgctxt "#30304"
-msgid "Trailers"
-msgstr "Trailer"
-
-msgctxt "#30305"
-msgid "Series"
-msgstr "Serier"
-
-msgctxt "#30306"
-msgid "Seasons"
-msgstr "Sæson"
-
-msgctxt "#30307"
-msgid "Episodes"
-msgstr "Episoder"
-
-msgctxt "#30308"
-msgid "Music Artists"
-msgstr "Musik kunstnere"
-
-msgctxt "#30309"
-msgid "Music Albums"
-msgstr "Musik albums"
-
-msgctxt "#30310"
-msgid "Music Videos"
-msgstr "Musikvideoer"
-
-msgctxt "#30311"
-msgid "Music Tracks"
-msgstr "Musiknumre"
-
-msgctxt "#30312"
-msgid "Channels"
-msgstr "Kanaler"
-
-# contextmenu
+# contextmenu entry
 msgctxt "#30401"
 msgid "Plex options"
 msgstr "Plex indstillinger"
 
-msgctxt "#30402"
-msgid "Clear like for this item"
-msgstr "Slet like for dette emne"
-
-msgctxt "#30403"
-msgid "Like this item"
-msgstr "Like dette emne"
-
-msgctxt "#30404"
-msgid "Dislike this item"
-msgstr "Dislike dette emne"
-
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr "Tilføj til Plex favoritter"
 
+# contextmenu entry
 msgctxt "#30406"
 msgid "Remove from Plex favorites"
 msgstr "Fjern fra Plex favoritter"
 
+# contextmenu entry
 msgctxt "#30407"
 msgid "Set custom song rating"
 msgstr "Angive brugerdefinerede sange rating"
 
+# contextmenu entry
 msgctxt "#30408"
 msgid "Plex addon settings"
 msgstr "Plex addon indstillinger"
 
+# contextmenu entry
 msgctxt "#30409"
 msgid "Delete item from server"
 msgstr "Slet element fra server"
 
+# contextmenu entry
 msgctxt "#30410"
 msgid "Refresh this item"
 msgstr "Opdater siden"
 
-msgctxt "#30411"
-msgid "Set custom song rating (0-5)"
-msgstr "Angive brugerdefinerede sange rating (0-5)"
-
+# contextmenu entry
 msgctxt "#30412"
 msgid "Force transcode"
 msgstr "Vælg transcode"
 
-msgctxt "#30413"
-msgid "Enable Plex context menu in Kodi"
-msgstr "Aktivere Plex kontekstmenu i Kodi"
-
+# Error dialog text
 msgctxt "#30414"
 msgid ""
 "Could not delete the Plex item. Is item deletion enabled on the Plex Media "
@@ -972,6 +339,7 @@ msgid ""
 msgstr ""
 "Kunne ikke slette Plex emnet. Er sletning aktiveret på Plex Media Server?"
 
+# contextmenu entry
 msgctxt "#30415"
 msgid "Start playback via PMS"
 msgstr "Start afspilning via PMS"
@@ -980,43 +348,37 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Indstillinger for Plex-Server"
 
-# add-on settings
+# PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
 msgstr "Bekræfte vært SSL certifikat (mere sikker)"
 
+# PKC Settings - Connection
 msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "Klient SSL certifikat"
 
-msgctxt "#30502"
-msgid "Use alternate address"
-msgstr "Brug alternativ adresse"
-
-msgctxt "#30503"
-msgid "Alternate Server Address"
-msgstr "Alternative server adresse"
-
-msgctxt "#30504"
-msgid "Use alternate device Name"
-msgstr "Brug alternative enhed navn"
-
+# PKC Settings - Connection
 msgctxt "#30505"
 msgid "[COLOR yellow]Reset login attempts[/COLOR]"
 msgstr "[COLOR yellow] Nulstille login attempts[/COLOR]"
 
+# PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
 msgstr "Indstillinger for synkronisering"
 
+# PKC Settings - Sync Options
 msgctxt "#30507"
 msgid "Show syncing progress"
 msgstr "Vis synkronisering fremskridt"
 
+# PKC Settings - Sync Options
 msgctxt "#30508"
 msgid "Sync empty TV Shows"
 msgstr "Sync tomme TV shows"
 
+# PKC Settings - Sync Options
 msgctxt "#30509"
 msgid "Enable Music Library"
 msgstr "Aktivere musikbibliotek"
@@ -1025,72 +387,62 @@ msgctxt "#30510"
 msgid "Direct stream music library"
 msgstr "Direkte stream fra musikbibliotek"
 
+# PKC Settings - Sync Options
 msgctxt "#30511"
 msgid "Playback Mode"
 msgstr "Afspilningstilstand"
 
+# PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Force artwork caching"
 msgstr "Tvinge illustrationer cachelagring"
 
+# PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Begrænse illustrationen cache tråde (anbefales til rpi)"
 
-msgctxt "#30514"
-msgid "Enable fast startup (requires server plugin)"
-msgstr "Aktiver hurtig opstart (kræver server plugin)"
-
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Maksimale elementer til at anmode serveren på én gang"
 
+# PKC Settings, category name
 msgctxt "#30516"
 msgid "Playback"
 msgstr "Afspilning"
 
+# PKC Settings - Connection
 msgctxt "#30517"
 msgid "[COLOR yellow]Enter network credentials[/COLOR]"
 msgstr "[COLOR yellow] Indtast netværk info[/COLOR]"
 
+# PKC Settings - Playback
 msgctxt "#30518"
 msgid "Enable Plex Trailers (Plexpass is needed)"
 msgstr "Aktiverer Plex trailere (Plexpass er nødvendig)"
 
+# PKC Settings - Playback
 msgctxt "#30519"
 msgid "Ask to play trailers"
 msgstr "Bede om at afspille trailere"
 
+# PKC Settings - Plex
 msgctxt "#30520"
-msgid ""
-"Skip Plex delete confirmation for the context menu (use at your own risk)"
+msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
-"Spring Plex slet bekræftelse over i kontekstmenuen (brug på eget ansvar)"
 
+# PKC Settings - Playback
 msgctxt "#30521"
 msgid "Jump back on resume (in seconds)"
 msgstr "Spring tid tilbage (i sekunder)"
 
+# PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Transcode h265/HEVC"
 
-msgctxt "#30523"
-msgid "Music metadata options (not compatible with direct stream)"
-msgstr "Musik metadata mulighed (ikke kompatibel med direkte stream)"
-
-msgctxt "#30524"
-msgid "Import music song rating directly from files"
-msgstr "Importere musik sang rating direkte fra filer"
-
-msgctxt "#30525"
-msgid "Convert music song rating to Emby rating"
-msgstr "Konvertere musik sang rating til Emby rating"
-
-msgctxt "#30526"
-msgid "Allow rating in song files to be updated"
-msgstr "Tillad rating i sang filer skal opdateres"
-
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Ignorere ekstra i næste episoder"
@@ -1099,13 +451,10 @@ msgctxt "#30528"
 msgid "Permanent users to add to the session"
 msgstr "Faste brugere at føje til samlingen"
 
+# PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
 msgstr "Start forsinkelse (i sekunder)"
-
-msgctxt "#30530"
-msgid "Enable server restart message"
-msgstr "Aktivere server genstart besked"
 
 msgctxt "#30531"
 msgid "Enable new content notification"
@@ -1123,6 +472,7 @@ msgctxt "#30534"
 msgid "Server messages"
 msgstr "Server beskeder"
 
+# PKC Settings - Advanced
 msgctxt "#30535"
 msgid ""
 "[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
@@ -1131,83 +481,71 @@ msgstr ""
 "[COLOR yellow] Generere en ny unik enheds Id (f.eks. Når kloning "
 "Kodi)[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
 msgstr "Brugerne skal logge ind hver gang Kodi genstarter"
 
+# PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
 msgstr "GENSTART KODI, HVIS DU FORETAGER ÆNDRINGER"
 
+# PKC Settings warning
 msgctxt "#30538"
 msgid "Complete Re-Sync necessary"
 msgstr "Komplet re-synkronisere nødvendigt"
 
+# PKC Settings - Artwork
 msgctxt "#30539"
 msgid "Download additional art from FanArtTV"
 msgstr "Hent yderligere info fra FanArtTV"
 
+# PKC Settings - Artwork
 msgctxt "#30540"
 msgid "Download movie set/collection art from FanArtTV"
 msgstr "Download film sæt/samling info fra FanArtTV"
 
+# PKC Settings - Playback
 msgctxt "#30541"
 msgid "Don't ask to pick a certain stream/quality"
 msgstr "Spørg ikke at vælge en bestemt stream/kvalitet"
 
+# PKC Settings - Playback
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Altid vælge bedste kvalitet til anhængere"
-
-msgctxt "#30543"
-msgid "Kodi runs on a low-power device (e.g. Raspberry Pi)"
-msgstr "Kodi kører på en low-power enhed (f.eks. Raspberry Pi)"
 
 msgctxt "#30544"
 msgid "Artwork"
 msgstr "Illustrationer"
 
+# PKC Settings - Playback
 msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr "Transcode billeder"
 
-# service add-on
+# Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
 msgstr "Velkommen!"
 
+# Error message
 msgctxt "#33001"
 msgid "Error connecting"
 msgstr "Fejl forbindelse"
 
+# Error message
 msgctxt "#33002"
 msgid "Server is unreachable"
 msgstr "Serveren er ikke tilgængelig"
 
+# Plex notification
 msgctxt "#33003"
 msgid "Server is online"
 msgstr "Serveren er online"
 
-msgctxt "#33004"
-msgid "items added to playlist"
-msgstr "Emner tilføjet til afspilningslisten"
-
-msgctxt "#33005"
-msgid "items queued to playlist"
-msgstr "Emner sat i kø til afspilningslisten"
-
-msgctxt "#33006"
-msgid "Server is restarting"
-msgstr "Server genstarter!"
-
-msgctxt "#33007"
-msgid "Access is enabled"
-msgstr "Adgang er aktiveret"
-
-msgctxt "#33008"
-msgid "Enter password for user:"
-msgstr "Angiv adgangskode for brugeren:"
-
+# Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
 msgstr "Forkert brugernavn eller password"
@@ -1216,99 +554,22 @@ msgctxt "#33010"
 msgid "Failed to authenticate too many times. Reset in the settings."
 msgstr "Kunne ikke godkendes for mange gange. Nulstil i indstillingerne."
 
-msgctxt "#33011"
-msgid "Unable to direct play"
-msgstr "Ikke muligt at køre direkte afspilning"
-
-msgctxt "#33012"
-msgid "Direct play failed 3 times. Enabled play from HTTP."
-msgstr "Direkte afspilning fejlede 3 gange. Aktiveret afspilning fra HTTP."
-
+# Dialog before playback
 msgctxt "#33013"
 msgid "Choose the audio stream"
 msgstr "Vælg lyd-stream"
 
+# Dialog before playback
 msgctxt "#33014"
 msgid "Choose the subtitles stream"
 msgstr "Vælg undertekster stream"
 
-msgctxt "#33015"
-msgid "Delete file from your Emby server?"
-msgstr "Slette filen fra din Emby server?"
-
+# Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
 msgstr "afspil trailere?"
 
-msgctxt "#33017"
-msgid "Gathering movies from:"
-msgstr "Indsamling film fra:"
-
-msgctxt "#33018"
-msgid "Gathering boxsets"
-msgstr "Indsamling boxsets"
-
-msgctxt "#33019"
-msgid "Gathering music videos from:"
-msgstr "Indsamling musikvideoer fra:"
-
-msgctxt "#33020"
-msgid "Gathering tv shows from:"
-msgstr "Indsamling TV shows fra:"
-
-msgctxt "#33021"
-msgid "Gathering:"
-msgstr "Indsamling:"
-
-msgctxt "#33022"
-msgid ""
-"Detected the database needs to be recreated for this version of Emby for "
-"Kodi. Proceed?"
-msgstr ""
-"Registreret database skal genskabes i denne version af Emby for Kodi. Vil du"
-" fortsætte?"
-
-msgctxt "#33023"
-msgid "Emby for Kodi may not work correctly until the database is reset."
-msgstr ""
-"Emby for Kodi fungerer muligvis ikke korrekt, før databasen er nulstillet."
-
-msgctxt "#33024"
-msgid ""
-"Cancelling the database syncing process. The current Kodi version is "
-"unsupported."
-msgstr ""
-"Annullering af databasen synkronisering proces. Den nuværende Kodi version "
-"understøttes ikke."
-
-msgctxt "#33025"
-msgid "completed in:"
-msgstr "udfyldes:"
-
-msgctxt "#33026"
-msgid "Comparing movies from:"
-msgstr "Sammenligne film fra:"
-
-msgctxt "#33027"
-msgid "Comparing boxsets"
-msgstr "Sammenligne boxsets"
-
-msgctxt "#33028"
-msgid "Comparing music videos from:"
-msgstr "Sammenligne musikvideoer fra:"
-
-msgctxt "#33029"
-msgid "Comparing tv shows from:"
-msgstr "Sammenligne TV shows fra:"
-
-msgctxt "#33030"
-msgid "Comparing episodes from:"
-msgstr "Sammenligne episoder fra:"
-
-msgctxt "#33031"
-msgid "Comparing:"
-msgstr "Sammenligne:"
-
+# Error message
 msgctxt "#33032"
 msgid ""
 "Failed to generate a new device Id. See your logs for more information."
@@ -1316,10 +577,12 @@ msgstr ""
 "Det lykkedes ikke at generere en nyt enheds Id. Se dine logfiler for flere "
 "oplysninger."
 
+# Pop-up informing about Kodi restart
 msgctxt "#33033"
 msgid "Kodi will now restart to apply the changes."
 msgstr "Kodi vil nu genstarte for at gemme ændringer."
 
+# Confirmation dialog before item gets deleted from the PMS
 msgctxt "#33041"
 msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
@@ -1328,72 +591,78 @@ msgstr ""
 "Slette fil(er) fra Plex Server? Dette vil også slette filen/filerne fra "
 "disken!"
 
-# New to Plex
+# PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
 msgstr "-Antallet af trailere før afspilning af en film"
 
+# PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
 msgstr "Øge lyd når transcoding"
 
+# PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
 msgstr "Undertekst størrelse"
 
+# PKC Settings - Sync
 msgctxt "#39003"
 msgid "Limit download sync threads (rec. for rpi: 1)"
 msgstr "Begrænse download sync tråde (rec. for rpi: 1)"
 
+# PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
 msgstr "Aktivere Plex ledsager (genstart Kodi!)"
 
+# PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
 msgstr "Plex ledsager Port (ændring kun hvis nødvendigt)"
 
-msgctxt "#39006"
-msgid "Activate Plex Companion debug log"
-msgstr "Aktivere Plex ledsager fejlfindingslogfil"
-
-msgctxt "#39007"
-msgid "Activate Plex Companion GDM debug log"
-msgstr "Aktivere Plex ledsager GDM fejlfindingslogfil"
-
+# PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
 msgstr "Plex ledsager: Tillad skift af medier til Kodi gennem Plex"
 
+# Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
 msgstr "Kunne ikke logge ind på plex.tv. Prøv at logge igen."
 
+# Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
 msgstr ""
 "Problemer med at forbinde til plex.tv. Netværk eller internet problem?"
 
+# Error message
 msgctxt "#39011"
 msgid "Could not find any Plex server in the network. Aborting..."
 msgstr "Kunne ikke finde nogen Plex serveren i netværket. Afbryder..."
 
+# Dialog text for choosing PMS
 msgctxt "#39012"
 msgid "Choose your Plex server"
 msgstr "Vælg din Plex server"
 
+# Error message
 msgctxt "#39013"
 msgid "Not yet authorized for Plex server "
 msgstr "Endnu ikke godkendt til Plex server "
 
+# Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
 msgstr "Venligst log på plex.tv."
 
+# Error message
 msgctxt "#39015"
 msgid "Problems connecting to server. Pick another server?"
 msgstr "Problemer med at forbinde til serveren. Vælg en anden server?"
 
+# Pop-up on initial sync
 msgctxt "#39016"
 msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
@@ -1402,6 +671,7 @@ msgstr ""
 "Deaktivere Plex musikbibliotek? (Det anbefales at bruge Plex musik med "
 "direkte adgang til store musikbiblioteker. Kodi kan gå ned, ellers)"
 
+# Pop-up on initial sync
 msgctxt "#39017"
 msgid ""
 "Would you now like to go to the plugin's settings to fine-tune PKC? You will"
@@ -1410,44 +680,44 @@ msgstr ""
 "Ønsker du at finjustere PKC nu, gå til plugins for dette. Du skal genstarte "
 "Kodi!"
 
+# PKC Settings - Advanced
 msgctxt "#39018"
 msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
 msgstr ""
 "[COLOR yellow] Reparere lokale database (opdatere alt indhold)[/COLOR]"
 
+# PKC Settings - Advanced
 msgctxt "#39019"
 msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
 msgstr "[COLOR red] Fuld eller delvis nulstilling af Database og PKC[/COLOR]"
 
+# PKC Settings - Artwork
 msgctxt "#39020"
 msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
 msgstr ""
 "[COLOR yellow] Cachelagre alle billeder til Kodi tekstur cache now[/COLOR]"
 
-msgctxt "#39021"
-msgid "[COLOR yellow]Sync Emby Theme Media to Kodi[/COLOR]"
-msgstr "[COLOR yellow] Sync Emby tema medier til Kodi[/COLOR]"
-
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
 msgid "local"
 msgstr "lokal"
 
+# Error message
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
 msgstr "Kunne ikke godkendes. Loggede du ind på plex.tv?"
 
+# PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
 msgstr "Automatisk log ind på plex.tv ved start"
 
+# PKC Settings - Sync
 msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr "Aktivere konstant baggrund sync"
 
-msgctxt "#39027"
-msgid "Playback Mode"
-msgstr "Afspilningstilstand"
-
+# Pop-up on initial sync
 msgctxt "#39028"
 msgid ""
 "CAUTION! If you choose \"Native\" mode , you might loose access to certain "
@@ -1456,10 +726,12 @@ msgid ""
 "\\\\myNAS/mymovie.mkv)!"
 msgstr ""
 
+# Pop-up on initial sync
 msgctxt "#39029"
 msgid "Network credentials"
 msgstr "Legitimationsoplysninger til netværket"
 
+# Pop-up on initial sync
 msgctxt "#39030"
 msgid ""
 "Add network credentials to allow Kodi access to your content? Note: Skipping"
@@ -1471,59 +743,63 @@ msgstr ""
 "meddelelse under den første scanning af dit indhold hvis Kodi ikke kan finde"
 " dit indhold."
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr "Kodi kan ikke finde filen: "
-
-msgctxt "#39032"
 msgid ""
-"Please verify the path. You may need to verify your network credentials in "
-"the add-on settings or use different Plex paths. Stop syncing?"
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
 msgstr ""
-"Kontroller venligst stien. Du kan være nødvendigt at verificere dine "
-"legitimationsoplysninger til netværket i indstillingerne for tilføjelse "
-"eller bruge forskellige Plex stier. Stop synkronisering?"
 
+# Pop-up on initial sync
 msgctxt "#39033"
 msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
 " paths, smb://myNas/mymovie.mkv? (recommended)"
 msgstr ""
 
+# PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
 msgstr ""
 
+# PKC Settings - Customize Paths
 msgctxt "#39035"
 msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
 "paths smb://NAS/mystuff"
 msgstr ""
 
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Oprindelige Plex film sti erstattes:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39038"
 msgid "Replace Plex MOVIE with:"
 msgstr "Erstatte Plex film med:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
 msgstr "Oprindelige Plex TV shows sti erstattes:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39040"
 msgid "Replace Plex TV SHOWS with:"
 msgstr "Erstatte Plex TV SHOWS med:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39041"
 msgid "Original Plex MUSIC path to replace:"
 msgstr "Oprindelige Plex musik sti erstattes:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39042"
 msgid "Replace Plex MUSIC with:"
 msgstr "Erstatte Plex musik med:"
 
+# Pop-up on initial sync
 msgctxt "#39043"
 msgid ""
 "Go a step further and completely replace all original Plex library paths "
@@ -1532,6 +808,7 @@ msgstr ""
 "Gå et skridt videre og erstat alle oprindelige Plex bibliotek stier (/ "
 "volume1/media) med brugerdefinerede SMB-stier (smb://NAS/MyStuff)?"
 
+# Pop-up on initial sync
 msgctxt "#39044"
 msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
@@ -1540,70 +817,87 @@ msgstr ""
 "Indtast venligst din brugerdefinerede smb stier i indstillingerne under "
 "\"synkroniseringsindstillinger\" og derefter genstarte Kodi"
 
+# PKC Settings - Customize Paths
 msgctxt "#39045"
 msgid "Original Plex PHOTO path to replace:"
 msgstr "Oprindelige Plex Foto sti erstattes:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39046"
 msgid "Replace Plex PHOTO with:"
 msgstr "Erstatte Plex foto med:"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39047"
 msgid "On Deck: Append show title to episode"
 msgstr "Senest tilføjet:  Vis titel til episode"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39048"
 msgid "On Deck: Append season- and episode-number SxxExx"
 msgstr "Senest tilføjet: Føj sæson - og episode-nummer SxxExx"
 
+# PKC Settings - Advanced
 msgctxt "#39049"
 msgid "Nothing works? Try a full reset!"
 msgstr "Intet virker? Prøv en fuld reset!"
 
+# PKC Settings - Connection
 msgctxt "#39050"
 msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
 msgstr "[COLOR yellow] Vælg Plex Server fra listen[/COLOR]"
 
+# PKC Settings - Sync
 msgctxt "#39051"
 msgid "Wait before sync new/changed PMS item [s]"
 msgstr "Vente før sync af nye/ændrede PMS element [s]"
 
+# PKC Settings - Sync
 msgctxt "#39052"
 msgid "Background Sync"
 msgstr "Baggrundssynkronisering"
 
+# PKC Settings - Sync
 msgctxt "#39053"
 msgid "Do a full library sync every x minutes"
 msgstr "Kør en fuld bibliotek synkronisering hvert x minut"
 
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39054"
 msgid "remote"
 msgstr "Fjern adgang"
 
+# Notification pop-up
 msgctxt "#39055"
 msgid "Searching for Plex Server"
 msgstr "Søg efter Plex Server"
 
+# PKC Settings - Customize paths
 msgctxt "#39056"
 msgid "Used by Sync and when attempting to Direct Play"
 msgstr "Brugt af Sync og når du forsøger at direkte spille"
 
+# PKC Settings, category name
 msgctxt "#39057"
 msgid "Customize Paths"
 msgstr "Tilpasse stier"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39058"
 msgid "Extend Plex TV Series \"On Deck\" view to all shows"
 msgstr "Udvide Plex TV serie \"Senest Tilføjet\" Til vis alle shows"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "Senest tilføjet: Føj Vis titel til episode"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39060"
 msgid "Recently Added: Append season- and episode-number SxxExx"
 msgstr "Senest tilføjet: Føj sæson - og episode-nummer SxxExx"
 
+# Pop-up during initial sync
 msgctxt "#39061"
 msgid ""
 "Would you like to download additional artwork from FanArtTV in the "
@@ -1611,18 +905,27 @@ msgid ""
 msgstr ""
 "Ønsker du at downloade ekstra illustrationer fra FanArtTV i baggrunden?"
 
+# PKC Settings - Sync
 msgctxt "#39062"
 msgid "Sync when screensaver is deactivated"
 msgstr "Sync når screensaver er deaktiveret"
 
+# PKC Settings - Playback
 msgctxt "#39063"
 msgid "Force Transcode Hi10P"
 msgstr "Transcode Hi10P"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr "Senest tilføjet: Vis allerede set episoder"
 
+# PKC Settings - Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
+# PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
@@ -1630,46 +933,47 @@ msgid ""
 msgstr ""
 "Senest tilføjet: Vis allerede set film (Opdater Plex spilleliste/noder!)"
 
+# PKC Settings - Connection
 msgctxt "#39067"
 msgid "Your current Plex Media Server:"
 msgstr "Din nuværende Plex Media Server:"
 
+# PKC Settings - Connection
 msgctxt "#39068"
 msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
 msgstr "[COLOR yellow] Manuelt indtast Plex Media Server address[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#39069"
 msgid "Current address:"
 msgstr "Nuværende adresse:"
 
+# PKC Settings - Connection
 msgctxt "#39070"
 msgid "Current port:"
 msgstr "Nuværende port:"
 
+# PKC Settings - Connection
 msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "Nuværende plex.tv status:"
 
-msgctxt "#39072"
-msgid ""
-"Is your Kodi installed on a low-powered device like a Raspberry Pi? If yes, "
-"then we will reduce the strain on Kodi to prevent it from crashing."
-msgstr ""
-"Er din Kodi installeret på en low-power enhed som en Raspberry Pi? Hvis ja, "
-"vil vi reducere belastning på Kodi til at forhindre, at det bryder sammen."
-
+# PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
 msgstr "Udseende Tweaks"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "TV-udsendelser"
 
+# PKC Settings - Playback
 msgctxt "#39075"
 msgid "Always use default Plex subtitle if possible"
 msgstr "Brug altid standard Plex undertekst hvis muligt"
 
+# Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
@@ -1678,14 +982,17 @@ msgstr ""
 "Hvis du bruger flere Plex biblioteker af en slags, fx \"Kids film\" og "
 "\"Forældre film\", skal du kontrollere Wiki: https://goo.gl/JFtQV9"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
 msgstr "Antallet af PMS elementer at vise i widgets (fx \"Igangværende\")"
 
+# PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
 msgstr "Plex ledsager opdaterede Port (ændring kun hvis nødvendigt)"
 
+# Error message
 msgctxt "#39079"
 msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
@@ -1694,7 +1001,6 @@ msgstr ""
 "Plex ledsager kunne ikke åbne GDM port. Du kan ændre den i PKC "
 "indstillinger."
 
-# Plex Entrypoint.py
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Log ud Plex hjemme bruger "
@@ -1702,10 +1008,6 @@ msgstr "Log ud Plex hjemme bruger "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Indstillinger"
-
-msgctxt "#39202"
-msgid "Network credentials"
-msgstr "Legitimationsoplysninger til netværket"
 
 msgctxt "#39203"
 msgid "Refresh Plex playlists/nodes"
@@ -1715,6 +1017,7 @@ msgctxt "#39204"
 msgid "Perform manual library sync"
 msgstr "Udføre manuel bibliotek synkronisering"
 
+# Error message
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr ""
@@ -1737,6 +1040,7 @@ msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
 msgstr "Undladt at nulstille PKC. Prøv at genstarte Kodi."
 
+# PKC Settings - Plex
 msgctxt "#39209"
 msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
 msgstr "[COLOR yellow] Skifte plex.tv login (logge på eller logge ud)[/COLOR]"
@@ -1749,13 +1053,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr "Se senere"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39213"
 msgid "is offline"
 msgstr "Offline"
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
-msgstr "Selvom vi logget på plex.tv, kunne vi ikke give tilladelse til PMS"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1777,6 +1078,7 @@ msgctxt "#39219"
 msgid "Abort (Yes) or save address anyway (No)?"
 msgstr "Afbryde (ja) eller gemme adresse alligevel (Nej)?"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39220"
 msgid "connected"
 msgstr "Tilsluttet"
@@ -1821,7 +1123,6 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr ""
 
-# Plex Artwork.py
 msgctxt "#39250"
 msgid ""
 "Running the image cache process can take some time. It will happen in the "
@@ -1833,19 +1134,6 @@ msgstr ""
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
 msgstr "Nulstille alle eksisterende cache data først?"
-
-# Plex PlexAPI.py
-msgctxt "#39300"
-msgid ": Enter plex.tv username. Or nothing to cancel."
-msgstr ": Indtast plex.tv Brugernavn. Eller intet at annullere."
-
-msgctxt "#39301"
-msgid "Enter password for plex.tv user "
-msgstr "Angiv adgangskode for brugeren: "
-
-msgctxt "#39302"
-msgid "Could not sign in user "
-msgstr "Kunne ikke logge brugeren på "
 
 msgctxt "#39303"
 msgid "Problems trying to contact plex.tv. Try again later"
@@ -1883,7 +1171,6 @@ msgctxt "#39311"
 msgid "or press No to not sign in."
 msgstr "eller tryk på Nej for ikke at logge på."
 
-# Plex Librarysync.py
 msgctxt "#39400"
 msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
@@ -1911,14 +1198,6 @@ msgid ""
 msgstr ""
 "Annullering af databasen synkronisering proces. Nuværende Kodi version "
 "understøttes ikke. Kontroller dine logfiler for mere info."
-
-msgctxt "#39404"
-msgid ""
-"Startup syncing process failed repeatedly. Try restarting Kodi. Stopping "
-"Sync for now."
-msgstr ""
-"Start synkronisering processen mislykkedes gentagne gange. Prøv at genstarte"
-" Kodi. Stop synkronisering for nu."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1954,7 +1233,6 @@ msgctxt "#39410"
 msgid "ERROR in library sync"
 msgstr "FEJL i bibliotek synkronisering"
 
-# Plex videonodes.py
 msgctxt "#39500"
 msgid "On Deck"
 msgstr "Igangværende"
@@ -1963,7 +1241,6 @@ msgctxt "#39501"
 msgid "Collections"
 msgstr "Samlinger"
 
-# Plex utils.py
 msgctxt "#39600"
 msgid ""
 "Are you sure you want to reset your local Kodi database? A re-sync of the "
@@ -1975,10 +1252,6 @@ msgstr ""
 msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
 msgstr "Kunne ikke stoppe den kørende database. Prøv igen senere."
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
-msgstr "Fjern alle cachelagrede illustrationer? (anbefales!)"
 
 msgctxt "#39603"
 msgid ""

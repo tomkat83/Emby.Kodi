@@ -25,42 +25,28 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr "IP Adresa serveru"
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr ""
+
 msgctxt "#30002"
 msgid "Preferred playback method"
 msgstr "Upřednostňovaná metoda přehrávání"
 
-msgctxt "#30004"
-msgid "Log level"
-msgstr "Úroveň záznamů"
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
 
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Uživ. jméno: "
 
-msgctxt "#30006"
-msgid "Password: "
-msgstr "Heslo: "
-
-msgctxt "#30007"
-msgid "Network Username: "
-msgstr "Síťové uživ. jméno: "
-
-msgctxt "#30008"
-msgid "Network Password: "
-msgstr "Síťové heslo: "
-
-msgctxt "#30009"
-msgid "Transcode: "
-msgstr "Překódování: "
-
-msgctxt "#30010"
-msgid "Enable Performance Profiling"
-msgstr "Povolit profilování výkonu"
-
-msgctxt "#30011"
-msgid "Local caching system"
-msgstr "Místní systémová mezipaměť"
-
+# Button text
 msgctxt "#30012"
 msgid "OK"
 msgstr "OK"
@@ -69,22 +55,21 @@ msgctxt "#30013"
 msgid "Never show"
 msgstr "Nezobrazovat"
 
+# PKC settings category
 msgctxt "#30014"
 msgid "Connection"
 msgstr "Připojení"
-
-msgctxt "#30015"
-msgid "Network"
-msgstr "Síť"
 
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "Název zařízení"
 
+# Error message
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "Neověřeno u PMS"
 
+# PKC settings category
 msgctxt "#30022"
 msgid "Advanced"
 msgstr "Rozšířené"
@@ -110,34 +95,6 @@ msgctxt "#30032"
 msgid "Information"
 msgstr "Informace"
 
-msgctxt "#30035"
-msgid "Number of recent Music Albums to show:"
-msgstr "Zobrazit počet naposledy přidaných hudebních alb:"
-
-msgctxt "#30036"
-msgid "Number of recent Movies to show:"
-msgstr "Zobrazit počet naposledy přidaných filmů:"
-
-msgctxt "#30037"
-msgid "Number of recent TV episodes to show:"
-msgstr "Zobrazit počet naposledy přidaných epizod seriálů:"
-
-msgctxt "#30038"
-msgid "Mark watched at start of playback:"
-msgstr "Označit jako shlédnuté po zahájení přehrávání:"
-
-msgctxt "#30039"
-msgid "Set Season poster for episodes"
-msgstr "Nastavit plakát sezóny pro epizody"
-
-msgctxt "#30040"
-msgid "Genre Filter ..."
-msgstr "Filtr žánrů ..."
-
-msgctxt "#30041"
-msgid "Play All from Here"
-msgstr "Přehrát vše odsud"
-
 msgctxt "#30042"
 msgid "Refresh"
 msgstr "Obnovit"
@@ -146,165 +103,14 @@ msgctxt "#30043"
 msgid "Delete"
 msgstr "Smazat"
 
-msgctxt "#30044"
-msgid "Incorrect Username/Password"
-msgstr "Nesprávné uživatelské jméno nebo heslo"
-
-msgctxt "#30045"
-msgid "Username not found"
-msgstr "Uživatelské jméno nenalezeno"
-
-msgctxt "#30046"
-msgid "Add Movie to CouchPotato"
-msgstr "Přidat film do CouchPotato"
-
+# Notification displayed if there is a LOT to be deleted
 msgctxt "#30052"
 msgid "Deleting"
 msgstr "Mažu"
 
-msgctxt "#30053"
-msgid "Waiting for server to delete"
-msgstr "Čekám až server provede smazání"
-
-msgctxt "#30059"
-msgid "Server Default"
-msgstr "Výchozí nastavení serveru"
-
-msgctxt "#30060"
-msgid "Title"
-msgstr "Název"
-
-msgctxt "#30061"
-msgid "Year"
-msgstr "Rok"
-
-msgctxt "#30062"
-msgid "Premiere Date"
-msgstr "Datum premiéry"
-
-msgctxt "#30063"
-msgid "Date Created"
-msgstr "Datum vytvoření"
-
-msgctxt "#30064"
-msgid "Critic Rating"
-msgstr "Hodnocení kritiků"
-
-msgctxt "#30065"
-msgid "Community Rating"
-msgstr "Hodnocení komunity"
-
-msgctxt "#30066"
-msgid "Play Count"
-msgstr "Počet přehrání"
-
-msgctxt "#30067"
-msgid "Budget"
-msgstr "Rozpočet"
-
-# Runtime added as 30226 below
-msgctxt "#30068"
-msgid "Sort By"
-msgstr "Třídit podle:"
-
 msgctxt "#30069"
 msgid "None"
 msgstr "Žádný"
-
-msgctxt "#30070"
-msgid "Action"
-msgstr "Akční"
-
-msgctxt "#30071"
-msgid "Adventure"
-msgstr "Dobrodružný"
-
-msgctxt "#30072"
-msgid "Animation"
-msgstr "Animovaný"
-
-msgctxt "#30073"
-msgid "Crime"
-msgstr "Kriminální"
-
-msgctxt "#30074"
-msgid "Comedy"
-msgstr "Komedie"
-
-msgctxt "#30075"
-msgid "Documentary"
-msgstr "Dokumentární"
-
-msgctxt "#30076"
-msgid "Drama"
-msgstr "Drama"
-
-msgctxt "#30077"
-msgid "Fantasy"
-msgstr "Fantasy"
-
-msgctxt "#30078"
-msgid "Foreign"
-msgstr "Zahraniční"
-
-msgctxt "#30079"
-msgid "History"
-msgstr "Historický"
-
-msgctxt "#30080"
-msgid "Horror"
-msgstr "Horor"
-
-msgctxt "#30081"
-msgid "Music"
-msgstr "Hudební"
-
-msgctxt "#30082"
-msgid "Musical"
-msgstr "Muzikál"
-
-msgctxt "#30083"
-msgid "Mystery"
-msgstr "Tajemný"
-
-msgctxt "#30084"
-msgid "Romance"
-msgstr "Romantický"
-
-msgctxt "#30085"
-msgid "Science Fiction"
-msgstr "Vědeckofantastický"
-
-msgctxt "#30086"
-msgid "Short"
-msgstr "Krátký"
-
-msgctxt "#30087"
-msgid "Suspense"
-msgstr "Napínavý"
-
-msgctxt "#30088"
-msgid "Thriller"
-msgstr "Thriller"
-
-msgctxt "#30089"
-msgid "Western"
-msgstr "Western"
-
-msgctxt "#30090"
-msgid "Genre Filter"
-msgstr "Filtr žánrů"
-
-msgctxt "#30091"
-msgid "Confirm file deletion"
-msgstr "Potvrdit smazání"
-
-msgctxt "#30092"
-msgid ""
-"Delete this item? This action will delete media and associated data files."
-msgstr ""
-"Smazat tuto položku? Touto akcí smažete média a všechny přiřazené datové "
-"soubory."
 
 msgctxt "#30093"
 msgid "Mark Watched"
@@ -322,51 +128,6 @@ msgctxt "#30096"
 msgid "Remove from Favorites"
 msgstr "Odebrat z oblíbených"
 
-msgctxt "#30097"
-msgid "Sort By ..."
-msgstr "Třídit podle ..."
-
-msgctxt "#30098"
-msgid "Sort Order Descending"
-msgstr "Řadit sestupně"
-
-msgctxt "#30099"
-msgid "Sort Order Ascending"
-msgstr "Řadit vzestupně"
-
-msgctxt "#30100"
-msgid "Show People"
-msgstr "Zobrazit lidi"
-
-# resume dialog
-msgctxt "#30105"
-msgid "Resume"
-msgstr "Pokračovat"
-
-msgctxt "#30106"
-msgid "Resume from"
-msgstr "Pokračovat od"
-
-msgctxt "#30107"
-msgid "Start from beginning"
-msgstr "Přehrát od začáku"
-
-msgctxt "#30110"
-msgid "Interface"
-msgstr "Rozhraní"
-
-msgctxt "#30111"
-msgid "Include Stream Info"
-msgstr "Zobrazit info o proudu"
-
-msgctxt "#30112"
-msgid "Include People"
-msgstr "Zobrazit lidi"
-
-msgctxt "#30113"
-msgid "Include Overview"
-msgstr "Zobrazit náhled"
-
 msgctxt "#30114"
 msgid "Offer delete after playback"
 msgstr "Nabídnout smazání po skončení přehrávání"
@@ -379,81 +140,22 @@ msgctxt "#30116"
 msgid "For Movies"
 msgstr "Pro filmy"
 
-msgctxt "#30117"
-msgid "Background Art Refresh Rate (seconds)"
-msgstr "Obnovování obrázku na pozadí (v sekundách)"
-
-msgctxt "#30118"
-msgid "Add Resume Percent"
-msgstr "Přidat procenta obnovení"
-
-msgctxt "#30119"
-msgid "Add Episode Number"
-msgstr "Přidat číslo epizody"
-
-msgctxt "#30120"
-msgid "Show Load Progress"
-msgstr "Zobrazit průběh načítání"
-
-msgctxt "#30121"
-msgid "Loading Content"
-msgstr "Načítám obsah"
-
-msgctxt "#30122"
-msgid "Retrieving Data"
-msgstr "Přijímám data"
-
 msgctxt "#30125"
 msgid "Done"
 msgstr "Hotovo"
 
-msgctxt "#30126"
-msgid "Processing Item : "
-msgstr "Zpracovávám položku : "
-
+# Error popup message text
 msgctxt "#30128"
 msgid "Play Error"
 msgstr "Chyba přehrávání"
-
-msgctxt "#30129"
-msgid "This item is not playable"
-msgstr "Tuto položku nelze přehrát"
-
-msgctxt "#30130"
-msgid "Local path detected"
-msgstr "Zjištěna místní cesta"
-
-msgctxt "#30131"
-msgid ""
-"Your MB3 Server contains local paths.  Please change server paths to UNC or "
-"change XBMB3C setting 'Play from Stream' to true.  Path: "
-msgstr ""
-"Váš Plex server obsahuje místní cesta. Změňte prosím cesty na UNC nebo "
-"změňte nastavení  'Přehrát proud'. Cesta: "
 
 msgctxt "#30132"
 msgid "Warning"
 msgstr "Varování"
 
-msgctxt "#30133"
-msgid "Debug logging enabled."
-msgstr "Povoleny ladící záznamy."
-
-msgctxt "#30134"
-msgid "This will affect performance."
-msgstr "Toto může mít vliv na výkon."
-
 msgctxt "#30135"
 msgid "Error"
 msgstr "Chyba"
-
-msgctxt "#30136"
-msgid "Monitoring service is not running"
-msgstr "Monitorovací služba neběží"
-
-msgctxt "#30137"
-msgid "If you have just installed please restart Kodi"
-msgstr "Pokud jste teď nainstalovali, restartujte Kodi"
 
 msgctxt "#30138"
 msgid "Search"
@@ -463,33 +165,9 @@ msgctxt "#30139"
 msgid "Enable Theme Music (Requires Restart)"
 msgstr "Povolit tématickou hudbu (vyžaduje restart)"
 
-msgctxt "#30140"
-msgid " - Loop Theme Music"
-msgstr " - Opakovat tématickou hudbu"
-
-msgctxt "#30141"
-msgid "Enable Background Image (Requires Restart)"
-msgstr "Povolit obrázek na pozadí (vyžaduje restart)"
-
-msgctxt "#30142"
-msgid "Services"
-msgstr "Služby"
-
 msgctxt "#30143"
 msgid "Always transcode if video bitrate is above"
 msgstr "Vždy překódovat video pokud je bitový tok větší než"
-
-msgctxt "#30150"
-msgid "Skin does not support setting views"
-msgstr "Vzhled nepodporuje nastavení náhledů"
-
-msgctxt "#30151"
-msgid "Select item action (Requires Restart)"
-msgstr "Zvolit akci na položce (vyžaduje restart)"
-
-msgctxt "#30156"
-msgid "Sort NextUp by Show Title"
-msgstr "Třídit další v pořadí podle názvu seriálu"
 
 msgctxt "#30157"
 msgid "Enable Enhanced Images (eg CoverArt)"
@@ -499,29 +177,9 @@ msgctxt "#30158"
 msgid "Metadata"
 msgstr "Metadata"
 
-msgctxt "#30159"
-msgid "Artwork"
-msgstr "Obrázky"
-
 msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Kvalita videa při překódování"
-
-msgctxt "#30161"
-msgid "Enable Suggested Loader (Requires Restart)"
-msgstr "Enable Suggested Loader (vyžaduje restart)"
-
-msgctxt "#30162"
-msgid "Add Season Number"
-msgstr "Přidat číslo sezóny"
-
-msgctxt "#30163"
-msgid "Flatten Seasons"
-msgstr "Sloučit sezóny"
-
-msgctxt "#30164"
-msgid "Direct Play - HTTP"
-msgstr "Přímé přehrávání - HTTP"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -531,19 +189,6 @@ msgctxt "#30166"
 msgid "Transcoding"
 msgstr "Překódování"
 
-msgctxt "#30167"
-msgid "Server Detection Succeeded"
-msgstr "Zjištění serveru uspělo"
-
-msgctxt "#30168"
-msgid "Found server"
-msgstr "Nalezen server"
-
-msgctxt "#30169"
-msgid "Address : "
-msgstr "Adresa : "
-
-# Video nodes
 msgctxt "#30170"
 msgid "Recently Added TV Shows"
 msgstr "Naposledy přidané seriály"
@@ -552,10 +197,6 @@ msgctxt "#30171"
 msgid "In Progress TV Shows"
 msgstr "Rozkoukané seriály"
 
-msgctxt "#30172"
-msgid "All Music"
-msgstr "Všechna hudba"
-
 msgctxt "#30173"
 msgid "Channels"
 msgstr "Kanály"
@@ -563,14 +204,6 @@ msgstr "Kanály"
 msgctxt "#30174"
 msgid "Recently Added"
 msgstr "Naposledy přidané"
-
-msgctxt "#30175"
-msgid "Recently Added Episodes"
-msgstr "Naposledy přidané epizody"
-
-msgctxt "#30176"
-msgid "Recently Added Albums"
-msgstr "Naposledy přidaná alba"
 
 msgctxt "#30177"
 msgid "In Progress Movies"
@@ -596,178 +229,20 @@ msgctxt "#30182"
 msgid "Favorite Episodes"
 msgstr "Oblíbené epizody"
 
-msgctxt "#30183"
-msgid "Frequent Played Albums"
-msgstr "Často přehrávaná alba"
-
-msgctxt "#30184"
-msgid "Upcoming TV"
-msgstr "Nadcházející epizody"
-
-msgctxt "#30185"
-msgid "BoxSets"
-msgstr "Kolekce"
-
-msgctxt "#30186"
-msgid "Trailers"
-msgstr "Ukázky"
-
-msgctxt "#30187"
-msgid "Music Videos"
-msgstr "Videoklipy"
-
-msgctxt "#30188"
-msgid "Photos"
-msgstr "Fotky"
-
 msgctxt "#30189"
 msgid "Unwatched Movies"
 msgstr "Neshlédnuté filmy"
-
-msgctxt "#30190"
-msgid "Movie Genres"
-msgstr "Žánry filmů"
-
-msgctxt "#30191"
-msgid "Movie Studios"
-msgstr "Filmová studia"
-
-msgctxt "#30192"
-msgid "Movie Actors"
-msgstr "Filmoví herci"
-
-msgctxt "#30193"
-msgid "Unwatched Episodes"
-msgstr "Neshlédnuté epizody"
-
-msgctxt "#30194"
-msgid "TV Genres"
-msgstr "Žánry seriálů"
-
-msgctxt "#30195"
-msgid "TV Networks"
-msgstr "Televizní stanice"
-
-msgctxt "#30196"
-msgid "TV Actors"
-msgstr "Televizní herci"
-
-msgctxt "#30197"
-msgid "Playlists"
-msgstr "Playlisty"
 
 msgctxt "#30198"
 msgid "Search"
 msgstr "Hledání"
 
-msgctxt "#30199"
-msgid "Set Views"
-msgstr "Nastavit náhledy"
-
-msgctxt "#30200"
-msgid "Select User"
-msgstr "Vybrat uživatele"
-
-msgctxt "#30201"
-msgid "Profiling enabled."
-msgstr "Profilování povoleno."
-
-msgctxt "#30202"
-msgid "Please remember to turn off when finished testing."
-msgstr "Po ukončení testování toto prosím vypněte."
-
-msgctxt "#30203"
-msgid "Error in ArtworkRotationThread"
-msgstr "Chyba v ArtworkRotationThread"
-
-msgctxt "#30204"
-msgid "Unable to connect to server"
-msgstr "Nemohu se připojit k serveru"
-
-msgctxt "#30205"
-msgid "Error in LoadMenuOptionsThread"
-msgstr "Chyba v LoadMenuOptionsThread"
-
-msgctxt "#30206"
-msgid "Enable Playlists Loader (Requires Restart)"
-msgstr "Povolit načítání playlistů (vyžaduje restart)"
-
-msgctxt "#30207"
-msgid "Songs"
-msgstr "Skladby"
-
-msgctxt "#30208"
-msgid "Albums"
-msgstr "Alba"
-
-msgctxt "#30209"
-msgid "Album Artists"
-msgstr "Interpreti alba"
-
-msgctxt "#30210"
-msgid "Artists"
-msgstr "Interpreti"
-
-msgctxt "#30211"
-msgid "Music Genres"
-msgstr "Hudební žánry"
-
-msgctxt "#30212"
-msgid "Enable Theme Videos (Requires Restart)"
-msgstr "Povolit tématická videa (vyžaduje restart)"
-
-msgctxt "#30213"
-msgid " - Loop Theme Videos"
-msgstr " - Opakovat tématická videa"
-
-msgctxt "#30216"
-msgid "AutoPlay remaining episodes in a season"
-msgstr "Automaticky přehrát zbývající epizody v sezóně"
-
-msgctxt "#30218"
-msgid "Compress Artwork"
-msgstr "Komprimovat obrázky"
-
-msgctxt "#30220"
-msgid "Latest "
-msgstr "Poslední "
-
-msgctxt "#30221"
-msgid "In Progress "
-msgstr "Rozkoukané "
-
-msgctxt "#30222"
-msgid "NextUp "
-msgstr "Nadcházející "
-
-msgctxt "#30223"
-msgid "User Views"
-msgstr "Uživatelské náhledy"
-
-msgctxt "#30224"
-msgid "Report Metrics"
-msgstr "Hlášení metriky"
-
-msgctxt "#30225"
-msgid "Use Kodi Sorting"
-msgstr "Použít třídění Kodi"
-
-msgctxt "#30226"
-msgid "Runtime"
-msgstr "Za běhu"
-
+# Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
 msgstr "Náhodně"
 
-msgctxt "#30228"
-msgid "Recently releases"
-msgstr "Naposledy vydané"
-
-msgctxt "#30229"
-msgid "Random Items"
-msgstr "Náhodné položky"
-
+# Video node naming for e.g. movies
 msgctxt "#30230"
 msgid "Recommended"
 msgstr "Doporučené"
@@ -776,57 +251,9 @@ msgctxt "#30235"
 msgid "Extras"
 msgstr "Extra"
 
-msgctxt "#30236"
-msgid "Sync Theme Music"
-msgstr "Synchronizovat tématickou hudbu"
-
-msgctxt "#30237"
-msgid "Sync Extra Fanart"
-msgstr "Synchronizovat Extra Fanart"
-
-msgctxt "#30238"
-msgid "Sync Movie BoxSets"
-msgstr "Synchronizovat kolekce filmů"
-
-msgctxt "#30239"
-msgid "[COLOR yellow]Reset local Kodi database[/COLOR]"
-msgstr "[COLOR yellow]Resetovat místní databázi Kodi[/COLOR]"
-
-msgctxt "#30240"
-msgid "Enable watched/resume status sync"
-msgstr "Povolit synchronizaci stavu shlédnuté/pokračovat"
-
-msgctxt "#30241"
-msgid "DB Sync Indication:"
-msgstr "Indikace synchronizace databáze:"
-
-msgctxt "#30242"
-msgid "Play Count Sync Indication:"
-msgstr "Indikace počtu přehrání:"
-
 msgctxt "#30243"
 msgid "Enable HTTPS"
 msgstr "Povolit HTTPS"
-
-msgctxt "#30245"
-msgid "Force Transcoding Codecs"
-msgstr "Kodeky vynuceného překódování"
-
-msgctxt "#30246"
-msgid "Enable Netflix style next up notification"
-msgstr "Povolit upozornění na následující ve stylu Netflixu"
-
-msgctxt "#30247"
-msgid "  - The number of seconds before the end to show the notification"
-msgstr "  - Sekund před koncem zobrazit upozornění"
-
-msgctxt "#30248"
-msgid "Show Emby Info dialog on play/select action"
-msgstr "Zobrazovat informační dialog Plexu při akci přehrát/vybrat"
-
-msgctxt "#30249"
-msgid "Enable server connection message on startup"
-msgstr "Povolit zprávu o připojení k serveru po spuštění"
 
 msgctxt "#30251"
 msgid "Recently added Home Videos"
@@ -860,112 +287,52 @@ msgctxt "#30258"
 msgid "Unwatched Music videos"
 msgstr "Neshlédnuté videoklipy"
 
-# Default views
-msgctxt "#30300"
-msgid "Active"
-msgstr "Aktivní"
-
-msgctxt "#30301"
-msgid "Clear Settings"
-msgstr "Vyčistit nastavení"
-
+# PKC settings sub category under appearance tweaks
 msgctxt "#30302"
 msgid "Movies"
 msgstr "Filmy"
 
-msgctxt "#30303"
-msgid "BoxSets"
-msgstr "Kolekce"
-
-msgctxt "#30304"
-msgid "Trailers"
-msgstr "Ukázky"
-
-msgctxt "#30305"
-msgid "Series"
-msgstr "Seriály"
-
-msgctxt "#30306"
-msgid "Seasons"
-msgstr "Sezóny"
-
-msgctxt "#30307"
-msgid "Episodes"
-msgstr "Episody"
-
-msgctxt "#30308"
-msgid "Music Artists"
-msgstr "Hudební interpreti"
-
-msgctxt "#30309"
-msgid "Music Albums"
-msgstr "Hudební alba"
-
-msgctxt "#30310"
-msgid "Music Videos"
-msgstr "Videoklipy"
-
-msgctxt "#30311"
-msgid "Music Tracks"
-msgstr "Skladby"
-
-msgctxt "#30312"
-msgid "Channels"
-msgstr "Kanály"
-
-# contextmenu
+# contextmenu entry
 msgctxt "#30401"
 msgid "Plex options"
 msgstr "Nastavení Plexu"
 
-msgctxt "#30402"
-msgid "Clear like for this item"
-msgstr "Odstranit 'líbí se mi'"
-
-msgctxt "#30403"
-msgid "Like this item"
-msgstr "Nastavit 'líbí se mi'"
-
-msgctxt "#30404"
-msgid "Dislike this item"
-msgstr "Nastavit 'nelíbí se mi'"
-
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr "Přidat do oblíbených Plexu"
 
+# contextmenu entry
 msgctxt "#30406"
 msgid "Remove from Plex favorites"
 msgstr "Odstranit z oblíbených Plexu"
 
+# contextmenu entry
 msgctxt "#30407"
 msgid "Set custom song rating"
 msgstr "Nastavit vlastní hodnocení skladby"
 
+# contextmenu entry
 msgctxt "#30408"
 msgid "Plex addon settings"
 msgstr "Nastavení doplňku Plex"
 
+# contextmenu entry
 msgctxt "#30409"
 msgid "Delete item from server"
 msgstr "Smazat položku ze serveru"
 
+# contextmenu entry
 msgctxt "#30410"
 msgid "Refresh this item"
 msgstr "Obnovit tuto položku"
 
-msgctxt "#30411"
-msgid "Set custom song rating (0-5)"
-msgstr "Nastavit vlastní hodnocení skladby (0-5)"
-
+# contextmenu entry
 msgctxt "#30412"
 msgid "Force transcode"
 msgstr "Vynutit překódování"
 
-msgctxt "#30413"
-msgid "Enable Plex context menu in Kodi"
-msgstr "Povolit v Kodi kontextovou nabídku Plexu"
-
+# Error dialog text
 msgctxt "#30414"
 msgid ""
 "Could not delete the Plex item. Is item deletion enabled on the Plex Media "
@@ -974,6 +341,7 @@ msgstr ""
 "Nemohu smazat tuto položku Plexu. Máte povolené mazání položek v Plex Media "
 "Serveru?"
 
+# contextmenu entry
 msgctxt "#30415"
 msgid "Start playback via PMS"
 msgstr "Zahájit přehrávání přes PMS"
@@ -982,43 +350,37 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Nastavení Plex Serveru"
 
-# add-on settings
+# PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
 msgstr "Ověřit hostitelův SSL certifikát (bezpečnější)"
 
+# PKC Settings - Connection
 msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "Klientský SSL certifikát"
 
-msgctxt "#30502"
-msgid "Use alternate address"
-msgstr "Použít alternativní adresu"
-
-msgctxt "#30503"
-msgid "Alternate Server Address"
-msgstr "Alternativní adresa serveru"
-
-msgctxt "#30504"
-msgid "Use alternate device Name"
-msgstr "Použít alternativní název zařízení"
-
+# PKC Settings - Connection
 msgctxt "#30505"
 msgid "[COLOR yellow]Reset login attempts[/COLOR]"
 msgstr "[COLOR yellow]Resetovat pokusy o přihlášení[/COLOR]"
 
+# PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
 msgstr "Synchronizace"
 
+# PKC Settings - Sync Options
 msgctxt "#30507"
 msgid "Show syncing progress"
 msgstr "Zobrazovat průběh synchronizace"
 
+# PKC Settings - Sync Options
 msgctxt "#30508"
 msgid "Sync empty TV Shows"
 msgstr "Synchronizovat prázdné seriály"
 
+# PKC Settings - Sync Options
 msgctxt "#30509"
 msgid "Enable Music Library"
 msgstr "Povolit hudební knihovnu"
@@ -1027,71 +389,62 @@ msgctxt "#30510"
 msgid "Direct stream music library"
 msgstr "Přímé streamování hudební knihovny"
 
+# PKC Settings - Sync Options
 msgctxt "#30511"
 msgid "Playback Mode"
 msgstr "Režim přehrávání"
 
+# PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Force artwork caching"
 msgstr "Vynutit ukládání obrázků do mezipaměti"
 
+# PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Omezit vlákna mezipaměti obrázků (doporučeno pro rpi)"
 
-msgctxt "#30514"
-msgid "Enable fast startup (requires server plugin)"
-msgstr "Povolit rychlé spuštění (vyžaduje plugin na serveru)"
-
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Maximální počet položek vyžádaných najednou ze serveru"
 
+# PKC Settings, category name
 msgctxt "#30516"
 msgid "Playback"
 msgstr "Přehrávání"
 
+# PKC Settings - Connection
 msgctxt "#30517"
 msgid "[COLOR yellow]Enter network credentials[/COLOR]"
 msgstr "[COLOR yellow]Zadejte přihlašovací údaje k síťi[/COLOR]"
 
+# PKC Settings - Playback
 msgctxt "#30518"
 msgid "Enable Plex Trailers (Plexpass is needed)"
 msgstr "Povolit ukázky Plex Trailers (je vyžadován PlexPass)"
 
+# PKC Settings - Playback
 msgctxt "#30519"
 msgid "Ask to play trailers"
 msgstr "Zeptat se na přehrání ukázek"
 
+# PKC Settings - Plex
 msgctxt "#30520"
-msgid ""
-"Skip Plex delete confirmation for the context menu (use at your own risk)"
-msgstr "Přeskočit potvrzení Plexu o smazání (používejte na vlastní riziko)"
+msgid "Skip PMS delete confirmation (use at your own risk)"
+msgstr ""
 
+# PKC Settings - Playback
 msgctxt "#30521"
 msgid "Jump back on resume (in seconds)"
 msgstr "Poskočit vzad při obnovení přehrávání (v sekundách)"
 
+# PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Vynutit překódování H265/HEVC"
 
-msgctxt "#30523"
-msgid "Music metadata options (not compatible with direct stream)"
-msgstr "Nastavení hudebních metadat (není kompatibilní s přímým streamováním)"
-
-msgctxt "#30524"
-msgid "Import music song rating directly from files"
-msgstr "Načíst hodnocení skladeb přímo ze souborů"
-
-msgctxt "#30525"
-msgid "Convert music song rating to Emby rating"
-msgstr "Převést hodnocení hudby na hodnocení Plexu"
-
-msgctxt "#30526"
-msgid "Allow rating in song files to be updated"
-msgstr "Povolit aktualizaci hodnocení skladeb přímo v souborech"
-
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Ignorovat speciály v nadcházejících epizodách"
@@ -1100,13 +453,10 @@ msgctxt "#30528"
 msgid "Permanent users to add to the session"
 msgstr "Stálí uživatelé pro přidání do relace"
 
+# PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
 msgstr "Zpoždění startu (v sekundách)"
-
-msgctxt "#30530"
-msgid "Enable server restart message"
-msgstr "Povolit zprávu o restartu serveru"
 
 msgctxt "#30531"
 msgid "Enable new content notification"
@@ -1124,6 +474,7 @@ msgctxt "#30534"
 msgid "Server messages"
 msgstr "Zprávy serveru"
 
+# PKC Settings - Advanced
 msgctxt "#30535"
 msgid ""
 "[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
@@ -1132,83 +483,71 @@ msgstr ""
 "[COLOR yellow]Vygenerovat nový unikátní identifikátor zařízení (např. při "
 "kopii Kodi)[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
 msgstr "Při každém restartu Kodi se musí uživatel přihlásit"
 
+# PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
 msgstr "PŘI KAŽDÉ ZMĚNĚ MUSÍTE RESTARTOVAT KODI"
 
+# PKC Settings warning
 msgctxt "#30538"
 msgid "Complete Re-Sync necessary"
 msgstr "Je vyžadována kompletní resynchronizace"
 
+# PKC Settings - Artwork
 msgctxt "#30539"
 msgid "Download additional art from FanArtTV"
 msgstr "Stahovat další obrázky z FanArtTV"
 
+# PKC Settings - Artwork
 msgctxt "#30540"
 msgid "Download movie set/collection art from FanArtTV"
 msgstr "Stahovat obrázky filmových kolekcí z FanArtTV"
 
+# PKC Settings - Playback
 msgctxt "#30541"
 msgid "Don't ask to pick a certain stream/quality"
 msgstr "Nepožadovat výběr proudu nebo kvality"
 
+# PKC Settings - Playback
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Vždy vybrat nejlepší kvalitu ukázek"
-
-msgctxt "#30543"
-msgid "Kodi runs on a low-power device (e.g. Raspberry Pi)"
-msgstr "Kodi běží na málo výkonném zařízení (např. Raspberry Pi)"
 
 msgctxt "#30544"
 msgid "Artwork"
 msgstr "Obrázky"
 
+# PKC Settings - Playback
 msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr "Vynutit překódování obrázků"
 
-# service add-on
+# Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
 msgstr "Vítáme uživatele"
 
+# Error message
 msgctxt "#33001"
 msgid "Error connecting"
 msgstr "Chyba připojení"
 
+# Error message
 msgctxt "#33002"
 msgid "Server is unreachable"
 msgstr "Server je nedosažitelný"
 
+# Plex notification
 msgctxt "#33003"
 msgid "Server is online"
 msgstr "Server je online"
 
-msgctxt "#33004"
-msgid "items added to playlist"
-msgstr "položek přidáno do playlistu"
-
-msgctxt "#33005"
-msgid "items queued to playlist"
-msgstr "položek zařazeno do fronty playlistu"
-
-msgctxt "#33006"
-msgid "Server is restarting"
-msgstr "Server se restartuje"
-
-msgctxt "#33007"
-msgid "Access is enabled"
-msgstr "Přístup je povolen"
-
-msgctxt "#33008"
-msgid "Enter password for user:"
-msgstr "Zadejte heslo pro uživatele:"
-
+# Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
 msgstr "Neplatné uživatelské jméno nebo heslo"
@@ -1218,97 +557,22 @@ msgid "Failed to authenticate too many times. Reset in the settings."
 msgstr ""
 "Proběhlo moc neúspěšných pokusů o ověření. Proveďte reset v nastavení."
 
-msgctxt "#33011"
-msgid "Unable to direct play"
-msgstr "Nemohu přehrávat přímo"
-
-msgctxt "#33012"
-msgid "Direct play failed 3 times. Enabled play from HTTP."
-msgstr "Přímé přehrávání 3x neuspělo. Povolte přehrávání přes HTTP."
-
+# Dialog before playback
 msgctxt "#33013"
 msgid "Choose the audio stream"
 msgstr "Zvolte audiostopu"
 
+# Dialog before playback
 msgctxt "#33014"
 msgid "Choose the subtitles stream"
 msgstr "Zvolte titulkovou stopu"
 
-msgctxt "#33015"
-msgid "Delete file from your Emby server?"
-msgstr "Smazat soubor ze serveru Plex?"
-
+# Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
 msgstr "Přehrát ukázky?"
 
-msgctxt "#33017"
-msgid "Gathering movies from:"
-msgstr "Shromažďuji filmy z:"
-
-msgctxt "#33018"
-msgid "Gathering boxsets"
-msgstr "Shromažďuji kolekce"
-
-msgctxt "#33019"
-msgid "Gathering music videos from:"
-msgstr "Shromažďuji videoklipy z:"
-
-msgctxt "#33020"
-msgid "Gathering tv shows from:"
-msgstr "Shromažďuji seriály z:"
-
-msgctxt "#33021"
-msgid "Gathering:"
-msgstr "Shromažďuji:"
-
-msgctxt "#33022"
-msgid ""
-"Detected the database needs to be recreated for this version of Emby for "
-"Kodi. Proceed?"
-msgstr ""
-"Zjištěná databáze musí být pro tuto verzi PlexKodiConnect znovu vytvořena. "
-"Pokračovat?"
-
-msgctxt "#33023"
-msgid "Emby for Kodi may not work correctly until the database is reset."
-msgstr ""
-"PlexKodiConnect nemusí fungovat správně dokud nebude databáze resetována."
-
-msgctxt "#33024"
-msgid ""
-"Cancelling the database syncing process. The current Kodi version is "
-"unsupported."
-msgstr "Ruším synchronizaci databáze. Tato verze Kodi není podporována.."
-
-msgctxt "#33025"
-msgid "completed in:"
-msgstr "dokončeno za:"
-
-msgctxt "#33026"
-msgid "Comparing movies from:"
-msgstr "Porovnávám filmy z:"
-
-msgctxt "#33027"
-msgid "Comparing boxsets"
-msgstr "Porovnávám kolekce"
-
-msgctxt "#33028"
-msgid "Comparing music videos from:"
-msgstr "Porovnávám videoklipy z:"
-
-msgctxt "#33029"
-msgid "Comparing tv shows from:"
-msgstr "Porovnávám seriály z:"
-
-msgctxt "#33030"
-msgid "Comparing episodes from:"
-msgstr "Porovnávám epizody z:"
-
-msgctxt "#33031"
-msgid "Comparing:"
-msgstr "Porovnávám:"
-
+# Error message
 msgctxt "#33032"
 msgid ""
 "Failed to generate a new device Id. See your logs for more information."
@@ -1316,81 +580,89 @@ msgstr ""
 "Nepodařilo se vygenerovat nový identifikátor zařízení. Pro více informací se"
 " podívejte do záznamu."
 
+# Pop-up informing about Kodi restart
 msgctxt "#33033"
 msgid "Kodi will now restart to apply the changes."
 msgstr "Pro aplikování změn se nyní Kodi restartuje."
 
+# Confirmation dialog before item gets deleted from the PMS
 msgctxt "#33041"
 msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
 "disk!"
 msgstr "Smazat tyto soubory z Plex Serveru? Tímto smažete i soubory z disku!"
 
-# New to Plex
+# PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
 msgstr "- Počet ukázek před filmem"
 
+# PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
 msgstr "Zesílit zvuk při překódování"
 
+# PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
 msgstr "Velikost vpálených titulků"
 
+# PKC Settings - Sync
 msgctxt "#39003"
 msgid "Limit download sync threads (rec. for rpi: 1)"
 msgstr "Omezit synchronizační vlákna (doporučené pro rpi: 1)"
 
+# PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
 msgstr "Povolit Plex Companion (restartujte Kodi!)"
 
+# PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
 msgstr "Port Plex Companion (změňte pouze pokud je nutné)"
 
-msgctxt "#39006"
-msgid "Activate Plex Companion debug log"
-msgstr "Aktivovat ladící záznamy Plex Companion"
-
-msgctxt "#39007"
-msgid "Activate Plex Companion GDM debug log"
-msgstr "Aktivovat ladící záznamy Plex Companion GDM"
-
+# PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
 msgstr "Plex Companion: Umožňuje dálkově přehrávat v Kodi přes Plex"
 
+# Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
 msgstr "Nemohu se přihlásit k plex.tv. Prosím zkuste se přihlásit znova."
 
+# Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
 msgstr "Nemohu se připojit k plex.tv. Zřejmě chyba sítě nebo internetu."
 
+# Error message
 msgctxt "#39011"
 msgid "Could not find any Plex server in the network. Aborting..."
 msgstr "Nemohu v síti najít žádný Plex server. Přerušuji..."
 
+# Dialog text for choosing PMS
 msgctxt "#39012"
 msgid "Choose your Plex server"
 msgstr "Vyberte Plex server"
 
+# Error message
 msgctxt "#39013"
 msgid "Not yet authorized for Plex server "
 msgstr "Ještě nejste autorizováni k Plex serveru "
 
+# Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
 msgstr "Prosím přihlašte se k plex.tv."
 
+# Error message
 msgctxt "#39015"
 msgid "Problems connecting to server. Pick another server?"
 msgstr "Vyskytly se problémy při připojování k serveru. Vyberete si jiný?"
 
+# Pop-up on initial sync
 msgctxt "#39016"
 msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
@@ -1399,6 +671,7 @@ msgstr ""
 "Zakázat hudební knihovnu Plexu? (Je velice doporučováno pro velké hudební "
 "knihovny použít přímé cesty. Jinak hrozí pád Kodi.)"
 
+# Pop-up on initial sync
 msgctxt "#39017"
 msgid ""
 "Would you now like to go to the plugin's settings to fine-tune PKC? You will"
@@ -1407,46 +680,46 @@ msgstr ""
 "Chcete otevřít nastavení pluginu pro další nastavení PKC? Potom budete muset"
 " RESTARTOVAT Kodi!"
 
+# PKC Settings - Advanced
 msgctxt "#39018"
 msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
 msgstr ""
 "[COLOR yellow]Opravit místní databázi (vynutit aktualizaci všeho "
 "obsahu)[/COLOR]"
 
+# PKC Settings - Advanced
 msgctxt "#39019"
 msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
 msgstr "[COLOR red]Částečný nebo plný reset databáze a PKC[/COLOR]"
 
+# PKC Settings - Artwork
 msgctxt "#39020"
 msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
 msgstr ""
 "[COLOR yellow]Nyní umístit všechny obrázky do texturové mezipaměti "
 "Kodi[/COLOR]"
 
-msgctxt "#39021"
-msgid "[COLOR yellow]Sync Emby Theme Media to Kodi[/COLOR]"
-msgstr "[COLOR yellow]Synchronizovat tématickou hudbu do Kodi[/COLOR]"
-
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
 msgid "local"
 msgstr "místní"
 
+# Error message
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
 msgstr "Nemohu provést autentifikaci. Přihlásili jste se na plex.tv?"
 
+# PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
 msgstr "Po spuštění automaticky přihlásit na plex.tv"
 
+# PKC Settings - Sync
 msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr "Povolit neustálou synchronizaci na pozadí"
 
-msgctxt "#39027"
-msgid "Playback Mode"
-msgstr "Režim přehrávání"
-
+# Pop-up on initial sync
 msgctxt "#39028"
 msgid ""
 "CAUTION! If you choose \"Native\" mode , you might loose access to certain "
@@ -1459,10 +732,12 @@ msgstr ""
 "používat přímé cesty (např. smb://myNAS/mymovie.mkv nebo "
 "\\myNAS/mymovie.mkv)!"
 
+# Pop-up on initial sync
 msgctxt "#39029"
 msgid "Network credentials"
 msgstr "Přihlašovací údaje k síti"
 
+# Pop-up on initial sync
 msgctxt "#39030"
 msgid ""
 "Add network credentials to allow Kodi access to your content? Note: Skipping"
@@ -1473,19 +748,14 @@ msgstr ""
 "přeskočíte tento krok, při úvodním skenování se může zobrazit výzva k zadání"
 " přihlašovacích údajů."
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr "Kodi nemůže najít soubor: "
-
-msgctxt "#39032"
 msgid ""
-"Please verify the path. You may need to verify your network credentials in "
-"the add-on settings or use different Plex paths. Stop syncing?"
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
 msgstr ""
-"Prosím zkontrolujte cestu. Možná bude také nutno zkontrolovat síťové "
-"přihlašovací údaje v nastavení doplňku nebo použít jinou cestu k Plexu. "
-"Zastavit synchronizaci?"
 
+# Pop-up on initial sync
 msgctxt "#39033"
 msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
@@ -1494,10 +764,12 @@ msgstr ""
 "Automaticky změnit UNC cesty ke knihovně Plexu \\myNas\\mymovie.mkv na smb "
 "cesty smb://myNas/mymovie.mkv? (doporučeno)"
 
+# PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
 msgstr "Nahradit UNC cesty z \\myNas na smb://myNas"
 
+# PKC Settings - Customize Paths
 msgctxt "#39035"
 msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
@@ -1506,30 +778,37 @@ msgstr ""
 "Nahradit cesty /volume1/media nebo \\myserver\\media za vlastní cesty "
 "smb://NAS/mystuff"
 
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Původní cesta k Plex FILMU:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39038"
 msgid "Replace Plex MOVIE with:"
 msgstr "Nahradit Plex FILMY:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
 msgstr "Původní cesta k Plex SERIÁLU:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39040"
 msgid "Replace Plex TV SHOWS with:"
 msgstr "Nahradit Plex SERIÁLY:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39041"
 msgid "Original Plex MUSIC path to replace:"
 msgstr "Původní cesta k Plex HUDBĚ:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39042"
 msgid "Replace Plex MUSIC with:"
 msgstr "Nahradit Plex HUDBU:"
 
+# Pop-up on initial sync
 msgctxt "#39043"
 msgid ""
 "Go a step further and completely replace all original Plex library paths "
@@ -1538,6 +817,7 @@ msgstr ""
 "Jít ještě o krok dále a kompletně nahradit původní cesty k Plex knihovnám "
 "(/volume1/media) vlastními SMB cestami (smb://NAS/MyStuff)?"
 
+# Pop-up on initial sync
 msgctxt "#39044"
 msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
@@ -1546,88 +826,114 @@ msgstr ""
 "Prosím zadejte vlastní SMB cesty v nastavení pod \"Synchronizace\" a "
 "restartujte Kodi"
 
+# PKC Settings - Customize Paths
 msgctxt "#39045"
 msgid "Original Plex PHOTO path to replace:"
 msgstr "Původní cesta Plex FOTEK:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39046"
 msgid "Replace Plex PHOTO with:"
 msgstr "Nahradit Plex FOTKY:"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39047"
 msgid "On Deck: Append show title to episode"
 msgstr "Aktuální: Připojit název seriálu k epizodě"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39048"
 msgid "On Deck: Append season- and episode-number SxxExx"
 msgstr "Aktuální: Připojit číslo sezóny a epizody ve formátu SxxExx"
 
+# PKC Settings - Advanced
 msgctxt "#39049"
 msgid "Nothing works? Try a full reset!"
 msgstr "Nic nefunguje? Zkuste plný reset!"
 
+# PKC Settings - Connection
 msgctxt "#39050"
 msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
 msgstr "[COLOR yellow]Zvolte Plex server ze seznamu[/COLOR]"
 
+# PKC Settings - Sync
 msgctxt "#39051"
 msgid "Wait before sync new/changed PMS item [s]"
 msgstr "Počkat před synchronizací položek (s)"
 
+# PKC Settings - Sync
 msgctxt "#39052"
 msgid "Background Sync"
 msgstr "Synchronizace na pozadí"
 
+# PKC Settings - Sync
 msgctxt "#39053"
 msgid "Do a full library sync every x minutes"
 msgstr "Plná synchronizace každých x minut"
 
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39054"
 msgid "remote"
 msgstr "vzdálené"
 
+# Notification pop-up
 msgctxt "#39055"
 msgid "Searching for Plex Server"
 msgstr "Vyhledávám Plex servery"
 
+# PKC Settings - Customize paths
 msgctxt "#39056"
 msgid "Used by Sync and when attempting to Direct Play"
 msgstr "Použito při synchronizaci a při pokusu o přímé přehrávání"
 
+# PKC Settings, category name
 msgctxt "#39057"
 msgid "Customize Paths"
 msgstr "Přizpůsobit cesty"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39058"
 msgid "Extend Plex TV Series \"On Deck\" view to all shows"
 msgstr "Rozšířit seriály na obrazovce \"Aktuální\" na všechny seriály"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "Naposledy přidané: Připojit název seriálu k epizodě"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39060"
 msgid "Recently Added: Append season- and episode-number SxxExx"
 msgstr "Naposledy přidané: Připojit číslo sezóny a epizody ve formátu SxxExx"
 
+# Pop-up during initial sync
 msgctxt "#39061"
 msgid ""
 "Would you like to download additional artwork from FanArtTV in the "
 "background?"
 msgstr "Chcete na pozadí stahovat další obrázky z FanArtTV?"
 
+# PKC Settings - Sync
 msgctxt "#39062"
 msgid "Sync when screensaver is deactivated"
 msgstr "Synchronizovat při vypnutém šetřiči obrazovky"
 
+# PKC Settings - Playback
 msgctxt "#39063"
 msgid "Force Transcode Hi10P"
 msgstr "Vynutit překódování Hi10P"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr "Naposledy přidané: Zobrazovat také shlédnuté epizody"
 
+# PKC Settings - Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
+# PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
@@ -1636,46 +942,47 @@ msgstr ""
 "Naposledy přidané: Zobrazovat také už shlédnuté filmy (Obnovte playlisty "
 "Plexu!)"
 
+# PKC Settings - Connection
 msgctxt "#39067"
 msgid "Your current Plex Media Server:"
 msgstr "Váš současný Plex Media Server:"
 
+# PKC Settings - Connection
 msgctxt "#39068"
 msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
 msgstr "[COLOR yellow]Ručně zadat adresu Plex Media Serveru[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#39069"
 msgid "Current address:"
 msgstr "Současná adresa:"
 
+# PKC Settings - Connection
 msgctxt "#39070"
 msgid "Current port:"
 msgstr "Současný port:"
 
+# PKC Settings - Connection
 msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "Současný stav plex.tv:"
 
-msgctxt "#39072"
-msgid ""
-"Is your Kodi installed on a low-powered device like a Raspberry Pi? If yes, "
-"then we will reduce the strain on Kodi to prevent it from crashing."
-msgstr ""
-"Je Kodi nainstalován na málo výkonném zařízení jako např. Raspberry Pi? "
-"Pokud ano, tímto snížíte zátěž Kodi a zabráníte jeho pádům."
-
+# PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
 msgstr "Vzhled"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "Seriály"
 
+# PKC Settings - Playback
 msgctxt "#39075"
 msgid "Always use default Plex subtitle if possible"
 msgstr "Vždy použít výchozí titulky Plexu, pokud je to možné"
 
+# Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
@@ -1685,14 +992,17 @@ msgstr ""
 "\"Ostatní filmy\", přečtěte si prosím následující stráku na Wiki: "
 "https://goo.gl/JFtQV9"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
 msgstr "Počet položek pro zobrazení ve widgetech (např. \"Aktuální\")"
 
+# PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
 msgstr "Port aktualizace Plex Companion (změňte pouze pokud je nutné)"
 
+# Error message
 msgctxt "#39079"
 msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
@@ -1700,7 +1010,6 @@ msgid ""
 msgstr ""
 "Plex Companion nemůže otevřít GDM port. Prosím změňte ho v nastavení PKC."
 
-# Plex Entrypoint.py
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Odhlásit uživatele Plex Home "
@@ -1708,10 +1017,6 @@ msgstr "Odhlásit uživatele Plex Home "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Nastavení"
-
-msgctxt "#39202"
-msgid "Network credentials"
-msgstr "Přihlášení k síti"
 
 msgctxt "#39203"
 msgid "Refresh Plex playlists/nodes"
@@ -1721,6 +1026,7 @@ msgctxt "#39204"
 msgid "Perform manual library sync"
 msgstr "Provést ruční synchronizaci knihovny"
 
+# Error message
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr "Nemohu provést synchronizaci, doplněk není připojen k Plex serveru."
@@ -1741,6 +1047,7 @@ msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
 msgstr "Nemohu resetovat PKC. Zkuste restartovat Kodi."
 
+# PKC Settings - Plex
 msgctxt "#39209"
 msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
 msgstr ""
@@ -1755,13 +1062,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr "Shlédnout později"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39213"
 msgid "is offline"
 msgstr "je offline"
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
-msgstr "I když jsme přihlášeni k plex.tv, nemůžeme provést autorizaci na PMS"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1782,6 +1086,7 @@ msgctxt "#39219"
 msgid "Abort (Yes) or save address anyway (No)?"
 msgstr "Přerušit (Ano) nebo přesto uložit adresu (Ne)?"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39220"
 msgid "connected"
 msgstr "připojen"
@@ -1826,7 +1131,6 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Uživatel plexu:"
 
-# Plex Artwork.py
 msgctxt "#39250"
 msgid ""
 "Running the image cache process can take some time. It will happen in the "
@@ -1838,19 +1142,6 @@ msgstr ""
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
 msgstr "Provést nejdříve reset existujících dat v mezipaměti?"
-
-# Plex PlexAPI.py
-msgctxt "#39300"
-msgid ": Enter plex.tv username. Or nothing to cancel."
-msgstr ": Zadejte uživatelské jméno plex.tv. Pro zrušení nezadávejte nic."
-
-msgctxt "#39301"
-msgid "Enter password for plex.tv user "
-msgstr "Zadejte heslo pro uživatele plex.tv "
-
-msgctxt "#39302"
-msgid "Could not sign in user "
-msgstr "Nemohu přihlásit uživatele "
 
 msgctxt "#39303"
 msgid "Problems trying to contact plex.tv. Try again later"
@@ -1888,7 +1179,6 @@ msgctxt "#39311"
 msgid "or press No to not sign in."
 msgstr "nebo zvolte Ne pro zrušení."
 
-# Plex Librarysync.py
 msgctxt "#39400"
 msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
@@ -1916,14 +1206,6 @@ msgid ""
 msgstr ""
 "Ruším synchronizaci databáze. Tato verze Kodi není podporována. Pro více "
 "informací se podívejte do záznamů."
-
-msgctxt "#39404"
-msgid ""
-"Startup syncing process failed repeatedly. Try restarting Kodi. Stopping "
-"Sync for now."
-msgstr ""
-"Synchronizace při startu opakovaně selhala. Zkuste restartovat Kodi. "
-"Prozatím zastavuji synchronizaci."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1960,7 +1242,6 @@ msgctxt "#39410"
 msgid "ERROR in library sync"
 msgstr "CHYBA při synchronizaci knihovny"
 
-# Plex videonodes.py
 msgctxt "#39500"
 msgid "On Deck"
 msgstr "Aktuální"
@@ -1969,7 +1250,6 @@ msgctxt "#39501"
 msgid "Collections"
 msgstr "Kolekce"
 
-# Plex utils.py
 msgctxt "#39600"
 msgid ""
 "Are you sure you want to reset your local Kodi database? A re-sync of the "
@@ -1981,10 +1261,6 @@ msgstr ""
 msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
 msgstr "Nemohu zastavit běh databáze. Prosím zkuste to později."
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
-msgstr "Odstranit všechny obrázky v mezipaměti? (doporučuje se!)"
 
 msgctxt "#39603"
 msgid ""

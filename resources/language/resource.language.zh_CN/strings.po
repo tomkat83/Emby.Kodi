@@ -25,42 +25,28 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr "服务器地址(IP)"
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr ""
+
 msgctxt "#30002"
 msgid "Preferred playback method"
 msgstr "首选播放模式"
 
-msgctxt "#30004"
-msgid "Log level"
-msgstr "日志等级"
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
 
 msgctxt "#30005"
 msgid "Username: "
 msgstr "用户名 "
 
-msgctxt "#30006"
-msgid "Password: "
-msgstr "密码 "
-
-msgctxt "#30007"
-msgid "Network Username: "
-msgstr "网络用户名 "
-
-msgctxt "#30008"
-msgid "Network Password: "
-msgstr "网络密码 "
-
-msgctxt "#30009"
-msgid "Transcode: "
-msgstr "转码 "
-
-msgctxt "#30010"
-msgid "Enable Performance Profiling"
-msgstr "启用性能分析"
-
-msgctxt "#30011"
-msgid "Local caching system"
-msgstr "本地缓存系统"
-
+# Button text
 msgctxt "#30012"
 msgid "OK"
 msgstr "确认"
@@ -69,22 +55,21 @@ msgctxt "#30013"
 msgid "Never show"
 msgstr "不再显示"
 
+# PKC settings category
 msgctxt "#30014"
 msgid "Connection"
 msgstr "连接"
-
-msgctxt "#30015"
-msgid "Network"
-msgstr "网络"
 
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "设备名"
 
+# Error message
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "Plex媒体服务器未授权"
 
+# PKC settings category
 msgctxt "#30022"
 msgid "Advanced"
 msgstr "高级"
@@ -110,34 +95,6 @@ msgctxt "#30032"
 msgid "Information"
 msgstr ""
 
-msgctxt "#30035"
-msgid "Number of recent Music Albums to show:"
-msgstr "要显示的最近音乐专辑数量"
-
-msgctxt "#30036"
-msgid "Number of recent Movies to show:"
-msgstr "要显示的最近电影数量"
-
-msgctxt "#30037"
-msgid "Number of recent TV episodes to show:"
-msgstr "要显示的最近电视剧集数量"
-
-msgctxt "#30038"
-msgid "Mark watched at start of playback:"
-msgstr "播放开始后标记为已观看"
-
-msgctxt "#30039"
-msgid "Set Season poster for episodes"
-msgstr "为剧集设置每季海报"
-
-msgctxt "#30040"
-msgid "Genre Filter ..."
-msgstr "流派筛选器..."
-
-msgctxt "#30041"
-msgid "Play All from Here"
-msgstr "从此处播放所有"
-
 msgctxt "#30042"
 msgid "Refresh"
 msgstr "刷新"
@@ -146,163 +103,14 @@ msgctxt "#30043"
 msgid "Delete"
 msgstr "删除"
 
-msgctxt "#30044"
-msgid "Incorrect Username/Password"
-msgstr "用户名/密码不正确"
-
-msgctxt "#30045"
-msgid "Username not found"
-msgstr "找不到用户名"
-
-msgctxt "#30046"
-msgid "Add Movie to CouchPotato"
-msgstr "添加电影到CouchPotato"
-
+# Notification displayed if there is a LOT to be deleted
 msgctxt "#30052"
 msgid "Deleting"
 msgstr "删除中"
 
-msgctxt "#30053"
-msgid "Waiting for server to delete"
-msgstr "等待服务器删除"
-
-msgctxt "#30059"
-msgid "Server Default"
-msgstr "服务器默认值"
-
-msgctxt "#30060"
-msgid "Title"
-msgstr "标题"
-
-msgctxt "#30061"
-msgid "Year"
-msgstr "年份"
-
-msgctxt "#30062"
-msgid "Premiere Date"
-msgstr "首播日期"
-
-msgctxt "#30063"
-msgid "Date Created"
-msgstr "创建日期"
-
-msgctxt "#30064"
-msgid "Critic Rating"
-msgstr "专家评分"
-
-msgctxt "#30065"
-msgid "Community Rating"
-msgstr "社区评分"
-
-msgctxt "#30066"
-msgid "Play Count"
-msgstr "播放次数"
-
-msgctxt "#30067"
-msgid "Budget"
-msgstr "预算"
-
-# Runtime added as 30226 below
-msgctxt "#30068"
-msgid "Sort By"
-msgstr "排序方式"
-
 msgctxt "#30069"
 msgid "None"
 msgstr "无"
-
-msgctxt "#30070"
-msgid "Action"
-msgstr "动作"
-
-msgctxt "#30071"
-msgid "Adventure"
-msgstr "冒险"
-
-msgctxt "#30072"
-msgid "Animation"
-msgstr "动画"
-
-msgctxt "#30073"
-msgid "Crime"
-msgstr "犯罪"
-
-msgctxt "#30074"
-msgid "Comedy"
-msgstr "喜剧"
-
-msgctxt "#30075"
-msgid "Documentary"
-msgstr "纪录片"
-
-msgctxt "#30076"
-msgid "Drama"
-msgstr "剧情"
-
-msgctxt "#30077"
-msgid "Fantasy"
-msgstr "幻想"
-
-msgctxt "#30078"
-msgid "Foreign"
-msgstr "外语"
-
-msgctxt "#30079"
-msgid "History"
-msgstr "历史"
-
-msgctxt "#30080"
-msgid "Horror"
-msgstr "恐怖"
-
-msgctxt "#30081"
-msgid "Music"
-msgstr "音乐"
-
-msgctxt "#30082"
-msgid "Musical"
-msgstr "音乐剧"
-
-msgctxt "#30083"
-msgid "Mystery"
-msgstr "悬疑"
-
-msgctxt "#30084"
-msgid "Romance"
-msgstr "浪漫"
-
-msgctxt "#30085"
-msgid "Science Fiction"
-msgstr "科幻"
-
-msgctxt "#30086"
-msgid "Short"
-msgstr "短片"
-
-msgctxt "#30087"
-msgid "Suspense"
-msgstr "悬念"
-
-msgctxt "#30088"
-msgid "Thriller"
-msgstr "惊悚"
-
-msgctxt "#30089"
-msgid "Western"
-msgstr "西部"
-
-msgctxt "#30090"
-msgid "Genre Filter"
-msgstr "流派筛选器"
-
-msgctxt "#30091"
-msgid "Confirm file deletion"
-msgstr "文件删除确认"
-
-msgctxt "#30092"
-msgid ""
-"Delete this item? This action will delete media and associated data files."
-msgstr "删除此项目吗？此操作将删除媒体和关联的数据文件。"
 
 msgctxt "#30093"
 msgid "Mark Watched"
@@ -320,51 +128,6 @@ msgctxt "#30096"
 msgid "Remove from Favorites"
 msgstr "从收藏夹移除"
 
-msgctxt "#30097"
-msgid "Sort By ..."
-msgstr "排序方式"
-
-msgctxt "#30098"
-msgid "Sort Order Descending"
-msgstr "降序排序"
-
-msgctxt "#30099"
-msgid "Sort Order Ascending"
-msgstr "升序排序"
-
-msgctxt "#30100"
-msgid "Show People"
-msgstr "显示人物"
-
-# resume dialog
-msgctxt "#30105"
-msgid "Resume"
-msgstr "继续"
-
-msgctxt "#30106"
-msgid "Resume from"
-msgstr "从此处继续"
-
-msgctxt "#30107"
-msgid "Start from beginning"
-msgstr "从头开始"
-
-msgctxt "#30110"
-msgid "Interface"
-msgstr "用户界面"
-
-msgctxt "#30111"
-msgid "Include Stream Info"
-msgstr "包括串流信息"
-
-msgctxt "#30112"
-msgid "Include People"
-msgstr "包括人物"
-
-msgctxt "#30113"
-msgid "Include Overview"
-msgstr "包括概述"
-
 msgctxt "#30114"
 msgid "Offer delete after playback"
 msgstr "提供播放后删除"
@@ -377,79 +140,22 @@ msgctxt "#30116"
 msgid "For Movies"
 msgstr "供电影"
 
-msgctxt "#30117"
-msgid "Background Art Refresh Rate (seconds)"
-msgstr "背景刷新率(秒)"
-
-msgctxt "#30118"
-msgid "Add Resume Percent"
-msgstr "添加恢复比率"
-
-msgctxt "#30119"
-msgid "Add Episode Number"
-msgstr "添加剧集数量"
-
-msgctxt "#30120"
-msgid "Show Load Progress"
-msgstr "显示加载进度"
-
-msgctxt "#30121"
-msgid "Loading Content"
-msgstr "正加载内容"
-
-msgctxt "#30122"
-msgid "Retrieving Data"
-msgstr "检索数据"
-
 msgctxt "#30125"
 msgid "Done"
 msgstr "完成"
 
-msgctxt "#30126"
-msgid "Processing Item : "
-msgstr "正处理项目 "
-
+# Error popup message text
 msgctxt "#30128"
 msgid "Play Error"
 msgstr "播放错误"
-
-msgctxt "#30129"
-msgid "This item is not playable"
-msgstr "此项目无法播放"
-
-msgctxt "#30130"
-msgid "Local path detected"
-msgstr "检测到本地路径"
-
-msgctxt "#30131"
-msgid ""
-"Your MB3 Server contains local paths.  Please change server paths to UNC or "
-"change XBMB3C setting 'Play from Stream' to true.  Path: "
-msgstr "您的MB3服务器包含本地路径。请更改服务器路径至UNC或在XBMB3C设置里将“从串流播放”值更改为true。路径： "
 
 msgctxt "#30132"
 msgid "Warning"
 msgstr "警告"
 
-msgctxt "#30133"
-msgid "Debug logging enabled."
-msgstr "启用调试"
-
-msgctxt "#30134"
-msgid "This will affect performance."
-msgstr "这将影响性能"
-
 msgctxt "#30135"
 msgid "Error"
 msgstr "错误"
-
-msgctxt "#30136"
-msgid "Monitoring service is not running"
-msgstr "监视服务未运行"
-
-msgctxt "#30137"
-msgid "If you have just installed please restart Kodi"
-msgstr "如刚安装请重启Kodi"
 
 msgctxt "#30138"
 msgid "Search"
@@ -459,33 +165,9 @@ msgctxt "#30139"
 msgid "Enable Theme Music (Requires Restart)"
 msgstr "启用主题音乐(须重启)"
 
-msgctxt "#30140"
-msgid " - Loop Theme Music"
-msgstr " 循环主题音乐"
-
-msgctxt "#30141"
-msgid "Enable Background Image (Requires Restart)"
-msgstr "启用背景图(须重启)"
-
-msgctxt "#30142"
-msgid "Services"
-msgstr "服务"
-
 msgctxt "#30143"
 msgid "Always transcode if video bitrate is above"
 msgstr "视频比特率高于则总是转码"
-
-msgctxt "#30150"
-msgid "Skin does not support setting views"
-msgstr "皮肤不支持设置视图"
-
-msgctxt "#30151"
-msgid "Select item action (Requires Restart)"
-msgstr "选中项目动作(须重启)"
-
-msgctxt "#30156"
-msgid "Sort NextUp by Show Title"
-msgstr "通过标题排序下一步"
 
 msgctxt "#30157"
 msgid "Enable Enhanced Images (eg CoverArt)"
@@ -495,29 +177,9 @@ msgctxt "#30158"
 msgid "Metadata"
 msgstr "元数据"
 
-msgctxt "#30159"
-msgid "Artwork"
-msgstr "插图"
-
 msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "如须转码视频质量"
-
-msgctxt "#30161"
-msgid "Enable Suggested Loader (Requires Restart)"
-msgstr "启用建议的加载器(须重启)"
-
-msgctxt "#30162"
-msgid "Add Season Number"
-msgstr "添加季数"
-
-msgctxt "#30163"
-msgid "Flatten Seasons"
-msgstr "平铺每季"
-
-msgctxt "#30164"
-msgid "Direct Play - HTTP"
-msgstr "直接播放 - HTTP"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -527,19 +189,6 @@ msgctxt "#30166"
 msgid "Transcoding"
 msgstr "转码"
 
-msgctxt "#30167"
-msgid "Server Detection Succeeded"
-msgstr "服务器检测成功"
-
-msgctxt "#30168"
-msgid "Found server"
-msgstr "找到服务器"
-
-msgctxt "#30169"
-msgid "Address : "
-msgstr "地址： "
-
-# Video nodes
 msgctxt "#30170"
 msgid "Recently Added TV Shows"
 msgstr "最近添加的电视剧"
@@ -548,10 +197,6 @@ msgctxt "#30171"
 msgid "In Progress TV Shows"
 msgstr "观看中的电视剧"
 
-msgctxt "#30172"
-msgid "All Music"
-msgstr "所有音乐"
-
 msgctxt "#30173"
 msgid "Channels"
 msgstr "频道"
@@ -559,14 +204,6 @@ msgstr "频道"
 msgctxt "#30174"
 msgid "Recently Added"
 msgstr "最近添加"
-
-msgctxt "#30175"
-msgid "Recently Added Episodes"
-msgstr "最近添加剧集"
-
-msgctxt "#30176"
-msgid "Recently Added Albums"
-msgstr "最近添加专辑"
 
 msgctxt "#30177"
 msgid "In Progress Movies"
@@ -592,178 +229,20 @@ msgctxt "#30182"
 msgid "Favorite Episodes"
 msgstr "喜欢的剧集"
 
-msgctxt "#30183"
-msgid "Frequent Played Albums"
-msgstr "播放最多的专辑"
-
-msgctxt "#30184"
-msgid "Upcoming TV"
-msgstr "即将来临的电视"
-
-msgctxt "#30185"
-msgid "BoxSets"
-msgstr "盒装套装"
-
-msgctxt "#30186"
-msgid "Trailers"
-msgstr "预告片"
-
-msgctxt "#30187"
-msgid "Music Videos"
-msgstr "音乐视频"
-
-msgctxt "#30188"
-msgid "Photos"
-msgstr "照片"
-
 msgctxt "#30189"
 msgid "Unwatched Movies"
 msgstr "未观看的电影"
-
-msgctxt "#30190"
-msgid "Movie Genres"
-msgstr "电影流派"
-
-msgctxt "#30191"
-msgid "Movie Studios"
-msgstr "电影制片厂"
-
-msgctxt "#30192"
-msgid "Movie Actors"
-msgstr "电影演员"
-
-msgctxt "#30193"
-msgid "Unwatched Episodes"
-msgstr "未观看的剧集"
-
-msgctxt "#30194"
-msgid "TV Genres"
-msgstr "电视流派"
-
-msgctxt "#30195"
-msgid "TV Networks"
-msgstr "电视网络"
-
-msgctxt "#30196"
-msgid "TV Actors"
-msgstr "电视演员"
-
-msgctxt "#30197"
-msgid "Playlists"
-msgstr "播放列表"
 
 msgctxt "#30198"
 msgid "Search"
 msgstr "搜索"
 
-msgctxt "#30199"
-msgid "Set Views"
-msgstr "设置视图"
-
-msgctxt "#30200"
-msgid "Select User"
-msgstr "选择用户"
-
-msgctxt "#30201"
-msgid "Profiling enabled."
-msgstr "分析已启用"
-
-msgctxt "#30202"
-msgid "Please remember to turn off when finished testing."
-msgstr "完成测试后请记得关闭"
-
-msgctxt "#30203"
-msgid "Error in ArtworkRotationThread"
-msgstr "插图旋转线索错误"
-
-msgctxt "#30204"
-msgid "Unable to connect to server"
-msgstr "无法连接到服务器"
-
-msgctxt "#30205"
-msgid "Error in LoadMenuOptionsThread"
-msgstr "载入目录选项线索错误"
-
-msgctxt "#30206"
-msgid "Enable Playlists Loader (Requires Restart)"
-msgstr "启用播放列表载入(须重启)"
-
-msgctxt "#30207"
-msgid "Songs"
-msgstr "歌曲"
-
-msgctxt "#30208"
-msgid "Albums"
-msgstr "专辑"
-
-msgctxt "#30209"
-msgid "Album Artists"
-msgstr "专辑艺人"
-
-msgctxt "#30210"
-msgid "Artists"
-msgstr "艺人"
-
-msgctxt "#30211"
-msgid "Music Genres"
-msgstr "音乐流派"
-
-msgctxt "#30212"
-msgid "Enable Theme Videos (Requires Restart)"
-msgstr "启用主题视频(须重启)"
-
-msgctxt "#30213"
-msgid " - Loop Theme Videos"
-msgstr " - 循环主题视频"
-
-msgctxt "#30216"
-msgid "AutoPlay remaining episodes in a season"
-msgstr "自动播放当季剩余剧集"
-
-msgctxt "#30218"
-msgid "Compress Artwork"
-msgstr "压缩插图"
-
-msgctxt "#30220"
-msgid "Latest "
-msgstr "最近的 "
-
-msgctxt "#30221"
-msgid "In Progress "
-msgstr "进行中 "
-
-msgctxt "#30222"
-msgid "NextUp "
-msgstr "接下来 "
-
-msgctxt "#30223"
-msgid "User Views"
-msgstr "用户视图"
-
-msgctxt "#30224"
-msgid "Report Metrics"
-msgstr "报告Metrics"
-
-msgctxt "#30225"
-msgid "Use Kodi Sorting"
-msgstr "使用Kodi排序"
-
-msgctxt "#30226"
-msgid "Runtime"
-msgstr "运行时长"
-
+# Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
 msgstr "随机"
 
-msgctxt "#30228"
-msgid "Recently releases"
-msgstr "最近发行"
-
-msgctxt "#30229"
-msgid "Random Items"
-msgstr "随机项目"
-
+# Video node naming for e.g. movies
 msgctxt "#30230"
 msgid "Recommended"
 msgstr "推荐"
@@ -772,57 +251,9 @@ msgctxt "#30235"
 msgid "Extras"
 msgstr "附加"
 
-msgctxt "#30236"
-msgid "Sync Theme Music"
-msgstr "同步主题音乐"
-
-msgctxt "#30237"
-msgid "Sync Extra Fanart"
-msgstr "同步附加Fanart"
-
-msgctxt "#30238"
-msgid "Sync Movie BoxSets"
-msgstr "同步电影盒装套装"
-
-msgctxt "#30239"
-msgid "[COLOR yellow]Reset local Kodi database[/COLOR]"
-msgstr "[黄色]重置本地KodI数据库[/COLOR]"
-
-msgctxt "#30240"
-msgid "Enable watched/resume status sync"
-msgstr "启用已观看/继续观看状态同步"
-
-msgctxt "#30241"
-msgid "DB Sync Indication:"
-msgstr "DB同步标示:"
-
-msgctxt "#30242"
-msgid "Play Count Sync Indication:"
-msgstr "播放次数同步标示:"
-
 msgctxt "#30243"
 msgid "Enable HTTPS"
 msgstr "启用HTTPS"
-
-msgctxt "#30245"
-msgid "Force Transcoding Codecs"
-msgstr "强制转码编码器"
-
-msgctxt "#30246"
-msgid "Enable Netflix style next up notification"
-msgstr "启用类Netflix下一步通知"
-
-msgctxt "#30247"
-msgid "  - The number of seconds before the end to show the notification"
-msgstr "  - 节目结束前多少秒显示通知"
-
-msgctxt "#30248"
-msgid "Show Emby Info dialog on play/select action"
-msgstr "播放/选择动作时显示Emby信息对话"
-
-msgctxt "#30249"
-msgid "Enable server connection message on startup"
-msgstr "启用启动时服务器连接消息"
 
 msgctxt "#30251"
 msgid "Recently added Home Videos"
@@ -856,118 +287,59 @@ msgctxt "#30258"
 msgid "Unwatched Music videos"
 msgstr "未观看的音乐视频"
 
-# Default views
-msgctxt "#30300"
-msgid "Active"
-msgstr "激活"
-
-msgctxt "#30301"
-msgid "Clear Settings"
-msgstr "清除设置"
-
+# PKC settings sub category under appearance tweaks
 msgctxt "#30302"
 msgid "Movies"
 msgstr "电影"
 
-msgctxt "#30303"
-msgid "BoxSets"
-msgstr "盒装套装"
-
-msgctxt "#30304"
-msgid "Trailers"
-msgstr "预告片"
-
-msgctxt "#30305"
-msgid "Series"
-msgstr "系列"
-
-msgctxt "#30306"
-msgid "Seasons"
-msgstr "季"
-
-msgctxt "#30307"
-msgid "Episodes"
-msgstr "剧集"
-
-msgctxt "#30308"
-msgid "Music Artists"
-msgstr "音乐艺人"
-
-msgctxt "#30309"
-msgid "Music Albums"
-msgstr "音乐专辑"
-
-msgctxt "#30310"
-msgid "Music Videos"
-msgstr "音乐视频"
-
-msgctxt "#30311"
-msgid "Music Tracks"
-msgstr "音乐曲目"
-
-msgctxt "#30312"
-msgid "Channels"
-msgstr "频道"
-
-# contextmenu
+# contextmenu entry
 msgctxt "#30401"
 msgid "Plex options"
 msgstr "Plex选项"
 
-msgctxt "#30402"
-msgid "Clear like for this item"
-msgstr "取消喜欢对此项目"
-
-msgctxt "#30403"
-msgid "Like this item"
-msgstr "喜欢此项目"
-
-msgctxt "#30404"
-msgid "Dislike this item"
-msgstr "踩这个项目"
-
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr "添加到Plex收藏夹"
 
+# contextmenu entry
 msgctxt "#30406"
 msgid "Remove from Plex favorites"
 msgstr "从Plex收藏夹移除"
 
+# contextmenu entry
 msgctxt "#30407"
 msgid "Set custom song rating"
 msgstr "设置自定义歌曲打分"
 
+# contextmenu entry
 msgctxt "#30408"
 msgid "Plex addon settings"
 msgstr "Plex插件设置"
 
+# contextmenu entry
 msgctxt "#30409"
 msgid "Delete item from server"
 msgstr "从服务器上删除此项目"
 
+# contextmenu entry
 msgctxt "#30410"
 msgid "Refresh this item"
 msgstr "刷新此项目"
 
-msgctxt "#30411"
-msgid "Set custom song rating (0-5)"
-msgstr "设置自定义歌曲打分(0-5)"
-
+# contextmenu entry
 msgctxt "#30412"
 msgid "Force transcode"
 msgstr "强制转码"
 
-msgctxt "#30413"
-msgid "Enable Plex context menu in Kodi"
-msgstr "在Kodi中启用Plex上下文菜单"
-
+# Error dialog text
 msgctxt "#30414"
 msgid ""
 "Could not delete the Plex item. Is item deletion enabled on the Plex Media "
 "Server?"
 msgstr "无法删除此Plex项目。Plex媒体服务器已启用项目删除了吗？"
 
+# contextmenu entry
 msgctxt "#30415"
 msgid "Start playback via PMS"
 msgstr "通过PMS开始播放"
@@ -976,43 +348,37 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Plex服务器配置"
 
-# add-on settings
+# PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
 msgstr "验证主机SSL证书(更安全)"
 
+# PKC Settings - Connection
 msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "客户端SSL证书"
 
-msgctxt "#30502"
-msgid "Use alternate address"
-msgstr "使用备用地址"
-
-msgctxt "#30503"
-msgid "Alternate Server Address"
-msgstr "备用服务器地址"
-
-msgctxt "#30504"
-msgid "Use alternate device Name"
-msgstr "使用备用设备名称"
-
+# PKC Settings - Connection
 msgctxt "#30505"
 msgid "[COLOR yellow]Reset login attempts[/COLOR]"
 msgstr "[黄色]重置登录尝试[/COLOR]"
 
+# PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
 msgstr "同步选项"
 
+# PKC Settings - Sync Options
 msgctxt "#30507"
 msgid "Show syncing progress"
 msgstr "显示同步进度"
 
+# PKC Settings - Sync Options
 msgctxt "#30508"
 msgid "Sync empty TV Shows"
 msgstr "同步空电视节目"
 
+# PKC Settings - Sync Options
 msgctxt "#30509"
 msgid "Enable Music Library"
 msgstr "启用音乐库"
@@ -1021,71 +387,62 @@ msgctxt "#30510"
 msgid "Direct stream music library"
 msgstr "直接串流音乐库"
 
+# PKC Settings - Sync Options
 msgctxt "#30511"
 msgid "Playback Mode"
 msgstr "播放模式"
 
+# PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Force artwork caching"
 msgstr "强制缓存插图"
 
+# PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "限制插图缓存线程(rpi下推荐)"
 
-msgctxt "#30514"
-msgid "Enable fast startup (requires server plugin)"
-msgstr "启用快速启动(须服务器插件)"
-
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "一次从服务器请求最大项目数"
 
+# PKC Settings, category name
 msgctxt "#30516"
 msgid "Playback"
 msgstr "回放"
 
+# PKC Settings - Connection
 msgctxt "#30517"
 msgid "[COLOR yellow]Enter network credentials[/COLOR]"
 msgstr "[黄色]输入网络凭证[/COLOR]"
 
+# PKC Settings - Playback
 msgctxt "#30518"
 msgid "Enable Plex Trailers (Plexpass is needed)"
 msgstr "启用Plex预告片(须Plexpass)"
 
+# PKC Settings - Playback
 msgctxt "#30519"
 msgid "Ask to play trailers"
 msgstr "要求播放预告片"
 
+# PKC Settings - Plex
 msgctxt "#30520"
-msgid ""
-"Skip Plex delete confirmation for the context menu (use at your own risk)"
-msgstr "为上下文菜单跳过Plex删除确认(须自行承担风险)"
+msgid "Skip PMS delete confirmation (use at your own risk)"
+msgstr ""
 
+# PKC Settings - Playback
 msgctxt "#30521"
 msgid "Jump back on resume (in seconds)"
 msgstr "跳回继续(秒)"
 
+# PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "强制h265/HEVC转码"
 
-msgctxt "#30523"
-msgid "Music metadata options (not compatible with direct stream)"
-msgstr "音乐元数据选项(不兼容直接串流)"
-
-msgctxt "#30524"
-msgid "Import music song rating directly from files"
-msgstr "从文件里直接导入音乐曲目打分"
-
-msgctxt "#30525"
-msgid "Convert music song rating to Emby rating"
-msgstr "将音乐曲目打分转换为Emby排名"
-
-msgctxt "#30526"
-msgid "Allow rating in song files to be updated"
-msgstr "允许曲目文件打分更新"
-
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "下一集忽略特集"
@@ -1094,13 +451,10 @@ msgctxt "#30528"
 msgid "Permanent users to add to the session"
 msgstr "永久用户添加会话"
 
+# PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
 msgstr "启动延迟 (秒)"
-
-msgctxt "#30530"
-msgid "Enable server restart message"
-msgstr "启用服务器重启消息"
 
 msgctxt "#30531"
 msgid "Enable new content notification"
@@ -1118,89 +472,78 @@ msgctxt "#30534"
 msgid "Server messages"
 msgstr "服务器消息"
 
+# PKC Settings - Advanced
 msgctxt "#30535"
 msgid ""
 "[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
 "Kodi)[/COLOR]"
 msgstr "[黄色]生成新的唯一设备ID(e.g. 当克隆Kodi时)[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
 msgstr "Kodi重启后用户须登录"
 
+# PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
 msgstr "如有任何更改请重启KODI"
 
+# PKC Settings warning
 msgctxt "#30538"
 msgid "Complete Re-Sync necessary"
 msgstr "必须完整重新同步"
 
+# PKC Settings - Artwork
 msgctxt "#30539"
 msgid "Download additional art from FanArtTV"
 msgstr "从FanArtTV下载额外的art"
 
+# PKC Settings - Artwork
 msgctxt "#30540"
 msgid "Download movie set/collection art from FanArtTV"
 msgstr "从FanArtTV下载额外的电影集/收藏art"
 
+# PKC Settings - Playback
 msgctxt "#30541"
 msgid "Don't ask to pick a certain stream/quality"
 msgstr "无需询问挑选特定的串流/质量"
 
+# PKC Settings - Playback
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "总是为预告片挑选最佳质量"
-
-msgctxt "#30543"
-msgid "Kodi runs on a low-power device (e.g. Raspberry Pi)"
-msgstr "Kodi运行在一个低功耗设备上(e.g. 树莓派)"
 
 msgctxt "#30544"
 msgid "Artwork"
 msgstr "插图"
 
+# PKC Settings - Playback
 msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr "强制图片转码"
 
-# service add-on
+# Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
 msgstr "欢迎"
 
+# Error message
 msgctxt "#33001"
 msgid "Error connecting"
 msgstr "连接错误"
 
+# Error message
 msgctxt "#33002"
 msgid "Server is unreachable"
 msgstr "服务器不可达"
 
+# Plex notification
 msgctxt "#33003"
 msgid "Server is online"
 msgstr "服务器在线"
 
-msgctxt "#33004"
-msgid "items added to playlist"
-msgstr "添加到播放列表中的项目"
-
-msgctxt "#33005"
-msgid "items queued to playlist"
-msgstr "播放列表中的排队项目"
-
-msgctxt "#33006"
-msgid "Server is restarting"
-msgstr "服务器正重启"
-
-msgctxt "#33007"
-msgid "Access is enabled"
-msgstr "访问已启用"
-
-msgctxt "#33008"
-msgid "Enter password for user:"
-msgstr "输入用户名的密码"
-
+# Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
 msgstr "无效的用户名或密码"
@@ -1209,222 +552,159 @@ msgctxt "#33010"
 msgid "Failed to authenticate too many times. Reset in the settings."
 msgstr "验证失败次数过多。在设置中重置。"
 
-msgctxt "#33011"
-msgid "Unable to direct play"
-msgstr "无法直接播放"
-
-msgctxt "#33012"
-msgid "Direct play failed 3 times. Enabled play from HTTP."
-msgstr "直接播放失败3此。从HTTP启用播放。"
-
+# Dialog before playback
 msgctxt "#33013"
 msgid "Choose the audio stream"
 msgstr "选择音频流"
 
+# Dialog before playback
 msgctxt "#33014"
 msgid "Choose the subtitles stream"
 msgstr "选择字幕流"
 
-msgctxt "#33015"
-msgid "Delete file from your Emby server?"
-msgstr "是否从您的Emby服务器删除文件？"
-
+# Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
 msgstr "是否播放预告片？"
 
-msgctxt "#33017"
-msgid "Gathering movies from:"
-msgstr "收集电影自:"
-
-msgctxt "#33018"
-msgid "Gathering boxsets"
-msgstr "收集盒装套装"
-
-msgctxt "#33019"
-msgid "Gathering music videos from:"
-msgstr "收集音乐视频自"
-
-msgctxt "#33020"
-msgid "Gathering tv shows from:"
-msgstr "收集电视节目自:"
-
-msgctxt "#33021"
-msgid "Gathering:"
-msgstr "收集"
-
-msgctxt "#33022"
-msgid ""
-"Detected the database needs to be recreated for this version of Emby for "
-"Kodi. Proceed?"
-msgstr "检测到须为此版本的Kodi版Emby重建数据库。是否继续？"
-
-msgctxt "#33023"
-msgid "Emby for Kodi may not work correctly until the database is reset."
-msgstr "数据库重建前Kodi版Emby可能无法正常工作。"
-
-msgctxt "#33024"
-msgid ""
-"Cancelling the database syncing process. The current Kodi version is "
-"unsupported."
-msgstr "正在取消数据库同步进程。当前的Kodi版本不受支持。"
-
-msgctxt "#33025"
-msgid "completed in:"
-msgstr "预计完成于"
-
-msgctxt "#33026"
-msgid "Comparing movies from:"
-msgstr "比较电影于："
-
-msgctxt "#33027"
-msgid "Comparing boxsets"
-msgstr "比较盒装套装"
-
-msgctxt "#33028"
-msgid "Comparing music videos from:"
-msgstr "比较音乐视频于："
-
-msgctxt "#33029"
-msgid "Comparing tv shows from:"
-msgstr "比较电视节目于："
-
-msgctxt "#33030"
-msgid "Comparing episodes from:"
-msgstr "比较剧集于："
-
-msgctxt "#33031"
-msgid "Comparing:"
-msgstr "比较："
-
+# Error message
 msgctxt "#33032"
 msgid ""
 "Failed to generate a new device Id. See your logs for more information."
 msgstr "无法生成新的设备ID。查看logs以了解更多信息。"
 
+# Pop-up informing about Kodi restart
 msgctxt "#33033"
 msgid "Kodi will now restart to apply the changes."
 msgstr "Kodi将立即重启以应用更改。"
 
+# Confirmation dialog before item gets deleted from the PMS
 msgctxt "#33041"
 msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
 "disk!"
 msgstr "是否从Plex服务器上删除文件？这也将从磁盘上删除文件！"
 
-# New to Plex
+# PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
 msgstr "- 电影开始前要播放的预告片数量"
 
+# PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
 msgstr "转码时加强音频"
 
+# PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
 msgstr "压制字幕尺寸"
 
+# PKC Settings - Sync
 msgctxt "#39003"
 msgid "Limit download sync threads (rec. for rpi: 1)"
 msgstr "限制下载同步线程(reg. for rpi: 1)"
 
+# PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
 msgstr "启用Plex Companion(重启Kodi!)"
 
+# PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
 msgstr "Plex Companion端口(仅在需要时更改)"
 
-msgctxt "#39006"
-msgid "Activate Plex Companion debug log"
-msgstr "激活Plex Companion调试日志"
-
-msgctxt "#39007"
-msgid "Activate Plex Companion GDM debug log"
-msgstr "激活Plex Companion GDM调试日志"
-
+# PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
 msgstr "Plex Companion: 允许通过Plex将媒体扔进Kodi"
 
+# Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
 msgstr "无法登入plex.tv。请再次尝试登录。"
 
+# Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
 msgstr "连接到plex.tv遇到问题。网络或互联网有问题？"
 
+# Error message
 msgctxt "#39011"
 msgid "Could not find any Plex server in the network. Aborting..."
 msgstr "网络中找不到任何Plex服务器。中止..."
 
+# Dialog text for choosing PMS
 msgctxt "#39012"
 msgid "Choose your Plex server"
 msgstr "选择您的Plex服务器"
 
+# Error message
 msgctxt "#39013"
 msgid "Not yet authorized for Plex server "
 msgstr "尚未为Plex服务器授权 "
 
+# Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
 msgstr "请登录到plex.tv。"
 
+# Error message
 msgctxt "#39015"
 msgid "Problems connecting to server. Pick another server?"
 msgstr "登录到服务器时有问题。选择另一台服务器？"
 
+# Pop-up on initial sync
 msgctxt "#39016"
 msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
 " with direct paths for large music libraries. Kodi might crash otherwise)"
 msgstr "停用Plex音乐库？(强烈建议对Plex音乐的大音乐库只使用直接路径。Kodi可能崩溃)"
 
+# Pop-up on initial sync
 msgctxt "#39017"
 msgid ""
 "Would you now like to go to the plugin's settings to fine-tune PKC? You will"
 " need to RESTART Kodi!"
 msgstr "您想现在转入插件设置以调整PKC吗？您将需要重启Kodi！"
 
+# PKC Settings - Advanced
 msgctxt "#39018"
 msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
 msgstr "[黄色]修复本地数据库 (强制更新所有内容)[/COLOR]"
 
+# PKC Settings - Advanced
 msgctxt "#39019"
 msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
 msgstr "[红色]部分或全部重置数据库和PKC[/COLOR]"
 
+# PKC Settings - Artwork
 msgctxt "#39020"
 msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
 msgstr "[黄色]现在缓存所有图像到Kodi texture缓存[/COLOR]"
 
-msgctxt "#39021"
-msgid "[COLOR yellow]Sync Emby Theme Media to Kodi[/COLOR]"
-msgstr "[黄色]同步Emby主题媒体到Kodi[/COLOR]"
-
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
 msgid "local"
 msgstr "本地"
 
+# Error message
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
 msgstr "未能通过验证。您没有登录到plex.tv吗？"
 
+# PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
 msgstr "启动时自动登录到plex.tv"
 
+# PKC Settings - Sync
 msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr "启用持续背景同步"
 
-msgctxt "#39027"
-msgid "Playback Mode"
-msgstr "播放模式"
-
+# Pop-up on initial sync
 msgctxt "#39028"
 msgid ""
 "CAUTION! If you choose \"Native\" mode , you might loose access to certain "
@@ -1433,10 +713,12 @@ msgid ""
 "\\\\myNAS/mymovie.mkv)!"
 msgstr ""
 
+# Pop-up on initial sync
 msgctxt "#39029"
 msgid "Network credentials"
 msgstr "网络凭据"
 
+# Pop-up on initial sync
 msgctxt "#39030"
 msgid ""
 "Add network credentials to allow Kodi access to your content? Note: Skipping"
@@ -1444,56 +726,63 @@ msgid ""
 " Kodi can't locate your content."
 msgstr "添加网络凭据以允许Kodi访问您的内容？注：如果Kodi无法定位您的内容，则跳过此步骤可能会在初始扫描您的内容时生成一个消息。"
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr "Kodi无法定位文件： "
-
-msgctxt "#39032"
 msgid ""
-"Please verify the path. You may need to verify your network credentials in "
-"the add-on settings or use different Plex paths. Stop syncing?"
-msgstr "请验证路径。您可能需要在插件设置中验证您的网络凭据或使用不同的Plex路径。停止同步吗？"
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
+msgstr ""
 
+# Pop-up on initial sync
 msgctxt "#39033"
 msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
 " paths, smb://myNas/mymovie.mkv? (recommended)"
 msgstr ""
 
+# PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
 msgstr ""
 
+# PKC Settings - Customize Paths
 msgctxt "#39035"
 msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
 "paths smb://NAS/mystuff"
 msgstr ""
 
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "要替换的原始Plex电影路径:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39038"
 msgid "Replace Plex MOVIE with:"
 msgstr "用于替换Plex MOVIE："
 
+# PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
 msgstr "要替换的原始Plex TV SHOWS路径："
 
+# PKC Settings - Customize Paths
 msgctxt "#39040"
 msgid "Replace Plex TV SHOWS with:"
 msgstr "用于替换Plex TV SHOWS："
 
+# PKC Settings - Customize Paths
 msgctxt "#39041"
 msgid "Original Plex MUSIC path to replace:"
 msgstr "要替换的原始Plex MUSIC路径："
 
+# PKC Settings - Customize Paths
 msgctxt "#39042"
 msgid "Replace Plex MUSIC with:"
 msgstr "用于替换Plex MUSIC："
 
+# Pop-up on initial sync
 msgctxt "#39043"
 msgid ""
 "Go a step further and completely replace all original Plex library paths "
@@ -1502,159 +791,191 @@ msgstr ""
 "进一步，完全用自定义SMB路径 (smb://NAS/MyStuff) 替换所有原始Plex库路径\n"
 " (/volume1/media)?"
 
+# Pop-up on initial sync
 msgctxt "#39044"
 msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
 "and then restart Kodi"
 msgstr "请在设置中\"同步选项\"下输入自定义smb路径，然后重启Kodi"
 
+# PKC Settings - Customize Paths
 msgctxt "#39045"
 msgid "Original Plex PHOTO path to replace:"
 msgstr "要替换的原始Plex PHOTO路径："
 
+# PKC Settings - Customize Paths
 msgctxt "#39046"
 msgid "Replace Plex PHOTO with:"
 msgstr "用于替换Plex PHOTO："
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39047"
 msgid "On Deck: Append show title to episode"
 msgstr "On Deck: 附加显示剧集标题"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39048"
 msgid "On Deck: Append season- and episode-number SxxExx"
 msgstr "On Deck: 附加季-和集-数 SxxExx"
 
+# PKC Settings - Advanced
 msgctxt "#39049"
 msgid "Nothing works? Try a full reset!"
 msgstr "不起作用？试试完全重置！"
 
+# PKC Settings - Connection
 msgctxt "#39050"
 msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
 msgstr "[黄色]从列表中选择Plex服务器[/COLOR]"
 
+# PKC Settings - Sync
 msgctxt "#39051"
 msgid "Wait before sync new/changed PMS item [s]"
 msgstr "等待同步新的/更改的PMS项目"
 
+# PKC Settings - Sync
 msgctxt "#39052"
 msgid "Background Sync"
 msgstr "后台同步"
 
+# PKC Settings - Sync
 msgctxt "#39053"
 msgid "Do a full library sync every x minutes"
 msgstr "每x分钟进行一次完全库同步"
 
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39054"
 msgid "remote"
 msgstr "远程"
 
+# Notification pop-up
 msgctxt "#39055"
 msgid "Searching for Plex Server"
 msgstr "正搜索Plex服务器"
 
+# PKC Settings - Customize paths
 msgctxt "#39056"
 msgid "Used by Sync and when attempting to Direct Play"
 msgstr "用于同步和何时尝试直接播放"
 
+# PKC Settings, category name
 msgctxt "#39057"
 msgid "Customize Paths"
 msgstr "自定义路径"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39058"
 msgid "Extend Plex TV Series \"On Deck\" view to all shows"
 msgstr "扩展Plex TV Series \"On Deck\"视图到所有节目"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "最近添加：追加显示剧集标题"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39060"
 msgid "Recently Added: Append season- and episode-number SxxExx"
 msgstr "最近添加: 追加季-和集-数 SxxExx"
 
+# Pop-up during initial sync
 msgctxt "#39061"
 msgid ""
 "Would you like to download additional artwork from FanArtTV in the "
 "background?"
 msgstr "您想后台从FanArtTV下载额外的插图吗？"
 
+# PKC Settings - Sync
 msgctxt "#39062"
 msgid "Sync when screensaver is deactivated"
 msgstr "当屏幕保护程序停用时同步"
 
+# PKC Settings - Playback
 msgctxt "#39063"
 msgid "Force Transcode Hi10P"
 msgstr "强制转码Hi10P"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr "最近添加：同时显示已观看剧集"
 
+# PKC Settings - Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
+# PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
 "playlist/nodes!)"
 msgstr "最近添加：同时显示已观看电影(Refresh Plex 列表/节点!)"
 
+# PKC Settings - Connection
 msgctxt "#39067"
 msgid "Your current Plex Media Server:"
 msgstr "您当前的Plex媒体服务器："
 
+# PKC Settings - Connection
 msgctxt "#39068"
 msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
 msgstr "[黄色]手动输入Plex媒体服务器地址[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#39069"
 msgid "Current address:"
 msgstr "当前地址："
 
+# PKC Settings - Connection
 msgctxt "#39070"
 msgid "Current port:"
 msgstr "当前端口："
 
+# PKC Settings - Connection
 msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "当前plex.tv状态："
 
-msgctxt "#39072"
-msgid ""
-"Is your Kodi installed on a low-powered device like a Raspberry Pi? If yes, "
-"then we will reduce the strain on Kodi to prevent it from crashing."
-msgstr "您的Kodi是否安装在一个低功耗设备上如树莓派？如果是，我们将减少Kodi压力以防止崩溃。"
-
+# PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
 msgstr "外观微调"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "电视节目"
 
+# PKC Settings - Playback
 msgctxt "#39075"
 msgid "Always use default Plex subtitle if possible"
 msgstr "如可能始终使用默认Plex字幕"
 
+# Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
 "\"Parents Movies\", be sure to check the Wiki: https://goo.gl/JFtQV9"
 msgstr "如果您使用了同一类多个Plex库，e.g. “儿童电影”和”服务电影”，务必查看Wiki: https://goo.gl/JFtQV9"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
 msgstr "小部件上显示的PMS项目数(e.g. \"On Deck\")"
 
+# PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
 msgstr "Plex Companion更新端口(仅在需要时更改)"
 
+# Error message
 msgctxt "#39079"
 msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
 "settings."
 msgstr "Plex Companion无法打开GDM端口。请在PKC中更改。"
 
-# Plex Entrypoint.py
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "退出Plex家庭用户 "
@@ -1662,10 +983,6 @@ msgstr "退出Plex家庭用户 "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "设置"
-
-msgctxt "#39202"
-msgid "Network credentials"
-msgstr "网络凭据"
 
 msgctxt "#39203"
 msgid "Refresh Plex playlists/nodes"
@@ -1675,6 +992,7 @@ msgctxt "#39204"
 msgid "Perform manual library sync"
 msgstr "执行手动库同步"
 
+# Error message
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr "无法运行同步，插件未连接到Plex服务器。"
@@ -1693,6 +1011,7 @@ msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
 msgstr "重置PKC失败。尝试重启Kodi。"
 
+# PKC Settings - Plex
 msgctxt "#39209"
 msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
 msgstr "[黄色]切换 plex.tv 登录 (登录或退出)[/COLOR]"
@@ -1705,13 +1024,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr "稍后观看"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39213"
 msgid "is offline"
 msgstr "处于离线状态"
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
-msgstr "即使我们登录到 plex.tv，我们无法为PMS授权"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1731,6 +1047,7 @@ msgctxt "#39219"
 msgid "Abort (Yes) or save address anyway (No)?"
 msgstr "中止 (Yes) 或保存地址 (No)？"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39220"
 msgid "connected"
 msgstr "已连接"
@@ -1773,7 +1090,6 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Plex 用户:"
 
-# Plex Artwork.py
 msgctxt "#39250"
 msgid ""
 "Running the image cache process can take some time. It will happen in the "
@@ -1783,19 +1099,6 @@ msgstr "运行图像缓存可能会花费一些时间。它将在后台持续。
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
 msgstr "首先重置现有缓存数据吗？"
-
-# Plex PlexAPI.py
-msgctxt "#39300"
-msgid ": Enter plex.tv username. Or nothing to cancel."
-msgstr "︰ 输入 plex.tv 的用户名。或不输入来取消。"
-
-msgctxt "#39301"
-msgid "Enter password for plex.tv user "
-msgstr "输入 plex.tv 用户密码 "
-
-msgctxt "#39302"
-msgid "Could not sign in user "
-msgstr "无法登陆用户 "
 
 msgctxt "#39303"
 msgid "Problems trying to contact plex.tv. Try again later"
@@ -1833,7 +1136,6 @@ msgctxt "#39311"
 msgid "or press No to not sign in."
 msgstr "或按No停止登录。"
 
-# Plex Librarysync.py
 msgctxt "#39400"
 msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
@@ -1855,12 +1157,6 @@ msgid ""
 "Cancelling the database syncing process. Current Kodi version is "
 "unsupported. Please verify your logs for more info."
 msgstr "正在取消数据库同步进程。不支持当前Kodi版本。请验证logs以获取更多信息。"
-
-msgctxt "#39404"
-msgid ""
-"Startup syncing process failed repeatedly. Try restarting Kodi. Stopping "
-"Sync for now."
-msgstr "同步进程启动持续失败。尝试重启Kodi中。现在停止同步。"
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1891,7 +1187,6 @@ msgctxt "#39410"
 msgid "ERROR in library sync"
 msgstr "库同步错误"
 
-# Plex videonodes.py
 msgctxt "#39500"
 msgid "On Deck"
 msgstr "上架"
@@ -1900,7 +1195,6 @@ msgctxt "#39501"
 msgid "Collections"
 msgstr "收藏"
 
-# Plex utils.py
 msgctxt "#39600"
 msgid ""
 "Are you sure you want to reset your local Kodi database? A re-sync of the "
@@ -1910,10 +1204,6 @@ msgstr "确定要重置您的本地Kodi数据库？之后重新同步 Plex 数�
 msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
 msgstr "无法停止数据库运行。请稍后再试。"
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
-msgstr "删除所有缓存的插图？(推荐!)"
 
 msgctxt "#39603"
 msgid ""

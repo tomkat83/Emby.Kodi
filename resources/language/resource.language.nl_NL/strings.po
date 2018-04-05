@@ -25,42 +25,28 @@ msgctxt "#30000"
 msgid "Server Address (IP)"
 msgstr "Serveradres (IP)"
 
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr ""
+
 msgctxt "#30002"
 msgid "Preferred playback method"
 msgstr "Voorkeurs methode voor afspelen"
 
-msgctxt "#30004"
-msgid "Log level"
-msgstr "Log niveau"
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
 
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Gebruikersnaam: "
 
-msgctxt "#30006"
-msgid "Password: "
-msgstr "Wachtwoord: "
-
-msgctxt "#30007"
-msgid "Network Username: "
-msgstr "Netwerk gebruikersnaam: "
-
-msgctxt "#30008"
-msgid "Network Password: "
-msgstr "Netwerk wachtwoord: "
-
-msgctxt "#30009"
-msgid "Transcode: "
-msgstr "Transcode: "
-
-msgctxt "#30010"
-msgid "Enable Performance Profiling"
-msgstr "Schakel prestatie profilering in"
-
-msgctxt "#30011"
-msgid "Local caching system"
-msgstr "Lokaal caching systeem"
-
+# Button text
 msgctxt "#30012"
 msgid "OK"
 msgstr "OK"
@@ -69,22 +55,21 @@ msgctxt "#30013"
 msgid "Never show"
 msgstr "Nooit weergeven"
 
+# PKC settings category
 msgctxt "#30014"
 msgid "Connection"
 msgstr "Verbinding"
-
-msgctxt "#30015"
-msgid "Network"
-msgstr "Netwerk"
 
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "Apparaatnaam"
 
+# Error message
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "Onbevoegd voor PMS"
 
+# PKC settings category
 msgctxt "#30022"
 msgid "Advanced"
 msgstr "Geavanceerd"
@@ -110,34 +95,6 @@ msgctxt "#30032"
 msgid "Information"
 msgstr ""
 
-msgctxt "#30035"
-msgid "Number of recent Music Albums to show:"
-msgstr "Aantal recente muziekalbums tonen:"
-
-msgctxt "#30036"
-msgid "Number of recent Movies to show:"
-msgstr "Aantal recente films tonen:"
-
-msgctxt "#30037"
-msgid "Number of recent TV episodes to show:"
-msgstr "Aantal recente TV-afleveringen tonen:"
-
-msgctxt "#30038"
-msgid "Mark watched at start of playback:"
-msgstr "Markeer als gezien aan begin van afspelen:"
-
-msgctxt "#30039"
-msgid "Set Season poster for episodes"
-msgstr "Toon poster van seizoen bij afleveringen"
-
-msgctxt "#30040"
-msgid "Genre Filter ..."
-msgstr "Genre Filter..."
-
-msgctxt "#30041"
-msgid "Play All from Here"
-msgstr "Speel alles vanaf hier"
-
 msgctxt "#30042"
 msgid "Refresh"
 msgstr "Vernieuwen"
@@ -146,165 +103,14 @@ msgctxt "#30043"
 msgid "Delete"
 msgstr "Verwijderen"
 
-msgctxt "#30044"
-msgid "Incorrect Username/Password"
-msgstr "Onjuiste gebruikersnaam/wachtwoord"
-
-msgctxt "#30045"
-msgid "Username not found"
-msgstr "Gebruikersnaam niet gevonden"
-
-msgctxt "#30046"
-msgid "Add Movie to CouchPotato"
-msgstr "Film toevoegen aan CouchPotato"
-
+# Notification displayed if there is a LOT to be deleted
 msgctxt "#30052"
 msgid "Deleting"
 msgstr "Verwijderen"
 
-msgctxt "#30053"
-msgid "Waiting for server to delete"
-msgstr "Wachten op het verwijderen op de server"
-
-msgctxt "#30059"
-msgid "Server Default"
-msgstr "Standaardwaarde van de server"
-
-msgctxt "#30060"
-msgid "Title"
-msgstr "Titel"
-
-msgctxt "#30061"
-msgid "Year"
-msgstr "Jaar"
-
-msgctxt "#30062"
-msgid "Premiere Date"
-msgstr "Datum Première"
-
-msgctxt "#30063"
-msgid "Date Created"
-msgstr "Datum gemaakt"
-
-msgctxt "#30064"
-msgid "Critic Rating"
-msgstr "Critic Rating"
-
-msgctxt "#30065"
-msgid "Community Rating"
-msgstr "Community Rating"
-
-msgctxt "#30066"
-msgid "Play Count"
-msgstr "Afspeel aantal"
-
-msgctxt "#30067"
-msgid "Budget"
-msgstr "Budget"
-
-# Runtime added as 30226 below
-msgctxt "#30068"
-msgid "Sort By"
-msgstr "Sorteren op"
-
 msgctxt "#30069"
 msgid "None"
 msgstr "Geen"
-
-msgctxt "#30070"
-msgid "Action"
-msgstr "Actie"
-
-msgctxt "#30071"
-msgid "Adventure"
-msgstr "Avontuur"
-
-msgctxt "#30072"
-msgid "Animation"
-msgstr "Animatie"
-
-msgctxt "#30073"
-msgid "Crime"
-msgstr "Misdaad"
-
-msgctxt "#30074"
-msgid "Comedy"
-msgstr "Komedie"
-
-msgctxt "#30075"
-msgid "Documentary"
-msgstr "Documentaire"
-
-msgctxt "#30076"
-msgid "Drama"
-msgstr "Drama"
-
-msgctxt "#30077"
-msgid "Fantasy"
-msgstr "Fantasie"
-
-msgctxt "#30078"
-msgid "Foreign"
-msgstr "Buitenlandse"
-
-msgctxt "#30079"
-msgid "History"
-msgstr "Geschiedenis"
-
-msgctxt "#30080"
-msgid "Horror"
-msgstr "Horror"
-
-msgctxt "#30081"
-msgid "Music"
-msgstr "Muziek"
-
-msgctxt "#30082"
-msgid "Musical"
-msgstr "Musical"
-
-msgctxt "#30083"
-msgid "Mystery"
-msgstr "Mysterie"
-
-msgctxt "#30084"
-msgid "Romance"
-msgstr "Romantiek"
-
-msgctxt "#30085"
-msgid "Science Fiction"
-msgstr "Sciencefiction"
-
-msgctxt "#30086"
-msgid "Short"
-msgstr "Kort"
-
-msgctxt "#30087"
-msgid "Suspense"
-msgstr "Spanning"
-
-msgctxt "#30088"
-msgid "Thriller"
-msgstr "Thriller"
-
-msgctxt "#30089"
-msgid "Western"
-msgstr "Western"
-
-msgctxt "#30090"
-msgid "Genre Filter"
-msgstr "Genre Filter"
-
-msgctxt "#30091"
-msgid "Confirm file deletion"
-msgstr "Bevestig bestandsverwijdering"
-
-msgctxt "#30092"
-msgid ""
-"Delete this item? This action will delete media and associated data files."
-msgstr ""
-"Dit item verwijderen? Deze actie verwijderd media en bijbehorende "
-"gegevensbestanden."
 
 msgctxt "#30093"
 msgid "Mark Watched"
@@ -322,51 +128,6 @@ msgctxt "#30096"
 msgid "Remove from Favorites"
 msgstr "Verwijderen uit favorieten"
 
-msgctxt "#30097"
-msgid "Sort By ..."
-msgstr "Sorteren op..."
-
-msgctxt "#30098"
-msgid "Sort Order Descending"
-msgstr "Aflopende sorteervolgorde"
-
-msgctxt "#30099"
-msgid "Sort Order Ascending"
-msgstr "Oplopende sorteervolgorde"
-
-msgctxt "#30100"
-msgid "Show People"
-msgstr "Toon personen"
-
-# resume dialog
-msgctxt "#30105"
-msgid "Resume"
-msgstr "Hervatten"
-
-msgctxt "#30106"
-msgid "Resume from"
-msgstr "Hervatten vanaf"
-
-msgctxt "#30107"
-msgid "Start from beginning"
-msgstr "Starten vanaf het begin"
-
-msgctxt "#30110"
-msgid "Interface"
-msgstr "Uiterlijk"
-
-msgctxt "#30111"
-msgid "Include Stream Info"
-msgstr "Info van de Stream opnemen"
-
-msgctxt "#30112"
-msgid "Include People"
-msgstr "Mensen opnemen"
-
-msgctxt "#30113"
-msgid "Include Overview"
-msgstr "Overzicht opnemen"
-
 msgctxt "#30114"
 msgid "Offer delete after playback"
 msgstr "Aanbieding verwijderen na het afspelen"
@@ -379,81 +140,22 @@ msgctxt "#30116"
 msgid "For Movies"
 msgstr "Voor films"
 
-msgctxt "#30117"
-msgid "Background Art Refresh Rate (seconds)"
-msgstr "Achtergrond kunst vernieuwingsfrequentie (seconden)"
-
-msgctxt "#30118"
-msgid "Add Resume Percent"
-msgstr "Hervatten percentage toevoegen"
-
-msgctxt "#30119"
-msgid "Add Episode Number"
-msgstr "Aflevering nummer toevoegen"
-
-msgctxt "#30120"
-msgid "Show Load Progress"
-msgstr "De voortgang van het laden tonen"
-
-msgctxt "#30121"
-msgid "Loading Content"
-msgstr "Laden van inhoud"
-
-msgctxt "#30122"
-msgid "Retrieving Data"
-msgstr "Gegevens ophalen"
-
 msgctxt "#30125"
 msgid "Done"
 msgstr "Gedaan"
 
-msgctxt "#30126"
-msgid "Processing Item : "
-msgstr "Verwerking van Item: "
-
+# Error popup message text
 msgctxt "#30128"
 msgid "Play Error"
 msgstr "Fout bij afspelen"
-
-msgctxt "#30129"
-msgid "This item is not playable"
-msgstr "Dit object is niet afspeelbaar"
-
-msgctxt "#30130"
-msgid "Local path detected"
-msgstr "Lokaal pad gedetecteerd"
-
-msgctxt "#30131"
-msgid ""
-"Your MB3 Server contains local paths.  Please change server paths to UNC or "
-"change XBMB3C setting 'Play from Stream' to true.  Path: "
-msgstr ""
-"Uw MB3-Server bevat lokale paden.  Wijzig de server paden naar UNC- of "
-"wijzig de  XBMB3C instelling 'Play uit Stream' naar true.  Path: "
 
 msgctxt "#30132"
 msgid "Warning"
 msgstr "Waarschuwing"
 
-msgctxt "#30133"
-msgid "Debug logging enabled."
-msgstr "Debug logging geactiveerd."
-
-msgctxt "#30134"
-msgid "This will affect performance."
-msgstr "Dit zal invloed hebben op de prestaties."
-
 msgctxt "#30135"
 msgid "Error"
 msgstr "Fout"
-
-msgctxt "#30136"
-msgid "Monitoring service is not running"
-msgstr "Bewakingsservice draait niet"
-
-msgctxt "#30137"
-msgid "If you have just installed please restart Kodi"
-msgstr "Als je net geïnstalleerd hebt, start Kodi opnieuw"
 
 msgctxt "#30138"
 msgid "Search"
@@ -463,33 +165,9 @@ msgctxt "#30139"
 msgid "Enable Theme Music (Requires Restart)"
 msgstr "Inschakelen themamuziek (opnieuw opstarten noodzakelijk)"
 
-msgctxt "#30140"
-msgid " - Loop Theme Music"
-msgstr " - themamuziek herhalen"
-
-msgctxt "#30141"
-msgid "Enable Background Image (Requires Restart)"
-msgstr "Achtergrondafbeelding inschakelen (opnieuw opstarten noodzakelijk)"
-
-msgctxt "#30142"
-msgid "Services"
-msgstr "Diensten"
-
 msgctxt "#30143"
 msgid "Always transcode if video bitrate is above"
 msgstr "Altijd transcoden als video bitrate hoger is dan"
-
-msgctxt "#30150"
-msgid "Skin does not support setting views"
-msgstr "Instelling weergaven worden niet ondersteund door thema"
-
-msgctxt "#30151"
-msgid "Select item action (Requires Restart)"
-msgstr "Selecteer de item-actie (vereist opnieuw opstarten)"
-
-msgctxt "#30156"
-msgid "Sort NextUp by Show Title"
-msgstr "Soort NextUp op Serie titel"
 
 msgctxt "#30157"
 msgid "Enable Enhanced Images (eg CoverArt)"
@@ -499,30 +177,9 @@ msgctxt "#30158"
 msgid "Metadata"
 msgstr "Metagegevens"
 
-msgctxt "#30159"
-msgid "Artwork"
-msgstr "Illustraties"
-
 msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Videokwaliteit als Transcoden nodig is"
-
-msgctxt "#30161"
-msgid "Enable Suggested Loader (Requires Restart)"
-msgstr ""
-"Inschakelen van de voorgestelde Loader (opnieuw opstarten noodzakelijk)"
-
-msgctxt "#30162"
-msgid "Add Season Number"
-msgstr "Seizoen nummer toevoegen"
-
-msgctxt "#30163"
-msgid "Flatten Seasons"
-msgstr "Seizoenen samenvoegen"
-
-msgctxt "#30164"
-msgid "Direct Play - HTTP"
-msgstr "Direct Play - HTTP"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -532,19 +189,6 @@ msgctxt "#30166"
 msgid "Transcoding"
 msgstr "Transcoden"
 
-msgctxt "#30167"
-msgid "Server Detection Succeeded"
-msgstr "Serverdetectie geslaagd"
-
-msgctxt "#30168"
-msgid "Found server"
-msgstr "Server gevonden"
-
-msgctxt "#30169"
-msgid "Address : "
-msgstr "Adres: "
-
-# Video nodes
 msgctxt "#30170"
 msgid "Recently Added TV Shows"
 msgstr "Onlangs toegevoegde TV-Shows"
@@ -553,10 +197,6 @@ msgctxt "#30171"
 msgid "In Progress TV Shows"
 msgstr "Actieve TV-Shows"
 
-msgctxt "#30172"
-msgid "All Music"
-msgstr "Alle muziek"
-
 msgctxt "#30173"
 msgid "Channels"
 msgstr "Kanalen"
@@ -564,14 +204,6 @@ msgstr "Kanalen"
 msgctxt "#30174"
 msgid "Recently Added"
 msgstr "Onlangs toegevoegd"
-
-msgctxt "#30175"
-msgid "Recently Added Episodes"
-msgstr "Onlangs toegevoegde afleveringen"
-
-msgctxt "#30176"
-msgid "Recently Added Albums"
-msgstr "Onlangs toegevoegde Albums"
 
 msgctxt "#30177"
 msgid "In Progress Movies"
@@ -597,178 +229,20 @@ msgctxt "#30182"
 msgid "Favorite Episodes"
 msgstr "Favoriete afleveringen"
 
-msgctxt "#30183"
-msgid "Frequent Played Albums"
-msgstr "Frequent afgespeelde Albums"
-
-msgctxt "#30184"
-msgid "Upcoming TV"
-msgstr "Aankomende TV"
-
-msgctxt "#30185"
-msgid "BoxSets"
-msgstr "BoxSets"
-
-msgctxt "#30186"
-msgid "Trailers"
-msgstr "Trailers"
-
-msgctxt "#30187"
-msgid "Music Videos"
-msgstr "Muziekvideo 's"
-
-msgctxt "#30188"
-msgid "Photos"
-msgstr "Foto's"
-
 msgctxt "#30189"
 msgid "Unwatched Movies"
 msgstr "Onbekeken films"
-
-msgctxt "#30190"
-msgid "Movie Genres"
-msgstr "Film Genres"
-
-msgctxt "#30191"
-msgid "Movie Studios"
-msgstr "Filmstudios"
-
-msgctxt "#30192"
-msgid "Movie Actors"
-msgstr "Film acteurs"
-
-msgctxt "#30193"
-msgid "Unwatched Episodes"
-msgstr "Onbekeken afleveringen"
-
-msgctxt "#30194"
-msgid "TV Genres"
-msgstr "TV Genres"
-
-msgctxt "#30195"
-msgid "TV Networks"
-msgstr "TV-netwerken"
-
-msgctxt "#30196"
-msgid "TV Actors"
-msgstr "TV-acteurs"
-
-msgctxt "#30197"
-msgid "Playlists"
-msgstr "Afspeellijsten"
 
 msgctxt "#30198"
 msgid "Search"
 msgstr "Zoek"
 
-msgctxt "#30199"
-msgid "Set Views"
-msgstr "Set Views"
-
-msgctxt "#30200"
-msgid "Select User"
-msgstr "Selecteer gebruiker"
-
-msgctxt "#30201"
-msgid "Profiling enabled."
-msgstr "Profiling ingeschakeld."
-
-msgctxt "#30202"
-msgid "Please remember to turn off when finished testing."
-msgstr "Vergeet niet uit te schakelen als u klaar bent met testen."
-
-msgctxt "#30203"
-msgid "Error in ArtworkRotationThread"
-msgstr "Fout in ArtworkRotationThread"
-
-msgctxt "#30204"
-msgid "Unable to connect to server"
-msgstr "Kan geen verbinding maken met de server"
-
-msgctxt "#30205"
-msgid "Error in LoadMenuOptionsThread"
-msgstr "Fout in LoadMenuOptionsThread"
-
-msgctxt "#30206"
-msgid "Enable Playlists Loader (Requires Restart)"
-msgstr "Inschakelen van Playlists Loader (opnieuw opstarten noodzakelijk)"
-
-msgctxt "#30207"
-msgid "Songs"
-msgstr "Nummers"
-
-msgctxt "#30208"
-msgid "Albums"
-msgstr "Albums"
-
-msgctxt "#30209"
-msgid "Album Artists"
-msgstr "Album Artiesten"
-
-msgctxt "#30210"
-msgid "Artists"
-msgstr "Artiesten"
-
-msgctxt "#30211"
-msgid "Music Genres"
-msgstr "Muziekgenres"
-
-msgctxt "#30212"
-msgid "Enable Theme Videos (Requires Restart)"
-msgstr "Thema video's inschakelen (opnieuw opstarten noodzakelijk)"
-
-msgctxt "#30213"
-msgid " - Loop Theme Videos"
-msgstr " - Thema video's herhalen"
-
-msgctxt "#30216"
-msgid "AutoPlay remaining episodes in a season"
-msgstr "Speel automatisch resterende afleveringen in een seizoen"
-
-msgctxt "#30218"
-msgid "Compress Artwork"
-msgstr "Comprimeren van Artwork"
-
-msgctxt "#30220"
-msgid "Latest "
-msgstr "Nieuwste "
-
-msgctxt "#30221"
-msgid "In Progress "
-msgstr "Actief "
-
-msgctxt "#30222"
-msgid "NextUp "
-msgstr "NextUp "
-
-msgctxt "#30223"
-msgid "User Views"
-msgstr "Gebruiker Views"
-
-msgctxt "#30224"
-msgid "Report Metrics"
-msgstr "Rapporteer statistieken"
-
-msgctxt "#30225"
-msgid "Use Kodi Sorting"
-msgstr "Gebruik sortering van Kodi"
-
-msgctxt "#30226"
-msgid "Runtime"
-msgstr "Speelduur"
-
+# Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
 msgstr "Willekeurig"
 
-msgctxt "#30228"
-msgid "Recently releases"
-msgstr "Onlangs ge-released"
-
-msgctxt "#30229"
-msgid "Random Items"
-msgstr "Willekeurige Items"
-
+# Video node naming for e.g. movies
 msgctxt "#30230"
 msgid "Recommended"
 msgstr "Aanbevolen"
@@ -777,58 +251,9 @@ msgctxt "#30235"
 msgid "Extras"
 msgstr "Extra's"
 
-msgctxt "#30236"
-msgid "Sync Theme Music"
-msgstr "Synchroniseer themamuziek"
-
-msgctxt "#30237"
-msgid "Sync Extra Fanart"
-msgstr "Synchroniseer extra Fanart"
-
-msgctxt "#30238"
-msgid "Sync Movie BoxSets"
-msgstr "Synchroniseer Film BoxSets"
-
-msgctxt "#30239"
-msgid "[COLOR yellow]Reset local Kodi database[/COLOR]"
-msgstr "[COLOR yellow]Reset lokale Kodi database[/COLOR]"
-
-msgctxt "#30240"
-msgid "Enable watched/resume status sync"
-msgstr "Activeer kijk/status synchronisatie"
-
-msgctxt "#30241"
-msgid "DB Sync Indication:"
-msgstr "DB Sync indicatie:"
-
-msgctxt "#30242"
-msgid "Play Count Sync Indication:"
-msgstr "Afspeelaantal Sync Indicatie:"
-
 msgctxt "#30243"
 msgid "Enable HTTPS"
 msgstr "HTTPS inschakelen"
-
-msgctxt "#30245"
-msgid "Force Transcoding Codecs"
-msgstr "Forceer Codecs Transcoden"
-
-msgctxt "#30246"
-msgid "Enable Netflix style next up notification"
-msgstr "Inschakelen van Netflix stijl volgende notificatie"
-
-msgctxt "#30247"
-msgid "  - The number of seconds before the end to show the notification"
-msgstr ""
-"  - Het aantal seconden voor het einde wanneer de notificatie te tonen"
-
-msgctxt "#30248"
-msgid "Show Emby Info dialog on play/select action"
-msgstr "Toon Emby Infodialoog bij Afspelen/Selecteer actie"
-
-msgctxt "#30249"
-msgid "Enable server connection message on startup"
-msgstr "Inschakelen van server verbinding bericht bij het opstarten"
 
 msgctxt "#30251"
 msgid "Recently added Home Videos"
@@ -862,112 +287,52 @@ msgctxt "#30258"
 msgid "Unwatched Music videos"
 msgstr "Ongeziene videoclips"
 
-# Default views
-msgctxt "#30300"
-msgid "Active"
-msgstr "Actieve"
-
-msgctxt "#30301"
-msgid "Clear Settings"
-msgstr "Instellingen wissen"
-
+# PKC settings sub category under appearance tweaks
 msgctxt "#30302"
 msgid "Movies"
 msgstr "Films"
 
-msgctxt "#30303"
-msgid "BoxSets"
-msgstr "BoxSets"
-
-msgctxt "#30304"
-msgid "Trailers"
-msgstr "Trailers"
-
-msgctxt "#30305"
-msgid "Series"
-msgstr "TV-series"
-
-msgctxt "#30306"
-msgid "Seasons"
-msgstr "Seizoenen"
-
-msgctxt "#30307"
-msgid "Episodes"
-msgstr "Afleveringen"
-
-msgctxt "#30308"
-msgid "Music Artists"
-msgstr "Muziek artiesten"
-
-msgctxt "#30309"
-msgid "Music Albums"
-msgstr "Muziek albums"
-
-msgctxt "#30310"
-msgid "Music Videos"
-msgstr "Muziek video 's"
-
-msgctxt "#30311"
-msgid "Music Tracks"
-msgstr "Muziek tracks"
-
-msgctxt "#30312"
-msgid "Channels"
-msgstr "Kanalen"
-
-# contextmenu
+# contextmenu entry
 msgctxt "#30401"
 msgid "Plex options"
 msgstr "Plex opties"
 
-msgctxt "#30402"
-msgid "Clear like for this item"
-msgstr "Verwijder like voor dit item"
-
-msgctxt "#30403"
-msgid "Like this item"
-msgstr "Like dit item"
-
-msgctxt "#30404"
-msgid "Dislike this item"
-msgstr "Dislike dit item"
-
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr "Voeg toe aan Plex favorieten"
 
+# contextmenu entry
 msgctxt "#30406"
 msgid "Remove from Plex favorites"
 msgstr "Verwijderen uit Plex favorieten"
 
+# contextmenu entry
 msgctxt "#30407"
 msgid "Set custom song rating"
 msgstr "Aangepaste song beoordeling instellen"
 
+# contextmenu entry
 msgctxt "#30408"
 msgid "Plex addon settings"
 msgstr "Plex addon instellingen"
 
+# contextmenu entry
 msgctxt "#30409"
 msgid "Delete item from server"
 msgstr "Verwijderen item van server"
 
+# contextmenu entry
 msgctxt "#30410"
 msgid "Refresh this item"
 msgstr "Vernieuwen van dit item"
 
-msgctxt "#30411"
-msgid "Set custom song rating (0-5)"
-msgstr "Aangepaste rating instellen (0-5)"
-
+# contextmenu entry
 msgctxt "#30412"
 msgid "Force transcode"
 msgstr "Forceer transcoden"
 
-msgctxt "#30413"
-msgid "Enable Plex context menu in Kodi"
-msgstr "Inschakelen van Plex contextmenu in Kodi"
-
+# Error dialog text
 msgctxt "#30414"
 msgid ""
 "Could not delete the Plex item. Is item deletion enabled on the Plex Media "
@@ -976,6 +341,7 @@ msgstr ""
 "Kon het item niet verwijderen van Plex. Is het verwijderen van items "
 "ingeschakeld op de Plex Media Server?"
 
+# contextmenu entry
 msgctxt "#30415"
 msgid "Start playback via PMS"
 msgstr "Het afspelen starten via PMS"
@@ -984,43 +350,37 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Instellingen voor de Plex Server"
 
-# add-on settings
+# PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
 msgstr "Controleer het Host SSL-certificaat (veiliger)"
 
+# PKC Settings - Connection
 msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "SSL-clientcertificaat"
 
-msgctxt "#30502"
-msgid "Use alternate address"
-msgstr "Gebruik alternatief adres"
-
-msgctxt "#30503"
-msgid "Alternate Server Address"
-msgstr "Alternatief server adres"
-
-msgctxt "#30504"
-msgid "Use alternate device Name"
-msgstr "Gebruik alternatieve apparaat naam"
-
+# PKC Settings - Connection
 msgctxt "#30505"
 msgid "[COLOR yellow]Reset login attempts[/COLOR]"
 msgstr "[COLOR yellow]Reset inlog pogingen[/COLOR]"
 
+# PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
 msgstr "Synchronisatieopties"
 
+# PKC Settings - Sync Options
 msgctxt "#30507"
 msgid "Show syncing progress"
 msgstr "Synchroniseren voortgang weergeven"
 
+# PKC Settings - Sync Options
 msgctxt "#30508"
 msgid "Sync empty TV Shows"
 msgstr "Sync lege TV Shows"
 
+# PKC Settings - Sync Options
 msgctxt "#30509"
 msgid "Enable Music Library"
 msgstr "Muziekbibliotheek inschakelen"
@@ -1029,72 +389,62 @@ msgctxt "#30510"
 msgid "Direct stream music library"
 msgstr "Direct stream muziekbibliotheek"
 
+# PKC Settings - Sync Options
 msgctxt "#30511"
 msgid "Playback Mode"
 msgstr "Afspeelmodus"
 
+# PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Force artwork caching"
 msgstr "Forceer artwork caching"
 
+# PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Beperk artwork cache threads (aanbevolen voor rpi)"
 
-msgctxt "#30514"
-msgid "Enable fast startup (requires server plugin)"
-msgstr "Snel opstarten inschakelen (server plugin vereist)"
-
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Maximaal aantal items om per request van de server op te halen"
 
+# PKC Settings, category name
 msgctxt "#30516"
 msgid "Playback"
 msgstr "Afspelen"
 
+# PKC Settings - Connection
 msgctxt "#30517"
 msgid "[COLOR yellow]Enter network credentials[/COLOR]"
 msgstr "[COLOR yellow]Geef netwerk authenticatie gegevens[/COLOR]"
 
+# PKC Settings - Playback
 msgctxt "#30518"
 msgid "Enable Plex Trailers (Plexpass is needed)"
 msgstr "Inschakelen van Plex Trailers (Plexpass is nodig)"
 
+# PKC Settings - Playback
 msgctxt "#30519"
 msgid "Ask to play trailers"
 msgstr "Vragen om trailers te tonen"
 
+# PKC Settings - Plex
 msgctxt "#30520"
-msgid ""
-"Skip Plex delete confirmation for the context menu (use at your own risk)"
+msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
-"Geen confirmatie bij het verwijderen van Plex (gebruik op eigen risico)"
 
+# PKC Settings - Playback
 msgctxt "#30521"
 msgid "Jump back on resume (in seconds)"
 msgstr "Terugspringen bij verder kijken (in seconden)"
 
+# PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Forceer transcoden h265/HEVC"
 
-msgctxt "#30523"
-msgid "Music metadata options (not compatible with direct stream)"
-msgstr "Muziek metagegevens opties (niet compatibel met direct stream)"
-
-msgctxt "#30524"
-msgid "Import music song rating directly from files"
-msgstr "Muziek ratings direct uit bestanden lezen"
-
-msgctxt "#30525"
-msgid "Convert music song rating to Emby rating"
-msgstr "Converteer muziek ratings naar Emby ratings"
-
-msgctxt "#30526"
-msgid "Allow rating in song files to be updated"
-msgstr "Toestaan van aanpassen rating in bestanden"
-
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Specials in de volgende afleveringen negeren"
@@ -1103,13 +453,10 @@ msgctxt "#30528"
 msgid "Permanent users to add to the session"
 msgstr "Permanente gebruikers toe te voegen aan de sessie"
 
+# PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
 msgstr "Opstartvertraging (in seconden)"
-
-msgctxt "#30530"
-msgid "Enable server restart message"
-msgstr "Server herstart bericht inschakelen"
 
 msgctxt "#30531"
 msgid "Enable new content notification"
@@ -1127,6 +474,7 @@ msgctxt "#30534"
 msgid "Server messages"
 msgstr "Serverberichten"
 
+# PKC Settings - Advanced
 msgctxt "#30535"
 msgid ""
 "[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
@@ -1135,83 +483,71 @@ msgstr ""
 "[COLOR yellow]Genereer nieuw uniek apparaat ID (bijvoorbeeld bij het klonen "
 "van Kodi)[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
 msgstr "Gebruiker moet bij elke Kodi herstart opnieuw inloggen"
 
+# PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
 msgstr "BIJ AANPASSINGEN KODI HERSTARTEN"
 
+# PKC Settings warning
 msgctxt "#30538"
 msgid "Complete Re-Sync necessary"
 msgstr "Volledige re-sync nodig"
 
+# PKC Settings - Artwork
 msgctxt "#30539"
 msgid "Download additional art from FanArtTV"
 msgstr "Download extra artwork van FanArtTV"
 
+# PKC Settings - Artwork
 msgctxt "#30540"
 msgid "Download movie set/collection art from FanArtTV"
 msgstr "Download film set/collectie artwork van FanArtTV"
 
+# PKC Settings - Playback
 msgctxt "#30541"
 msgid "Don't ask to pick a certain stream/quality"
 msgstr "Niet vragen om een bepaalde stream/kwaliteit te kiezen"
 
+# PKC Settings - Playback
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Kies altijd beste kwaliteit voor trailers"
-
-msgctxt "#30543"
-msgid "Kodi runs on a low-power device (e.g. Raspberry Pi)"
-msgstr "Kodi draait op een low-power apparaat (bijvoorbeeld Raspberry Pi)"
 
 msgctxt "#30544"
 msgid "Artwork"
 msgstr "Illustraties"
 
+# PKC Settings - Playback
 msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr "Forceer transcoden van foto's"
 
-# service add-on
+# Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
 msgstr "Welkom"
 
+# Error message
 msgctxt "#33001"
 msgid "Error connecting"
 msgstr "Verbindingsfout"
 
+# Error message
 msgctxt "#33002"
 msgid "Server is unreachable"
 msgstr "Server is onbereikbaar"
 
+# Plex notification
 msgctxt "#33003"
 msgid "Server is online"
 msgstr "Server is online"
 
-msgctxt "#33004"
-msgid "items added to playlist"
-msgstr "items toegevoegd aan afspeellijst"
-
-msgctxt "#33005"
-msgid "items queued to playlist"
-msgstr "items toegevoegd aan afspeellijst"
-
-msgctxt "#33006"
-msgid "Server is restarting"
-msgstr "De server wordt opnieuw opgestart"
-
-msgctxt "#33007"
-msgid "Access is enabled"
-msgstr "Toegang is verleend"
-
-msgctxt "#33008"
-msgid "Enter password for user:"
-msgstr "Wachtwoord voor gebruiker:"
-
+# Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
 msgstr "Ongeldige gebruikersnaam of wachtwoord"
@@ -1220,108 +556,34 @@ msgctxt "#33010"
 msgid "Failed to authenticate too many times. Reset in the settings."
 msgstr "Te vaak niet kunnen inloggen. Pas instellingen aan."
 
-msgctxt "#33011"
-msgid "Unable to direct play"
-msgstr "Direct play niet mogelijk"
-
-msgctxt "#33012"
-msgid "Direct play failed 3 times. Enabled play from HTTP."
-msgstr "Direct play 3 keer mislukt. Afspelen via HTTP ingeschakeld."
-
+# Dialog before playback
 msgctxt "#33013"
 msgid "Choose the audio stream"
 msgstr "Kies het audio kanaal"
 
+# Dialog before playback
 msgctxt "#33014"
 msgid "Choose the subtitles stream"
 msgstr "Kies de ondertitels"
 
-msgctxt "#33015"
-msgid "Delete file from your Emby server?"
-msgstr "Verwijder bestand van uw Emby server?"
-
+# Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
 msgstr "Trailers afspelen?"
 
-msgctxt "#33017"
-msgid "Gathering movies from:"
-msgstr "Verzamel films van:"
-
-msgctxt "#33018"
-msgid "Gathering boxsets"
-msgstr "Verzamel boxsets"
-
-msgctxt "#33019"
-msgid "Gathering music videos from:"
-msgstr "Verzamel muziek video's van:"
-
-msgctxt "#33020"
-msgid "Gathering tv shows from:"
-msgstr "Verzamel tv-series van:"
-
-msgctxt "#33021"
-msgid "Gathering:"
-msgstr "Verzamelen:"
-
-msgctxt "#33022"
-msgid ""
-"Detected the database needs to be recreated for this version of Emby for "
-"Kodi. Proceed?"
-msgstr ""
-"Gedetecteerd dat de database opnieuw moet worden gemaakt voor deze versie "
-"van Emby voor Kodi. Wilt u doorgaan?"
-
-msgctxt "#33023"
-msgid "Emby for Kodi may not work correctly until the database is reset."
-msgstr ""
-"Emby voor Kodi werkt mogelijk niet correct totdat de database is ge-reset."
-
-msgctxt "#33024"
-msgid ""
-"Cancelling the database syncing process. The current Kodi version is "
-"unsupported."
-msgstr ""
-"Database sync geannuleerd. De huidige versie van Kodi is niet ondersteund."
-
-msgctxt "#33025"
-msgid "completed in:"
-msgstr "voltooid in:"
-
-msgctxt "#33026"
-msgid "Comparing movies from:"
-msgstr "Vergelijk films met:"
-
-msgctxt "#33027"
-msgid "Comparing boxsets"
-msgstr "Vergelijken boxsets"
-
-msgctxt "#33028"
-msgid "Comparing music videos from:"
-msgstr "Vergelijk muziek video's met:"
-
-msgctxt "#33029"
-msgid "Comparing tv shows from:"
-msgstr "Vergelijk tv-shows met:"
-
-msgctxt "#33030"
-msgid "Comparing episodes from:"
-msgstr "Vergelijk afleveringen met:"
-
-msgctxt "#33031"
-msgid "Comparing:"
-msgstr "Vergelijken:"
-
+# Error message
 msgctxt "#33032"
 msgid ""
 "Failed to generate a new device Id. See your logs for more information."
 msgstr ""
 "Genereren van nieuwe device id mislukt. Zie de logs voor meer informatie."
 
+# Pop-up informing about Kodi restart
 msgctxt "#33033"
 msgid "Kodi will now restart to apply the changes."
 msgstr "Kodi zal nu opnieuw opstarten om de wijzigingen toe te passen."
 
+# Confirmation dialog before item gets deleted from the PMS
 msgctxt "#33041"
 msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
@@ -1330,72 +592,78 @@ msgstr ""
 "Bestand(en) van Plex Server verwijderen? Dit zal ook de bestanden van de "
 "schijf verwijderen!"
 
-# New to Plex
+# PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
 msgstr "- Aantal trailers voor een film afspelen"
 
+# PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
 msgstr "Volume ophogen bij transcoden"
 
+# PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
 msgstr "Ondertitel grootte"
 
+# PKC Settings - Sync
 msgctxt "#39003"
 msgid "Limit download sync threads (rec. for rpi: 1)"
 msgstr "Beperk aantal download threads (voor rpi: 1)"
 
+# PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
 msgstr "Plex Companion inschakelen (herstart kodi!)"
 
+# PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
 msgstr "Plex Companion poort (alleen aanpassen indien nodig)"
 
-msgctxt "#39006"
-msgid "Activate Plex Companion debug log"
-msgstr "Activeer debug log voor Plex Companion"
-
-msgctxt "#39007"
-msgid "Activate Plex Companion GDM debug log"
-msgstr "Activeer debug log voor Plex Companion GDM"
-
+# PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
 msgstr "Plex Companion: Ondersteun afspelen van media via Kodi met Plex"
 
+# Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
 msgstr "Kan niet inloggen op plex.tv. Probeer opnieuw."
 
+# Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
 msgstr ""
 "Problemen bij het verbinding met plex.tv. Netwerk of internet probleem?"
 
+# Error message
 msgctxt "#39011"
 msgid "Could not find any Plex server in the network. Aborting..."
 msgstr "Kon geen Plex servers in het netwerk vinden. Afgebroken..."
 
+# Dialog text for choosing PMS
 msgctxt "#39012"
 msgid "Choose your Plex server"
 msgstr "Kies uw Plex server"
 
+# Error message
 msgctxt "#39013"
 msgid "Not yet authorized for Plex server "
 msgstr "Nog niet ingelogd op de Plex server "
 
+# Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
 msgstr "Log in op plex.tv."
 
+# Error message
 msgctxt "#39015"
 msgid "Problems connecting to server. Pick another server?"
 msgstr "Problemen bij het verbinden met de server. Kies een andere server?"
 
+# Pop-up on initial sync
 msgctxt "#39016"
 msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
@@ -1405,52 +673,53 @@ msgstr ""
 "alleen met directe paden te gebruiken bij een grote bibliotheek. Kodi kan "
 "anders vastlopen)"
 
+# Pop-up on initial sync
 msgctxt "#39017"
 msgid ""
 "Would you now like to go to the plugin's settings to fine-tune PKC? You will"
 " need to RESTART Kodi!"
 msgstr "PKC plugin instellingen aanpassen? Kodi moet hierna herstart worden!"
 
+# PKC Settings - Advanced
 msgctxt "#39018"
 msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
 msgstr ""
 "[COLOR yellow]Lokale database herstellen (forceer verversen van alle "
 "inhoud)[/COLOR]"
 
+# PKC Settings - Advanced
 msgctxt "#39019"
 msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
 msgstr ""
 "[COLOR red]Gedeeltelijke of volledige reset van database en PKC[/COLOR]"
 
+# PKC Settings - Artwork
 msgctxt "#39020"
 msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
 msgstr ""
 "[COLOR yellow]Alle afbeeldingen van Kodi nu aan de cache toevoegen[/COLOR]"
 
-msgctxt "#39021"
-msgid "[COLOR yellow]Sync Emby Theme Media to Kodi[/COLOR]"
-msgstr "[Kleur geel] Kodi[/COLOR] Synchroniseer Emby thema muziek naar Kodi"
-
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
 msgid "local"
 msgstr "lokaal"
 
+# Error message
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
 msgstr "Authenticatie mislukt. Ingelogd bij plex.tv?"
 
+# PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
 msgstr "Automatisch inloggen bij plex.tv bij het opstarten"
 
+# PKC Settings - Sync
 msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr "Constante achtergrond sync inschakelen"
 
-msgctxt "#39027"
-msgid "Playback Mode"
-msgstr "Afspeelmodus"
-
+# Pop-up on initial sync
 msgctxt "#39028"
 msgid ""
 "CAUTION! If you choose \"Native\" mode , you might loose access to certain "
@@ -1463,10 +732,12 @@ msgstr ""
 " directe paden gebruiken (bijvoorbeeld smb://myNAS/mymovie.mkv of "
 "\\\\myNAS\\mymovie.mkv)!"
 
+# Pop-up on initial sync
 msgctxt "#39029"
 msgid "Network credentials"
 msgstr "Netwerk inloggegevens"
 
+# Pop-up on initial sync
 msgctxt "#39030"
 msgid ""
 "Add network credentials to allow Kodi access to your content? Note: Skipping"
@@ -1477,18 +748,14 @@ msgstr ""
 "Kodi zal een bericht tonen bij de eerste sync als deze stap overgeslagen "
 "word."
 
+# Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
-msgid "Kodi can't locate file: "
-msgstr "Kodi kan het bestand niet vinden: "
-
-msgctxt "#39032"
 msgid ""
-"Please verify the path. You may need to verify your network credentials in "
-"the add-on settings or use different Plex paths. Stop syncing?"
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
 msgstr ""
-"Controleer het pad. Waarschijnlijk verkeerde netwerk gegevens of verkeerde "
-"paden. Stoppen met synchroniseren?"
 
+# Pop-up on initial sync
 msgctxt "#39033"
 msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
@@ -1497,10 +764,12 @@ msgstr ""
 "Vervang Plex UNC bibliotheek paden \\\\myNas\\mymovie.mkv automatisch met "
 "smb paden, smb://myNas/mymovie.mkv? (aangeraden)"
 
+# PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
 msgstr "Vervang Plex UNC paden \\\\MyNas met smb://myNas"
 
+# PKC Settings - Customize Paths
 msgctxt "#39035"
 msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
@@ -1509,30 +778,37 @@ msgstr ""
 "Vervang plex paden /volume1/media of \\\\myserver\\media met aangepaste SMB "
 "paden smb://NAS/mystuff"
 
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Oorspronkelijke Plex film pad om te vervangen:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39038"
 msgid "Replace Plex MOVIE with:"
 msgstr "Vervang Plex MOVIE met:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
 msgstr "Vervang Plex TV SHOWS pad met:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39040"
 msgid "Replace Plex TV SHOWS with:"
 msgstr "Vervang Plex TV-SHOWS met:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39041"
 msgid "Original Plex MUSIC path to replace:"
 msgstr "Oorspronkelijke Plex muziek pad om te vervangen:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39042"
 msgid "Replace Plex MUSIC with:"
 msgstr "Vervang Plex MUZIEK met:"
 
+# Pop-up on initial sync
 msgctxt "#39043"
 msgid ""
 "Go a step further and completely replace all original Plex library paths "
@@ -1542,6 +818,7 @@ msgstr ""
 "volume1/media) volledig vervangen door aangepaste SMB paden "
 "(smb://NAS/MyStuff)?"
 
+# Pop-up on initial sync
 msgctxt "#39044"
 msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
@@ -1550,88 +827,114 @@ msgstr ""
 "Voer uw aangepaste smb paden in de instellingen onder \"Sync Opties\" en "
 "herstart Kodi"
 
+# PKC Settings - Customize Paths
 msgctxt "#39045"
 msgid "Original Plex PHOTO path to replace:"
 msgstr "Oorspronkelijke Plex foto pad om te vervangen:"
 
+# PKC Settings - Customize Paths
 msgctxt "#39046"
 msgid "Replace Plex PHOTO with:"
 msgstr "Vervang Plex PHOTO met:"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39047"
 msgid "On Deck: Append show title to episode"
 msgstr "On Deck: Voeg show naam toe aan episode"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39048"
 msgid "On Deck: Append season- and episode-number SxxExx"
 msgstr "On Deck: Voeg seizoen en aflevering nummer toe SxxExx"
 
+# PKC Settings - Advanced
 msgctxt "#39049"
 msgid "Nothing works? Try a full reset!"
 msgstr "Niets werkt? Probeer een volledige reset!"
 
+# PKC Settings - Connection
 msgctxt "#39050"
 msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
 msgstr "[COLOR yellow]Kies Plex Server uit lijst[/COLOR]"
 
+# PKC Settings - Sync
 msgctxt "#39051"
 msgid "Wait before sync new/changed PMS item [s]"
 msgstr "Tijd voordat nieuwe/gewijzigde items gesynct worden [s]"
 
+# PKC Settings - Sync
 msgctxt "#39052"
 msgid "Background Sync"
 msgstr "Achtergrond Sync"
 
+# PKC Settings - Sync
 msgctxt "#39053"
 msgid "Do a full library sync every x minutes"
 msgstr "Elke X minuten een volledige bibliotheek sync"
 
+# Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39054"
 msgid "remote"
 msgstr "remote"
 
+# Notification pop-up
 msgctxt "#39055"
 msgid "Searching for Plex Server"
 msgstr "Plex Server zoeken"
 
+# PKC Settings - Customize paths
 msgctxt "#39056"
 msgid "Used by Sync and when attempting to Direct Play"
 msgstr "Gebruikt door Sync en bij Direct Play"
 
+# PKC Settings, category name
 msgctxt "#39057"
 msgid "Customize Paths"
 msgstr "Aanpassen van paden"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39058"
 msgid "Extend Plex TV Series \"On Deck\" view to all shows"
 msgstr "On Deck van TV-series laat alle series zien"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "Onlangs Toegevoegd: Voeg serie naam toe aan afleveringen"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39060"
 msgid "Recently Added: Append season- and episode-number SxxExx"
 msgstr "Onlangs Toegevoegd: Voeg seizoen en aflevering nummer toe SxxExx"
 
+# Pop-up during initial sync
 msgctxt "#39061"
 msgid ""
 "Would you like to download additional artwork from FanArtTV in the "
 "background?"
 msgstr "Extra artwork van FanArtTV in de background downloaden?"
 
+# PKC Settings - Sync
 msgctxt "#39062"
 msgid "Sync when screensaver is deactivated"
 msgstr "Sync als screensaver gedeactiveerd is"
 
+# PKC Settings - Playback
 msgctxt "#39063"
 msgid "Force Transcode Hi10P"
 msgstr "Forceer transcoden van Hi10P"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
 msgstr "Onlangs Toegevoegd: Toon ook al bekeken afleveringen"
 
+# PKC Settings - Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr ""
+
+# PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
@@ -1640,47 +943,47 @@ msgstr ""
 "Onlangs Toegevoegd: Toon ook al bekeken films (Ververs Plex "
 "afspeellijst/nodes!)"
 
+# PKC Settings - Connection
 msgctxt "#39067"
 msgid "Your current Plex Media Server:"
 msgstr "Huidige Plex Media Server:"
 
+# PKC Settings - Connection
 msgctxt "#39068"
 msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
 msgstr "[COLOR yellow]Handmatig Plex Media Server adres invoeren[/COLOR]"
 
+# PKC Settings - Connection
 msgctxt "#39069"
 msgid "Current address:"
 msgstr "Huidig adres:"
 
+# PKC Settings - Connection
 msgctxt "#39070"
 msgid "Current port:"
 msgstr "Huidige poort:"
 
+# PKC Settings - Connection
 msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "Huidige status van de plex.tv:"
 
-msgctxt "#39072"
-msgid ""
-"Is your Kodi installed on a low-powered device like a Raspberry Pi? If yes, "
-"then we will reduce the strain on Kodi to prevent it from crashing."
-msgstr ""
-"Is Kodi geïnstalleerd op een low-powered apparaat zoals een Raspberry Pi? Zo"
-" ja, dan zullen we de druk op Kodi verlagen om de kans op crashen te "
-"verminderen."
-
+# PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
 msgstr "Uiterlijk aanpassingen"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "TV series"
 
+# PKC Settings - Playback
 msgctxt "#39075"
 msgid "Always use default Plex subtitle if possible"
 msgstr "Gebruik indien mogelijk altijd standaard Plex ondertitels"
 
+# Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
@@ -1690,14 +993,17 @@ msgstr ""
 "\"Kinder Films\" en \"Films voor volwassenen\" bekijk dan de Wiki: "
 "https://goo.gl/JFtQV9"
 
+# PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
 msgstr "Aantal PMS items in widgets laten zien (bijv. \"On Deck\")"
 
+# PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
 msgstr "Plex Companion poort (alleen aanpassen indien nodig)"
 
+# Error message
 msgctxt "#39079"
 msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
@@ -1706,7 +1012,6 @@ msgstr ""
 "Plex Companion kon de GDM poort niet gebruiken. Wijzig deze in de PKC "
 "instellingen."
 
-# Plex Entrypoint.py
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Log-out Plex Home gebruiker "
@@ -1714,10 +1019,6 @@ msgstr "Log-out Plex Home gebruiker "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Instellingen"
-
-msgctxt "#39202"
-msgid "Network credentials"
-msgstr "Netwerk inloggegevens"
 
 msgctxt "#39203"
 msgid "Refresh Plex playlists/nodes"
@@ -1727,6 +1028,7 @@ msgctxt "#39204"
 msgid "Perform manual library sync"
 msgstr "Handmatige sync uitvoeren"
 
+# Error message
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr "Sync is niet gelukt, de add-on is niet verbonden met de Plex Server."
@@ -1747,6 +1049,7 @@ msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
 msgstr "PKC reset niet gelukt. Herstart Kodi."
 
+# PKC Settings - Plex
 msgctxt "#39209"
 msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
 msgstr "[COLOR yellow]Verander plex.tv login (aanmelden of afmelden)[/COLOR]"
@@ -1759,13 +1062,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr "Later bekijken"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39213"
 msgid "is offline"
 msgstr "is offline"
-
-msgctxt "#39214"
-msgid "Even though we signed in to plex.tv, we could not authorize for PMS"
-msgstr "Hoewel aangemeld bij plex.tv, niet geauthoriseerd bij de PMS"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1787,6 +1087,7 @@ msgctxt "#39219"
 msgid "Abort (Yes) or save address anyway (No)?"
 msgstr "Afbreken (Ja) of adres toch opslaan (Nee)?"
 
+# String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39220"
 msgid "connected"
 msgstr "verbonden"
@@ -1831,7 +1132,6 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Plex gebruiker:"
 
-# Plex Artwork.py
 msgctxt "#39250"
 msgid ""
 "Running the image cache process can take some time. It will happen in the "
@@ -1843,19 +1143,6 @@ msgstr ""
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
 msgstr "Alle bestaande gegevens van de cache eerst resetten?"
-
-# Plex PlexAPI.py
-msgctxt "#39300"
-msgid ": Enter plex.tv username. Or nothing to cancel."
-msgstr ": Plex.tv gebruikersnaam. Of niets om te annuleren."
-
-msgctxt "#39301"
-msgid "Enter password for plex.tv user "
-msgstr "Wachtwoord voor gebruiker van plex.tv "
-
-msgctxt "#39302"
-msgid "Could not sign in user "
-msgstr "Kan de gebruiker niet inloggen "
 
 msgctxt "#39303"
 msgid "Problems trying to contact plex.tv. Try again later"
@@ -1893,7 +1180,6 @@ msgctxt "#39311"
 msgid "or press No to not sign in."
 msgstr "of druk op Nee als u niet wilt inloggen."
 
-# Plex Librarysync.py
 msgctxt "#39400"
 msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
@@ -1919,14 +1205,6 @@ msgid ""
 msgstr ""
 "Database synchroniseer proces geannuleerd. Huidige Kodi versie wordt niet "
 "ondersteund. Controleer uw logbestanden voor meer info."
-
-msgctxt "#39404"
-msgid ""
-"Startup syncing process failed repeatedly. Try restarting Kodi. Stopping "
-"Sync for now."
-msgstr ""
-"Opstarten synchronisatie proces mislukt herhaaldelijk. Start Kodi opnieuw. "
-"Sync is voor nu geannuleerd."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1961,7 +1239,6 @@ msgctxt "#39410"
 msgid "ERROR in library sync"
 msgstr "FOUT in bibliotheek synchronisatie"
 
-# Plex videonodes.py
 msgctxt "#39500"
 msgid "On Deck"
 msgstr "On Deck"
@@ -1970,7 +1247,6 @@ msgctxt "#39501"
 msgid "Collections"
 msgstr "Verzamelingen"
 
-# Plex utils.py
 msgctxt "#39600"
 msgid ""
 "Are you sure you want to reset your local Kodi database? A re-sync of the "
@@ -1983,10 +1259,6 @@ msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
 msgstr ""
 "Kon de database synchronisatie niet stoppen. Probeer het later nog eens."
-
-msgctxt "#39602"
-msgid "Remove all cached artwork? (recommended!)"
-msgstr "Verwijder artwork cache? (aanbevolen!)"
 
 msgctxt "#39603"
 msgid ""
