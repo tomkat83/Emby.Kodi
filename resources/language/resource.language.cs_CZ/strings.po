@@ -27,7 +27,7 @@ msgstr "IP Adresa serveru"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Vyhledávám PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -41,6 +41,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Varování: Máte v Kodi zapnuté nastavení \"Automaticky přehrát další video\"."
+" Toto může narušit funkčnost PKC. Deaktivovat?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -432,7 +434,7 @@ msgstr "Zeptat se na přehrání ukázek"
 # PKC Settings - Plex
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
-msgstr ""
+msgstr "Přeskočit potvrzení PMS o smazání (používejte na vlastní riziko)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -754,6 +756,8 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Kodi nemůže najít soubor %s. Prosím zkontrolujte nastavení PKC. Přerušit "
+"synchronizaci?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
