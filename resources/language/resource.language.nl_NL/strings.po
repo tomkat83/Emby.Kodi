@@ -27,7 +27,7 @@ msgstr "Serveradres (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Plex Server zoeken"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -41,6 +41,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Waarschuwing: De kodi setting 'Automatisch volgende video afspelen' is "
+"actief. Dit kan voor problemen zorgen. Setting deactiveren?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -93,7 +95,7 @@ msgstr "Ik beheer deze Plex Media Server"
 # Kodi context menu entry for movie and episode information screen
 msgctxt "#30032"
 msgid "Information"
-msgstr ""
+msgstr "Informatie"
 
 msgctxt "#30042"
 msgid "Refresh"
@@ -433,6 +435,7 @@ msgstr "Vragen om trailers te tonen"
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
+"Geen confirmatie bij het verwijderen van Plex (gebruik op eigen risico)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -754,6 +757,8 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Kodi kan het bestand %sniet vinden. Verifieer de PKC instellingen. Sync "
+"stoppen?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
