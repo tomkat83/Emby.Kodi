@@ -3,13 +3,14 @@
 # Croneter None <croneter@gmail.com>, 2017
 # Nat Le Scouarnec <nat@blogotheque.net>, 2017
 # Elixir59 <elixir.css@gmail.com>, 2017
+# scorpio686 <gced@live.be>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Elixir59 <elixir.css@gmail.com>, 2017\n"
+"Last-Translator: scorpio686 <gced@live.be>, 2018\n"
 "Language-Team: French (France) (https://www.transifex.com/croneter/teams/73837/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +29,7 @@ msgstr "Adresse du serveur (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Recherche d'un serveur plex"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -42,6 +43,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Attention, les paramètres de Kodi sont réglés pour joueur automatiquement la"
+" vidéo suivante. Cette option va casser PlexKodiConnect. Désactiver ?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -435,6 +438,7 @@ msgstr "Demander de jouer les bandes-annonces"
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
+"Passer la confirmation de suppression de PlexMediaServer (à vos risques)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -761,6 +765,8 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Kodi ne peut pas localiser le fichier %s. Veuillez vérifier les paramètres "
+"de PlexKodiConnect. Arrêter la synchronisation ?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
