@@ -19,7 +19,7 @@ languages = [
     'el_GR',
     'pl_PL',
     # 'sv_SE',
-    # 'hu_HU',
+    'hu_HU',
     'ru_RU',
 ]
 
