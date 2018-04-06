@@ -30,7 +30,7 @@ msgstr "Адрес сервера (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Поиск PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -44,6 +44,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Предупреждение: включена настройка Kodi «Воспроизвести следующее видео "
+"автоматически». Это может сломать PKC. Деактивировать?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -435,6 +437,7 @@ msgstr "Предложить воспроизвести трейлер"
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
+"Пропустить подтверждение удаления в PMS (использовать на свой страх и риск)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -754,6 +757,8 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Kodi не может найти файл%s. Проверьте свои настройки PKC. Остановить "
+"синхронизацию?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
