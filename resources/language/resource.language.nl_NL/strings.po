@@ -937,7 +937,7 @@ msgstr "Onlangs Toegevoegd: Toon ook al bekeken afleveringen"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Forceer Kodi thema reset bij afspelen stoppen"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"

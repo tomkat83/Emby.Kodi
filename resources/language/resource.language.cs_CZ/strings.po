@@ -935,7 +935,7 @@ msgstr "Naposledy přidané: Zobrazovat také shlédnuté epizody"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Vynutit obnovení vzhledu Kodi po skončení přehrávání"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"

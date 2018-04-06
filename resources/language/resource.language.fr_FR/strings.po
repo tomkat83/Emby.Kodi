@@ -948,7 +948,7 @@ msgstr "Recently Added: Also show already watched episodes"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Forcer le rafraîchissement du skin de Kodi va arrêter le playback."
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"

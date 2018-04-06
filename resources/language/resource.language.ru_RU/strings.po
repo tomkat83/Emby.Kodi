@@ -936,7 +936,7 @@ msgstr "Недавно добавлено: также показывать пр�
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Принудительное обновление обложки Kodi при остановке воспроизведения"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
