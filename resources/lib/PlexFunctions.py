@@ -636,7 +636,7 @@ def init_plex_playqueue(itemid, librarySectionUUID, mediatype='movie',
         xml[0].tag
     except (IndexError, TypeError, AttributeError):
         LOG.error("Error retrieving metadata for %s", url)
-        return None
+        return
     return xml
 
 

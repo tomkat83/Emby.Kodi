@@ -7,7 +7,7 @@ from Queue import Empty
 from socket import SHUT_RDWR
 from urllib import urlencode
 
-from xbmc import sleep, executebuiltin
+from xbmc import sleep, executebuiltin, Player
 
 from utils import settings, thread_methods, language as lang, dialog
 from plexbmchelper import listener, plexgdm, subscribers, httppersist
@@ -18,7 +18,6 @@ from playlist_func import get_pms_playqueue, get_plextype_from_xml, \
     get_playlist_details_from_xml
 from playback import playback_triage, play_xml
 import json_rpc as js
-import player
 import variables as v
 import state
 import playqueue as PQ
@@ -43,7 +42,7 @@ class PlexCompanion(Thread):
         self.client.clientDetails()
         LOG.debug("Registration string is:\n%s", self.client.getClientDetails())
         # kodi player instance
-        self.player = player.PKC_Player()
+        self.player = Player()
         self.httpd = False
         self.subscription_manager = None
         Thread.__init__(self)

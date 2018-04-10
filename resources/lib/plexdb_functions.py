@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ###############################################################################
-from logging import getLogger
 
 from utils import kodi_sql
 import variables as v
-
-###############################################################################
-
-log = getLogger("PLEX."+__name__)
 
 ###############################################################################
 
@@ -183,34 +178,15 @@ class Plex_DB_Functions():
         None if not found
         """
         query = '''
-            SELECT plex_id
-            FROM plex
-            WHERE kodi_fileid = ? AND kodi_type = ?
+            SELECT plex_id FROM plex WHERE kodi_fileid = ? AND kodi_type = ?
+            LIMIT 1
         '''
+        self.plexcursor.execute(query, (kodi_fileid, kodi_type))
         try:
-            self.plexcursor.execute(query, (kodi_fileid, kodi_type))
             item = self.plexcursor.fetchone()[0]
-            return item
-        except:
-            return None
-
-    def getMusicItem_byFileId(self, kodi_id, kodi_type):
-        """
-        Returns the plex_id for kodi_id and kodi_type
-
-        None if not found
-        """
-        query = '''
-            SELECT plex_id
-            FROM plex
-            WHERE kodi_id = ? AND kodi_type = ?
-        '''
-        try:
-            self.plexcursor.execute(query, (kodi_id, kodi_type))
-            item = self.plexcursor.fetchone()[0]
-            return item
-        except:
-            return None
+        except TypeError:
+            item = None
+        return item
 
     def getItem_byId(self, plex_id):
         """
@@ -237,7 +213,7 @@ class Plex_DB_Functions():
             FROM plex
             WHERE plex_id LIKE ?
         '''
-        self.plexcursor.execute(query, (plex_id+"%",))
+        self.plexcursor.execute(query, (plex_id + "%",))
         return self.plexcursor.fetchall()
 
     def getItem_byView(self, view_id):
@@ -260,8 +236,7 @@ class Plex_DB_Functions():
         query = '''
             SELECT plex_id, parent_id, plex_type
             FROM plex
-            WHERE kodi_id = ?
-            AND kodi_type = ?
+            WHERE kodi_id = ? AND kodi_type = ?
         '''
         self.plexcursor.execute(query, (kodi_id, kodi_type,))
         return self.plexcursor.fetchone()
@@ -303,24 +278,6 @@ class Plex_DB_Functions():
         '''
         self.plexcursor.execute(query, (plex_type,))
         return self.plexcursor.fetchall()
-
-    def getMediaType_byId(self, plex_id):
-        """
-        Returns plex_type for plex_id
-
-        Or None if not found
-        """
-        query = '''
-            SELECT plex_type
-            FROM plex
-            WHERE plex_id = ?
-        '''
-        self.plexcursor.execute(query, (plex_id,))
-        try:
-            itemtype = self.plexcursor.fetchone()[0]
-        except TypeError:
-            itemtype = None
-        return itemtype
 
     def addReference(self, plex_id, plex_type, kodi_id, kodi_type,
                      kodi_fileid=None, kodi_pathid=None, parent_id=None,
@@ -381,13 +338,6 @@ class Plex_DB_Functions():
         self.plexcursor.execute('DELETE FROM plex WHERE plex_id = ?',
                                 (plex_id,))
 
-    def removeWildItem(self, plex_id):
-        """
-        Removes all entries with plex_id with % added
-        """
-        query = "DELETE FROM plex WHERE plex_id LIKE ?"
-        self.plexcursor.execute(query, (plex_id+"%",))
-
     def itemsByType(self, plex_type):
         """
         Returns a list of dicts for plex_type:
@@ -418,7 +368,7 @@ class Plex_DB_Functions():
         """
         Sets the fanart_synced flag to 1 for plex_id
         """
-        query = '''UPDATE plex SET fanart_synced = 1 WHERE plex_id = ?'''
+        query = 'UPDATE plex SET fanart_synced = 1 WHERE plex_id = ?'
         self.plexcursor.execute(query, (plex_id,))
 
     def get_missing_fanart(self):

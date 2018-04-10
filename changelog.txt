@@ -1,3 +1,20 @@
+version 2.0.18 (beta only):
+- Fix some playqueue inconsistencies using Plex Companion
+- Direct paths: fix replaying item where playback was started via PMS
+- Fix Plex trailers screwing up playqueue 
+- Fix IndexError when emptying Kodi playqueue
+- Incorporate PKC player in kodimonitor module
+- Fix pretty printing of PKC playqueues not working
+- Code cleanups
+
+version 2.0.17 (beta only):
+- Finally make PKC compatible with Kodi 18 Leia Alpha 1
+- Fix information screen and Plex option not working
+- Activate Kodi background updates to hide "Compressing Database"
+- Update translations
+- Remove most strings not being used by PKC
+- Remove some legacy settings
+
 version 2.0.16 (beta only):
 - Do NOT delete playstates before getting new ones from the PMS
 

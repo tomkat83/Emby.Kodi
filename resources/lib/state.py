@@ -95,8 +95,12 @@ WEBSOCKET_QUEUE = None
 
 # Which Kodi player is/has been active? (either int 1, 2 or 3)
 ACTIVE_PLAYERS = []
-# Failsafe for throwing failing ListItems() back to Kodi's setResolvedUrl
+# Failsafe for throwing an empty video back to Kodi's setResolvedUrl to set
+# up our own playlist from the very beginning
 PKC_CAUSED_STOP = False
+# Flag if the 0 length PKC video has already failed so we can start resolving
+# playback (set in player.py)
+PKC_CAUSED_STOP_DONE = True
 
 # Kodi player states - here, initial values are set
 PLAYER_STATES = {

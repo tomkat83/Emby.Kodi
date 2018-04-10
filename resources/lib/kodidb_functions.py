@@ -204,24 +204,20 @@ class KodiDBMethods(object):
             self.cursor.execute(query, (file_id, path_id, filename, date_added))
         return file_id
 
-    def clean_file_table(self):
+    def obsolete_file_ids(self):
         """
-        Hack: using Direct Paths, Kodi adds all addon paths to the files table
-        but without a dateAdded entry. This method cleans up all file entries
-        without a dateAdded entry - to be called after playback has ended.
+        Returns a list of (idFile,) tuples (ints) of all Kodi file ids that do
+        not have a dateAdded set (dateAdded is NULL) and the filename start with
+        'plugin://plugin.video.plexkodiconnect'
+        These entries should be deleted as they're created falsely by Kodi.
         """
-        self.cursor.execute('SELECT idFile FROM files WHERE dateAdded IS NULL')
-        files = self.cursor.fetchall()
-        self.cursor.execute('DELETE FROM files where dateAdded IS NULL')
-        for file in files:
-            self.cursor.execute('DELETE FROM bookmark WHERE idFile = ?',
-                                (file[0],))
-            self.cursor.execute('DELETE FROM settings WHERE idFile = ?',
-                                (file[0],))
-            self.cursor.execute('DELETE FROM streamdetails WHERE idFile = ?',
-                                (file[0],))
-            self.cursor.execute('DELETE FROM stacktimes WHERE idFile = ?',
-                                (file[0],))
+        query = '''
+            SELECT idFile FROM files
+            WHERE dateAdded IS NULL
+            AND strFilename LIKE \'plugin://plugin.video.plexkodiconnect%\'
+        '''
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
 
     def show_id_from_path(self, path):
         """
@@ -241,10 +237,12 @@ class KodiDBMethods(object):
             show_id = None
         return show_id
 
-    def remove_file(self, file_id):
+    def remove_file(self, file_id, remove_orphans=True):
         """
         Removes the entry for file_id from the files table. Will also delete
-        entries from the associated tables: bookmark, settings, streamdetails
+        entries from the associated tables: bookmark, settings, streamdetails.
+        If remove_orphans is true, this method will delete any orphaned path
+        entries in the Kodi path table
         """
         self.cursor.execute('SELECT idPath FROM files WHERE idFile = ? LIMIT 1',
                             (file_id,))
@@ -262,12 +260,13 @@ class KodiDBMethods(object):
                             (file_id,))
         self.cursor.execute('DELETE FROM stacktimes WHERE idFile = ?',
                             (file_id,))
-        # Delete orphaned path entry
-        self.cursor.execute('SELECT idFile FROM files WHERE idPath = ? LIMIT 1',
-                            (path_id,))
-        if self.cursor.fetchone() is None:
-            self.cursor.execute('DELETE FROM path WHERE idPath = ?',
-                                (path_id,))
+        if remove_orphans:
+            # Delete orphaned path entry
+            query = 'SELECT idFile FROM files WHERE idPath = ? LIMIT 1'
+            self.cursor.execute(query, (path_id,))
+            if self.cursor.fetchone() is None:
+                self.cursor.execute('DELETE FROM path WHERE idPath = ?',
+                                    (path_id,))
 
     def _modify_link_and_table(self, kodi_id, kodi_type, entries, link_table,
                                table, key):

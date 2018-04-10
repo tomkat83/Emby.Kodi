@@ -999,7 +999,7 @@ class TVShows(Items):
         """
         plex_dbitem = self.plex_db.getItem_byId(plex_id)
         if plex_dbitem is None:
-            LOG.info('Cannot delete plex_id %s - not found in DB', plex_id)
+            LOG.debug('Cannot delete plex_id %s - not found in DB', plex_id)
             return
         kodi_id = plex_dbitem[0]
         file_id = plex_dbitem[1]
@@ -1075,7 +1075,7 @@ class TVShows(Items):
         if v.KODIVERSION >= 17:
             self.kodi_db.remove_uniqueid(kodi_id, v.KODI_TYPE_SHOW)
             self.kodi_db.remove_ratings(kodi_id, v.KODI_TYPE_SHOW)
-        LOG.info("Removed tvshow: %s", kodi_id)
+        LOG.debug("Removed tvshow: %s", kodi_id)
 
     def remove_season(self, kodi_id):
         """
@@ -1086,7 +1086,7 @@ class TVShows(Items):
                                     self.kodicursor)
         self.kodicursor.execute("DELETE FROM seasons WHERE idSeason = ?",
                                 (kodi_id,))
-        LOG.info("Removed season: %s", kodi_id)
+        LOG.debug("Removed season: %s", kodi_id)
 
     def remove_episode(self, kodi_id, file_id):
         """
@@ -1102,7 +1102,7 @@ class TVShows(Items):
         if v.KODIVERSION >= 17:
             self.kodi_db.remove_uniqueid(kodi_id, v.KODI_TYPE_EPISODE)
             self.kodi_db.remove_ratings(kodi_id, v.KODI_TYPE_EPISODE)
-        LOG.info("Removed episode: %s", kodi_id)
+        LOG.debug("Removed episode: %s", kodi_id)
 
 
 class Music(Items):
@@ -1719,109 +1719,101 @@ class Music(Items):
             # Update album artwork
             artwork.modify_artwork(artworks, albumid, v.KODI_TYPE_ALBUM, kodicursor)
 
-    def remove(self, itemid):
+    def remove(self, plex_id):
         """
-        Remove kodiid, file_id, pathid, plex reference
+        Completely remove the item with plex_id from the Kodi and Plex DBs.
+        Orphaned entries will also be deleted.
         """
-        plex_db = self.plex_db
-
-        plex_dbitem = plex_db.getItem_byId(itemid)
+        plex_dbitem = self.plex_db.getItem_byId(plex_id)
         try:
-            kodiid = plex_dbitem[0]
-            mediatype = plex_dbitem[4]
-            LOG.info("Removing %s kodiid: %s", mediatype, kodiid)
+            kodi_id = plex_dbitem[0]
+            file_id = plex_dbitem[1]
+            parent_id = plex_dbitem[3]
+            kodi_type = plex_dbitem[4]
+            LOG.info("Removing %s with kodi_id: %s, parent_id: %s, file_id: %s",
+                     kodi_type, kodi_id, parent_id, file_id)
         except TypeError:
+            LOG.debug('Cannot delete item with plex id %s from Kodi', plex_id)
             return
 
-        ##### PROCESS ITEM #####
-
         # Remove the plex reference
-        plex_db.removeItem(itemid)
-
-        ##### IF SONG #####
-
-        if mediatype == v.KODI_TYPE_SONG:
+        self.plex_db.removeItem(plex_id)
+        ##### SONG #####
+        if kodi_type == v.KODI_TYPE_SONG:
             # Delete song
-            self.removeSong(kodiid)
-            # This should only address single song scenario, where server doesn't actually
-            # create an album for the song.
-            plex_db.removeWildItem(itemid)
+            self.remove_song(kodi_id)
+            # Album verification
 
-            for item in plex_db.getItem_byWildId(itemid):
+            for item in self.plex_db.getItem_byWildId(plex_id):
 
                 item_kid = item[0]
-                item_mediatype = item[1]
+                item_kodi_type = item[1]
 
-                if item_mediatype == v.KODI_TYPE_ALBUM:
-                    childs = plex_db.getItem_byParentId(item_kid,
-                                                        v.KODI_TYPE_SONG)
+                if item_kodi_type == v.KODI_TYPE_ALBUM:
+                    childs = self.plex_db.getItem_byParentId(item_kid,
+                                                             v.KODI_TYPE_SONG)
                     if not childs:
                         # Delete album
-                        self.removeAlbum(item_kid)
+                        self.remove_album(item_kid)
 
-        ##### IF ALBUM #####
-        elif mediatype == v.KODI_TYPE_ALBUM:
+        ##### ALBUM #####
+        elif kodi_type == v.KODI_TYPE_ALBUM:
             # Delete songs, album
-            album_songs = plex_db.getItem_byParentId(kodiid,
-                                                     v.KODI_TYPE_SONG)
+            album_songs = self.plex_db.getItem_byParentId(kodi_id,
+                                                          v.KODI_TYPE_SONG)
             for song in album_songs:
-                self.removeSong(song[1])
+                self.remove_song(song[1])
             # Remove plex songs
-            plex_db.removeItems_byParentId(kodiid,
-                                           v.KODI_TYPE_SONG)
+            self.plex_db.removeItems_byParentId(kodi_id,
+                                                v.KODI_TYPE_SONG)
             # Remove the album
-            self.removeAlbum(kodiid)
+            self.remove_album(kodi_id)
 
         ##### IF ARTIST #####
-        elif mediatype == v.KODI_TYPE_ARTIST:
+        elif kodi_type == v.KODI_TYPE_ARTIST:
             # Delete songs, album, artist
-            albums = plex_db.getItem_byParentId(kodiid,
-                                                v.KODI_TYPE_ALBUM)
+            albums = self.plex_db.getItem_byParentId(kodi_id, v.KODI_TYPE_ALBUM)
             for album in albums:
                 albumid = album[1]
-                album_songs = plex_db.getItem_byParentId(albumid,
-                                                         v.KODI_TYPE_SONG)
+                album_songs = self.plex_db.getItem_byParentId(albumid,
+                                                              v.KODI_TYPE_SONG)
                 for song in album_songs:
-                    self.removeSong(song[1])
+                    self.remove_song(song[1])
                 # Remove plex song
-                plex_db.removeItems_byParentId(albumid,
-                                               v.KODI_TYPE_SONG)
+                self.plex_db.removeItems_byParentId(albumid, v.KODI_TYPE_SONG)
                 # Remove plex artist
-                plex_db.removeItems_byParentId(albumid,
-                                               v.KODI_TYPE_ARTIST)
+                self.plex_db.removeItems_byParentId(albumid, v.KODI_TYPE_ARTIST)
                 # Remove kodi album
-                self.removeAlbum(albumid)
+                self.remove_album(albumid)
             # Remove plex albums
-            plex_db.removeItems_byParentId(kodiid,
-                                           v.KODI_TYPE_ALBUM)
-
+            self.plex_db.removeItems_byParentId(kodi_id, v.KODI_TYPE_ALBUM)
             # Remove artist
-            self.removeArtist(kodiid)
+            self.remove_artist(kodi_id)
 
-        LOG.info("Deleted %s: %s from kodi database", mediatype, itemid)
+        LOG.debug("Deleted plex_id %s from kodi database", plex_id)
 
-    def removeSong(self, kodiid):
+    def remove_song(self, kodi_id):
         """
         Remove song, and only the song
         """
-        self.artwork.delete_artwork(kodiid, v.KODI_TYPE_SONG, self.kodicursor)
+        self.artwork.delete_artwork(kodi_id, v.KODI_TYPE_SONG, self.kodicursor)
         self.kodicursor.execute("DELETE FROM song WHERE idSong = ?",
-                                (kodiid,))
+                                (kodi_id,))
 
-    def removeAlbum(self, kodiid):
+    def remove_album(self, kodi_id):
         """
         Remove an album, and only the album
         """
-        self.artwork.delete_artwork(kodiid, v.KODI_TYPE_ALBUM, self.kodicursor)
+        self.artwork.delete_artwork(kodi_id, v.KODI_TYPE_ALBUM, self.kodicursor)
         self.kodicursor.execute("DELETE FROM album WHERE idAlbum = ?",
-                                (kodiid,))
+                                (kodi_id,))
 
-    def removeArtist(self, kodiid):
+    def remove_artist(self, kodi_id):
         """
         Remove an artist, and only the artist
         """
-        self.artwork.delete_artwork(kodiid,
-                                   v.KODI_TYPE_ARTIST,
-                                   self.kodicursor)
+        self.artwork.delete_artwork(kodi_id,
+                                    v.KODI_TYPE_ARTIST,
+                                    self.kodicursor)
         self.kodicursor.execute("DELETE FROM artist WHERE idArtist = ?",
-                                (kodiid,))
+                                (kodi_id,))

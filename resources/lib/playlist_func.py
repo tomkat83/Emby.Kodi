@@ -49,6 +49,9 @@ class PlaylistObjectBaseclase(object):
         self.plex_transient_token = None
         # Need a hack for detecting swaps of elements
         self.old_kodi_pl = []
+        # Did PKC itself just change the playqueue so the PKC playqueue monitor
+        # should not pick up any changes?
+        self.pkc_edit = False
         # Workaround to avoid endless loops of detecting PL clears
         self._clear_list = []
 
@@ -64,6 +67,8 @@ class PlaylistObjectBaseclase(object):
             if isinstance(getattr(self, key), str):
                 answ += '\'%s\': \'%s\', ' % (key,
                                               try_decode(getattr(self, key)))
+            elif isinstance(getattr(self, key), unicode):
+                answ += '\'%s\': \'%s\', ' % (key, getattr(self, key))
             else:
                 # e.g. int
                 answ += '\'%s\': %s, ' % (key, unicode(getattr(self, key)))
@@ -184,6 +189,8 @@ class Playlist_Item(object):
             if isinstance(getattr(self, key), str):
                 answ += '\'%s\': \'%s\', ' % (key,
                                               try_decode(getattr(self, key)))
+            elif isinstance(getattr(self, key), unicode):
+                answ += '\'%s\': \'%s\', ' % (key, getattr(self, key))
             else:
                 # e.g. int
                 answ += '\'%s\': %s, ' % (key, unicode(getattr(self, key)))

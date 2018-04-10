@@ -226,17 +226,26 @@ class PlayqueueMonitor(Thread):
                 if stopped():
                     break
                 sleep(1000)
-            for playqueue in PLAYQUEUES:
-                kodi_pl = js.playlist_get_items(playqueue.playlistid)
-                if playqueue.old_kodi_pl != kodi_pl:
-                    if playqueue.id is None and (not state.DIRECT_PATHS or
-                                                 state.CONTEXT_MENU_PLAY):
-                        # Only initialize if directly fired up using direct
-                        # paths. Otherwise let default.py do its magic
-                        LOG.debug('Not yet initiating playback')
-                    else:
-                        # compare old and new playqueue
-                        self._compare_playqueues(playqueue, kodi_pl)
-                    playqueue.old_kodi_pl = list(kodi_pl)
+            work = []
+            # Detect changed playqueues first, do the work afterwards
+            with LOCK:
+                for playqueue in PLAYQUEUES:
+                    kodi_pl = js.playlist_get_items(playqueue.playlistid)
+                    if playqueue.old_kodi_pl != kodi_pl:
+                        if playqueue.id is None and (not state.DIRECT_PATHS or
+                                                     state.CONTEXT_MENU_PLAY):
+                            # Only initialize if directly fired up using direct
+                            # paths. Otherwise let default.py do its magic
+                            LOG.debug('Not yet initiating playback')
+                        elif playqueue.pkc_edit:
+                            playqueue.pkc_edit = False
+                            LOG.debug('PKC edited the playqueue - skipping')
+                        else:
+                            # We do need to update our playqueues
+                            work.append((playqueue, kodi_pl))
+                        playqueue.old_kodi_pl = kodi_pl
+            # Now do the work - LOCK individual playqueue edits
+            for playqueue, kodi_pl in work:
+                self._compare_playqueues(playqueue, kodi_pl)
             sleep(200)
         LOG.info("----===## PlayqueueMonitor stopped ##===----")

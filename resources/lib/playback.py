@@ -49,10 +49,11 @@ def playback_triage(plex_id=None, plex_type=None, path=None, resolve=True):
     the first pass - e.g. if you're calling this function from the original
     service.py Python instance
     """
-    LOG.info('playback_triage called with plex_id %s, plex_type %s, path %s',
-             plex_id, plex_type, path)
+    LOG.info('playback_triage called with plex_id %s, plex_type %s, path %s, '
+             'resolve %s,', plex_id, plex_type, path, resolve)
     global RESOLVE
-    RESOLVE = resolve
+    # If started via Kodi context menu, we never resolve
+    RESOLVE = resolve if not state.CONTEXT_MENU_PLAY else False
     if not state.AUTHENTICATED:
         LOG.error('Not yet authenticated for PMS, abort starting playback')
         # "Unauthorized for PMS"
@@ -64,7 +65,7 @@ def playback_triage(plex_id=None, plex_type=None, path=None, resolve=True):
     pos = js.get_position(playqueue.playlistid)
     # Can return -1 (as in "no playlist")
     pos = pos if pos != -1 else 0
-    LOG.debug('playQueue position: %s for %s', pos, playqueue)
+    LOG.debug('playQueue position %s for %s', pos, playqueue)
     # Have we already initiated playback?
     try:
         item = playqueue.items[pos]
@@ -98,7 +99,7 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
         try:
             _init_existing_kodi_playlist(playqueue, pos)
         except PL.PlaylistError:
-            LOG.error('Aborting playback_init for longer Kodi playlist')
+            LOG.error('Playback_init for existing Kodi playlist failed')
             _ensure_resolve(abort=True)
             return
         # Now we need to use setResolvedUrl for the item at position ZERO
@@ -107,7 +108,8 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
         return
     # "Usual" case - consider trailers and parts and build both Kodi and Plex
     # playqueues
-    # Fail the item we're trying to play now so we can restart the player
+    # Pass dummy PKC video with 0 length so Kodi immediately stops playback
+    # and we can build our own playqueue.
     _ensure_resolve()
     api = API(xml[0])
     trailers = False
@@ -120,6 +122,10 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
         else:
             trailers = True
     LOG.debug('Playing trailers: %s', trailers)
+    if RESOLVE:
+        # Sleep a bit to let setResolvedUrl do its thing - bit ugly
+        while not state.PKC_CAUSED_STOP_DONE:
+            sleep(50)
     playqueue.clear()
     if plex_type != v.PLEX_TYPE_CLIP:
         # Post to the PMS to create a playqueue - in any case due to Companion
@@ -132,13 +138,13 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
                       plex_id, xml.attrib.get('librarySectionUUID'))
             # "Play error"
             dialog('notification', lang(29999), lang(30128), icon='{error}')
-            _ensure_resolve(abort=True)
+            # Do NOT use _ensure_resolve() because we resolved above already
+            state.CONTEXT_MENU_PLAY = False
+            state.FORCE_TRANSCODE = False
+            state.RESUME_PLAYBACK = False
             return
-        # Should already be empty, but just in case
         PL.get_playlist_details_from_xml(playqueue, xml)
     stack = _prep_playlist_stack(xml)
-    # Sleep a bit to let setResolvedUrl do its thing - bit ugly
-    sleep(200)
     _process_stack(playqueue, stack)
     # Always resume if playback initiated via PMS and there IS a resume
     # point
@@ -146,7 +152,6 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
     # Reset some playback variables
     state.CONTEXT_MENU_PLAY = False
     state.FORCE_TRANSCODE = False
-    # Do NOT set offset, because Kodi player will return here to resolveURL
     # New thread to release this one sooner (e.g. harddisk spinning up)
     thread = Thread(target=threaded_playback,
                     args=(playqueue.kodi_pl, pos, offset))
@@ -160,6 +165,8 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
     # plugin://pkc will be lost; Kodi will try to startup playback for an empty
     # path: log entry is "CGUIWindowVideoBase::OnPlayMedia <missing path>"
     thread.start()
+    # Ensure that PKC playqueue monitor ignores the changes we just made
+    playqueue.pkc_edit = True
 
 
 def _ensure_resolve(abort=False):
@@ -173,9 +180,10 @@ def _ensure_resolve(abort=False):
     """
     if RESOLVE:
         LOG.debug('Passing dummy path to Kodi')
-        if not state.CONTEXT_MENU_PLAY:
-            # Because playback won't start with context menu play
-            state.PKC_CAUSED_STOP = True
+        # if not state.CONTEXT_MENU_PLAY:
+        # Because playback won't start with context menu play
+        state.PKC_CAUSED_STOP = True
+        state.PKC_CAUSED_STOP_DONE = False
         result = Playback_Successful()
         result.listitem = PKC_ListItem(path=NULL_VIDEO)
         pickle_me(result)
@@ -345,7 +353,8 @@ def process_indirect(key, offset, resolve=True):
     Set resolve to False if playback should be kicked off directly, not via
     setResolvedUrl
     """
-    LOG.info('process_indirect called with key: %s, offset: %s', key, offset)
+    LOG.info('process_indirect called with key: %s, offset: %s, resolve: %s',
+             key, offset, resolve)
     global RESOLVE
     RESOLVE = resolve
     result = Playback_Successful()
