@@ -12,15 +12,16 @@ import variables as v
 
 ###############################################################################
 
-log = getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 ###############################################################################
 
 
 @thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD',
                               'DB_SCAN',
-                              'STOP_SYNC'])
-class Process_Fanart_Thread(Thread):
+                              'STOP_SYNC',
+                              'SUSPEND_SYNC'])
+class ThreadedProcessFanart(Thread):
     """
     Threaded download of additional fanart in the background
 
@@ -40,20 +41,9 @@ class Process_Fanart_Thread(Thread):
 
     def run(self):
         """
-        Catch all exceptions and log them
-        """
-        try:
-            self.__run()
-        except Exception as e:
-            log.error('Exception %s' % e)
-            import traceback
-            log.error("Traceback:\n%s" % traceback.format_exc())
-
-    def __run(self):
-        """
         Do the work
         """
-        log.debug("---===### Starting FanartSync ###===---")
+        LOG.debug("---===### Starting FanartSync ###===---")
         stopped = self.stopped
         suspended = self.suspended
         queue = self.queue
@@ -63,7 +53,7 @@ class Process_Fanart_Thread(Thread):
                 # Set in service.py
                 if stopped():
                     # Abort was requested while waiting. We should exit
-                    log.info("---===### Stopped FanartSync ###===---")
+                    LOG.info("---===### Stopped FanartSync ###===---")
                     return
                 sleep(1000)
             # grabs Plex item from queue
@@ -73,15 +63,14 @@ class Process_Fanart_Thread(Thread):
                 sleep(200)
                 continue
 
-            log.debug('Get additional fanart for Plex id %s' % item['plex_id'])
+            LOG.debug('Get additional fanart for Plex id %s', item['plex_id'])
             with getattr(itemtypes,
-                         v.ITEMTYPE_FROM_PLEXTYPE[item['plex_type']])() as cls:
-                result = cls.getfanart(item['plex_id'],
-                                       refresh=item['refresh'])
+                         v.ITEMTYPE_FROM_PLEXTYPE[item['plex_type']])() as item_type:
+                result = item_type.getfanart(item['plex_id'],
+                                             refresh=item['refresh'])
             if result is True:
-                log.debug('Done getting fanart for Plex id %s'
-                          % item['plex_id'])
+                LOG.debug('Done getting fanart for Plex id %s', item['plex_id'])
                 with plexdb.Get_Plex_DB() as plex_db:
                     plex_db.set_fanart_synched(item['plex_id'])
             queue.task_done()
-        log.debug("---===### Stopped FanartSync ###===---")
+        LOG.debug("---===### Stopped FanartSync ###===---")

@@ -171,8 +171,12 @@ class Main():
         """
         Start up playback_starter in main Python thread
         """
+        request = '%s&handle=%s' % (argv[2], HANDLE)
         # Put the request into the 'queue'
-        plex_command('PLAY', argv[2])
+        plex_command('PLAY', request)
+        if HANDLE == -1:
+            # Handle -1 received, not waiting for main thread
+            return
         # Wait for the result
         while not pickl_window('plex_result'):
             sleep(50)

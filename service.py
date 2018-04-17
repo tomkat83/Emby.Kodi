@@ -38,7 +38,7 @@ from websocket_client import PMS_Websocket, Alexa_Websocket
 from PlexFunctions import check_connection
 from PlexCompanion import PlexCompanion
 from command_pipeline import Monitor_Window
-from playback_starter import Playback_Starter
+from playback_starter import PlaybackStarter
 from playqueue import PlayqueueMonitor
 from artwork import Image_Cache_Thread
 import variables as v
@@ -111,7 +111,7 @@ class Service():
         self.library = LibrarySync()
         self.plexCompanion = PlexCompanion()
         self.specialMonitor = SpecialMonitor()
-        self.playback_starter = Playback_Starter()
+        self.playback_starter = PlaybackStarter()
         self.playqueue = PlayqueueMonitor()
         if settings('enableTextureCache') == "true":
             self.image_cache_thread = Image_Cache_Thread()

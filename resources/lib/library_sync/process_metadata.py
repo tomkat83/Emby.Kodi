@@ -10,13 +10,15 @@ import itemtypes
 import sync_info
 
 ###############################################################################
-log = getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 ###############################################################################
 
 
-@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD', 'STOP_SYNC'])
-class Threaded_Process_Metadata(Thread):
+@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
+                           'STOP_SYNC',
+                           'SUSPEND_SYNC'])
+class ThreadedProcessMetadata(Thread):
     """
     Not yet implemented for more than 1 thread - if ever. Only to be called by
     ONE thread!
@@ -25,12 +27,12 @@ class Threaded_Process_Metadata(Thread):
     Input:
         queue:      Queue.Queue() object that you'll need to fill up with
                     the downloaded XML eTree objects
-        item_type:  as used to call functions in itemtypes.py e.g. 'Movies' =>
+        item_class: as used to call functions in itemtypes.py e.g. 'Movies' =>
                     itemtypes.Movies()
     """
-    def __init__(self, queue, item_type):
+    def __init__(self, queue, item_class):
         self.queue = queue
-        self.item_type = item_type
+        self.item_class = item_class
         Thread.__init__(self)
 
     def terminate_now(self):
@@ -50,22 +52,11 @@ class Threaded_Process_Metadata(Thread):
 
     def run(self):
         """
-        Catch all exceptions and log them
-        """
-        try:
-            self.__run()
-        except Exception as e:
-            log.error('Exception %s' % e)
-            import traceback
-            log.error("Traceback:\n%s" % traceback.format_exc())
-
-    def __run(self):
-        """
         Do the work
         """
-        log.debug('Processing thread started')
+        LOG.debug('Processing thread started')
         # Constructs the method name, e.g. itemtypes.Movies
-        item_fct = getattr(itemtypes, self.item_type)
+        item_fct = getattr(itemtypes, self.item_class)
         # cache local variables because it's faster
         queue = self.queue
         stopped = self.stopped
@@ -79,24 +70,19 @@ class Threaded_Process_Metadata(Thread):
                     continue
                 # Do the work
                 item_method = getattr(item_class, item['method'])
-                if item.get('children') is not None:
-                    item_method(item['XML'][0],
-                                viewtag=item['viewName'],
-                                viewid=item['viewId'],
+                if item.get('children'):
+                    item_method(item['xml'][0],
+                                viewtag=item['view_name'],
+                                viewid=item['view_id'],
                                 children=item['children'])
                 else:
-                    item_method(item['XML'][0],
-                                viewtag=item['viewName'],
-                                viewid=item['viewId'])
+                    item_method(item['xml'][0],
+                                viewtag=item['view_name'],
+                                viewid=item['view_id'])
                 # Keep track of where we are at
-                try:
-                    log.debug('found child: %s'
-                              % item['children'].attrib)
-                except:
-                    pass
                 with sync_info.LOCK:
                     sync_info.PROCESS_METADATA_COUNT += 1
                     sync_info.PROCESSING_VIEW_NAME = item['title']
                 queue.task_done()
         self.terminate_now()
-        log.debug('Processing thread terminated')
+        LOG.debug('Processing thread terminated')

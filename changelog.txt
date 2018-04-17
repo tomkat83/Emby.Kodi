@@ -1,3 +1,11 @@
+version 2.0.19 (beta only):
+- Fix PKC playback startup getting caught in infinity loop
+- Rewire library sync, suspend sync during playback
+- Fix playback failing in certain cases
+- Fix PKC not working anymore after using context menu on songs
+- Fix deletion of Plex music items
+- Code cleanup
+
 version 2.0.18 (beta only):
 - Fix some playqueue inconsistencies using Plex Companion
 - Direct paths: fix replaying item where playback was started via PMS

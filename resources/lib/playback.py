@@ -124,8 +124,12 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
     LOG.debug('Playing trailers: %s', trailers)
     if RESOLVE:
         # Sleep a bit to let setResolvedUrl do its thing - bit ugly
+        sleep_timer = 0
         while not state.PKC_CAUSED_STOP_DONE:
             sleep(50)
+            sleep_timer += 1
+            if sleep_timer > 100:
+                break
     playqueue.clear()
     if plex_type != v.PLEX_TYPE_CLIP:
         # Post to the PMS to create a playqueue - in any case due to Companion

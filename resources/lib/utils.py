@@ -1050,11 +1050,11 @@ def thread_methods(cls=None, add_stops=None, add_suspends=None):
         suspends
 
     invoke with either
-        @Newthread_methods
+        @thread_methods
         class MyClass():
     or
-        @Newthread_methods(add_stops=['SUSPEND_LIBRARY_TRHEAD'],
-                          add_suspends=['DB_SCAN', 'WHATEVER'])
+        @thread_methods(add_stops=['SUSPEND_LIBRARY_TRHEAD'],
+                        add_suspends=['DB_SCAN', 'WHATEVER'])
         class MyClass():
     """
     # So we don't need to invoke with ()

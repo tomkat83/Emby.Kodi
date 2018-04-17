@@ -10,6 +10,9 @@ STOP_PKC = False
 SUSPEND_LIBRARY_THREAD = False
 # Set if user decided to cancel sync
 STOP_SYNC = False
+# Set e.g. during media playback if PKC should not do any syncs. Will NOT
+# suspend synching of playstate progress
+SUSPEND_SYNC = False
 # Could we access the paths?
 PATH_VERIFIED = False
 # Set if a Plex-Kodi DB sync is being done - along with
@@ -36,8 +39,6 @@ FORCE_RELOAD_SKIN = True
 # Stemming from the PKC settings.xml
 # Shall we show Kodi dialogs when synching?
 SYNC_DIALOG = True
-# Have we already checked the Kodi DB on consistency?
-KODI_DB_CHECKED = False
 # Is synching of Plex music enabled?
 ENABLE_MUSIC = True
 # How often shall we sync?

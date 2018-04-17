@@ -237,6 +237,7 @@ class Plex_DB_Functions():
             SELECT plex_id, parent_id, plex_type
             FROM plex
             WHERE kodi_id = ? AND kodi_type = ?
+            LIMIT 1
         '''
         self.plexcursor.execute(query, (kodi_id, kodi_type,))
         return self.plexcursor.fetchone()

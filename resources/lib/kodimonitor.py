@@ -136,6 +136,7 @@ class KodiMonitor(xbmc.Monitor):
             LOG.debug("Method: %s Data: %s", method, data)
 
         if method == "Player.OnPlay":
+            state.SUSPEND_SYNC = True
             self.PlayBackStart(data)
         elif method == "Player.OnStop":
             # Should refresh our video nodes, e.g. on deck
@@ -143,12 +144,13 @@ class KodiMonitor(xbmc.Monitor):
             if data.get('end'):
                 if state.PKC_CAUSED_STOP is True:
                     state.PKC_CAUSED_STOP = False
-                    state.PKC_CAUSED_STOP_DONE = True
                     LOG.debug('PKC caused this playback stop - ignoring')
                 else:
                     _playback_cleanup(ended=True)
             else:
                 _playback_cleanup()
+            state.PKC_CAUSED_STOP_DONE = True
+            state.SUSPEND_SYNC = False
         elif method == 'Playlist.OnAdd':
             self._playlist_onadd(data)
         elif method == 'Playlist.OnRemove':
@@ -253,8 +255,8 @@ class KodiMonitor(xbmc.Monitor):
         """
         playqueue = PQ.PLAYQUEUES[data['playlistid']]
         if not playqueue.is_pkc_clear():
-            playqueue.clear(kodi=False)
             playqueue.pkc_edit = True
+            playqueue.clear(kodi=False)
         else:
             LOG.debug('Detected PKC clear - ignoring')
 

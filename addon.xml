@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.0.18" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.0.19" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests" version="2.9.1" />
-    <import addon="plugin.video.plexkodiconnect.movies" version="2.0.1" />
-    <import addon="plugin.video.plexkodiconnect.tvshows" version="2.0.2" />
+    <import addon="plugin.video.plexkodiconnect.movies" version="2.0.2" />
+    <import addon="plugin.video.plexkodiconnect.tvshows" version="2.0.3" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video audio image</provides>
@@ -67,7 +67,15 @@
     <summary lang="ru_RU">Нативная интеграция сервера Plex в Kodi</summary>
     <description lang="ru_RU">Подключите Kodi к своему серверу Plex. Плагин предполагает что вы управляете своими видео с помощью Plex (а не в Kodi). Вы можете потерять текущие базы данных музыки и видео в Kodi (так как плагин напрямую их изменяет). Используйте на свой страх и риск</description>
     <disclaimer lang="ru_RU">Используйте на свой страх и риск</disclaimer>
-    <news>version 2.0.18 (beta only):
+    <news>version 2.0.19 (beta only):
+- Fix PKC playback startup getting caught in infinity loop
+- Rewire library sync, suspend sync during playback
+- Fix playback failing in certain cases
+- Fix PKC not working anymore after using context menu on songs
+- Fix deletion of Plex music items
+- Code cleanup
+
+version 2.0.18 (beta only):
 - Fix some playqueue inconsistencies using Plex Companion
 - Direct paths: fix replaying item where playback was started via PMS
 - Fix Plex trailers screwing up playqueue 

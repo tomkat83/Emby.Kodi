@@ -907,6 +907,102 @@ class KodiDBMethods(object):
                 self.cursor.execute(query, (name, artistid,))
         return artistid
 
+    def delete_song_from_song_artist(self, song_id):
+        """
+        Deletes son from song_artist table and possibly orphaned roles
+        Will returned an orphaned idArtist or None if not orphaned
+        """
+        query = '''
+            SELECT idArtist, idRole FROM song_artist WHERE idSong = ? LIMIT 1
+        '''
+        self.cursor.execute(query, (song_id, ))
+        artist = self.cursor.fetchone()
+        if artist is None:
+            # No entry to begin with
+            return
+        # Delete the entry
+        self.cursor.execute('DELETE FROM song_artist WHERE idSong = ?',
+                            (song_id, ))
+        # Check whether we need to delete orphaned roles
+        query = 'SELECT idRole FROM song_artist WHERE idRole = ? LIMIT 1'
+        self.cursor.execute(query, (artist[1], ))
+        if not self.cursor.fetchone():
+            # Delete orphaned role
+            self.cursor.execute('DELETE FROM role WHERE idRole = ?',
+                                (artist[1], ))
+        # Check whether we need to delete orphaned artists
+        query = 'SELECT idArtist FROM song_artist WHERE idArtist = ? LIMIT 1'
+        self.cursor.execute(query, (artist[0], ))
+        if self.cursor.fetchone():
+            return
+        else:
+            return artist[0]
+
+    def delete_album_from_discography(self, album_id):
+        """
+        Removes the album with id album_id from the table discography
+        """
+        # Need to get the album name as a string first!
+        query = 'SELECT strAlbum, iYear FROM album WHERE idAlbum = ? LIMIT 1'
+        self.cursor.execute(query, (album_id, ))
+        try:
+            name, year = self.cursor.fetchone()
+        except TypeError:
+            return
+        query = 'SELECT idArtist FROM album_artist WHERE idAlbum = ? LIMIT 1'
+        self.cursor.execute(query, (album_id, ))
+        artist = self.cursor.fetchone()
+        if not artist:
+            return
+        query = '''
+            DELETE FROM discography
+            WHERE idArtist = ? AND strAlbum = ? AND strYear = ?
+        '''
+        self.cursor.execute(query, (artist[0], name, year))
+
+    def delete_song_from_song_genre(self, song_id):
+        """
+        Deletes the one entry with id song_id from the song_genre table.
+        Will also delete orphaned genres from genre table
+        """
+        query = 'SELECT idGenre FROM song_genre WHERE idSong = ?'
+        self.cursor.execute(query, (song_id, ))
+        genres = self.cursor.fetchall()
+        self.cursor.execute('DELETE FROM song_genre WHERE idSong = ?',
+                            (song_id, ))
+        # Check for orphaned genres in both song_genre and album_genre tables
+        query = 'SELECT idGenre FROM song_genre WHERE idGenre = ? LIMIT 1'
+        query2 = 'SELECT idGenre FROM album_genre WHERE idGenre = ? LIMIT 1'
+        for genre in genres:
+            self.cursor.execute(query, (genre[0], ))
+            if not self.cursor.fetchone():
+                self.cursor.execute(query2, (genre[0], ))
+                if not self.cursor.fetchone():
+                    self.cursor.execute('DELETE FROM genre WHERE idGenre = ?',
+                                        (genre[0], ))
+
+    def delete_album_from_album_genre(self, album_id):
+        """
+        Deletes the one entry with id album_id from the album_genre table.
+        Will also delete orphaned genres from genre table
+        """
+        query = 'SELECT idGenre FROM album_genre WHERE idAlbum = ?'
+        self.cursor.execute(query, (album_id, ))
+        genres = self.cursor.fetchall()
+        self.cursor.execute('DELETE FROM album_genre WHERE idAlbum = ?',
+                            (album_id, ))
+        # Check for orphaned genres in both album_genre and song_genre tables
+        query = 'SELECT idGenre FROM album_genre WHERE idGenre = ? LIMIT 1'
+        query2 = 'SELECT idGenre FROM song_genre WHERE idGenre = ? LIMIT 1'
+        for genre in genres:
+            self.cursor.execute(query, (genre[0], ))
+            if not self.cursor.fetchone():
+                self.cursor.execute(query2, (genre[0], ))
+                if not self.cursor.fetchone():
+                    self.cursor.execute('DELETE FROM genre WHERE idGenre = ?',
+                                        (genre[0], ))
+
+
     def addAlbum(self, name, musicbrainz):
         query = 'SELECT idAlbum FROM album WHERE strMusicBrainzAlbumID = ?'
         self.cursor.execute(query, (musicbrainz,))

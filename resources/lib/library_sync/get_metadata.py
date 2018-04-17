@@ -11,20 +11,22 @@ import sync_info
 
 ###############################################################################
 
-log = getLogger("PLEX."+__name__)
+LOG = getLogger("PLEX." + __name__)
 
 ###############################################################################
 
 
-@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD', 'STOP_SYNC'])
-class Threaded_Get_Metadata(Thread):
+@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
+                           'STOP_SYNC',
+                           'SUSPEND_SYNC'])
+class ThreadedGetMetadata(Thread):
     """
     Threaded download of Plex XML metadata for a certain library item.
     Fills the out_queue with the downloaded etree XML objects
 
     Input:
         queue               Queue.Queue() object that you'll need to fill up
-                            with Plex itemIds
+                            with plex_ids
         out_queue           Queue() object where this thread will store
                             the downloaded metadata XMLs as etree objects
     """
@@ -61,20 +63,9 @@ class Threaded_Get_Metadata(Thread):
 
     def run(self):
         """
-        Catch all exceptions and log them
-        """
-        try:
-            self.__run()
-        except Exception as e:
-            log.error('Exception %s' % e)
-            import traceback
-            log.error("Traceback:\n%s" % traceback.format_exc())
-
-    def __run(self):
-        """
         Do the work
         """
-        log.debug('Starting get metadata thread')
+        LOG.debug('Starting get metadata thread')
         # cache local variables because it's faster
         queue = self.queue
         out_queue = self.out_queue
@@ -88,11 +79,11 @@ class Threaded_Get_Metadata(Thread):
                 sleep(20)
                 continue
             # Download Metadata
-            xml = GetPlexMetadata(item['itemId'])
+            xml = GetPlexMetadata(item['plex_id'])
             if xml is None:
                 # Did not receive a valid XML - skip that item for now
-                log.error("Could not get metadata for %s. Skipping that item "
-                          "for now" % item['itemId'])
+                LOG.error("Could not get metadata for %s. Skipping that item "
+                          "for now", item['plex_id'])
                 # Increase BOTH counters - since metadata won't be processed
                 with sync_info.LOCK:
                     sync_info.GET_METADATA_COUNT += 1
@@ -100,21 +91,21 @@ class Threaded_Get_Metadata(Thread):
                 queue.task_done()
                 continue
             elif xml == 401:
-                log.error('HTTP 401 returned by PMS. Too much strain? '
+                LOG.error('HTTP 401 returned by PMS. Too much strain? '
                           'Cancelling sync for now')
                 window('plex_scancrashed', value='401')
                 # Kill remaining items in queue (for main thread to cont.)
                 queue.task_done()
                 break
 
-            item['XML'] = xml
+            item['xml'] = xml
             if item.get('get_children') is True:
-                children_xml = GetAllPlexChildren(item['itemId'])
+                children_xml = GetAllPlexChildren(item['plex_id'])
                 try:
                     children_xml[0].attrib
                 except (TypeError, IndexError, AttributeError):
-                    log.error('Could not get children for Plex id %s'
-                              % item['itemId'])
+                    LOG.error('Could not get children for Plex id %s',
+                              item['plex_id'])
                     item['children'] = []
                 else:
                     item['children'] = children_xml
@@ -128,4 +119,4 @@ class Threaded_Get_Metadata(Thread):
             queue.task_done()
         # Empty queue in case PKC was shut down (main thread hangs otherwise)
         self.terminate_now()
-        log.debug('Get metadata thread terminated')
+        LOG.debug('Get metadata thread terminated')
