@@ -47,6 +47,26 @@ msgctxt "#30005"
 msgid "Username: "
 msgstr "Benutzername: "
 
+# Sync notification displayed if there is still artwork to be cached to Kodi
+msgctxt "#30006"
+msgid "Caching %s images"
+msgstr "Cache %s Bilder"
+
+# Sync notification displayed if syncing of major artwork is done
+msgctxt "#30007"
+msgid "Major image caching done"
+msgstr "Cachen wichtigster Bilder beendet"
+
+# PKC settings artwork: Enable notifications for artwork image sync
+msgctxt "#30008"
+msgid "Enable notifications for image caching"
+msgstr "Benachrichtigungen für Cachen von Bildern aktivieren"
+
+# PKC settings artwork: Enable image caching during Kodi playback
+msgctxt "#30009"
+msgid "Enable image caching during Kodi playback (restart Kodi!)"
+msgstr ""
+
 # Button text
 msgctxt "#30012"
 msgid "OK"
