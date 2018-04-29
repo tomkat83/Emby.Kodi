@@ -125,6 +125,8 @@
 		<setting id="enableTextureCache" label="30512"  type="bool" default="true" /> <!-- Force Artwork Caching -->
 		<setting id="FanartTV" label="30539" type="bool" default="false" /><!-- Download additional art from FanArtTV -->
 		<setting label="39222" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=fanart)" option="close" visible="eq(-1,true)" subsetting="true" /> <!-- Look for missing fanart on FanartTV now -->
+        <setting id="imageSyncNotifications" label="30008" type="bool" default="true" /><!-- Enable notifications for image caching -->
+        <setting id="imageSyncDuringPlayback" label="30009" type="bool" default="true" /><!-- Enable image caching during Kodi playback (restart Kodi!) -->
 		<setting label="39020" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=texturecache)" option="close" /> <!-- Cache all images to Kodi texture cache now -->
 	</category>
 	<!--

@@ -1,3 +1,10 @@
+version 2.0.20 (beta only):
+- Fix missing episode poster in certain views. You will have to manually reset your Kodi database to benefit
+- Fix episode artwork sometimes not being complete
+- Fix IndexError for certain Plex channels
+- Kodi Leia: Fix playback failing
+- Fix TV On Deck direct paths asking to choose between different media
+
 version 2.0.19 (beta only):
 - Fix PKC playback startup getting caught in infinity loop
 - Rewire library sync, suspend sync during playback

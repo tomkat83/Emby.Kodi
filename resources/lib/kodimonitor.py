@@ -50,7 +50,8 @@ STATE_SETTINGS = {
     'remapSMBphotoNew': 'remapSMBphotoNew',
     'enableMusic': 'ENABLE_MUSIC',
     'forceReloadSkinOnPlaybackStop': 'FORCE_RELOAD_SKIN',
-    'fetch_pms_item_number': 'FETCH_PMS_ITEM_NUMBER'
+    'fetch_pms_item_number': 'FETCH_PMS_ITEM_NUMBER',
+    'imageSyncNotifications': 'IMAGE_SYNC_NOTIFICATIONS'
 }
 
 ###############################################################################

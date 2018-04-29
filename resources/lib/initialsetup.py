@@ -141,7 +141,7 @@ class InitialSetup(object):
     """
     def __init__(self):
         LOG.debug('Entering initialsetup class')
-        self.server = UserClient().getServer()
+        self.server = UserClient().get_server()
         self.serverid = settings('plex_machineIdentifier')
         # Get Plex credentials from settings file, if they exist
         plexdict = PF.GetPlexLoginFromSettings()

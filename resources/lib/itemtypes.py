@@ -1217,6 +1217,7 @@ class Music(Items):
         """
         Adds a single music album
             children: list of child xml's, so in this case songs
+            scan_children: set to False if you don't want to add children
         """
         kodicursor = self.kodicursor
         plex_db = self.plex_db
@@ -1224,20 +1225,18 @@ class Music(Items):
         api = API(item)
 
         update_item = True
-        itemid = api.plex_id()
-        if not itemid:
+        plex_id = api.plex_id()
+        if not plex_id:
             LOG.error('Error processing Album, skipping')
             return
-        plex_dbitem = plex_db.getItem_byId(itemid)
+        plex_dbitem = plex_db.getItem_byId(plex_id)
         try:
-            albumid = plex_dbitem[0]
+            album_id = plex_dbitem[0]
         except TypeError:
-            # Albumid not found
             update_item = False
 
         # The album details #####
         lastScraped = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        dateadded = api.date_created()
         userdata = api.userdata()
         checksum = api.checksum()
 
@@ -1269,22 +1268,22 @@ class Music(Items):
 
         # UPDATE THE ALBUM #####
         if update_item:
-            LOG.info("UPDATE album itemid: %s - Name: %s", itemid, name)
+            LOG.info("UPDATE album plex_id: %s - Name: %s", plex_id, name)
             # Update the checksum in plex table
-            plex_db.updateReference(itemid, checksum)
+            plex_db.updateReference(plex_id, checksum)
 
         # OR ADD THE ALBUM #####
         else:
-            LOG.info("ADD album itemid: %s - Name: %s", itemid, name)
+            LOG.info("ADD album plex_id: %s - Name: %s", plex_id, name)
             # safety checks: It looks like plex supports the same artist
             # multiple times.
             # Kodi doesn't allow that. In case that happens we just merge the
             # artist entries.
-            albumid = self.kodi_db.addAlbum(name, musicBrainzId)
+            album_id = self.kodi_db.addAlbum(name, musicBrainzId)
             # Create the reference in plex table
-            plex_db.addReference(itemid,
+            plex_db.addReference(plex_id,
                                  v.PLEX_TYPE_ALBUM,
-                                 albumid,
+                                 album_id,
                                  v.KODI_TYPE_ALBUM,
                                  view_id=viewid,
                                  checksum=checksum)
@@ -1302,7 +1301,7 @@ class Music(Items):
             kodicursor.execute(query, (artistname, year, self.genre, bio,
                                        thumb, rating, lastScraped,
                                        v.KODI_TYPE_ALBUM, studio,
-                                       self.compilation, albumid))
+                                       self.compilation, album_id))
         elif v.KODIVERSION == 17:
             # Kodi Krypton
             query = '''
@@ -1315,7 +1314,7 @@ class Music(Items):
             kodicursor.execute(query, (artistname, year, self.genre, bio,
                                        thumb, rating, lastScraped,
                                        v.KODI_TYPE_ALBUM, studio,
-                                       self.compilation, albumid))
+                                       self.compilation, album_id))
         elif v.KODIVERSION == 16:
             # Kodi Jarvis
             query = '''
@@ -1328,71 +1327,46 @@ class Music(Items):
             kodicursor.execute(query, (artistname, year, self.genre, bio,
                                        thumb, rating, lastScraped,
                                        v.KODI_TYPE_ALBUM, studio,
-                                       self.compilation, albumid))
+                                       self.compilation, album_id))
 
         # Associate the parentid for plex reference
         parent_id = api.parent_plex_id()
+        artist_id = None
         if parent_id is not None:
-            plex_dbartist = plex_db.getItem_byId(parent_id)
             try:
-                artistid = plex_dbartist[0]
+                artist_id = plex_db.getItem_byId(parent_id)[0]
             except TypeError:
-                LOG.info('Artist %s does not exist in plex database',
-                         parent_id)
+                LOG.info('Artist %s does not yet exist in Plex DB', parent_id)
                 artist = GetPlexMetadata(parent_id)
-                # Item may not be an artist, verification necessary.
-                if artist is not None and artist != 401:
-                    if artist[0].attrib.get('type') == v.PLEX_TYPE_ARTIST:
-                        # Update with the parent_id, for remove reference
-                        plex_db.addReference(parent_id,
-                                             v.PLEX_TYPE_ARTIST,
-                                             parent_id,
-                                             v.KODI_TYPE_ARTIST,
-                                             view_id=viewid)
-                        plex_db.updateParentId(itemid, parent_id)
-            else:
-                # Update plex reference with the artistid
-                plex_db.updateParentId(itemid, artistid)
-
-        # Assign main artists to album
-        # Plex unfortunately only supports 1 artist :-(
-        artist_id = parent_id
-        plex_dbartist = plex_db.getItem_byId(artist_id)
-        try:
-            artistid = plex_dbartist[0]
-        except TypeError:
-            # Artist does not exist in plex database, create the reference
-            LOG.info('Artist %s does not exist in Plex database', artist_id)
-            artist = GetPlexMetadata(artist_id)
-            if artist is not None and artist != 401:
-                self.add_updateArtist(artist[0])
-                plex_dbartist = plex_db.getItem_byId(artist_id)
-                artistid = plex_dbartist[0]
-        else:
-            # Best take this name over anything else.
-            query = "UPDATE artist SET strArtist = ? WHERE idArtist = ?"
-            kodicursor.execute(query, (artistname, artistid,))
-            LOG.info("UPDATE artist: strArtist: %s, idArtist: %s",
-                     artistname, artistid)
-
+                try:
+                    artist[0].attrib
+                except (TypeError, IndexError, AttributeError):
+                    LOG.error('Could not get artist xml for %s', parent_id)
+                else:
+                    self.add_updateArtist(artist[0])
+                    plex_dbartist = plex_db.getItem_byId(parent_id)
+                    try:
+                        artist_id = plex_dbartist[0]
+                    except TypeError:
+                        LOG.error('Adding artist failed for %s', parent_id)
+        # Update plex reference with the artist_id
+        plex_db.updateParentId(plex_id, artist_id)
         # Add artist to album
         query = '''
             INSERT OR REPLACE INTO album_artist(idArtist, idAlbum, strArtist)
             VALUES (?, ?, ?)
         '''
-        kodicursor.execute(query, (artistid, albumid, artistname))
+        kodicursor.execute(query, (artist_id, album_id, artistname))
         # Update discography
         query = '''
             INSERT OR REPLACE INTO discography(idArtist, strAlbum, strYear)
             VALUES (?, ?, ?)
         '''
-        kodicursor.execute(query, (artistid, name, year))
-        # Update plex reference with parentid
-        plex_db.updateParentId(artist_id, albumid)
+        kodicursor.execute(query, (artist_id, name, year))
         if v.KODIVERSION < 18:
-            self.kodi_db.addMusicGenres(albumid, self.genres, v.KODI_TYPE_ALBUM)
+            self.kodi_db.addMusicGenres(album_id, self.genres, v.KODI_TYPE_ALBUM)
         # Update artwork
-        artwork.modify_artwork(artworks, albumid, v.KODI_TYPE_ALBUM, kodicursor)
+        artwork.modify_artwork(artworks, album_id, v.KODI_TYPE_ALBUM, kodicursor)
         # Add all children - all tracks
         if scan_children:
             for child in children:

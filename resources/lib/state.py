@@ -39,6 +39,8 @@ FORCE_RELOAD_SKIN = True
 # Stemming from the PKC settings.xml
 # Shall we show Kodi dialogs when synching?
 SYNC_DIALOG = True
+# Shall Kodi show dialogs for syncing/caching images? (e.g. images left to sync)
+IMAGE_SYNC_NOTIFICATIONS = True
 # Is synching of Plex music enabled?
 ENABLE_MUSIC = True
 # How often shall we sync?

@@ -325,6 +325,13 @@ KODI_TO_PLEX_ARTWORK = {
     'fanart': 'art'
 }
 
+KODI_TO_PLEX_ARTWORK_EPISODE = {
+    'thumb': 'thumb',
+    'poster': 'grandparentThumb',
+    'banner': 'banner',
+    'fanart': 'art'
+}
+
 # Might be implemented in the future: 'icon', 'landscape' (16:9)
 ALL_KODI_ARTWORK = (
     'thumb',

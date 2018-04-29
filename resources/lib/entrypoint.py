@@ -369,7 +369,7 @@ def getRecentEpisodes(viewid, mediatype, tagname, limit):
     append_show_title = settings('RecentTvAppendShow') == 'true'
     append_sxxexx = settings('RecentTvAppendSeason') == 'true'
     # First we get a list of all the TV shows - filtered by tag
-    allshowsIds = set()
+    allshowsIds = list()
     params = {
         'sort': {'order': "descending", 'method': "dateadded"},
         'filter': {'operator': "is", 'field': "tag", 'value': "%s" % tagname},
@@ -553,7 +553,7 @@ def getOnDeck(viewid, mediatype, tagname, limit):
                 append_show_title=append_show_title,
                 append_sxxexx=append_sxxexx)
             if directpaths:
-                url = api.file_path()
+                url = api.file_path(force_first_media=True)
             else:
                 url = ('plugin://%s.tvshows/?plex_id=%s&plex_type=%s&mode=play&filename=%s'
                        % (v.ADDON_ID,
@@ -561,8 +561,7 @@ def getOnDeck(viewid, mediatype, tagname, limit):
                           api.plex_type(),
                           api.file_name(force_first_media=True)))
             if api.resume_point():
-                listitem.setProperty('resumetime',
-                                     str(api.resume_point()))
+                listitem.setProperty('resumetime', str(api.resume_point()))
             xbmcplugin.addDirectoryItem(
                 handle=HANDLE,
                 url=url,

@@ -4,10 +4,29 @@ from cPickle import dumps, loads
 
 from xbmcgui import Window
 from xbmc import log, LOGDEBUG
+
 ###############################################################################
 WINDOW = Window(10000)
 PREFIX = 'PLEX.%s: ' % __name__
 ###############################################################################
+
+
+def try_encode(input_str, encoding='utf-8'):
+    """
+    Will try to encode input_str (in unicode) to encoding. This possibly
+    fails with e.g. Android TV's Python, which does not accept arguments for
+    string.encode()
+
+    COPY to avoid importing utils on calling default.py
+    """
+    if isinstance(input_str, str):
+        # already encoded
+        return input_str
+    try:
+        input_str = input_str.encode(encoding, "ignore")
+    except TypeError:
+        input_str = input_str.encode()
+    return input_str
 
 
 def pickl_window(property, value=None, clear=False):
@@ -20,7 +39,7 @@ def pickl_window(property, value=None, clear=False):
     elif value is not None:
         WINDOW.setProperty(property, value)
     else:
-        return WINDOW.getProperty(property)
+        return try_encode(WINDOW.getProperty(property))
 
 
 def pickle_me(obj, window_var='plex_result'):

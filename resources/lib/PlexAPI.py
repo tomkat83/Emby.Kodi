@@ -124,8 +124,12 @@ class API(object):
             # Local path
             filename = ans.rsplit("\\", 1)[1]
         else:
-            # Network share
-            filename = ans.rsplit("/", 1)[1]
+            try:
+                # Network share
+                filename = ans.rsplit("/", 1)[1]
+            except IndexError:
+                # E.g. certain Plex channels
+                filename = None
         return filename
 
     def file_path(self, force_first_media=False):
@@ -772,33 +776,41 @@ class API(object):
             # Artwork lookup for episodes is broken for addon paths
             # Episodes is a bit special, only get the thumb, because all
             # the other artwork will be saved under season and show
-            art = self._one_artwork('thumb')
-            if art:
-                artworks['thumb'] = art
-            if full_artwork:
-                with plexdb.Get_Plex_DB() as plex_db:
-                    db_item = plex_db.getItem_byId(self.plex_id())
+            # EXCEPT if you're constructing a listitem
+            if not full_artwork:
+                art = self._one_artwork('thumb')
+                if art:
+                    artworks['thumb'] = art
+                return artworks
+            for kodi_artwork, plex_artwork in \
+                    v.KODI_TO_PLEX_ARTWORK_EPISODE.iteritems():
+                art = self._one_artwork(plex_artwork)
+                if art:
+                    artworks[kodi_artwork] = art
+            if not full_artwork:
+                return artworks
+            with plexdb.Get_Plex_DB() as plex_db:
                 try:
-                    season_id = db_item[3]
+                    season_id = plex_db.getItem_byId(self.plex_id())[3]
                 except TypeError:
                     return artworks
-                # Grab artwork from the season
-                with kodidb.GetKodiDB('video') as kodi_db:
-                    season_art = kodi_db.get_art(season_id, v.KODI_TYPE_SEASON)
-                for kodi_art in season_art:
-                    artworks['season.%s' % kodi_art] = season_art[kodi_art]
-                # Get the show id
-                with plexdb.Get_Plex_DB() as plex_db:
-                    db_item = plex_db.getItem_byId(self.grandparent_id())
+            # Grab artwork from the season
+            with kodidb.GetKodiDB('video') as kodi_db:
+                season_art = kodi_db.get_art(season_id, v.KODI_TYPE_SEASON)
+            for kodi_art in season_art:
+                artworks['season.%s' % kodi_art] = season_art[kodi_art]
+            # Get the show id
+            with plexdb.Get_Plex_DB() as plex_db:
                 try:
-                    show_id = db_item[0]
+                    show_id = plex_db.getItem_byKodiId(season_id,
+                                                       v.KODI_TYPE_SEASON)[1]
                 except TypeError:
                     return artworks
-                # Grab more artwork from the show
-                with kodidb.GetKodiDB('video') as kodi_db:
-                    show_art = kodi_db.get_art(show_id, v.KODI_TYPE_SHOW)
-                for kodi_art in show_art:
-                    artworks['tvshow.%s' % kodi_art] = show_art[kodi_art]
+            # Grab more artwork from the show
+            with kodidb.GetKodiDB('video') as kodi_db:
+                show_art = kodi_db.get_art(show_id, v.KODI_TYPE_SHOW)
+            for kodi_art in show_art:
+                artworks['tvshow.%s' % kodi_art] = show_art[kodi_art]
             return artworks
 
         if kodi_id:
@@ -844,7 +856,6 @@ class API(object):
         external_id = self.retrieve_external_item_id()
         if external_id is not None:
             artworks = self.lookup_fanart_tv(external_id[0], artworks)
-        LOG.debug('fanart artworks: %s', artworks)
         return artworks
 
     def retrieve_external_item_id(self, collection=False):
