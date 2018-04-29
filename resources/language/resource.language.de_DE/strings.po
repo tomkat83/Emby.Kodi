@@ -65,7 +65,7 @@ msgstr "Benachrichtigungen für Cachen von Bildern aktivieren"
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
-msgstr ""
+msgstr "Cachen von Bildern während Wiedergabe aktivieren (Kodi neu starten!)"
 
 # Button text
 msgctxt "#30012"
