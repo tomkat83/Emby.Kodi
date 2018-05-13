@@ -49,13 +49,13 @@ msgstr "Benutzername: "
 
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
-msgid "Caching %s images"
-msgstr "Cache %s Bilder"
+msgid "Caching %s Plex images"
+msgstr "Cache %s Plex Bilder"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
-msgid "Major image caching done"
-msgstr "Cachen wichtigster Bilder beendet"
+msgid "Plex image caching done"
+msgstr "Plex Bilder-Caching beendet"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
@@ -66,6 +66,16 @@ msgstr "Benachrichtigungen für Cachen von Bildern aktivieren"
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr "Cachen von Bildern während Wiedergabe aktivieren (Kodi neu starten!)"
+
+# PKC settings - Artwork
+msgctxt "#30010"
+msgid "Approximate progress"
+msgstr "Ungefährer Stand"
+
+# PKC settings - Artwork
+msgctxt "#30011"
+msgid "Plex artwork (posters and backgrounds) left to cache:"
+msgstr "Plex Bilder (Poster und Hintergründe) noch zu cachen:"
 
 # Button text
 msgctxt "#30012"
@@ -81,6 +91,11 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Verbindung"
 
+# PKC settings - Artwork
+msgctxt "#30015"
+msgid "Movie and show FanartTV lookups left to do:"
+msgstr "Filme und Serien noch bei FanartTV nachzuschlagen:"
+
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "Gerätename"
@@ -89,6 +104,16 @@ msgstr "Gerätename"
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "Nicht autorisiert für PMS"
+
+# Sync notification displayed for the number of fanart.tv lookups left
+msgctxt "#30018"
+msgid "Checking FanartTV for %s items"
+msgstr "%s Nachforschungen bei FanartTV"
+
+# Sync notification displayed when FanartTV lookup is completed
+msgctxt "#30019"
+msgid "FanartTV lookup completed"
+msgstr "FanartTV Nachforschungen beendet"
 
 # PKC settings category
 msgctxt "#30022"
@@ -417,8 +442,8 @@ msgstr "Wiedergabemodus"
 
 # PKC Settings - Artwork
 msgctxt "#30512"
-msgid "Force artwork caching"
-msgstr "Zwischenspeichern von PMS Bildern erzwingen"
+msgid "Cache all artwork for a smooth Kodi experience"
+msgstr "Bilder zwischenspeichern (\"cachen\") für ein besseres Kodi-Erlebnis"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
@@ -498,12 +523,8 @@ msgstr "Server-Meldungen"
 
 # PKC Settings - Advanced
 msgctxt "#30535"
-msgid ""
-"[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
-"Kodi)[/COLOR]"
-msgstr ""
-"[COLOR yellow]Neue einzigartige Geräte-ID generieren (z.B. wenn Kodi geklont"
-" wurde)[/COLOR]"
+msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
+msgstr "Neue einzigartige Plex-ID generieren (z.B. wenn Kodi geklont wurde)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -517,8 +538,8 @@ msgstr "BEI ÄNDERUNGEN KODI NEU STARTEN"
 
 # PKC Settings warning
 msgctxt "#30538"
-msgid "Complete Re-Sync necessary"
-msgstr "Komplette Neu-Synchronisierung nötig"
+msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
+msgstr ""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -634,8 +655,8 @@ msgstr "Größe der eingebrannten Untertitel"
 
 # PKC Settings - Sync
 msgctxt "#39003"
-msgid "Limit download sync threads (rec. for rpi: 1)"
-msgstr "Anzahl Download Sync Threads beschränken (Empfehlung RPI: 1)"
+msgid "Number of simultaneous download threads"
+msgstr "Anzahl gleichzeitiger Download-Threads"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -712,15 +733,13 @@ msgstr ""
 
 # PKC Settings - Advanced
 msgctxt "#39018"
-msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
-msgstr ""
-"[COLOR yellow]Lokale Datenbank reparieren (alle Einträge "
-"aktualisieren)[/COLOR]"
+msgid "Repair the Kodi database (force update all content)"
+msgstr "Kodi Datenbank reparieren (alle Einträge aktualisieren)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
-msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
-msgstr "[COLOR red]Datenbank und auf Wunsch PKC zurücksetzen[/COLOR]"
+msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
+msgstr "Kodi Datenbank und optional PlexKodiConnect zurücksetzen"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
