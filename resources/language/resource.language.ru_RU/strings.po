@@ -54,32 +54,34 @@ msgstr "Имя пользователя: "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Кэширование %s изображений Plex"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Кэширование изображений Plex завершено"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Включить уведомления для кэширования изображений"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
+"Включить кэширование изображений во время воспроизведения Kodi "
+"(перезапустите Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Приблизительный прогресс"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Plex artwork (posters and backgrounds) left to cache:"
-msgstr ""
+msgstr "Plex изображения (плакаты и фоны) остались в кэше:"
 
 # Button text
 msgctxt "#30012"
@@ -112,12 +114,12 @@ msgstr "Не авторизован на сервере Plex"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "FanartTV осталось проверить %s"
 
 # Sync notification displayed when FanartTV lookup is completed
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "Поиск FanartTV завершен"
 
 # PKC settings category
 msgctxt "#30022"
@@ -445,7 +447,7 @@ msgstr "Режим воспроизведения"
 # PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Cache all artwork for a smooth Kodi experience"
-msgstr ""
+msgstr "Кэш всех изображений для плавной работы Kodi"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
@@ -528,6 +530,7 @@ msgstr "Сообщения сервера"
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
 msgstr ""
+"Генерировать новый ID устройства Plex (например, при клонировании Kodi)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -543,6 +546,7 @@ msgstr "ПЕРЕЗАПУСТИТЕ KODI, ЕСЛИ ВНОСИЛИ КАКИЕ-ТО
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
 msgstr ""
+"Необходим ручной полный сброс базы данных Kodi, см. Раздел \"Дополнительно\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -654,7 +658,7 @@ msgstr "Размер субтитров внедряемых в видео"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Количество одновременных тем для загрузки"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -729,11 +733,13 @@ msgstr ""
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
 msgstr ""
+"Восстановление базы данных Kodi (принудительное обновление всего "
+"содержимого)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
-msgstr ""
+msgstr "Сброс базы данных Kodi и возможная перезагрузка PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
