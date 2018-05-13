@@ -51,32 +51,33 @@ msgstr "Uživ. jméno: "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Ukládám %s obrázků z Plexu"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Ukládání obrázků do mezipaměti dokončeno."
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Povolit upozornění na ukládání obrázků do mezipaměti"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
+"Povolit ukládání obrázků do mezipaměti při přehrávání (restartujte Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Odhad průběhu"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Plex artwork (posters and backgrounds) left to cache:"
-msgstr ""
+msgstr "Počet obrázků a pozadí z Plexu k uložení do mezipaměti:"
 
 # Button text
 msgctxt "#30012"
@@ -95,7 +96,7 @@ msgstr "Připojení"
 # PKC settings - Artwork
 msgctxt "#30015"
 msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgstr "Filmů a seriálů k vyhledání na FanartTV:"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -109,12 +110,12 @@ msgstr "Neověřeno u PMS"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "Vyhledávám %s položek na FanartTV"
 
 # Sync notification displayed when FanartTV lookup is completed
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "Vyhledávání na FanartTV dokončeno"
 
 # PKC settings category
 msgctxt "#30022"
@@ -525,6 +526,8 @@ msgstr "Zprávy serveru"
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
 msgstr ""
+"Vygenerovat nový unikátní identifikátor zařízení Plexu (např. při kopii "
+"Kodi)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -539,7 +542,7 @@ msgstr "PŘI KAŽDÉ ZMĚNĚ MUSÍTE RESTARTOVAT KODI"
 # PKC Settings warning
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
-msgstr ""
+msgstr "Je vyžadován ruční reset databaze. Viz \"rozšířené\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -653,7 +656,7 @@ msgstr "Velikost vpálených titulků"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Počet souběžných vláken stahování"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -726,12 +729,12 @@ msgstr ""
 # PKC Settings - Advanced
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
-msgstr ""
+msgstr "Opravit databázi Kodi (vynutit aktualizaci všeho obsahu)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
-msgstr ""
+msgstr "Vyresetovat databázi Kodi a případně i nastavení PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
