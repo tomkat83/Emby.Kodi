@@ -47,12 +47,12 @@ msgstr "Usuario: "
 
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
-msgid "Caching %s images"
+msgid "Caching %s Plex images"
 msgstr ""
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
-msgid "Major image caching done"
+msgid "Plex image caching done"
 msgstr ""
 
 # PKC settings artwork: Enable notifications for artwork image sync
@@ -63,6 +63,16 @@ msgstr ""
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
+msgstr ""
+
+# PKC settings - Artwork
+msgctxt "#30010"
+msgid "Approximate progress"
+msgstr ""
+
+# PKC settings - Artwork
+msgctxt "#30011"
+msgid "Plex artwork (posters and backgrounds) left to cache:"
 msgstr ""
 
 # Button text
@@ -79,6 +89,11 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Conexión"
 
+# PKC settings - Artwork
+msgctxt "#30015"
+msgid "Movie and show FanartTV lookups left to do:"
+msgstr ""
+
 msgctxt "#30016"
 msgid "Device Name"
 msgstr "Nombre del Dispositivo"
@@ -87,6 +102,16 @@ msgstr "Nombre del Dispositivo"
 msgctxt "#30017"
 msgid "Unauthorized for PMS"
 msgstr "No autorizado para PMS"
+
+# Sync notification displayed for the number of fanart.tv lookups left
+msgctxt "#30018"
+msgid "Checking FanartTV for %s items"
+msgstr ""
+
+# Sync notification displayed when FanartTV lookup is completed
+msgctxt "#30019"
+msgid "FanartTV lookup completed"
+msgstr ""
 
 # PKC settings category
 msgctxt "#30022"
@@ -415,8 +440,8 @@ msgstr "Modo de reproducción"
 
 # PKC Settings - Artwork
 msgctxt "#30512"
-msgid "Force artwork caching"
-msgstr "Obligar caché de arte"
+msgid "Cache all artwork for a smooth Kodi experience"
+msgstr ""
 
 # PKC Settings - Artwork
 msgctxt "#30513"
@@ -495,12 +520,8 @@ msgstr "Mensajes del servidor"
 
 # PKC Settings - Advanced
 msgctxt "#30535"
-msgid ""
-"[COLOR yellow]Generate a new unique device Id (e.g. when cloning "
-"Kodi)[/COLOR]"
+msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
 msgstr ""
-"[COLOR yellow] Generar un nuevo id único de dispositivo (por ejemplo, al "
-"clonar Kodi)[/COLOR]"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -514,8 +535,8 @@ msgstr "REINICIAR KODI SI HACE CAMBIOS"
 
 # PKC Settings warning
 msgctxt "#30538"
-msgid "Complete Re-Sync necessary"
-msgstr "Es necesaria una Re-Sincronización Completa"
+msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
+msgstr ""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -630,9 +651,8 @@ msgstr "Tamaño de subtítulos incrustados"
 
 # PKC Settings - Sync
 msgctxt "#39003"
-msgid "Limit download sync threads (rec. for rpi: 1)"
+msgid "Number of simultaneous download threads"
 msgstr ""
-"Limitar los hilos de sincronización de descarga (recomendado para rpi: 1)"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -706,17 +726,13 @@ msgstr ""
 
 # PKC Settings - Advanced
 msgctxt "#39018"
-msgid "[COLOR yellow]Repair local database (force update all content)[/COLOR]"
+msgid "Repair the Kodi database (force update all content)"
 msgstr ""
-"[COLOR yellow] Reparar base de datos local (todo el contenido será "
-"actualizado)[/COLOR]"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
-msgid "[COLOR red]Partial or full reset of Database and PKC[/COLOR]"
+msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
 msgstr ""
-"[COLOR Red] Restablecimiento parcial o total de la base de datos y "
-"PKC[/COLOR]"
 
 # PKC Settings - Artwork
 msgctxt "#39020"

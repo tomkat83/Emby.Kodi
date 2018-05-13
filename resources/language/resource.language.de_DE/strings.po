@@ -540,6 +540,7 @@ msgstr "BEI ÄNDERUNGEN KODI NEU STARTEN"
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
 msgstr ""
+"Manuelles Zurücksetzen der Kodi Datenbank nötig, siehe \"Fortgeschritten\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
