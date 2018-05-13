@@ -5,10 +5,12 @@ from Queue import Empty
 
 from xbmc import sleep
 
-from utils import thread_methods
+from utils import thread_methods, settings, language as lang, dialog
 import plexdb_functions as plexdb
 import itemtypes
+from artwork import ArtworkSyncMessage
 import variables as v
+import state
 
 ###############################################################################
 
@@ -61,6 +63,24 @@ class ThreadedProcessFanart(Thread):
                 item = queue.get(block=False)
             except Empty:
                 sleep(200)
+                continue
+
+            if isinstance(item, ArtworkSyncMessage):
+                if item.artwork_counter is not None:
+                    if item.artwork_counter == 0:
+                        # Done caching, show this in the PKC settings, too
+                        settings('fanarttv_lookups', value=lang(30069))
+                        LOG.info('Done caching major images!')
+                    else:
+                        settings('fanarttv_lookups',
+                                 value=str(item.artwork_counter))
+                if item.message and state.IMAGE_SYNC_NOTIFICATIONS:
+                    dialog('notification',
+                           heading=lang(29999),
+                           message=item.message,
+                           icon='{plex}',
+                           sound=False)
+                queue.task_done()
                 continue
 
             LOG.debug('Get additional fanart for Plex id %s', item['plex_id'])

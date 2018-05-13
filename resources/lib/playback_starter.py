@@ -24,7 +24,13 @@ class PlaybackStarter(Thread):
     """
     @staticmethod
     def _triage(item):
-        _, params = item.split('?', 1)
+        try:
+            _, params = item.split('?', 1)
+        except ValueError:
+            # E.g. other add-ons scanning for Extras folder
+            LOG.debug('Detected 3rd party add-on call - ignoring')
+            pickle_me(Playback_Successful())
+            return
         params = dict(parse_qsl(params))
         mode = params.get('mode')
         resolve = False if params.get('handle') == '-1' else True

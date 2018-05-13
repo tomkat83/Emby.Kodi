@@ -640,7 +640,6 @@ class LibrarySync(Thread):
             self.updatelist
         """
         # Some logging, just in case.
-        LOG.debug("self.updatelist: %s", self.updatelist)
         item_number = len(self.updatelist)
         if item_number == 0:
             return
@@ -1376,6 +1375,8 @@ class LibrarySync(Thread):
         missing_only=True    False will start look-up for EVERY item
         refresh=False        True will force refresh all external fanart
         """
+        if settings('FanartTV') == 'false':
+            return
         with plexdb.Get_Plex_DB() as plex_db:
             if missing_only:
                 with plexdb.Get_Plex_DB() as plex_db:
@@ -1387,14 +1388,26 @@ class LibrarySync(Thread):
                     items.extend(plex_db.itemsByType(plex_type))
                 LOG.info('Trying to get ALL additional fanart for %s items',
                          len(items))
+        if not items:
+            return
         # Shuffle the list to not always start out identically
         shuffle(items)
-        for item in items:
+        # Checking FanartTV for %s items
+        self.fanartqueue.put(artwork.ArtworkSyncMessage(
+            message=lang(30018) % len(items), artwork_counter=len(items)))
+        for i, item in enumerate(items):
             self.fanartqueue.put({
                 'plex_id': item['plex_id'],
                 'plex_type': item['plex_type'],
                 'refresh': refresh
             })
+            if (len(items) - i) % 10 == 0:
+                # Update the PKC settings for fanart.tv lookup
+                msg = artwork.ArtworkSyncMessage(artwork_counter=len(items) - i)
+                self.fanartqueue.put(msg)
+        # FanartTV lookup completed
+        self.fanartqueue.put(artwork.ArtworkSyncMessage(message=lang(30019),
+                                                        artwork_counter=0))
 
     def triage_lib_scans(self):
         """
@@ -1542,14 +1555,13 @@ class LibrarySync(Thread):
                     initial_sync_done = True
                     kodi_db_version_checked = True
                     last_sync = utils.unix_timestamp()
+                    self.sync_fanart()
                     self.fanartthread.start()
                 else:
                     LOG.error('Initial start-up full sync unsuccessful')
                 xbmc.executebuiltin('InhibitIdleShutdown(false)')
                 window('plex_dbScan', clear=True)
                 state.DB_SCAN = False
-                if settings('FanartTV') == 'true':
-                    self.sync_fanart()
 
             elif not kodi_db_version_checked:
                 # Install sync was already done, don't force-show dialogs
@@ -1583,10 +1595,9 @@ class LibrarySync(Thread):
                 if self.full_sync():
                     initial_sync_done = True
                     last_sync = utils.unix_timestamp()
-                    if settings('FanartTV') == 'true':
-                        self.sync_fanart()
                     LOG.info('Done initial sync on Kodi startup')
                     artwork.Artwork().cache_major_artwork()
+                    self.sync_fanart()
                     self.fanartthread.start()
                 else:
                     LOG.info('Startup sync has not yet been successful')

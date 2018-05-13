@@ -1,5 +1,5 @@
 [![stable version](https://img.shields.io/badge/stable_version-1.8.18-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip) 
-[![beta version](https://img.shields.io/badge/beta_version-2.0.20-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip)
+[![beta version](https://img.shields.io/badge/beta_version-2.0.22-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip)
 
 [![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
@@ -55,6 +55,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 
 - Support of Kodi 18 Leia (and Kodi 17 Krypton)
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
+- [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
 - [Plex Watch Later / Plex It!](https://support.plex.tv/hc/en-us/sections/200211783-Plex-It-)
 - [Plex Companion](https://support.plex.tv/hc/en-us/sections/200276908-Plex-Companion): fling Plex media (or anything else) from other Plex devices to PlexKodiConnect
 - [Plex Transcoding](https://support.plex.tv/hc/en-us/articles/200250377-Transcoding-Media)

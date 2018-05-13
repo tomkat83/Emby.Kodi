@@ -29,17 +29,16 @@
 		<setting id="plexhome" label="Plex home in use" type="bool" default="" visible="false" />
 		<setting id="plexToken" label="plexToken" type="text" default="" visible="false" />
 		<setting id="plexHomeSize" type="number" default="1" visible="false" />
-
+        <setting type="sep" text=""/>
 		<setting type="lsep" label="39008" />
 		<setting id="plexCompanion" label="39004" type="bool" default="true" />
 		<setting id="deviceName" label="30016" type="text" visible="eq(-1,true)" default="PlexKodiConnect" subsetting="true" />
 		<setting id="companionPort" label="39005" type="number" default="3005" option="int" visible="eq(-2,true)" subsetting="true" />
 		<setting id="companionUpdatePort" label="39078" type="number" default="32412" option="int" visible="eq(-3,true)" subsetting="true" />
-		<setting type="lsep" label="39700" />
+		<setting type="sep" text=""/>
+        <setting type="lsep" label="39700" />
 		<setting id="enable_alexa" label="39701" type="bool" default="true"/>
-		<setting type="lsep" label="" />
         <!-- Different settings that are not visible - to avoid warnings in the log -->
-		<setting id="skipContextMenu" type="bool" label="30520" default="false"/>
 		<setting id="plex_restricteduser" type="bool" default="false" visible="false"/>
 		<setting id="plex_allows_mediaDeletion" type="bool" default="true" visible="false"/>
 		<setting id="companion_show_gdm_port_warning" type="bool" default="true" visible="false"/>
@@ -57,26 +56,27 @@
 
 	<category label="30506"><!-- Sync Options -->
 		<setting type="lsep" label="30537" /><!-- Restart if you make changes -->
-		<setting id="syncEmptyShows" type="bool" label="30508" default="false" visible="false"/>
-		<setting id="dbSyncIndicator" label="30507" type="bool" default="true" /><!-- show syncing progress -->
 		<setting type="sep" />
-        <setting id="syncThreadNumber" type="slider" label="39003" default="10" option="int" range="1,1,20"/><!-- Limit download sync threads (recommended for rpi: 1) -->
-		<setting id="limitindex" type="number" label="30515" default="200" option="int" /><!-- Maximum items to request from the server at once -->
-		<setting type="lsep" label="39052" /><!-- Background Sync -->
-		<setting id="enableBackgroundSync" type="bool" label="39026" default="true" visible="true"/>
-		<setting id="backgroundsync_saftyMargin" type="slider" label="39051" default="5" option="int" range="5,1,300" visible="eq(-1,true)" subsetting="true" />
-		<setting id="fullSyncInterval" type="number" label="39053" default="60" option="int" />
-		<setting id="dbSyncScreensaver" type="bool" label="39062" default="false" /><!--Sync when screensaver is deactivated-->
+        <setting id="fullSyncInterval" type="number" label="39053" default="60" option="int" />
+        <setting id="dbSyncScreensaver" type="bool" label="39062" default="false" /><!--Sync when screensaver is deactivated-->
+        <setting id="dbSyncIndicator" label="30507" type="bool" default="true" /><!-- show syncing progress -->
+        <setting id="syncThreadNumber" type="slider" label="39003" default="10" option="int" range="1,1,20"/><!-- Number of simultaneous download threads -->
+        <setting id="limitindex" type="number" label="30515" default="200" option="int" /><!-- Maximum items to request from the server at once -->
+        <setting type="sep" />
+        <setting type="lsep" label="39052" /><!-- Background Sync -->
+        <setting id="enableBackgroundSync" type="bool" label="39026" default="true" visible="true"/>
+        <setting id="backgroundsync_saftyMargin" type="slider" label="39051" default="5" option="int" range="5,1,300" visible="eq(-1,true)" subsetting="true" />
+        <setting type="sep" />
+        <setting type="lsep" label="30538" /><!-- Manual complete reset of Kodi database necessary, see "Advanced" -->
+        <setting id="indicate_media_versions" type="bool" label="39719" default="false" /><!-- Replace user ratings with number of versions -->
+        <setting id="enableMusic" type="bool" label="30509" default="true" />
+        <setting id="useDirectPaths" type="enum" label="30511" values="Addon(Default)|Native(Direct paths)" default="0" visible="true"/> <!-- Playback mode -->
 
-		<setting type="lsep" label="30538" /><!-- Complete Re-Sync necessary -->
-		<setting id="indicate_media_versions" type="bool" label="39719" default="false" /><!-- Replace user ratings with number of versions -->
-		<setting id="enableMusic" type="bool" label="30509" default="true" />
-		<setting id="useDirectPaths" type="enum" label="30511" values="Addon(Default)|Native(Direct paths)" default="0" visible="true"/> <!-- Playback mode -->
-
-		<setting id="streamMusic" type="bool" label="30510" default="false" visible="false" subsetting="true"/> <!-- Direct stream Music library -->
+        <setting id="streamMusic" type="bool" label="30510" default="false" visible="false" subsetting="true"/> <!-- Direct stream Music library -->
         <setting id="kodiplextimeoffset" type="number" label="Time difference in seconds (Koditime - Plextime)" default="0" visible="false" option="int" />
         <setting id="themoviedbAPIKey" type="text" default="19c90103adb9e98f2172c6a6a3d85dc4" visible="false"/>
         <setting id="FanArtTVAPIKey" type="text" default="639191cb0774661597f28a47e7e2bad5" visible="false"/>
+        <setting id="syncEmptyShows" type="bool" label="30508" default="false" visible="false"/>
 	</category>
 
 	<category label="39057"><!-- Customize Paths -->
@@ -94,40 +94,45 @@
 	</category>
 
 	<category label="30516"><!-- Playback -->
-		<setting type="sep" />
 		<setting id="enableCinema" type="bool" label="30518" default="false" />
 		<setting id="askCinema" type="bool" label="30519" default="false" visible="eq(-1,true)" subsetting="true" />
         <setting id="trailerNumber" type="slider" label="39000" default="3" visible="eq(-2,true)" range="1,1,15" option="int" />
         <setting id="pickPlexSubtitles" type="bool" label="39075" default="true" />
 	    <setting id="ignoreSpecialsNextEpisodes" type="bool" label="30527" default="false" />
+        <setting id="resumeJumpBack" type="slider" label="30521" default="10" range="0,1,120" option="int" visible="false"/>
+        <setting type="sep" />
+        <setting id="playType" type="enum" label="30002" values="Direct Play (default)|Direct Stream|Force Transcode" default="0" />
+        <setting id="transcoderVideoQualities" type="enum" label="30160" values="420x420, 320kbps|576x320, 720kbps|720x480, 1.5Mbps|1024x768, 2Mbps|1280x720, 3Mbps|1280x720, 4Mbps|1920x1080, 8Mbps|1920x1080, 10Mbps|1920x1080, 12Mbps|1920x1080, 20Mbps|1920x1080, 40Mbps" default="10" /><!-- Video Quality if Transcoding necessary -->
+        <setting id="maxVideoQualities" type="enum" label="30143" values="320kbps|720kbps|1.5Mbps|2Mbps|3Mbps|4Mbps|8Mbps|10Mbps|12Mbps|20Mbps|40Mbps|deactivated" default="11" /><!-- Always transcode if video bitrate is above -->
+        <setting id="transcodeH265" type="enum" label="30522" default="0" values="Disabled (default)|480p (and higher)|720p (and higher)|1080p" /><!-- Force transcode h265/HEVC -->
+        <setting id="transcodeHi10P" type="bool" label="39063" default="false"/>
+        <setting id="audioBoost" type="slider" label="39001" default="0" range="0,10,100" option="int"/>
+        <setting id="subtitleSize" label="39002" type="slider" option="int" range="0,30,300" default="100" />
+        <setting id="force_transcode_pix" type="bool" label="30545" default="false" />
+        <setting id="bestQuality" type="bool" label="30541" default="false" />
+        <setting id="bestTrailer" type="bool" label="30542" default="true" />
+        <setting type="sep" />
         <setting id="offerDelete" type="bool" label="30114" default="false" visible="false"/>
-		<setting id="deleteTV" type="bool" label="30115" visible="eq(-1,true)" default="false" subsetting="true" />
-		<setting id="deleteMovies" type="bool" label="30116" visible="eq(-2,true)" default="false" subsetting="true" />
-		<setting id="resumeJumpBack" type="slider" label="30521" default="10" range="0,1,120" option="int" visible="false"/>
-		<setting type="sep" />
-	    <setting id="playType" type="enum" label="30002" values="Direct Play (default)|Direct Stream|Force Transcode" default="0" />
-	    <setting id="transcoderVideoQualities" type="enum" label="30160" values="420x420, 320kbps|576x320, 720kbps|720x480, 1.5Mbps|1024x768, 2Mbps|1280x720, 3Mbps|1280x720, 4Mbps|1920x1080, 8Mbps|1920x1080, 10Mbps|1920x1080, 12Mbps|1920x1080, 20Mbps|1920x1080, 40Mbps" default="10" /><!-- Video Quality if Transcoding necessary -->
-	    <setting id="maxVideoQualities" type="enum" label="30143" values="320kbps|720kbps|1.5Mbps|2Mbps|3Mbps|4Mbps|8Mbps|10Mbps|12Mbps|20Mbps|40Mbps|deactivated" default="11" /><!-- Always transcode if video bitrate is above -->
-	    <setting id="transcodeH265" type="enum" label="30522" default="0" values="Disabled (default)|480p (and higher)|720p (and higher)|1080p" /><!-- Force transcode h265/HEVC -->
-	    <setting id="transcodeHi10P" type="bool" label="39063" default="false"/>
-	    <setting id="audioBoost" type="slider" label="39001" default="0" range="0,10,100" option="int"/>
-	    <setting id="subtitleSize" label="39002" type="slider" option="int" range="0,30,300" default="100" />
-	    <setting id="failedCount" type="number" visible="false" default="0" />
-	    <setting id="networkCreds" type="text" visible="false" default="" />
-	    <setting id="bestQuality" type="bool" label="30541" default="false" />
-	    <setting id="bestTrailer" type="bool" label="30542" default="true" />
-	    <setting id="force_transcode_pix" type="bool" label="30545" default="false" />
-	    <setting id="kodi_video_cache" type="number" visible="false" default="20971520" />
+        <setting id="deleteTV" type="bool" label="30115" visible="eq(-1,true)" default="false" subsetting="true" />
+        <setting id="deleteMovies" type="bool" label="30116" visible="eq(-2,true)" default="false" subsetting="true" />
+        <setting id="skipContextMenu" type="bool" label="30520" default="false"/>
+        <setting id="kodi_video_cache" type="number" visible="false" default="20971520" />
         <setting id="warned_setting_videoplayer.autoplaynextitem" type="bool" visible="false" default="false" />
+        <setting id="failedCount" type="number" visible="false" default="0" />
+        <setting id="networkCreds" type="text" visible="false" default="" />
 	</category>
 
 	<category label="30544"><!-- artwork -->
-		<setting id="enableTextureCache" label="30512"  type="bool" default="true" /> <!-- Force Artwork Caching -->
+		<setting id="enableTextureCache" label="30512"  type="bool" default="true" /> <!-- Cache all artwork for a smooth Kodi experience -->
 		<setting id="FanartTV" label="30539" type="bool" default="false" /><!-- Download additional art from FanArtTV -->
 		<setting label="39222" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=fanart)" option="close" visible="eq(-1,true)" subsetting="true" /> <!-- Look for missing fanart on FanartTV now -->
         <setting id="imageSyncNotifications" label="30008" type="bool" default="true" /><!-- Enable notifications for image caching -->
         <setting id="imageSyncDuringPlayback" label="30009" type="bool" default="true" /><!-- Enable image caching during Kodi playback (restart Kodi!) -->
 		<setting label="39020" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=texturecache)" option="close" /> <!-- Cache all images to Kodi texture cache now -->
+        <setting type="sep" />
+        <setting type="lsep" label="30010" /><!-- Approximate progress -->
+        <setting id="caching_major_artwork" label="30011" type="text" default="$ADDON[plugin.video.plexkodiconnect 39310]" enable="false" visible="eq(-8,true)"/><!-- Plex artwork (posters and backgrounds) left to cache: -->
+        <setting id="fanarttv_lookups" label="30015" type="text" default="$ADDON[plugin.video.plexkodiconnect 39310]" enable="false" visible="eq(-8,true)"/><!-- Movie and show FanartTV lookups left to do: -->
 	</category>
 	<!--
 	<category label="30235" visible="false">
@@ -141,24 +146,29 @@
 	-->
 
 	<category label="39073"><!-- Appearance Tweaks -->
-		<setting id="fetch_pms_item_number" label="39077" type="number" default="25" option="int" />
+		<setting id="fetch_pms_item_number" label="39077" type="number" default="50" option="int" />
+        <setting type="sep" />
+        <setting type="lsep" label="39074" /><!-- TV Shows -->
+        <setting id="OnDeckTVextended" type="bool" label="39058" default="true" /><!-- Extend Plex TV Series "On Deck" view to all shows -->
+        <setting id="OnDeckTvAppendShow" type="bool" label="39047" default="false" /><!--On Deck view: Append show title to episode-->
+        <setting id="OnDeckTvAppendSeason" type="bool" label="39048" default="false" /><!--On Deck view: Append season number to episode-->
+        <setting id="TVShowWatched" type="bool" label="39064" default="true" /><!--Recently Added: Also show already watched episodes-->
+        <setting id="RecentTvAppendShow" type="bool" label="39059" default="false" /><!--Recently added: Append show title to episode-->
+        <setting id="RecentTvAppendSeason" type="bool" label="39060" default="false" /><!--Recently Added: Append season- and episode-number SxxExx-->
+        <setting type="sep" />
+        <setting type="lsep" label="30302" /><!-- Movies -->
+        <setting id="MovieShowWatched" type="bool" label="39066" default="true" /><!--Recently Added: Also show already watched episodes-->
+        <setting type="sep" />
+        <setting type="lsep" label="30022" /><!-- Advanced -->
         <setting id="forceReloadSkinOnPlaybackStop" type="bool" label="39065" default="false" /><!-- Force-refresh Kodi skin on stopping playback -->
-		<setting type="lsep" label="39074" /><!-- TV Shows -->
-		<setting id="OnDeckTVextended" type="bool" label="39058" default="true" /><!-- Extend Plex TV Series "On Deck" view to all shows -->
-		<setting id="OnDeckTvAppendShow" type="bool" label="39047" default="false" /><!--On Deck view: Append show title to episode-->
-		<setting id="OnDeckTvAppendSeason" type="bool" label="39048" default="false" /><!--On Deck view: Append season number to episode-->
-		<setting id="TVShowWatched" type="bool" label="39064" default="true" /><!--Recently Added: Also show already watched episodes-->
-		<setting id="RecentTvAppendShow" type="bool" label="39059" default="false" /><!--Recently added: Append show title to episode-->
-		<setting id="RecentTvAppendSeason" type="bool" label="39060" default="false" /><!--Recently Added: Append season- and episode-number SxxExx-->
-		<setting type="lsep" label="30302" /><!-- Movies -->
-		<setting id="MovieShowWatched" type="bool" label="39066" default="true" /><!--Recently Added: Also show already watched episodes-->
 	</category>
 
 	<category label="30022"><!-- Advanced -->
 		<setting id="startupDelay" type="number" label="30529" default="0" option="int" />
-		<setting label="39018" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=repair)" option="close" /> <!-- Repair local database (force update all content) -->
-		<setting label="30535" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=deviceid)" /><!-- Reset device id uuid -->
-		<setting type="lsep" label="39049" /><!-- Nothing works? Try a full reset -->
-		<setting label="39019" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=reset)" option="close" /> <!-- Partial or full reset of Database and PKC -->
+		<setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 39018][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=repair)" option="close" /> <!-- Repair the Kodi database (force update all content) -->
+		<setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 30535][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=deviceid)" /><!-- Generate a new unique Plex device Id (e.g. to clone Kodi) -->
+		<setting type="sep" />
+        <setting type="lsep" label="39049" /><!-- Nothing works? Try a full reset -->
+		<setting label="[COLOR red]$ADDON[plugin.video.plexkodiconnect 39019][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=reset)" option="close" /> <!-- Reset the Kodi database and optionally reset PlexKodiConnect -->
 	</category>
 </settings>

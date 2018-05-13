@@ -12,8 +12,8 @@ import requests
 from xbmc import sleep, translatePath
 from xbmcvfs import exists
 
-from utils import window, settings, language as lang, kodi_sql, try_encode, \
-    thread_methods, dialog, exists_dir, try_decode
+from utils import settings, language as lang, kodi_sql, try_encode, try_decode,\
+    thread_methods, dialog, exists_dir
 import state
 
 ###############################################################################
@@ -69,7 +69,15 @@ class Image_Cache_Thread(Thread):
                 sleep(1000)
                 continue
             if isinstance(url, ArtworkSyncMessage):
-                if state.IMAGE_SYNC_NOTIFICATIONS:
+                if url.artwork_counter is not None:
+                    if url.artwork_counter == 0:
+                        # Done caching, show this in the PKC settings, too
+                        settings('caching_major_artwork', value=lang(30069))
+                        LOG.info('Done caching major images!')
+                    else:
+                        settings('caching_major_artwork',
+                                 value=str(url.artwork_counter))
+                if url.message and state.IMAGE_SYNC_NOTIFICATIONS:
                     dialog('notification',
                            heading=lang(29999),
                            message=url.message,
@@ -107,12 +115,12 @@ class Image_Cache_Thread(Thread):
                               'over-loaded. Sleep %s seconds before trying '
                               'again to download %s',
                               2**sleeptime, double_urldecode(url))
-                    sleep((2**sleeptime)*1000)
+                    sleep((2**sleeptime) * 1000)
                     sleeptime += 1
                     continue
-                except Exception as e:
+                except Exception as err:
                     LOG.error('Unknown exception for url %s: %s'.
-                              double_urldecode(url), e)
+                              double_urldecode(url), err)
                     import traceback
                     LOG.error("Traceback:\n%s", traceback.format_exc())
                     break
@@ -159,13 +167,25 @@ class Artwork():
         connection.close()
         if not artworks_to_cache:
             LOG.info('Caching of major images to Kodi texture cache done')
+            # Set to "None"
+            settings('caching_major_artwork', value=lang(30069))
             return
+        length = len(artworks_to_cache)
         LOG.info('Caching has not been completed - caching %s major images',
-                 len(artworks_to_cache))
-        self.queue.put(ArtworkSyncMessage(lang(30006) % len(artworks_to_cache)))
-        for url in artworks_to_cache:
+                 length)
+        settings('caching_major_artwork', value=str(length))
+        # Caching %s Plex images
+        self.queue.put(ArtworkSyncMessage(message=lang(30006) % length,
+                                          artwork_counter=length))
+        for i, url in enumerate(artworks_to_cache):
             self.queue.put(url[0])
-        self.queue.put(ArtworkSyncMessage(lang(30007)))
+            if (length - i) % 10 == 0:
+                # Update the PKC settings for artwork caching progress
+                msg = ArtworkSyncMessage(artwork_counter=length - i)
+                self.queue.put(msg)
+        # Plex image caching done
+        self.queue.put(ArtworkSyncMessage(message=lang(30007),
+                                          artwork_counter=0))
 
     def fullTextureCacheSync(self):
         """
@@ -323,5 +343,6 @@ class ArtworkSyncMessage(object):
     """
     Put in artwork queue to display the message as a Kodi notification
     """
-    def __init__(self, message):
+    def __init__(self, message=None, artwork_counter=None):
         self.message = message
+        self.artwork_counter = artwork_counter

@@ -435,7 +435,9 @@ def wipe_database():
             cursor.execute("DELETE FROM %s" % table_name)
     connection.commit()
     cursor.close()
-
+    # Reset the artwork sync status in the PKC settings
+    settings('caching_major_artwork', value=language(39310))
+    settings('fanarttv_lookups', value=language(39310))
     # reset the install run flag
     settings('SyncInstallRunDone', value="false")
 

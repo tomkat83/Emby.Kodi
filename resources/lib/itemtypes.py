@@ -852,7 +852,7 @@ class TVShows(Items):
             # Set plugin path - do NOT use "intermediate" paths for the show
             # as with direct paths!
             filename = api.file_name(force_first_media=True)
-            path = 'plugin://%s.tvshows/' % v.ADDON_ID
+            path = 'plugin://%s.tvshows/%s/' % (v.ADDON_ID, series_id)
             filename = ('%s?plex_id=%s&plex_type=%s&mode=play&filename=%s'
                         % (path, itemid, v.PLEX_TYPE_EPISODE, filename))
             playurl = filename

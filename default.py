@@ -99,6 +99,9 @@ class Main():
         elif mode == 'channels':
             entrypoint.channels()
 
+        elif mode == 'extras':
+            entrypoint.extras(plex_id=params.get('plex_id'))
+
         elif mode == 'settings':
             executebuiltin('Addon.OpenSettings(%s)' % v.ADDON_ID)
 

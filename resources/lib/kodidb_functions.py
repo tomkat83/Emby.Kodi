@@ -303,7 +303,11 @@ class KodiDBMethods(object):
         # Add all new entries that haven't already been added
         query = 'INSERT INTO %s VALUES (?, ?, ?)' % link_table
         for entry_id in entry_ids:
-            self.cursor.execute(query, (entry_id, kodi_id, kodi_type))
+            try:
+                self.cursor.execute(query, (entry_id, kodi_id, kodi_type))
+            except IntegrityError:
+                LOG.info('IntegrityError: skipping entry %s for table %s',
+                         entry_id, link_table)
         # Delete all outdated references in the link table. Also check whether
         # we need to delete orphaned entries in the master table
         query = '''

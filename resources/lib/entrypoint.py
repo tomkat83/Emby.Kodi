@@ -369,7 +369,7 @@ def getRecentEpisodes(viewid, mediatype, tagname, limit):
     append_show_title = settings('RecentTvAppendShow') == 'true'
     append_sxxexx = settings('RecentTvAppendSeason') == 'true'
     # First we get a list of all the TV shows - filtered by tag
-    allshowsIds = list()
+    allshowsIds = set()
     params = {
         'sort': {'order': "descending", 'method': "dateadded"},
         'filter': {'operator': "is", 'field': "tag", 'value': "%s" % tagname},
@@ -839,6 +839,26 @@ def __build_item(xml_element):
     xbmcplugin.addDirectoryItem(handle=HANDLE,
                                 url=url,
                                 listitem=listitem)
+
+
+def extras(plex_id):
+    """
+    Lists all extras for plex_id
+    """
+    xbmcplugin.setContent(HANDLE, 'movies')
+    xml = GetPlexMetadata(plex_id)
+    try:
+        xml[0].attrib
+    except (TypeError, IndexError, KeyError):
+        xbmcplugin.endOfDirectory(HANDLE)
+        return
+    for item in API(xml[0]).extras():
+        api = API(item)
+        listitem = api.create_listitem()
+        xbmcplugin.addDirectoryItem(handle=HANDLE,
+                                    url=api.path(),
+                                    listitem=listitem)
+    xbmcplugin.endOfDirectory(HANDLE)
 
 
 def enterPMS():

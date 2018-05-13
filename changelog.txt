@@ -1,3 +1,14 @@
+version 2.0.22 (beta only):
+- Fix Recently Added for tv shows not working
+- Fix PKC crashing on startup
+
+version 2.0.21 (beta only):
+- Fix TV show artwork Kodi native library (reset Kodi DB!)
+- Cache missing posters and backgrounds/fanart on Kodi startup
+- Add toggle to deactivate image caching during playback
+- Increase timeout between syncing images
+- Fix music database if new music is added in the background
+
 version 2.0.20 (beta only):
 - Fix missing episode poster in certain views. You will have to manually reset your Kodi database to benefit
 - Fix episode artwork sometimes not being complete

@@ -2,13 +2,16 @@
 ###############################################################################
 from logging import getLogger
 
-from xbmc import getInfoLabel, sleep, executebuiltin
 from xbmcaddon import Addon
+import xbmc
+import xbmcplugin
+import xbmcgui
 
 import plexdb_functions as plexdb
 from utils import window, settings, dialog, language as lang
 from dialogs import context
-from PlexFunctions import delete_item_from_pms
+import PlexFunctions as PF
+from PlexAPI import API
 import playqueue as PQ
 import variables as v
 import state
@@ -25,7 +28,8 @@ OPTIONS = {
     # 'RemoveFav': lang(30406),
     # 'RateSong': lang(30407),
     'Transcode': lang(30412),
-    'PMS_Play': lang(30415)  # Use PMS to start playback
+    'PMS_Play': lang(30415),  # Use PMS to start playback
+    'Extras': lang(30235)
 }
 
 ###############################################################################
@@ -53,17 +57,24 @@ class ContextMenu(object):
                   self.plex_id, self.plex_type)
         if not self.plex_id:
             return
+        xml = PF.GetPlexMetadata(self.plex_id)
+        try:
+            xml[0].attrib
+        except (TypeError, IndexError, KeyError):
+            self.api = None
+        else:
+            self.api = API(xml[0])
         if self._select_menu():
             self._action_menu()
             if self._selected_option in (OPTIONS['Delete'],
                                          OPTIONS['Refresh']):
                 LOG.info("refreshing container")
-                sleep(500)
-                executebuiltin('Container.Refresh')
+                xbmc.sleep(500)
+                xbmc.executebuiltin('Container.Refresh')
 
     @staticmethod
     def _get_plex_id(kodi_id, kodi_type):
-        plex_id = getInfoLabel('ListItem.Property(plexid)') or None
+        plex_id = xbmc.getInfoLabel('ListItem.Property(plexid)') or None
         if not plex_id and kodi_id and kodi_type:
             with plexdb.Get_Plex_DB() as plexcursor:
                 item = plexcursor.getItem_byKodiId(kodi_id, kodi_type)
@@ -79,6 +90,8 @@ class ContextMenu(object):
         """
         options = []
         # if user uses direct paths, give option to initiate playback via PMS
+        if self.api and self.api.extras():
+            options.append(OPTIONS['Extras'])
         if state.DIRECT_PATHS and self.kodi_type in v.KODI_VIDEOTYPES:
             options.append(OPTIONS['PMS_Play'])
         if self.kodi_type in v.KODI_VIDEOTYPES:
@@ -122,6 +135,8 @@ class ContextMenu(object):
             self._PMS_play()
         elif selected == OPTIONS['PMS_Play']:
             self._PMS_play()
+        elif selected == OPTIONS['Extras']:
+            self._extras()
         # elif selected == OPTIONS['Refresh']:
         #     self.emby.refreshItem(self.item_id)
         # elif selected == OPTIONS['AddFav']:
@@ -131,7 +146,8 @@ class ContextMenu(object):
         # elif selected == OPTIONS['RateSong']:
         #     self._rate_song()
         elif selected == OPTIONS['Addon']:
-            executebuiltin('Addon.OpenSettings(plugin.video.plexkodiconnect)')
+            xbmc.executebuiltin(
+                'Addon.OpenSettings(plugin.video.plexkodiconnect)')
         elif selected == OPTIONS['Delete']:
             self._delete_item()
 
@@ -146,7 +162,7 @@ class ContextMenu(object):
                 delete = False
         if delete:
             LOG.info("Deleting Plex item with id %s", self.plex_id)
-            if delete_item_from_pms(self.plex_id) is False:
+            if PF.delete_item_from_pms(self.plex_id) is False:
                 dialog("ok", heading="{plex}", line1=lang(30414))
 
     def _PMS_play(self):
@@ -161,4 +177,16 @@ class ContextMenu(object):
                   % (v.ADDON_TYPE[self.plex_type],
                      self.plex_id,
                      self.plex_type))
-        executebuiltin('RunPlugin(%s)' % handle)
+        xbmc.executebuiltin('RunPlugin(%s)' % handle)
+
+    def _extras(self):
+        """
+        Displays a list of elements for all the extras of the Plex element
+        """
+        handle = ('plugin://plugin.video.plexkodiconnect?mode=extras&plex_id=%s'
+                  % self.plex_id)
+        if xbmcgui.getCurrentWindowId() == 10025:
+            # Video Window
+            xbmc.executebuiltin('Container.Update(\"%s\")' % handle)
+        else:
+            xbmc.executebuiltin('ActivateWindow(videos, \"%s\")' % handle)

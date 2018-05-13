@@ -119,7 +119,7 @@ class SubscriptionMgr(object):
         self.server = ""
         self.protocol = "http"
         self.port = ""
-        self.isplaying = False
+        self.location = 'navigation'
         # In order to be able to signal a stop at the end
         self.last_params = {}
         self.lastplayers = {}
@@ -144,7 +144,7 @@ class SubscriptionMgr(object):
         Returns a timeline xml as str
         (xml containing video, audio, photo player state)
         """
-        self.isplaying = False
+        self.location = 'navigation'
         answ = str(XML)
         timelines = {
             v.PLEX_PLAYLIST_TYPE_VIDEO: None,
@@ -163,8 +163,8 @@ class SubscriptionMgr(object):
                         v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[typus]],
                     typus)
             timelines[typus] = self._dict_to_xml(timeline)
-        location = 'fullScreenVideo' if self.isplaying else 'navigation'
-        timelines.update({'command_id': '{command_id}', 'location': location})
+        timelines.update({'command_id': '{command_id}',
+                         'location': self.location})
         return answ.format(**timelines)
 
     @staticmethod
@@ -191,7 +191,8 @@ class SubscriptionMgr(object):
                 'type': ptype,
                 'state': 'stopped'
             }
-        self.isplaying = True
+        if ptype in (v.PLEX_PLAYLIST_TYPE_VIDEO, v.PLEX_PLAYLIST_TYPE_PHOTO):
+            self.location = 'fullScreenVideo'
         self.stop_sent_to_web = False
         pbmc_server = window('pms_server')
         if pbmc_server:
@@ -202,7 +203,6 @@ class SubscriptionMgr(object):
         shuffle = '1' if info['shuffled'] else '0'
         mute = '1' if info['muted'] is True else '0'
         answ = {
-            'location': 'fullScreenVideo',
             'controllable': CONTROLLABLE[ptype],
             'protocol': self.protocol,
             'address': self.server,
