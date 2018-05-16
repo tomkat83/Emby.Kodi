@@ -115,7 +115,7 @@ class ContextMenu(object):
         # Addon settings
         options.append(OPTIONS['Addon'])
         context_menu = context.ContextMenu(
-            "script-emby-context.xml",
+            "script-plex-context.xml",
             Addon('plugin.video.plexkodiconnect').getAddonInfo('path'),
             "default",
             "1080i")
