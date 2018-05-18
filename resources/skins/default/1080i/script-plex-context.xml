@@ -8,7 +8,7 @@
 			<description>Background fade</description>
 			<width>100%</width>
 			<height>100%</height>
-			<texture>emby-bg-fade.png</texture>
+			<texture>bg-fade.png</texture>
 		</control>
 		
 		<control type="group">
@@ -22,12 +22,12 @@
 			</control>
 			
 			<control type="image">
-				<description>Emby logo</description>
-				<texture>emby-icon.png</texture>
+				<description>Plex logo</description>
+				<texture>plex-logo.png</texture>
 				<aspectratio>keep</aspectratio>
-				<height>30</height>
+				<height>34</height>
 				<top>20</top>
-				<left>370</left>
+				<left>-285</left>
 			</control>
 
 			<control type="image" id="150">
@@ -36,7 +36,7 @@
 				<aspectratio>keep</aspectratio>
 				<height>34</height>
 				<top>20</top>
-				<left>285</left>
+				<left>370</left>
 			</control>
 
 			<control type="image">
@@ -45,7 +45,7 @@
 				<height>0.5</height>
 				<top>70</top>
 				<left>-5</left>
-				<texture colordiffuse="ff484848" border="90,3,90,3">emby-separator.png</texture>
+				<texture colordiffuse="ff484848" border="90,3,90,3">separator.png</texture>
 			</control>
 
 			<control type="group">

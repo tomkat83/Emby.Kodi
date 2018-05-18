@@ -1,3 +1,33 @@
+version 2.0.26 (beta only):
+- Reduce CPU strain for artwork caching progress
+- Fallback connection if plex.direct does not resolve
+- Prettify Plex context menu, thanks @dazedcrazy
+- Default to not show image caching notifications
+
+version 2.0.25 (beta only):
+- Fix migration not working correctly for re-connecting PMS
+- Fix PMS showing up twice
+- Improve artwork caching counter in PKC settings
+
+version 2.0.24 (beta only):
+- WARNING: You will need to reset the Kodi database! Sorry for that...
+- PKC will force you to re-connect with your PMS
+- Use plex.direct url instead of local ip to use correct SSL certificate; thus fix artwork caching
+- Revert "Increase timeout between syncing images"
+- Don't ask user for DB reset if forced by PKC
+- Ensure movies and tv shows are synced before music
+- Ensure a later migration if user downgraded PKC
+
+version 2.0.23 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Finally support for Extras!
+- Fix context menu not working for shows in library view
+- Fix Plex Companion music playstate status for iOS
+- Show caching progress and FanartTV lookup progress in PKC settings
+- Fix rare library sync errors
+- Fix ValueError for third party add-ons calling PKC
+- Tweak PKC settings
+
 version 2.0.22 (beta only):
 - Fix Recently Added for tv shows not working
 - Fix PKC crashing on startup

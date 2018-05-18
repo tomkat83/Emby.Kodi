@@ -49,6 +49,8 @@ class ThreadedProcessFanart(Thread):
         stopped = self.stopped
         suspended = self.suspended
         queue = self.queue
+        counter = 0
+        set_zero = False
         while not stopped():
             # In the event the server goes offline
             while suspended():
@@ -62,19 +64,15 @@ class ThreadedProcessFanart(Thread):
             try:
                 item = queue.get(block=False)
             except Empty:
+                if not set_zero:
+                    # Avoid saving '0' all the time
+                    set_zero = True
+                    settings('fanarttv_lookups', value='0')
                 sleep(200)
                 continue
-
+            set_zero = False
             if isinstance(item, ArtworkSyncMessage):
-                if item.artwork_counter is not None:
-                    if item.artwork_counter == 0:
-                        # Done caching, show this in the PKC settings, too
-                        settings('fanarttv_lookups', value=lang(30069))
-                        LOG.info('Done caching major images!')
-                    else:
-                        settings('fanarttv_lookups',
-                                 value=str(item.artwork_counter))
-                if item.message and state.IMAGE_SYNC_NOTIFICATIONS:
+                if state.IMAGE_SYNC_NOTIFICATIONS:
                     dialog('notification',
                            heading=lang(29999),
                            message=item.message,
@@ -92,5 +90,10 @@ class ThreadedProcessFanart(Thread):
                 LOG.debug('Done getting fanart for Plex id %s', item['plex_id'])
                 with plexdb.Get_Plex_DB() as plex_db:
                     plex_db.set_fanart_synched(item['plex_id'])
+            # Update the caching state in the PKC settings. Avoid saving '0'
+            counter += 1
+            if counter > 10:
+                counter = 0
+                settings('fanarttv_lookups', value=str(queue.qsize()))
             queue.task_done()
         LOG.debug("---===### Stopped FanartSync ###===---")

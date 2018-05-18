@@ -528,6 +528,8 @@ class InitialSetup(object):
 
         # Do we need to migrate stuff?
         check_migration()
+        # Reload the server IP cause we might've deleted it during migration
+        self.server = UserClient().get_server()
 
         # Display a warning if Kodi puts ALL movies into the queue, basically
         # breaking playback reporting for PKC
