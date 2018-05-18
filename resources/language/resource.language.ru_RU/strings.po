@@ -80,8 +80,8 @@ msgstr "Приблизительный прогресс"
 
 # PKC settings - Artwork
 msgctxt "#30011"
-msgid "Plex artwork (posters and backgrounds) left to cache:"
-msgstr "Plex изображения (плакаты и фоны) остались в кэше:"
+msgid "Artwork left to cache:"
+msgstr ""
 
 # Button text
 msgctxt "#30012"
@@ -100,7 +100,7 @@ msgstr "Подключение"
 # PKC settings - Artwork
 msgctxt "#30015"
 msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgstr "Осталось просмотреть FanartTV для фильмов и сериалов:"
 
 msgctxt "#30016"
 msgid "Device Name"

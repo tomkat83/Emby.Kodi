@@ -1,13 +1,14 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
+# Angela Calò <angycalo@libero.it>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2017\n"
+"Last-Translator: Angela Calò <angycalo@libero.it>, 2018\n"
 "Language-Team: Italian (Italy) (https://www.transifex.com/croneter/teams/73837/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +19,7 @@ msgstr ""
 # Add-on settings
 msgctxt "#29999"
 msgid "PlexKodiConnect"
-msgstr ""
+msgstr "PlexKodiConnect"
 
 msgctxt "#30000"
 msgid "Server Address (IP)"
@@ -26,7 +27,7 @@ msgstr "Indirizzo Server (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Cercando per PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -40,30 +41,34 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Attenzione: l'impostazione Kodi \"Avvia il video successivo "
+"automaticamente\" è attivata. Questo può interrompere PKC. Disattivare?"
 
 msgctxt "#30005"
 msgid "Username: "
-msgstr ""
+msgstr "Nome utente:"
 
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Sto salvando %s  delle immagini Plex "
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Salvataggio dell'immagine Plex completato"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Abilita le notifiche per il salvataggio dell'immagine"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
+"Abilita il salvataggio dell'immagine durante il playback Kodi (riavvia "
+"Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
@@ -72,13 +77,13 @@ msgstr ""
 
 # PKC settings - Artwork
 msgctxt "#30011"
-msgid "Plex artwork (posters and backgrounds) left to cache:"
+msgid "Artwork left to cache:"
 msgstr ""
 
 # Button text
 msgctxt "#30012"
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgctxt "#30013"
 msgid "Never show"

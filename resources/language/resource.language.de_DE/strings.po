@@ -74,8 +74,8 @@ msgstr "Ungefährer Stand"
 
 # PKC settings - Artwork
 msgctxt "#30011"
-msgid "Plex artwork (posters and backgrounds) left to cache:"
-msgstr "Plex Bilder (Poster und Hintergründe) noch zu cachen:"
+msgid "Artwork left to cache:"
+msgstr "Noch zu cachende Bilder:"
 
 # Button text
 msgctxt "#30012"

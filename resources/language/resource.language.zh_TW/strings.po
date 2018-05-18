@@ -72,7 +72,7 @@ msgstr ""
 
 # PKC settings - Artwork
 msgctxt "#30011"
-msgid "Plex artwork (posters and backgrounds) left to cache:"
+msgid "Artwork left to cache:"
 msgstr ""
 
 # Button text
