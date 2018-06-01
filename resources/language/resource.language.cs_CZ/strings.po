@@ -77,7 +77,7 @@ msgstr "Odhad průběhu"
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Obrázků k uložení do mezipaměti:"
 
 # Button text
 msgctxt "#30012"
