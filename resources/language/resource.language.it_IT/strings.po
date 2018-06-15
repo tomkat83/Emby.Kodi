@@ -125,7 +125,7 @@ msgstr "Avanzate"
 
 msgctxt "#30024"
 msgid "Username"
-msgstr ""
+msgstr "Nome Utente"
 
 msgctxt "#30025"
 msgid "Display message if PMS goes offline"
@@ -142,7 +142,7 @@ msgstr "Possiedo questo Plex Media Server"
 # Kodi context menu entry for movie and episode information screen
 msgctxt "#30032"
 msgid "Information"
-msgstr ""
+msgstr "Informazione"
 
 msgctxt "#30042"
 msgid "Refresh"
@@ -565,7 +565,7 @@ msgstr "Scegli sempre qualità migliore per i trailer"
 
 msgctxt "#30544"
 msgid "Artwork"
-msgstr ""
+msgstr "Immagine"
 
 # PKC Settings - Playback
 msgctxt "#30545"
@@ -1179,7 +1179,7 @@ msgstr ""
 # :
 msgctxt "#39228"
 msgid "Plex user:"
-msgstr ""
+msgstr "Utente Plex:"
 
 msgctxt "#39250"
 msgid ""
@@ -1370,13 +1370,13 @@ msgstr ""
 # language is unknown
 msgctxt "#39707"
 msgid "unknown"
-msgstr ""
+msgstr "sconosciuto"
 
 # If user gets prompted to choose between several subtitles and Plex adds the
 # "default" flag
 msgctxt "#39708"
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 # If user gets prompted to choose between several subtitles and Plex adds the
 # "forced" flag
@@ -1402,17 +1402,17 @@ msgstr ""
 # Shown during sync process
 msgctxt "#39712"
 msgid "downloaded"
-msgstr ""
+msgstr "scaricato"
 
 # Shown during sync process
 msgctxt "#39713"
 msgid "processed"
-msgstr ""
+msgstr "Processato"
 
 # Shown during sync process
 msgctxt "#39714"
 msgid "Sync"
-msgstr ""
+msgstr "Sync"
 
 # Shown during sync process
 msgctxt "#39715"
