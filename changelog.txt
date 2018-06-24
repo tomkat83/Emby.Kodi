@@ -1,3 +1,9 @@
+version 2.1.2:
+- Compatibility with Kodi Krypton Alpha 2
+- Check all Kodi database versions before starting PKC
+- Fix KeyError on non-PKC playback startup
+- PEP-8 stuff
+
 version 2.1.1:
 - Fix Library Sync crash on Android
 
