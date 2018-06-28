@@ -1,3 +1,6 @@
+version 2.1.3:
+- Fix default settings string, only show in English, hopefully fixes PKC loosing its settings
+
 version 2.1.2:
 - Compatibility with Kodi Krypton Alpha 2
 - Check all Kodi database versions before starting PKC
