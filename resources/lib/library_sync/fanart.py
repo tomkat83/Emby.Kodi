@@ -49,8 +49,6 @@ class ThreadedProcessFanart(Thread):
         stopped = self.stopped
         suspended = self.suspended
         queue = self.queue
-        counter = 0
-        set_zero = False
         while not stopped():
             # In the event the server goes offline
             while suspended():
@@ -64,14 +62,8 @@ class ThreadedProcessFanart(Thread):
             try:
                 item = queue.get(block=False)
             except Empty:
-                if not set_zero and not xbmc.getCondVisibility(
-                        'Window.IsVisible(DialogAddonSettings.xml)'):
-                    # Avoid saving '0' all the time
-                    set_zero = True
-                    settings('fanarttv_lookups', value='0')
                 xbmc.sleep(200)
                 continue
-            set_zero = False
             if isinstance(item, ArtworkSyncMessage):
                 if state.IMAGE_SYNC_NOTIFICATIONS:
                     dialog('notification',
@@ -91,11 +83,5 @@ class ThreadedProcessFanart(Thread):
                 LOG.debug('Done getting fanart for Plex id %s', item['plex_id'])
                 with plexdb.Get_Plex_DB() as plex_db:
                     plex_db.set_fanart_synched(item['plex_id'])
-            # Update the caching state in the PKC settings. Avoid saving '0'
-            counter += 1
-            if (counter > 20 and not xbmc.getCondVisibility(
-                    'Window.IsVisible(DialogAddonSettings.xml)')):
-                counter = 0
-                settings('fanarttv_lookups', value=str(queue.qsize()))
             queue.task_done()
         LOG.debug("---===### Stopped FanartSync ###===---")

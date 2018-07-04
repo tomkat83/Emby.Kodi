@@ -129,10 +129,6 @@
         <setting id="imageSyncNotifications" label="30008" type="bool" default="true" /><!-- Enable notifications for image caching -->
         <setting id="imageSyncDuringPlayback" label="30009" type="bool" default="true" /><!-- Enable image caching during Kodi playback (restart Kodi!) -->
 		<setting label="39020" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect/?mode=texturecache)" option="close" /> <!-- Cache all images to Kodi texture cache now -->
-        <setting type="sep" />
-        <setting type="lsep" label="30010" /><!-- Approximate progress -->
-        <setting id="caching_artwork_count" label="30011" type="text" default="unknown" enable="false" visible="eq(-8,true)"/><!-- Plex artwork (posters and backgrounds) left to cache: -->
-        <setting id="fanarttv_lookups" label="30015" type="text" default="unknown" enable="false" visible="eq(-8,true)"/><!-- Movie and show FanartTV lookups left to do: -->
 	</category>
 	<!--
 	<category label="30235" visible="false">

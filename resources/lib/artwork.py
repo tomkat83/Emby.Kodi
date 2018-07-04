@@ -54,8 +54,6 @@ class Image_Cache_Thread(Thread):
         suspended = self.suspended
         queue = self.queue
         sleep_between = self.sleep_between
-        counter = 0
-        set_zero = False
         while not stopped():
             # In the event the server goes offline
             while suspended():
@@ -69,14 +67,8 @@ class Image_Cache_Thread(Thread):
             try:
                 url = queue.get(block=False)
             except Empty:
-                if not set_zero and not xbmc.getCondVisibility(
-                        'Window.IsVisible(DialogAddonSettings.xml)'):
-                    # Avoid saving '0' all the time
-                    set_zero = True
-                    settings('caching_artwork_count', value='0')
                 xbmc.sleep(1000)
                 continue
-            set_zero = False
             if isinstance(url, ArtworkSyncMessage):
                 if state.IMAGE_SYNC_NOTIFICATIONS:
                     dialog('notification',
@@ -128,12 +120,6 @@ class Image_Cache_Thread(Thread):
                 # We did not even get a timeout
                 break
             queue.task_done()
-            # Update the caching state in the PKC settings.
-            counter += 1
-            if (counter > 20 and not xbmc.getCondVisibility(
-                    'Window.IsVisible(DialogAddonSettings.xml)')):
-                counter = 0
-                settings('caching_artwork_count', value=str(queue.qsize()))
             # Sleep for a bit to reduce CPU strain
             xbmc.sleep(sleep_between)
         LOG.info("---===### Stopped Image_Cache_Thread ###===---")
@@ -174,13 +160,10 @@ class Artwork():
         connection.close()
         if not artworks_to_cache:
             LOG.info('Caching of major images to Kodi texture cache done')
-            # Set to "None"
-            settings('caching_artwork_count', value=lang(30069))
             return
         length = len(artworks_to_cache)
         LOG.info('Caching has not been completed - caching %s major images',
                  length)
-        settings('caching_artwork_count', value=str(length))
         # Caching %s Plex images
         self.queue.put(ArtworkSyncMessage(lang(30006) % length))
         for i, url in enumerate(artworks_to_cache):
