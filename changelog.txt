@@ -1,3 +1,7 @@
+version 2.1.4:
+- Fix PKC settings suddenly getting lost
+- Don't show artwork sync progress, reduce setting-writes
+
 version 2.1.3:
 - Fix default settings string, only show in English, hopefully fixes PKC loosing its settings
 
