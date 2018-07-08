@@ -18,12 +18,14 @@ from xbmcgui import ListItem
 from utils import window, settings, language as lang, dialog, try_encode, \
     catch_exceptions, exists_dir, plex_command, try_decode
 import downloadutils
-
+import initialsetup
 from PlexFunctions import GetPlexMetadata, GetPlexSectionResults, \
     GetMachineIdentifier
 from PlexAPI import API
 import json_rpc as js
 import variables as v
+# Be careful - your using state in another Python instance!
+import state
 
 ###############################################################################
 LOG = getLogger("PLEX." + __name__)
@@ -37,7 +39,6 @@ def choose_pms_server():
     """
     LOG.info("Choosing PMS server requested, starting")
 
-    import initialsetup
     setup = initialsetup.InitialSetup()
     server = setup.pick_pms(showDialog=True)
     if server is None:
@@ -87,7 +88,6 @@ def toggle_plex_tv_sign_in():
         plex_command('PLEX_USERNAME', '')
     else:
         LOG.info('Login to plex.tv')
-        import initialsetup
         initialsetup.InitialSetup().plex_tv_sign_in()
     dialog('notification',
            lang(29999),
@@ -556,7 +556,15 @@ def on_deck_episodes(viewid, tagname, limit):
             LOG.error('Could not download PMS xml for view %s', viewid)
             xbmcplugin.endOfDirectory(int(argv[1]), False)
             return
-        direct_paths = settings('useDirectPaths') == '1'
+        # We're using another python instance - need to load some vars
+        if settings('useDirectPaths') == '1':
+            state.DIRECT_PATHS = True
+            state.REPLACE_SMB_PATH = settings('replaceSMB') == 'true'
+            state.REMAP_PATH = settings('remapSMB') == 'true'
+            if state.REMAP_PATH:
+                initialsetup.set_replace_paths()
+            # Let's NOT check paths for widgets!
+            state.PATH_VERIFIED = True
         counter = 0
         for item in xml:
             api = API(item)
@@ -565,7 +573,7 @@ def on_deck_episodes(viewid, tagname, limit):
                 append_sxxexx=append_sxxexx)
             if api.resume_point():
                 listitem.setProperty('resumetime', str(api.resume_point()))
-            path = api.path(force_first_media=False, direct_paths=direct_paths)
+            path = api.path(force_first_media=True)
             xbmcplugin.addDirectoryItem(
                 handle=int(argv[1]),
                 url=path,
