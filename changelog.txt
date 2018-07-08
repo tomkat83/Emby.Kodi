@@ -1,3 +1,6 @@
+version 2.1.5:
+- Fix OnDeck widget for Direct Paths
+
 version 2.1.4:
 - Fix PKC settings suddenly getting lost
 - Don't show artwork sync progress, reduce setting-writes
