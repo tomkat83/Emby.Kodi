@@ -477,6 +477,7 @@ def GetPlexMetadata(key):
         'includeExtras': 1,         # Trailers and Extras => Extras
         'includeReviews': 1,
         'includeRelated': 0,        # Similar movies => Video -> Related
+        'skipRefresh': 1,
         # 'includeRelatedCount': 0,
         # 'includeOnDeck': 1,
         # 'includeChapters': 1,
