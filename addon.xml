@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.1.5" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.1.6" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests" version="2.9.1" />
@@ -67,7 +67,10 @@
     <summary lang="ru_RU">Нативная интеграция сервера Plex в Kodi</summary>
     <description lang="ru_RU">Подключите Kodi к своему серверу Plex. Плагин предполагает что вы управляете своими видео с помощью Plex (а не в Kodi). Вы можете потерять текущие базы данных музыки и видео в Kodi (так как плагин напрямую их изменяет). Используйте на свой страх и риск</description>
     <disclaimer lang="ru_RU">Используйте на свой страх и риск</disclaimer>
-    <news>version 2.1.5:
+    <news>version 2.1.6:
+- Fix slow sync. Fix endless sync of corrupted PMS elements
+
+version 2.1.5:
 - Fix OnDeck widget for Direct Paths
 
 version 2.1.4:
