@@ -1,3 +1,10 @@
+version 2.3.0:
+Major stable version bump. Highlights:
+- Sync Plex playlists to Kodi and Kodi playlists to Plex!
+- Many bug fixes, especially Plex Companion
+- Tons of code improvements in the hope that someone else will help with developing PKC
+Warning: the 2 helper add-ons for movies and tv shows also received an upgrade from 2.0.4 to 2.0.5. If you want to downgrade PKC, be sure to downgrade these add-ons as well!
+
 version 2.2.18 (beta only):
 - Fix PKC tv show node "all"
 - Move PKC playlist shortcut
@@ -102,6 +109,25 @@ version 2.2.1 (beta only):
 
 version 2.2.0 (beta only):
 - Support for syncing Plex playlists to Kodi and vice-versa! (Kodi mixed music and video playlists cannot be supported as Plex does not support them)
+
+version 2.1.6:
+- Fix slow sync. Fix endless sync of corrupted PMS elements
+
+version 2.1.5:
+- Fix OnDeck widget for Direct Paths
+
+version 2.1.4:
+- Fix PKC settings suddenly getting lost
+- Don't show artwork sync progress, reduce setting-writes
+
+version 2.1.3:
+- Fix default settings string, only show in English, hopefully fixes PKC loosing its settings
+
+version 2.1.2:
+- Compatibility with Kodi Krypton Alpha 2
+- Check all Kodi database versions before starting PKC
+- Fix KeyError on non-PKC playback startup
+- PEP-8 stuff
 
 version 2.1.1:
 - Fix Library Sync crash on Android
