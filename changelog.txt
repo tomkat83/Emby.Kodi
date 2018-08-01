@@ -1,6 +1,7 @@
 version 2.3.0:
 Major stable version bump. Highlights:
 - Sync Plex playlists to Kodi and Kodi playlists to Plex!
+- Support for Plex collection/set artwork
 - Many bug fixes, especially Plex Companion
 - Tons of code improvements in the hope that someone else will help with developing PKC
 Warning: the 2 helper add-ons for movies and tv shows also received an upgrade from 2.0.4 to 2.0.5. If you want to downgrade PKC, be sure to downgrade these add-ons as well!
