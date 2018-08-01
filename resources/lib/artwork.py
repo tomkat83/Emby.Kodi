@@ -1,29 +1,26 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from Queue import Queue, Empty
-from shutil import rmtree
 from urllib import quote_plus, unquote
 from threading import Thread
-from os import makedirs
 import requests
 
 import xbmc
-from xbmcvfs import exists
 
-from utils import settings, language as lang, kodi_sql, try_encode, try_decode,\
-    thread_methods, dialog, exists_dir
-import state
+from . import path_ops
+from . import utils
+from . import state
 
 ###############################################################################
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.artwork')
 
 # Disable annoying requests warnings
 requests.packages.urllib3.disable_warnings()
 ARTWORK_QUEUE = Queue()
 IMAGE_CACHING_SUSPENDS = ['SUSPEND_LIBRARY_THREAD', 'DB_SCAN', 'STOP_SYNC']
-if not settings('imageSyncDuringPlayback') == 'true':
+if not utils.settings('imageSyncDuringPlayback') == 'true':
     IMAGE_CACHING_SUSPENDS.append('SUSPEND_SYNC')
 
 ###############################################################################
@@ -37,7 +34,7 @@ def double_urldecode(text):
     return unquote(unquote(text))
 
 
-@thread_methods(add_suspends=IMAGE_CACHING_SUSPENDS)
+@utils.thread_methods(add_suspends=IMAGE_CACHING_SUSPENDS)
 class Image_Cache_Thread(Thread):
     sleep_between = 50
     # Potentially issues with limited number of threads
@@ -71,14 +68,14 @@ class Image_Cache_Thread(Thread):
                 continue
             if isinstance(url, ArtworkSyncMessage):
                 if state.IMAGE_SYNC_NOTIFICATIONS:
-                    dialog('notification',
-                           heading=lang(29999),
-                           message=url.message,
-                           icon='{plex}',
-                           sound=False)
+                    utils.dialog('notification',
+                                 heading=utils.lang(29999),
+                                 message=url.message,
+                                 icon='{plex}',
+                                 sound=False)
                 queue.task_done()
                 continue
-            url = double_urlencode(try_encode(url))
+            url = double_urlencode(utils.try_encode(url))
             sleeptime = 0
             while True:
                 try:
@@ -126,7 +123,7 @@ class Image_Cache_Thread(Thread):
 
 
 class Artwork():
-    enableTextureCache = settings('enableTextureCache') == "true"
+    enableTextureCache = utils.settings('enableTextureCache') == "true"
     if enableTextureCache:
         queue = ARTWORK_QUEUE
 
@@ -142,7 +139,7 @@ class Artwork():
         artworks = list()
         # Get all posters and fanart/background for video and music
         for kind in ('video', 'music'):
-            connection = kodi_sql(kind)
+            connection = utils.kodi_sql(kind)
             cursor = connection.cursor()
             for typus in ('poster', 'fanart'):
                 cursor.execute('SELECT url FROM art WHERE type == ?',
@@ -150,7 +147,7 @@ class Artwork():
                 artworks.extend(cursor.fetchall())
             connection.close()
         artworks_to_cache = list()
-        connection = kodi_sql('texture')
+        connection = utils.kodi_sql('texture')
         cursor = connection.cursor()
         for url in artworks:
             query = 'SELECT url FROM texture WHERE url == ? LIMIT 1'
@@ -165,33 +162,33 @@ class Artwork():
         LOG.info('Caching has not been completed - caching %s major images',
                  length)
         # Caching %s Plex images
-        self.queue.put(ArtworkSyncMessage(lang(30006) % length))
+        self.queue.put(ArtworkSyncMessage(utils.lang(30006) % length))
         for i, url in enumerate(artworks_to_cache):
             self.queue.put(url[0])
         # Plex image caching done
-        self.queue.put(ArtworkSyncMessage(lang(30007)))
+        self.queue.put(ArtworkSyncMessage(utils.lang(30007)))
 
     def fullTextureCacheSync(self):
         """
         This method will sync all Kodi artwork to textures13.db
         and cache them locally. This takes diskspace!
         """
-        if not dialog('yesno', "Image Texture Cache", lang(39250)):
+        if not utils.dialog('yesno', "Image Texture Cache", utils.lang(39250)):
             return
 
         LOG.info("Doing Image Cache Sync")
 
         # ask to rest all existing or not
-        if dialog('yesno', "Image Texture Cache", lang(39251)):
+        if utils.dialog('yesno', "Image Texture Cache", utils.lang(39251)):
             LOG.info("Resetting all cache data first")
             # Remove all existing textures first
-            path = try_decode(xbmc.translatePath("special://thumbnails/"))
-            if exists_dir(path):
-                rmtree(path, ignore_errors=True)
+            path = path_ops.translate_path('special://thumbnails/')
+            if path_ops.exists(path):
+                path_ops.rmtree(path, ignore_errors=True)
                 self.restore_cache_directories()
 
             # remove all existing data from texture DB
-            connection = kodi_sql('texture')
+            connection = utils.kodi_sql('texture')
             cursor = connection.cursor()
             query = 'SELECT tbl_name FROM sqlite_master WHERE type=?'
             cursor.execute(query, ('table', ))
@@ -204,7 +201,7 @@ class Artwork():
             connection.close()
 
         # Cache all entries in video DB
-        connection = kodi_sql('video')
+        connection = utils.kodi_sql('video')
         cursor = connection.cursor()
         # dont include actors
         query = "SELECT url FROM art WHERE media_type != ?"
@@ -217,7 +214,7 @@ class Artwork():
         for url in result:
             self.cache_texture(url[0])
         # Cache all entries in music DB
-        connection = kodi_sql('music')
+        connection = utils.kodi_sql('music')
         cursor = connection.cursor()
         cursor.execute("SELECT url FROM art")
         result = cursor.fetchall()
@@ -292,7 +289,7 @@ class Artwork():
         """
         Deleted the cached artwork with path url (if it exists)
         """
-        connection = kodi_sql('texture')
+        connection = utils.kodi_sql('texture')
         cursor = connection.cursor()
         try:
             cursor.execute("SELECT cachedurl FROM texture WHERE url=? LIMIT 1",
@@ -303,10 +300,11 @@ class Artwork():
             pass
         else:
             # Delete thumbnail as well as the entry
-            path = xbmc.translatePath("special://thumbnails/%s" % cachedurl)
+            path = path_ops.translate_path("special://thumbnails/%s"
+                                           % cachedurl)
             LOG.debug("Deleting cached thumbnail: %s", path)
-            if exists(path):
-                rmtree(try_decode(path), ignore_errors=True)
+            if path_ops.exists(path):
+                path_ops.rmtree(path, ignore_errors=True)
             cursor.execute("DELETE FROM texture WHERE url = ?", (url,))
             connection.commit()
         finally:
@@ -319,8 +317,8 @@ class Artwork():
                  "a", "b", "c", "d", "e", "f",
                  "Video", "plex")
         for path in paths:
-            makedirs(try_decode(xbmc.translatePath("special://thumbnails/%s"
-                                                   % path)))
+            new_path = path_ops.translate_path("special://thumbnails/%s" % path)
+            path_ops.makedirs(utils.encode_path(new_path))
 
 
 class ArtworkSyncMessage(object):

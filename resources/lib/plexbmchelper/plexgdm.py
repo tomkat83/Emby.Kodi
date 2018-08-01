@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 PlexGDM.py - Version 0.2
 
@@ -21,20 +23,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 MA 02110-1301, USA.
 """
+from __future__ import absolute_import, division, unicode_literals
 import logging
 import socket
 import threading
 import time
-
 from xbmc import sleep
 
-import downloadutils
-from utils import window, settings, dialog, language
-import variables as v
+from ..downloadutils import DownloadUtils as DU
+from .. import utils
+from .. import variables as v
 
 ###############################################################################
 
-log = logging.getLogger("PLEX."+__name__)
+log = logging.getLogger('PLEX.plexgdm')
 
 ###############################################################################
 
@@ -49,7 +51,7 @@ class plexgdm:
         self._multicast_address = '239.0.0.250'
         self.discover_group = (self._multicast_address, 32414)
         self.client_register_group = (self._multicast_address, 32413)
-        self.client_update_port = int(settings('companionUpdatePort'))
+        self.client_update_port = int(utils.settings('companionUpdatePort'))
 
         self.server_list = []
         self.discovery_interval = 120
@@ -58,7 +60,7 @@ class plexgdm:
         self._registration_is_running = False
 
         self.client_registered = False
-        self.download = downloadutils.DownloadUtils().downloadUrl
+        self.download = DU().downloadUrl
 
     def clientDetails(self):
         self.client_data = (
@@ -120,14 +122,15 @@ class plexgdm:
             log.error("Unable to bind to port [%s] - Plex Companion will not "
                       "be registered. Change the Plex Companion update port!"
                       % self.client_update_port)
-            if settings('companion_show_gdm_port_warning') == 'true':
-                if dialog('yesno',
-                          language(29999),
-                          'Port %s' % self.client_update_port,
-                          language(39079),
-                          yeslabel=language(30013),  # Never show again
-                          nolabel=language(30012)):  # OK
-                    settings('companion_show_gdm_port_warning', value='false')
+            if utils.settings('companion_show_gdm_port_warning') == 'true':
+                if utils.dialog('yesno',
+                                utils.lang(29999),
+                                'Port %s' % self.client_update_port,
+                                utils.lang(39079),
+                                yeslabel=utils.lang(30013),  # Never show again
+                                nolabel=utils.lang(30012)):  # OK
+                    utils.settings('companion_show_gdm_port_warning',
+                                   value='false')
                 from xbmc import executebuiltin
                 executebuiltin(
                     'Addon.OpenSettings(plugin.video.plexkodiconnect)')
@@ -189,7 +192,7 @@ class plexgdm:
             log.info("Server list is empty. Unable to check")
             return False
         for server in self.server_list:
-            if server['uuid'] == window('plex_machineIdentifier'):
+            if server['uuid'] == utils.window('plex_machineIdentifier'):
                 media_server = server['server']
                 media_port = server['port']
                 scheme = server['protocol']
@@ -223,7 +226,7 @@ class plexgdm:
         return self.server_list
 
     def discover(self):
-        currServer = window('pms_server')
+        currServer = utils.window('pms_server')
         if not currServer:
             return
         currServerProt, currServerIP, currServerPort = \
@@ -240,9 +243,9 @@ class plexgdm:
             'owned': '1',
             'role': 'master',
             'server': currServerIP,
-            'serverName': window('plex_servername'),
+            'serverName': utils.window('plex_servername'),
             'updated': int(time.time()),
-            'uuid': window('plex_machineIdentifier'),
+            'uuid': utils.window('plex_machineIdentifier'),
             'version': 'irrelevant'
         }]
 
@@ -305,5 +308,5 @@ class plexgdm:
 
     def start_all(self, daemon=False):
         self.start_discovery(daemon)
-        if settings('plexCompanion') == 'true':
+        if utils.settings('plexCompanion') == 'true':
             self.start_registration(daemon)

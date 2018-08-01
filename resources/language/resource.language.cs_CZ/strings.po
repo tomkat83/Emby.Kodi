@@ -117,10 +117,25 @@ msgctxt "#30019"
 msgid "FanartTV lookup completed"
 msgstr "Vyhledávání na FanartTV dokončeno"
 
+# PKC settings sync options
+msgctxt "#30020"
+msgid "Sync Plex playlists"
+msgstr ""
+
+# PKC settings sync options
+msgctxt "#30021"
+msgid "Only sync specific Plex playlists to Kodi"
+msgstr ""
+
 # PKC settings category
 msgctxt "#30022"
 msgid "Advanced"
 msgstr "Rozšířené"
+
+# PKC settings sync options
+msgctxt "#30023"
+msgid "Only sync specific Kodi playlists to Plex"
+msgstr ""
 
 msgctxt "#30024"
 msgid "Username"
@@ -129,6 +144,16 @@ msgstr "Uživ. jméno"
 msgctxt "#30025"
 msgid "Display message if PMS goes offline"
 msgstr "Zobrazit zprávu při odpojení PMS"
+
+# PKC settings sync options
+msgctxt "#30026"
+msgid "Prefix in Plex playlist name to trigger sync"
+msgstr ""
+
+# PKC settings sync options
+msgctxt "#30027"
+msgid "Prefix in Kodi playlist name to trigger sync"
+msgstr ""
 
 msgctxt "#30030"
 msgid "Port Number"

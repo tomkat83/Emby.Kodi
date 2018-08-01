@@ -1,14 +1,14 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 
-from utils import window, settings
-import variables as v
+from . import utils
+from . import variables as v
 
 ###############################################################################
 
-log = getLogger("PLEX."+__name__)
+LOG = getLogger('PLEX.clientinfo')
 
 ###############################################################################
 
@@ -43,8 +43,8 @@ def getXArgsDeviceInfo(options=None, include_token=True):
         'X-Plex-Client-Identifier': getDeviceId(),
         'X-Plex-Provides': 'client,controller,player,pubsub-player',
     }
-    if include_token and window('pms_token'):
-        xargs['X-Plex-Token'] = window('pms_token')
+    if include_token and utils.window('pms_token'):
+        xargs['X-Plex-Token'] = utils.window('pms_token')
     if options is not None:
         xargs.update(options)
     return xargs
@@ -60,26 +60,26 @@ def getDeviceId(reset=False):
     """
     if reset is True:
         v.PKC_MACHINE_IDENTIFIER = None
-        window('plex_client_Id', clear=True)
-        settings('plex_client_Id', value="")
+        utils.window('plex_client_Id', clear=True)
+        utils.settings('plex_client_Id', value="")
 
     client_id = v.PKC_MACHINE_IDENTIFIER
     if client_id:
         return client_id
 
-    client_id = settings('plex_client_Id')
+    client_id = utils.settings('plex_client_Id')
     # Because Kodi appears to cache file settings!!
     if client_id != "" and reset is False:
         v.PKC_MACHINE_IDENTIFIER = client_id
-        window('plex_client_Id', value=client_id)
-        log.info("Unique device Id plex_client_Id loaded: %s", client_id)
+        utils.window('plex_client_Id', value=client_id)
+        LOG.info("Unique device Id plex_client_Id loaded: %s", client_id)
         return client_id
 
-    log.info("Generating a new deviceid.")
+    LOG.info("Generating a new deviceid.")
     from uuid import uuid4
     client_id = str(uuid4())
-    settings('plex_client_Id', value=client_id)
+    utils.settings('plex_client_Id', value=client_id)
     v.PKC_MACHINE_IDENTIFIER = client_id
-    window('plex_client_Id', value=client_id)
-    log.info("Unique device Id plex_client_Id generated: %s", client_id)
+    utils.window('plex_client_Id', value=client_id)
+    LOG.info("Unique device Id plex_client_Id generated: %s", client_id)
     return client_id

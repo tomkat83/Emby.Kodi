@@ -1,15 +1,16 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-
 from xbmc import sleep, executebuiltin
 
-from downloadutils import DownloadUtils as DU
-from utils import dialog, language as lang, settings, try_encode
-import variables as v
-import state
+from .downloadutils import DownloadUtils as DU
+from . import utils
+from . import variables as v
+from . import state
 
 ###############################################################################
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.plex_tx')
 ###############################################################################
 
 
@@ -39,7 +40,7 @@ def choose_home_user(token):
         username = user['title']
         userlist.append(username)
         # To take care of non-ASCII usernames
-        userlist_coded.append(try_encode(username))
+        userlist_coded.append(utils.try_encode(username))
     usernumber = len(userlist)
     username = ''
     usertoken = ''
@@ -47,12 +48,14 @@ def choose_home_user(token):
     while trials < 3:
         if usernumber > 1:
             # Select user
-            user_select = dialog('select', lang(29999) + lang(39306),
-                                 userlist_coded)
+            user_select = utils.dialog(
+                'select',
+                '%s%s' % (utils.lang(29999), utils.lang(39306)),
+                userlist_coded)
             if user_select == -1:
                 LOG.info("No user selected.")
-                settings('username', value='')
-                executebuiltin('Addon.OpenSettings(%s)' % v.ADDON_ID)
+                utils.settings('username', value='')
+                executebuiltin('Addon.Openutils.settings(%s)' % v.ADDON_ID)
                 return False
         # Only 1 user received, choose that one
         else:
@@ -64,11 +67,11 @@ def choose_home_user(token):
         pin = None
         if user['protected'] == '1':
             LOG.debug('Asking for users PIN')
-            pin = dialog('input',
-                         lang(39307) + selected_user,
-                         '',
-                         type='{numeric}',
-                         option='{hide}')
+            pin = utils.dialog('input',
+                               '%s%s' % (utils.lang(39307), selected_user),
+                               '',
+                               type='{numeric}',
+                               option='{hide}')
             # User chose to cancel
             # Plex bug: don't call url for protected user with empty PIN
             if not pin:
@@ -78,7 +81,7 @@ def choose_home_user(token):
         result = switch_home_user(user['id'],
                                   pin,
                                   token,
-                                  settings('plex_machineIdentifier'))
+                                  utils.settings('plex_machineIdentifier'))
         if result:
             # Successfully retrieved username: break out of while loop
             username = result['username']
@@ -88,15 +91,16 @@ def choose_home_user(token):
         else:
             trials += 1
             # Could not login user, please try again
-            if not dialog('yesno',
-                          heading='{plex}',
-                          line1=lang(39308) + selected_user,
-                          line2=lang(39309)):
+            if not utils.dialog('yesno',
+                                heading='{plex}',
+                                line1='%s%s' % (utils.lang(39308),
+                                                selected_user),
+                                line2=utils.lang(39309)):
                 # User chose to cancel
                 break
     if not username:
         LOG.error('Failed signing in a user to plex.tv')
-        executebuiltin('Addon.OpenSettings(%s)' % v.ADDON_ID)
+        executebuiltin('Addon.Openutils.settings(%s)' % v.ADDON_ID)
         return False
     return {
         'username': username,
@@ -123,7 +127,7 @@ def switch_home_user(userid, pin, token, machineIdentifier):
                                 for the machineIdentifier that was chosen
         }
 
-    settings('userid') and settings('username') with new plex token
+    utils.settings('userid') and utils.settings('username') with new plex token
     """
     LOG.info('Switching to user %s', userid)
     url = 'https://plex.tv/api/home/users/' + userid + '/switch'
@@ -143,12 +147,12 @@ def switch_home_user(userid, pin, token, machineIdentifier):
     token = answer.attrib.get('authenticationToken', '')
 
     # Write to settings file
-    settings('username', username)
-    settings('accessToken', token)
-    settings('userid', answer.attrib.get('id', ''))
-    settings('plex_restricteduser',
-             'true' if answer.attrib.get('restricted', '0') == '1'
-             else 'false')
+    utils.settings('username', username)
+    utils.settings('accessToken', token)
+    utils.settings('userid', answer.attrib.get('id', ''))
+    utils.settings('plex_restricteduser',
+                   'true' if answer.attrib.get('restricted', '0') == '1'
+                   else 'false')
     state.RESTRICTED_USER = True if \
         answer.attrib.get('restricted', '0') == '1' else False
 
@@ -239,15 +243,15 @@ def sign_in_with_pin():
     code, identifier = get_pin()
     if not code:
         # Problems trying to contact plex.tv. Try again later
-        dialog('ok', heading='{plex}', line1=lang(39303))
+        utils.dialog('ok', heading='{plex}', line1=utils.lang(39303))
         return False
     # Go to https://plex.tv/pin and enter the code:
     # Or press No to cancel the sign in.
-    answer = dialog('yesno',
-                    heading='{plex}',
-                    line1=lang(39304) + "\n\n",
-                    line2=code + "\n\n",
-                    line3=lang(39311))
+    answer = utils.dialog('yesno',
+                          heading='{plex}',
+                          line1='%s%s' % (utils.lang(39304), "\n\n"),
+                          line2='%s%s' % (code, "\n\n"),
+                          line3=utils.lang(39311))
     if not answer:
         return False
     count = 0
@@ -261,7 +265,7 @@ def sign_in_with_pin():
         count += 1
     if xml is False:
         # Could not sign in to plex.tv Try again later
-        dialog('ok', heading='{plex}', line1=lang(39305))
+        utils.dialog('ok', heading='{plex}', line1=utils.lang(39305))
         return False
     # Parse xml
     userid = xml.attrib.get('id')
@@ -282,15 +286,15 @@ def sign_in_with_pin():
         'plexid': userid,
         'homesize': home_size
     }
-    settings('plexLogin', username)
-    settings('plexToken', token)
-    settings('plexhome', home)
-    settings('plexid', userid)
-    settings('plexAvatar', avatar)
-    settings('plexHomeSize', home_size)
+    utils.settings('plexLogin', username)
+    utils.settings('plexToken', token)
+    utils.settings('plexhome', home)
+    utils.settings('plexid', userid)
+    utils.settings('plexAvatar', avatar)
+    utils.settings('plexHomeSize', home_size)
     # Let Kodi log into plex.tv on startup from now on
-    settings('myplexlogin', 'true')
-    settings('plex_status', value=lang(39227))
+    utils.settings('myplexlogin', 'true')
+    utils.settings('plex_status', value=utils.lang(39227))
     return result
 
 

@@ -1,13 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from cPickle import dumps, loads
-
 from xbmcgui import Window
 from xbmc import log, LOGDEBUG
 
 ###############################################################################
 WINDOW = Window(10000)
-PREFIX = 'PLEX.%s: ' % __name__
+PREFIX = 'PLEX.pickler: '
 ###############################################################################
 
 

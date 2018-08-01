@@ -1,29 +1,34 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-import variables as v
-from utils import compare_version, settings
+
+from . import variables as v
+from . import utils
 ###############################################################################
 
-log = getLogger("PLEX."+__name__)
+LOG = getLogger('PLEX.migration')
 
 
 def check_migration():
-    log.info('Checking whether we need to migrate something')
-    last_migration = settings('last_migrated_PKC_version')
+    LOG.info('Checking whether we need to migrate something')
+    last_migration = utils.settings('last_migrated_PKC_version')
     if last_migration == v.ADDON_VERSION:
-        log.info('Already migrated to PKC version %s' % v.ADDON_VERSION)
+        LOG.info('Already migrated to PKC version %s' % v.ADDON_VERSION)
         # Ensure later migration if user downgraded PKC!
-        settings('last_migrated_PKC_version', value=v.ADDON_VERSION)
+        utils.settings('last_migrated_PKC_version', value=v.ADDON_VERSION)
         return
 
-    if not compare_version(last_migration, '1.8.2'):
-        log.info('Migrating to version 1.8.1')
+    if not utils.compare_version(last_migration, '1.8.2'):
+        LOG.info('Migrating to version 1.8.1')
         # Set the new PKC theMovieDB key
-        settings('themoviedbAPIKey', value='19c90103adb9e98f2172c6a6a3d85dc4')
+        utils.settings('themoviedbAPIKey',
+                       value='19c90103adb9e98f2172c6a6a3d85dc4')
 
-    if not compare_version(last_migration, '2.0.25'):
-        log.info('Migrating to version 2.0.24')
+    if not utils.compare_version(last_migration, '2.0.25'):
+        LOG.info('Migrating to version 2.0.24')
         # Need to re-connect with PMS to pick up on plex.direct URIs
-        settings('ipaddress', value='')
-        settings('port', value='')
+        utils.settings('ipaddress', value='')
+        utils.settings('port', value='')
 
-    settings('last_migrated_PKC_version', value=v.ADDON_VERSION)
+    utils.settings('last_migrated_PKC_version', value=v.ADDON_VERSION)

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from threading import Thread
 from Queue import Empty
-
 from xbmc import sleep
 
-from utils import thread_methods
-import itemtypes
-import sync_info
+from .. import utils
+from .. import itemtypes
+from . import sync_info
 
 ###############################################################################
 LOG = getLogger("PLEX." + __name__)
@@ -15,9 +15,9 @@ LOG = getLogger("PLEX." + __name__)
 ###############################################################################
 
 
-@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
-                           'STOP_SYNC',
-                           'SUSPEND_SYNC'])
+@utils.thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
+                                 'STOP_SYNC',
+                                 'SUSPEND_SYNC'])
 class ThreadedProcessMetadata(Thread):
     """
     Not yet implemented for more than 1 thread - if ever. Only to be called by
@@ -70,7 +70,7 @@ class ThreadedProcessMetadata(Thread):
                     continue
                 # Do the work
                 item_method = getattr(item_class, item['method'])
-                if item.get('children'):
+                if item.get('children') is not None:
                     item_method(item['xml'][0],
                                 viewtag=item['view_name'],
                                 viewid=item['view_id'],

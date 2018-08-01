@@ -1,14 +1,14 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from downloadutils import DownloadUtils as DU
 
-from utils import window, settings, language as lang, dialog, try_encode
-import variables as v
+from .downloadutils import DownloadUtils as DU
+from . import utils
+from . import variables as v
 
 ###############################################################################
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.playutils')
 ###############################################################################
 
 
@@ -46,7 +46,8 @@ class PlayUtils():
                     'maxVideoBitrate': self.get_bitrate(),
                     'videoResolution': self.get_resolution(),
                     'videoQuality': '100',
-                    'mediaBufferSize': int(settings('kodi_video_cache'))/1024,
+                    'mediaBufferSize': int(
+                        utils.settings('kodi_video_cache')) / 1024,
                 })
             self.item.playmethod = 'Transcode'
         LOG.info("The playurl is: %s", playurl)
@@ -71,15 +72,15 @@ class PlayUtils():
             return playurl
         # set to either 'Direct Stream=1' or 'Transcode=2'
         # and NOT to 'Direct Play=0'
-        if settings('playType') != "0":
+        if utils.settings('playType') != "0":
             # User forcing to play via HTTP
             LOG.info("User chose to not direct play")
             return
         if self.mustTranscode():
             return
         return self.api.validate_playurl(path,
-                                        self.api.plex_type(),
-                                        force_check=True)
+                                         self.api.plex_type(),
+                                         force_check=True)
 
     def mustTranscode(self):
         """
@@ -106,7 +107,7 @@ class PlayUtils():
             # e.g. trailers. Avoids TypeError with "'h265' in codec"
             LOG.info('No codec from PMS, not transcoding.')
             return False
-        if ((settings('transcodeHi10P') == 'true' and
+        if ((utils.settings('transcodeHi10P') == 'true' and
                 videoCodec['bitDepth'] == '10') and 
                 ('h264' in codec)):
             LOG.info('Option to transcode 10bit h264 video content enabled.')
@@ -139,7 +140,7 @@ class PlayUtils():
         if self.api.plex_type() == 'track':
             return True
         # set to 'Transcode=2'
-        if settings('playType') == "2":
+        if utils.settings('playType') == "2":
             # User forcing to play via HTTP
             LOG.info("User chose to transcode")
             return False
@@ -149,7 +150,7 @@ class PlayUtils():
 
     def get_max_bitrate(self):
         # get the addon video quality
-        videoQuality = settings('maxVideoQualities')
+        videoQuality = utils.settings('maxVideoQualities')
         bitrate = {
             '0': 320,
             '1': 720,
@@ -180,13 +181,13 @@ class PlayUtils():
             '2': 720,
             '3': 1080
         }
-        return H265[settings('transcodeH265')]
+        return H265[utils.settings('transcodeH265')]
 
     def get_bitrate(self):
         """
         Get the desired transcoding bitrate from the settings
         """
-        videoQuality = settings('transcoderVideoQualities')
+        videoQuality = utils.settings('transcoderVideoQualities')
         bitrate = {
             '0': 320,
             '1': 720,
@@ -207,7 +208,7 @@ class PlayUtils():
         """
         Get the desired transcoding resolutions from the settings
         """
-        chosen = settings('transcoderVideoQualities')
+        chosen = utils.settings('transcoderVideoQualities')
         res = {
             '0': '420x420',
             '1': '576x320',
@@ -244,7 +245,7 @@ class PlayUtils():
         audio_streams = []
         subtitle_streams_list = []
         # No subtitles as an option
-        subtitle_streams = [lang(39706)]
+        subtitle_streams = [utils.lang(39706)]
         downloadable_streams = []
         download_subs = []
         # selectAudioIndex = ""
@@ -264,35 +265,35 @@ class PlayUtils():
                 codec = stream.attrib.get('codec')
                 channellayout = stream.attrib.get('audioChannelLayout', "")
                 try:
-                    track = "%s %s - %s %s" % (audio_numb+1,
+                    track = "%s %s - %s %s" % (audio_numb + 1,
                                                stream.attrib['language'],
                                                codec,
                                                channellayout)
                 except KeyError:
-                    track = "%s %s - %s %s" % (audio_numb+1,
-                                               lang(39707),  # unknown
+                    track = "%s %s - %s %s" % (audio_numb + 1,
+                                               utils.lang(39707),  # unknown
                                                codec,
                                                channellayout)
                 audio_streams_list.append(index)
-                audio_streams.append(try_encode(track))
+                audio_streams.append(utils.try_encode(track))
                 audio_numb += 1
 
             # Subtitles
             elif typus == "3":
                 try:
-                    track = "%s %s" % (sub_num+1, stream.attrib['language'])
+                    track = "%s %s" % (sub_num + 1, stream.attrib['language'])
                 except KeyError:
-                    track = "%s %s (%s)" % (sub_num+1,
-                                            lang(39707),  # unknown
+                    track = "%s %s (%s)" % (sub_num + 1,
+                                            utils.lang(39707),  # unknown
                                             stream.attrib.get('codec'))
                 default = stream.attrib.get('default')
                 forced = stream.attrib.get('forced')
                 downloadable = stream.attrib.get('key')
 
                 if default:
-                    track = "%s - %s" % (track, lang(39708))  # Default
+                    track = "%s - %s" % (track, utils.lang(39708))  # Default
                 if forced:
-                    track = "%s - %s" % (track, lang(39709))  # Forced
+                    track = "%s - %s" % (track, utils.lang(39709))  # Forced
                 if downloadable:
                     # We do know the language - temporarily download
                     if 'language' in stream.attrib:
@@ -303,23 +304,23 @@ class PlayUtils():
                     # We don't know the language - no need to download
                     else:
                         path = self.api.attach_plex_token_to_url(
-                            "%s%s" % (window('pms_server'),
+                            "%s%s" % (utils.window('pms_server'),
                                       stream.attrib['key']))
                     downloadable_streams.append(index)
-                    download_subs.append(try_encode(path))
+                    download_subs.append(utils.try_encode(path))
                 else:
-                    track = "%s (%s)" % (track, lang(39710))  # burn-in
+                    track = "%s (%s)" % (track, utils.lang(39710))  # burn-in
                 if stream.attrib.get('selected') == '1' and downloadable:
                     # Only show subs without asking user if they can be
                     # turned off
                     default_sub = index
 
                 subtitle_streams_list.append(index)
-                subtitle_streams.append(try_encode(track))
+                subtitle_streams.append(utils.try_encode(track))
                 sub_num += 1
 
         if audio_numb > 1:
-            resp = dialog('select', lang(33013), audio_streams)
+            resp = utils.dialog('select', utils.lang(33013), audio_streams)
             if resp > -1:
                 # User selected some audio track
                 args = {
@@ -335,14 +336,14 @@ class PlayUtils():
             return
 
         select_subs_index = None
-        if (settings('pickPlexSubtitles') == 'true' and
+        if (utils.settings('pickPlexSubtitles') == 'true' and
                 default_sub is not None):
             LOG.info('Using default Plex subtitle: %s', default_sub)
             select_subs_index = default_sub
         else:
-            resp = dialog('select', lang(33014), subtitle_streams)
+            resp = utils.dialog('select', utils.lang(33014), subtitle_streams)
             if resp > 0:
-                select_subs_index = subtitle_streams_list[resp-1]
+                select_subs_index = subtitle_streams_list[resp - 1]
             else:
                 # User selected no subtitles or backed out of dialog
                 select_subs_index = ''

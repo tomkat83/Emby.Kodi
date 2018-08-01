@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from threading import Thread, Lock
-
 from xbmc import sleep
 from xbmcgui import DialogProgressBG
 
-from utils import thread_methods, language as lang
+from .. import utils
 
 ###############################################################################
 
@@ -19,9 +19,9 @@ LOCK = Lock()
 ###############################################################################
 
 
-@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
-                           'STOP_SYNC',
-                           'SUSPEND_SYNC'])
+@utils.thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
+                                 'STOP_SYNC',
+                                 'SUSPEND_SYNC'])
 class ThreadedShowSyncInfo(Thread):
     """
     Threaded class to show the Kodi statusbar of the metadata download.
@@ -44,7 +44,10 @@ class ThreadedShowSyncInfo(Thread):
         total = self.total
         dialog = DialogProgressBG('dialoglogProgressBG')
         dialog.create("%s %s: %s %s"
-                      % (lang(39714), self.item_type, str(total), lang(39715)))
+                      % (utils.lang(39714),
+                         self.item_type,
+                         unicode(total),
+                         utils.lang(39715)))
 
         total = 2 * total
         total_progress = 0
@@ -55,15 +58,15 @@ class ThreadedShowSyncInfo(Thread):
                 view_name = PROCESSING_VIEW_NAME
             total_progress = get_progress + process_progress
             try:
-                percentage = int(float(total_progress) / float(total)*100.0)
+                percentage = int(float(total_progress) / float(total) * 100.0)
             except ZeroDivisionError:
                 percentage = 0
             dialog.update(percentage,
                           message="%s %s. %s %s: %s"
                                   % (get_progress,
-                                     lang(39712),
+                                     utils.lang(39712),
                                      process_progress,
-                                     lang(39713),
+                                     utils.lang(39713),
                                      view_name))
             # Sleep for x milliseconds
             sleep(200)

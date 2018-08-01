@@ -1,20 +1,21 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# Connect to the Kodi databases (video and music) and operate on them
-#
-###############################################################################
+"""
+Connect to the Kodi databases (video and music) and operate on them
+"""
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from ntpath import dirname
 from sqlite3 import IntegrityError
 
-import artwork
-from utils import kodi_sql, try_decode, unix_timestamp, unix_date_to_kodi
-import variables as v
-import state
+from . import artwork
+from . import utils
+from . import variables as v
+from . import state
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.kodidb_functions')
 
 ###############################################################################
 
@@ -35,7 +36,7 @@ class GetKodiDB(object):
         self.db_type = db_type
 
     def __enter__(self):
-        self.kodiconn = kodi_sql(self.db_type)
+        self.kodiconn = utils.kodi_sql(self.db_type)
         kodi_db = KodiDBMethods(self.kodiconn.cursor())
         return kodi_db
 
@@ -118,7 +119,7 @@ class KodiDBMethods(object):
         if pathid is None:
             self.cursor.execute("SELECT COALESCE(MAX(idPath),0) FROM path")
             pathid = self.cursor.fetchone()[0] + 1
-            datetime = unix_date_to_kodi(unix_timestamp())
+            datetime = utils.unix_date_to_kodi(utils.unix_timestamp())
             query = '''
                 INSERT INTO path(idPath, strPath, dateAdded)
                 VALUES (?, ?, ?)
@@ -209,13 +210,14 @@ class KodiDBMethods(object):
                 INSERT INTO files(idFile, idPath, strFilename, dateAdded)
                 VALUES (?, ?, ?, ?)
             '''
-            self.cursor.execute(query, (file_id, path_id, filename, date_added))
+            self.cursor.execute(query,
+                                (file_id, path_id, filename, date_added))
         return file_id
 
     def obsolete_file_ids(self):
         """
         Returns a list of (idFile,) tuples (ints) of all Kodi file ids that do
-        not have a dateAdded set (dateAdded is NULL) and the filename start with
+        not have a dateAdded set (dateAdded NULL) and the filename start with
         'plugin://plugin.video.plexkodiconnect'
         These entries should be deleted as they're created falsely by Kodi.
         """
@@ -668,22 +670,22 @@ class KodiDBMethods(object):
             WHERE strPath = ?
         '''
         self.cursor.execute(query, (path,))
-        path_id = self.cursor.fetchall()
-        if len(path_id) != 1:
+        path_ids = self.cursor.fetchall()
+        if len(path_ids) != 1:
             LOG.debug('Found wrong number of path ids: %s for path %s, abort',
-                      path_id, path)
+                      path_ids, path)
             return
         query = '''
             SELECT idSong
             FROM song
             WHERE strFileName = ? AND idPath = ?
         '''
-        self.cursor.execute(query, (filename, path_id[0]))
-        song_id = self.cursor.fetchall()
-        if len(song_id) != 1:
-            LOG.info('Found wrong number of songs %s, abort', song_id)
+        self.cursor.execute(query, (filename, path_ids[0][0]))
+        song_ids = self.cursor.fetchall()
+        if len(song_ids) != 1:
+            LOG.info('Found wrong number of songs %s, abort', song_ids)
             return
-        return song_id[0]
+        return song_ids[0][0]
 
     def get_resume(self, file_id):
         """
@@ -811,14 +813,6 @@ class KodiDBMethods(object):
                 WHERE media_id = ? AND media_type = ? AND tag_id = ?
             '''
             self.cursor.execute(query, (kodiid, mediatype, oldtag,))
-
-    def add_sets(self, movieid, collections):
-        """
-        Will add the movie to all collections (a list of unicodes)
-        """
-        for setname in collections:
-            setid = self.create_collection(setname)
-            self.assign_collection(setid, movieid)
 
     def create_collection(self, set_name):
         """
@@ -1228,30 +1222,34 @@ class KodiDBMethods(object):
         self.cursor.execute(query, (kodi_id, kodi_type))
 
 
-def kodiid_from_filename(path, kodi_type):
+def kodiid_from_filename(path, kodi_type=None, db_type=None):
     """
     Returns kodi_id if we have an item in the Kodi video or audio database with
-    said path. Feed with the Kodi itemtype, e.v. 'movie', 'song'
-    Returns None if not possible
+    said path. Feed with either koditype, e.v. 'movie', 'song' or the DB
+    you want to poll ('video' or 'music')
+    Returns None, <kodi_type> if not possible
     """
     kodi_id = None
-    path = try_decode(path)
+    path = utils.try_decode(path)
     try:
         filename = path.rsplit('/', 1)[1]
         path = path.rsplit('/', 1)[0] + '/'
     except IndexError:
         filename = path.rsplit('\\', 1)[1]
         path = path.rsplit('\\', 1)[0] + '\\'
-    if kodi_type == v.KODI_TYPE_SONG:
+    if kodi_type == v.KODI_TYPE_SONG or db_type == 'music':
         with GetKodiDB('music') as kodi_db:
             try:
-                kodi_id, _ = kodi_db.music_id_from_filename(filename, path)
+                kodi_id = kodi_db.music_id_from_filename(filename, path)
             except TypeError:
                 LOG.debug('No Kodi audio db element found for path %s', path)
+            else:
+                kodi_type = v.KODI_TYPE_SONG
     else:
         with GetKodiDB('video') as kodi_db:
             try:
-                kodi_id, _ = kodi_db.video_id_from_filename(filename, path)
+                kodi_id, kodi_type = kodi_db.video_id_from_filename(filename,
+                                                                    path)
             except TypeError:
                 LOG.debug('No kodi video db element found for path %s', path)
-    return kodi_id
+    return kodi_id, kodi_type

@@ -1,9 +1,8 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-###############################################################################
-
-from utils import kodi_sql
-import variables as v
+from __future__ import absolute_import, division, unicode_literals
+from . import utils
+from . import variables as v
 
 ###############################################################################
 
@@ -17,7 +16,7 @@ class Get_Plex_DB():
     and the db gets closed
     """
     def __enter__(self):
-        self.plexconn = kodi_sql('plex')
+        self.plexconn = utils.kodi_sql('plex')
         return Plex_DB_Functions(self.plexconn.cursor())
 
     def __exit__(self, type, value, traceback):
@@ -392,3 +391,102 @@ class Plex_DB_Functions():
             result.append({'plex_id': row[0],
                            'plex_type': row[1]})
         return result
+
+    def plex_id_from_playlist_path(self, path):
+        """
+        Given the Kodi playlist path [unicode], this will return the Plex id
+        [str] or None
+        """
+        query = 'SELECT plex_id FROM playlists WHERE kodi_path = ? LIMIT 1'
+        self.plexcursor.execute(query, (path, ))
+        try:
+            plex_id = self.plexcursor.fetchone()[0]
+        except TypeError:
+            plex_id = None
+        return plex_id
+
+    def plex_ids_all_playlists(self):
+        """
+        Returns a list of all Plex ids of playlists.
+        """
+        answ = []
+        self.plexcursor.execute('SELECT plex_id FROM playlists')
+        for entry in self.plexcursor.fetchall():
+            answ.append(entry[0])
+        return answ
+
+    def all_kodi_playlist_paths(self):
+        """
+        Returns a list of all Kodi playlist paths.
+        """
+        answ = []
+        self.plexcursor.execute('SELECT kodi_path FROM playlists')
+        for entry in self.plexcursor.fetchall():
+            answ.append(entry[0])
+        return answ
+
+    def retrieve_playlist(self, playlist, plex_id=None, path=None,
+                          kodi_hash=None):
+        """
+        Returns a complete Playlist (empty one passed in via playlist)
+        for the entry with plex_id OR kodi_hash OR kodi_path.
+        Returns None if not found
+        """
+        query = '''
+            SELECT plex_id, plex_name, plex_updatedat, kodi_path, kodi_type,
+                   kodi_hash
+            FROM playlists
+            WHERE %s = ?
+            LIMIT 1
+        '''
+        if plex_id:
+            query = query % 'plex_id'
+            var = plex_id
+        elif kodi_hash:
+            query = query % 'kodi_hash'
+            var = kodi_hash
+        else:
+            query = query % 'kodi_path'
+            var = path
+        self.plexcursor.execute(query, (var, ))
+        answ = self.plexcursor.fetchone()
+        if not answ:
+            return
+        playlist.plex_id = answ[0]
+        playlist.plex_name = answ[1]
+        playlist.plex_updatedat = answ[2]
+        playlist.kodi_path = answ[3]
+        playlist.kodi_type = answ[4]
+        playlist.kodi_hash = answ[5]
+        return playlist
+
+    def insert_playlist_entry(self, playlist):
+        """
+        Inserts or modifies an existing entry in the Plex playlists table.
+        """
+        query = '''
+            INSERT OR REPLACE INTO playlists(
+                plex_id, plex_name, plex_updatedat, kodi_path, kodi_type,
+                kodi_hash)
+            VALUES (?, ?, ?, ?, ?, ?)
+            '''
+        self.plexcursor.execute(query,
+                                (playlist.plex_id, playlist.plex_name,
+                                 playlist.plex_updatedat, playlist.kodi_path,
+                                 playlist.kodi_type, playlist.kodi_hash))
+
+    def delete_playlist_entry(self, playlist):
+        """
+        Removes the entry for playlist [Playqueue_Object] from the Plex
+        playlists table.
+        Be sure to either set playlist.id or playlist.kodi_path
+        """
+        if playlist.plex_id:
+            query = 'DELETE FROM playlists WHERE plex_id = ?'
+            var = playlist.plex_id
+        elif playlist.kodi_path:
+            query = 'DELETE FROM playlists WHERE kodi_path = ?'
+            var = playlist.kodi_path
+        else:
+            raise RuntimeError('Cannot delete playlist: %s' % playlist)
+        self.plexcursor.execute(query, (var, ))

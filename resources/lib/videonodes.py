@@ -1,24 +1,20 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from distutils import dir_util
 import xml.etree.ElementTree as etree
-from os import makedirs
-
 import xbmc
-from xbmcvfs import exists
 
-from utils import window, settings, language as lang, try_encode, indent, \
-    normalize_nodes, exists_dir, try_decode
-import variables as v
-import state
-
-###############################################################################
-
-log = getLogger("PLEX."+__name__)
+from . import utils
+from . import path_ops
+from . import variables as v
+from . import state
 
 ###############################################################################
-# Paths are strings, NOT unicode!
+
+LOG = getLogger('PLEX.videonodes')
+
+###############################################################################
 
 
 class VideoNodes(object):
@@ -30,21 +26,26 @@ class VideoNodes(object):
             root = etree.Element('node', attrib={'order': "%s" % order})
         elif roottype == 1:
             # Filter
-            root = etree.Element('node', attrib={'order': "%s" % order, 'type': "filter"})
+            root = etree.Element('node',
+                                 attrib={'order': "%s" % order, 'type': "filter"})
             etree.SubElement(root, 'match').text = "all"
             # Add tag rule
-            rule = etree.SubElement(root, 'rule', attrib={'field': "tag", 'operator': "is"})
+            rule = etree.SubElement(root,
+                                    'rule',
+                                    attrib={'field': "tag", 'operator': "is"})
             etree.SubElement(rule, 'value').text = tagname
         else:
             # Folder
-            root = etree.Element('node', attrib={'order': "%s" % order, 'type': "folder"})
+            root = etree.Element('node',
+                                 attrib={'order': "%s" % order, 'type': "folder"})
 
         etree.SubElement(root, 'label').text = label
         etree.SubElement(root, 'icon').text = "special://home/addons/plugin.video.plexkodiconnect/icon.png"
 
         return root
 
-    def viewNode(self, indexnumber, tagname, mediatype, viewtype, viewid, delete=False):
+    def viewNode(self, indexnumber, tagname, mediatype, viewtype, viewid,
+                 delete=False):
         # Plex: reassign mediatype due to Kodi inner workings
         # How many items do we get at most?
         limit = state.FETCH_PMS_ITEM_NUMBER
@@ -53,7 +54,8 @@ class VideoNodes(object):
             'show': 'tvshows',
             'photo': 'photos',
             'homevideo': 'homevideos',
-            'musicvideos': 'musicvideos'
+            'musicvideos': 'musicvideos',
+            'artist': 'albums'
         }
         mediatype = mediatypes[mediatype]
 
@@ -63,33 +65,30 @@ class VideoNodes(object):
             dirname = viewid
 
         # Returns strings
-        path = try_decode(xbmc.translatePath(
-            "special://profile/library/video/"))
-        nodepath = try_decode(xbmc.translatePath(
-            "special://profile/library/video/Plex-%s/" % dirname))
+        path = path_ops.translate_path('special://profile/library/video/')
+        nodepath = path_ops.translate_path(
+            'special://profile/library/video/Plex-%s/' % dirname)
 
         if delete:
-            if exists_dir(nodepath):
-                from shutil import rmtree
-                rmtree(nodepath)
-                log.info("Sucessfully removed videonode: %s." % tagname)
+            if path_ops.exists(nodepath):
+                path_ops.rmtree(nodepath)
+                LOG.info("Sucessfully removed videonode: %s." % tagname)
             return
 
         # Verify the video directory
-        if not exists_dir(path):
-            dir_util.copy_tree(
-                src=try_decode(
-                    xbmc.translatePath("special://xbmc/system/library/video")),
-                dst=try_decode(
-                    xbmc.translatePath("special://profile/library/video")),
+        if not path_ops.exists(path):
+            path_ops.copy_tree(
+                src=path_ops.translate_path(
+                    'special://xbmc/system/library/video'),
+                dst=path_ops.translate_path('special://profile/library/video'),
                 preserve_mode=0)  # do not copy permission bits!
 
         # Create the node directory
         if mediatype != "photos":
-            if not exists_dir(nodepath):
+            if not path_ops.exists(nodepath):
                 # folder does not exist yet
-                log.debug('Creating folder %s' % nodepath)
-                makedirs(nodepath)
+                LOG.debug('Creating folder %s' % nodepath)
+                path_ops.makedirs(nodepath)
 
         # Create index entry
         nodeXML = "%sindex.xml" % nodepath
@@ -97,13 +96,13 @@ class VideoNodes(object):
         path = "library://video/Plex-%s/" % dirname
         for i in range(1, indexnumber):
             # Verify to make sure we don't create duplicates
-            if window('Plex.nodes.%s.index' % i) == path:
+            if utils.window('Plex.nodes.%s.index' % i) == path:
                 return
 
         if mediatype == "photos":
             path = "plugin://plugin.video.plexkodiconnect?mode=browseplex&key=/library/sections/%s&id=%s" % (viewid, viewid)
 
-        window('Plex.nodes.%s.index' % indexnumber, value=path)
+        utils.window('Plex.nodes.%s.index' % indexnumber, value=path)
 
         # Root
         if not mediatype == "photos":
@@ -119,7 +118,7 @@ class VideoNodes(object):
                                        tagname=tagname,
                                        roottype=0)
             try:
-                indent(root)
+                utils.indent(root)
             except:
                 pass
             etree.ElementTree(root).write(nodeXML, encoding="UTF-8")
@@ -137,7 +136,7 @@ class VideoNodes(object):
             '10': "random",
             '11': "recommended",
             '12': "ondeck",
-            '13': 'browsefiles'
+            '13': 'browsefiles',
         }
         mediatypes = {
             # label according to nodetype per mediatype
@@ -152,7 +151,7 @@ class VideoNodes(object):
                     '10': 30227,
                     '11': 30230,
                     '12': 39500,
-                    '13': 39702
+                    '13': 39702,
                 },
 
             'tvshows':
@@ -167,7 +166,7 @@ class VideoNodes(object):
                     '10': 30227,
                     # '11': 30230,
                     '12': 39500,
-                    '13': 39702
+                    '13': 39702,
                 },
 
             'homevideos':
@@ -175,7 +174,8 @@ class VideoNodes(object):
                     '1': tagname,
                     '2': 30251,
                     '11': 30253,
-                    '13': 39702
+                    '13': 39702,
+                    '14': 136
                 },
 
             'photos':
@@ -194,6 +194,14 @@ class VideoNodes(object):
                     '4': 30257,
                     '6': 30258,
                     '13': 39702
+                },
+
+            'albums':
+                {
+                    '1': tagname,
+                    '2': 517,  # Recently played albums
+                    '2': 359,  # Recently added albums
+                    '13': 39702,  # browse by folder
                 }
         }
 
@@ -211,7 +219,7 @@ class VideoNodes(object):
             '10': '8',  # "random",
             '11': '5',  # "recommended",
             '12': '1',  # "ondeck"
-            '13': '9'  # browse by folder
+            '13': '9',  # browse by folder
         }
 
         nodes = mediatypes[mediatype]
@@ -222,14 +230,13 @@ class VideoNodes(object):
             # Get label
             stringid = nodes[node]
             if node != "1":
-                label = lang(stringid)
-                if not label:
-                    label = xbmc.getLocalizedString(stringid)
+                label = utils.lang(stringid)
             else:
                 label = stringid
 
             # Set window properties
-            if (mediatype == "homevideos" or mediatype == "photos") and nodetype == "all":
+            if ((mediatype == "homevideos" or mediatype == "photos") and
+                    nodetype == "all"):
                 # Custom query
                 path = ("plugin://plugin.video.plexkodiconnect/?id=%s&mode=browseplex&type=%s"
                         % (viewid, mediatype))
@@ -278,55 +285,72 @@ class VideoNodes(object):
                     templabel = label
 
                 embynode = "Plex.nodes.%s" % indexnumber
-                window('%s.title' % embynode, value=templabel)
-                window('%s.path' % embynode, value=windowpath)
-                window('%s.content' % embynode, value=path)
-                window('%s.type' % embynode, value=mediatype)
+                utils.window('%s.title' % embynode, value=templabel)
+                utils.window('%s.path' % embynode, value=windowpath)
+                utils.window('%s.content' % embynode, value=path)
+                utils.window('%s.type' % embynode, value=mediatype)
             else:
                 embynode = "Plex.nodes.%s.%s" % (indexnumber, nodetype)
-                window('%s.title' % embynode, value=label)
-                window('%s.path' % embynode, value=windowpath)
-                window('%s.content' % embynode, value=path)
+                utils.window('%s.title' % embynode, value=label)
+                utils.window('%s.path' % embynode, value=windowpath)
+                utils.window('%s.content' % embynode, value=path)
 
             if mediatype == "photos":
-                # For photos, we do not create a node in videos but we do want the window props
-                # to be created.
-                # To do: add our photos nodes to kodi picture sources somehow
+                # For photos, we do not create a node in videos but we do want
+                # the window props to be created. To do: add our photos nodes to
+                # kodi picture sources somehow
                 continue
 
-            if exists(try_encode(nodeXML)):
+            if path_ops.exists(nodeXML):
                 # Don't recreate xml if already exists
                 continue
 
             # Create the root
-            if (nodetype in ("nextepisodes", "ondeck", 'recentepisodes', 'browsefiles') or mediatype == "homevideos"):
+            if (nodetype in ("nextepisodes",
+                             "ondeck",
+                             'recentepisodes',
+                             'browsefiles') or mediatype == "homevideos"):
                 # Folder type with plugin path
-                root = self.commonRoot(order=sortorder[node], label=label, tagname=tagname, roottype=2)
-                etree.SubElement(root, 'path').text = path
-                etree.SubElement(root, 'content').text = "episodes"
+                root = self.commonRoot(order=sortorder[node],
+                                       label=label,
+                                       tagname=tagname,
+                                       roottype=2)
             else:
-                root = self.commonRoot(order=sortorder[node], label=label, tagname=tagname)
-                if nodetype in ('recentepisodes', 'inprogressepisodes'):
-                    etree.SubElement(root, 'content').text = "episodes"
-                else:
-                    etree.SubElement(root, 'content').text = mediatype
-
+                root = self.commonRoot(order=sortorder[node],
+                                       label=label,
+                                       tagname=tagname)
+            # Set the content type
+            if mediatype == 'tvshows' and nodetype != 'all':
+                etree.SubElement(root, 'content').text = 'episodes'
+            else:
+                etree.SubElement(root, 'content').text = mediatype
+            # Now fill the view
+            if (nodetype in ("nextepisodes",
+                             "ondeck",
+                             'recentepisodes',
+                             'browsefiles') or mediatype == "homevideos"):
+                etree.SubElement(root, 'path').text = path
+            else:
                 # Elements per nodetype
                 if nodetype == "all":
-                    etree.SubElement(root, 'order', {'direction': "ascending"}).text = "sorttitle"
-                
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "ascending"}).text = "sorttitle"
                 elif nodetype == "recent":
-                    etree.SubElement(root, 'order', {'direction': "descending"}).text = "dateadded"
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "descending"}).text = "dateadded"
                     etree.SubElement(root, 'limit').text = limit
-                    if settings('MovieShowWatched') == 'false':
+                    if utils.settings('MovieShowWatched') == 'false':
                         rule = etree.SubElement(root,
                                                 'rule',
                                                 {'field': "playcount",
                                                  'operator': "is"})
                         etree.SubElement(rule, 'value').text = "0"
-                
                 elif nodetype == "inprogress":
-                    etree.SubElement(root, 'rule', {'field': "inprogress", 'operator': "true"})
+                    etree.SubElement(root,
+                                     'rule',
+                                     {'field': "inprogress", 'operator': "true"})
                     etree.SubElement(root, 'limit').text = limit
                     etree.SubElement(
                         root,
@@ -335,55 +359,67 @@ class VideoNodes(object):
                     ).text = 'lastplayed'
 
                 elif nodetype == "genres":
-                    etree.SubElement(root, 'order', {'direction': "ascending"}).text = "sorttitle"
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "ascending"}).text = "sorttitle"
                     etree.SubElement(root, 'group').text = "genres"
-                
                 elif nodetype == "unwatched":
-                    etree.SubElement(root, 'order', {'direction': "ascending"}).text = "sorttitle"
-                    rule = etree.SubElement(root, "rule", {'field': "playcount", 'operator': "is"})
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "ascending"}).text = "sorttitle"
+                    rule = etree.SubElement(root,
+                                            "rule",
+                                            {'field': "playcount", 'operator': "is"})
                     etree.SubElement(rule, 'value').text = "0"
-
                 elif nodetype == "sets":
-                    etree.SubElement(root, 'order', {'direction': "ascending"}).text = "sorttitle"
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "ascending"}).text = "sorttitle"
                     etree.SubElement(root, 'group').text = "tags"
-
                 elif nodetype == "random":
-                    etree.SubElement(root, 'order', {'direction': "ascending"}).text = "random"
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "ascending"}).text = "random"
                     etree.SubElement(root, 'limit').text = limit
-
                 elif nodetype == "recommended":
-                    etree.SubElement(root, 'order', {'direction': "descending"}).text = "rating"
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "descending"}).text = "rating"
                     etree.SubElement(root, 'limit').text = limit
-                    rule = etree.SubElement(root, 'rule', {'field': "playcount", 'operator': "is"})
+                    rule = etree.SubElement(root,
+                                            'rule',
+                                            {'field': "playcount", 'operator': "is"})
                     etree.SubElement(rule, 'value').text = "0"
-                    rule2 = etree.SubElement(root, 'rule',
-                        attrib={'field': "rating", 'operator': "greaterthan"})
+                    rule2 = etree.SubElement(root,
+                                             'rule',
+                                             attrib={'field': "rating", 'operator': "greaterthan"})
                     etree.SubElement(rule2, 'value').text = "7"
-
                 elif nodetype == "recentepisodes":
                     # Kodi Isengard, Jarvis
-                    etree.SubElement(root, 'order', {'direction': "descending"}).text = "dateadded"
+                    etree.SubElement(root,
+                                     'order',
+                                     {'direction': "descending"}).text = "dateadded"
                     etree.SubElement(root, 'limit').text = limit
-                    rule = etree.SubElement(root, 'rule', {'field': "playcount", 'operator': "is"})
+                    rule = etree.SubElement(root,
+                                            'rule',
+                                            {'field': "playcount", 'operator': "is"})
                     etree.SubElement(rule, 'value').text = "0"
-
                 elif nodetype == "inprogressepisodes":
                     # Kodi Isengard, Jarvis
                     etree.SubElement(root, 'limit').text = limit
-                    rule = etree.SubElement(root, 'rule',
-                        attrib={'field': "inprogress", 'operator':"true"})
-
+                    rule = etree.SubElement(root,
+                                            'rule',
+                                            attrib={'field': "inprogress", 'operator':"true"})
             try:
-                indent(root)
+                utils.indent(root)
             except:
                 pass
-            etree.ElementTree(root).write(nodeXML, encoding="UTF-8")
+            etree.ElementTree(root).write(path_ops.encode_path(nodeXML),
+                                          encoding="UTF-8")
 
     def singleNode(self, indexnumber, tagname, mediatype, itemtype):
-        tagname = try_encode(tagname)
-        cleantagname = try_decode(normalize_nodes(tagname))
-        nodepath = try_decode(xbmc.translatePath(
-            "special://profile/library/video/"))
+        cleantagname = utils.normalize_nodes(tagname)
+        nodepath = path_ops.translate_path('special://profile/library/video/')
         nodeXML = "%splex_%s.xml" % (nodepath, cleantagname)
         path = "library://video/plex_%s.xml" % cleantagname
         if v.KODIVERSION >= 17:
@@ -393,13 +429,12 @@ class VideoNodes(object):
             windowpath = "ActivateWindow(Video,%s,return)" % path
 
         # Create the video node directory
-        if not exists_dir(nodepath):
+        if not path_ops.exists(nodepath):
             # We need to copy over the default items
-            dir_util.copy_tree(
-                src=try_decode(
-                    xbmc.translatePath("special://xbmc/system/library/video")),
-                dst=try_decode(
-                    xbmc.translatePath("special://profile/library/video")),
+            path_ops.copy_tree(
+                src=path_ops.translate_path(
+                    'special://xbmc/system/library/video'),
+                dst=path_ops.translate_path('special://profile/library/video'),
                 preserve_mode=0)  # do not copy permission bits!
 
         labels = {
@@ -407,14 +442,14 @@ class VideoNodes(object):
             'Favorite tvshows': 30181,
             'channels': 30173
         }
-        label = lang(labels[tagname])
+        label = utils.lang(labels[tagname])
         embynode = "Plex.nodes.%s" % indexnumber
-        window('%s.title' % embynode, value=label)
-        window('%s.path' % embynode, value=windowpath)
-        window('%s.content' % embynode, value=path)
-        window('%s.type' % embynode, value=itemtype)
+        utils.window('%s.title' % embynode, value=label)
+        utils.window('%s.path' % embynode, value=windowpath)
+        utils.window('%s.content' % embynode, value=path)
+        utils.window('%s.type' % embynode, value=itemtype)
 
-        if exists(try_encode(nodeXML)):
+        if path_ops.exists(nodeXML):
             # Don't recreate xml if already exists
             return
 
@@ -423,23 +458,26 @@ class VideoNodes(object):
                                    label=label,
                                    tagname=tagname,
                                    roottype=2)
-            etree.SubElement(root, 'path').text = "plugin://plugin.video.plexkodiconnect/?id=0&mode=channels"
+            etree.SubElement(root,
+                             'path').text = "plugin://plugin.video.plexkodiconnect/?id=0&mode=channels"
         else:
             root = self.commonRoot(order=1, label=label, tagname=tagname)
-            etree.SubElement(root, 'order', {'direction': "ascending"}).text = "sorttitle"
+            etree.SubElement(root,
+                             'order',
+                             {'direction': "ascending"}).text = "sorttitle"
 
         etree.SubElement(root, 'content').text = mediatype
 
         try:
-            indent(root)
+            utils.indent(root)
         except:
             pass
         etree.ElementTree(root).write(nodeXML, encoding="UTF-8")
 
     def clearProperties(self):
 
-        log.info("Clearing nodes properties.")
-        plexprops = window('Plex.nodes.total')
+        LOG.info("Clearing nodes properties.")
+        plexprops = utils.window('Plex.nodes.total')
         propnames = [
             "index","path","title","content",
             "inprogress.content","inprogress.title",
@@ -457,4 +495,5 @@ class VideoNodes(object):
             totalnodes = int(plexprops)
             for i in range(totalnodes):
                 for prop in propnames:
-                    window('Plex.nodes.%s.%s' % (str(i), prop), clear=True)
+                    utils.window('Plex.nodes.%s.%s' % (str(i), prop),
+                                 clear=True)

@@ -1,17 +1,16 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from os.path import join
-
 import xbmcgui
-from xbmcaddon import Addon
 
-from utils import window
+from . import utils
+from . import path_ops
+from . import variables as v
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
-ADDON = Addon('plugin.video.plexkodiconnect')
+LOG = getLogger('PLEX.context')
 
 ACTION_PARENT_DIR = 9
 ACTION_PREVIOUS_MENU = 10
@@ -44,8 +43,8 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
         return self.selected_option
 
     def onInit(self):
-        if window('PlexUserImage'):
-            self.getControl(USER_IMAGE).setImage(window('PlexUserImage'))
+        if utils.window('PlexUserImage'):
+            self.getControl(USER_IMAGE).setImage(utils.window('PlexUserImage'))
         height = 479 + (len(self._options) * 55)
         LOG.debug("options: %s", self._options)
         self.list_ = self.getControl(LIST)
@@ -66,10 +65,11 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
                 self.close()
 
     def _add_editcontrol(self, x, y, height, width, password=None):
-        media = join(ADDON.getAddonInfo('path'),
-                     'resources', 'skins', 'default', 'media')
+        media = path_ops.path.join(
+            v.ADDON_PATH, 'resources', 'skins', 'default', 'media')
+        filename = utils.try_encode(path_ops.path.join(media, 'white.png'))
         control = xbmcgui.ControlImage(0, 0, 0, 0,
-                                       filename=join(media, "white.png"),
+                                       filename=filename,
                                        aspectRatio=0,
                                        colorDiffuse="ff111111")
         control.setPosition(x, y)

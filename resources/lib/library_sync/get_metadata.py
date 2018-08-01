@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from threading import Thread
 from Queue import Empty
-
 from xbmc import sleep
 
-from utils import thread_methods, window
-from PlexFunctions import GetPlexMetadata, GetAllPlexChildren
-import sync_info
+from .. import utils
+from .. import plex_functions as PF
+from . import sync_info
 
 ###############################################################################
 
@@ -16,9 +16,9 @@ LOG = getLogger("PLEX." + __name__)
 ###############################################################################
 
 
-@thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
-                           'STOP_SYNC',
-                           'SUSPEND_SYNC'])
+@utils.thread_methods(add_stops=['SUSPEND_LIBRARY_THREAD',
+                                 'STOP_SYNC',
+                                 'SUSPEND_SYNC'])
 class ThreadedGetMetadata(Thread):
     """
     Threaded download of Plex XML metadata for a certain library item.
@@ -79,7 +79,7 @@ class ThreadedGetMetadata(Thread):
                 sleep(20)
                 continue
             # Download Metadata
-            xml = GetPlexMetadata(item['plex_id'])
+            xml = PF.GetPlexMetadata(item['plex_id'])
             if xml is None:
                 # Did not receive a valid XML - skip that item for now
                 LOG.error("Could not get metadata for %s. Skipping that item "
@@ -93,14 +93,14 @@ class ThreadedGetMetadata(Thread):
             elif xml == 401:
                 LOG.error('HTTP 401 returned by PMS. Too much strain? '
                           'Cancelling sync for now')
-                window('plex_scancrashed', value='401')
+                utils.window('plex_scancrashed', value='401')
                 # Kill remaining items in queue (for main thread to cont.)
                 queue.task_done()
                 break
 
             item['xml'] = xml
             if item.get('get_children') is True:
-                children_xml = GetAllPlexChildren(item['plex_id'])
+                children_xml = PF.GetAllPlexChildren(item['plex_id'])
                 try:
                     children_xml[0].attrib
                 except (TypeError, IndexError, AttributeError):

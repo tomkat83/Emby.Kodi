@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 websocket - WebSocket client library for Python
 
@@ -18,8 +20,6 @@ Copyright (C) 2010 Hiroki Ohtani(liris)
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-
-
 import socket
 
 try:
@@ -48,11 +48,11 @@ import logging
 import traceback
 import sys
 
-import utils
+from . import utils
 
 ###############################################################################
 
-LOG = logging.getLogger("PLEX." + __name__)
+LOG = logging.getLogger('PLEX.websocket')
 
 ###############################################################################
 

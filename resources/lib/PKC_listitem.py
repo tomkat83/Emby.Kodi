@@ -1,13 +1,14 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from xbmcgui import ListItem
 
 
-def convert_PKC_to_listitem(PKC_listitem):
+def convert_pkc_to_listitem(pkc_listitem):
     """
-    Insert a PKC_listitem and you will receive a valid XBMC listitem
+    Insert a PKCListItem() and you will receive a valid XBMC listitem
     """
-    data = PKC_listitem.data
+    data = pkc_listitem.data
     listitem = ListItem(label=data.get('label'),
                         label2=data.get('label2'),
                         path=data.get('path'))
@@ -26,7 +27,7 @@ def convert_PKC_to_listitem(PKC_listitem):
     return listitem
 
 
-class PKC_ListItem(object):
+class PKCListItem(object):
     """
     Imitates xbmcgui.ListItem and its functions. Pass along PKC_Listitem().data
     when pickling!

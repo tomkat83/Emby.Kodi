@@ -1,19 +1,19 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 import logging
 from threading import Thread
-
 from xbmc import sleep
 
-from utils import window, thread_methods
-import state
+from . import utils
+from . import state
 
 ###############################################################################
-LOG = logging.getLogger("PLEX." + __name__)
+LOG = logging.getLogger('PLEX.command_pipeline')
 ###############################################################################
 
 
-@thread_methods
+@utils.thread_methods
 class Monitor_Window(Thread):
     """
     Monitors window('plex_command') for new entries that we need to take care
@@ -26,9 +26,9 @@ class Monitor_Window(Thread):
         queue = state.COMMAND_PIPELINE_QUEUE
         LOG.info("----===## Starting Kodi_Play_Client ##===----")
         while not stopped():
-            if window('plex_command'):
-                value = window('plex_command')
-                window('plex_command', clear=True)
+            if utils.window('plex_command'):
+                value = utils.window('plex_command')
+                utils.window('plex_command', clear=True)
                 if value.startswith('PLAY-'):
                     queue.put(value.replace('PLAY-', ''))
                 elif value == 'SUSPEND_LIBRARY_THREAD-True':

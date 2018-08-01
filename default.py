@@ -1,46 +1,19 @@
 # -*- coding: utf-8 -*-
 
 ###############################################################################
-
+from __future__ import absolute_import, division, unicode_literals
 import logging
-from os import path as os_path
-from sys import path as sys_path, argv
+from sys import argv
 from urlparse import parse_qsl
-
-from xbmc import translatePath, sleep, executebuiltin
-from xbmcaddon import Addon
+from xbmc import sleep, executebuiltin
 from xbmcgui import ListItem
 from xbmcplugin import setResolvedUrl
 
-_addon = Addon(id='plugin.video.plexkodiconnect')
-try:
-    _addon_path = _addon.getAddonInfo('path').decode('utf-8')
-except TypeError:
-    _addon_path = _addon.getAddonInfo('path').decode()
-try:
-    _base_resource = translatePath(os_path.join(
-        _addon_path,
-        'resources',
-        'lib')).decode('utf-8')
-except TypeError:
-    _base_resource = translatePath(os_path.join(
-        _addon_path,
-        'resources',
-        'lib')).decode()
-sys_path.append(_base_resource)
+from resources.lib import entrypoint, utils, pickler, pkc_listitem, \
+    variables as v, loghandler
+from resources.lib.watchdog.utils import unicode_paths
 
 ###############################################################################
-
-import entrypoint
-from utils import window, reset, passwords_xml, language as lang, dialog, \
-    plex_command
-from pickler import unpickle_me, pickl_window
-from PKC_listitem import convert_PKC_to_listitem
-import variables as v
-
-###############################################################################
-
-import loghandler
 
 loghandler.config()
 log = logging.getLogger('PLEX.default')
@@ -54,9 +27,11 @@ class Main():
     # MAIN ENTRY POINT
     # @utils.profiling()
     def __init__(self):
-        log.debug('Full sys.argv received: %s' % argv)
+        log.debug('Full sys.argv received: %s', argv)
         # Parse parameters
-        params = dict(parse_qsl(argv[2][1:]))
+        path = unicode_paths.decode(argv[0])
+        arguments = unicode_paths.decode(argv[2])
+        params = dict(parse_qsl(arguments[1:]))
         mode = params.get('mode', '')
         itemid = params.get('id', '')
 
@@ -104,7 +79,7 @@ class Main():
             entrypoint.create_new_pms()
 
         elif mode == 'reset':
-            reset()
+            utils.reset()
 
         elif mode == 'togglePlexTV':
             entrypoint.toggle_plex_tv_sign_in()
@@ -113,53 +88,59 @@ class Main():
             entrypoint.reset_authorization()
 
         elif mode == 'passwords':
-            passwords_xml()
+            utils.passwords_xml()
 
         elif mode == 'switchuser':
             entrypoint.switch_plex_user()
 
         elif mode in ('manualsync', 'repair'):
-            if window('plex_online') != 'true':
+            if pickler.pickl_window('plex_online') != 'true':
                 # Server is not online, do not run the sync
-                dialog('ok', lang(29999), lang(39205))
+                utils.dialog('ok', utils.lang(29999), utils.lang(39205))
                 log.error('Not connected to a PMS.')
             else:
                 if mode == 'repair':
                     log.info('Requesting repair lib sync')
-                    plex_command('RUN_LIB_SCAN', 'repair')
+                    utils.plex_command('RUN_LIB_SCAN', 'repair')
                 elif mode == 'manualsync':
                     log.info('Requesting full library scan')
-                    plex_command('RUN_LIB_SCAN', 'full')
+                    utils.plex_command('RUN_LIB_SCAN', 'full')
 
         elif mode == 'texturecache':
             log.info('Requesting texture caching of all textures')
-            plex_command('RUN_LIB_SCAN', 'textures')
+            utils.plex_command('RUN_LIB_SCAN', 'textures')
 
         elif mode == 'chooseServer':
             entrypoint.choose_pms_server()
 
         elif mode == 'refreshplaylist':
             log.info('Requesting playlist/nodes refresh')
-            plex_command('RUN_LIB_SCAN', 'views')
+            utils.plex_command('RUN_LIB_SCAN', 'views')
 
         elif mode == 'deviceid':
             self.deviceid()
 
         elif mode == 'fanart':
             log.info('User requested fanarttv refresh')
-            plex_command('RUN_LIB_SCAN', 'fanart')
+            utils.plex_command('RUN_LIB_SCAN', 'fanart')
 
-        elif '/extrafanart' in argv[0]:
-            plexpath = argv[2][1:]
+        elif '/extrafanart' in path:
+            plexpath = arguments[1:]
             plexid = itemid
             entrypoint.extra_fanart(plexid, plexpath)
             entrypoint.get_video_files(plexid, plexpath)
 
         # Called by e.g. 3rd party plugin video extras
-        elif ('/Extras' in argv[0] or '/VideoFiles' in argv[0] or
-                '/Extras' in argv[2]):
+        elif ('/Extras' in path or '/VideoFiles' in path or
+                '/Extras' in arguments):
             plexId = itemid or None
             entrypoint.get_video_files(plexId, params)
+
+        elif mode == 'playlists':
+            entrypoint.playlists(params.get('content_type'))
+
+        elif mode == 'hub':
+            entrypoint.hub(params.get('type'))
 
         else:
             entrypoint.show_main_menu(content_type=params.get('content_type'))
@@ -171,40 +152,40 @@ class Main():
         """
         request = '%s&handle=%s' % (argv[2], HANDLE)
         # Put the request into the 'queue'
-        plex_command('PLAY', request)
+        utils.plex_command('PLAY', request)
         if HANDLE == -1:
             # Handle -1 received, not waiting for main thread
             return
         # Wait for the result
-        while not pickl_window('plex_result'):
+        while not pickler.pickl_window('plex_result'):
             sleep(50)
-        result = unpickle_me()
+        result = pickler.unpickle_me()
         if result is None:
             log.error('Error encountered, aborting')
-            dialog('notification',
-                   heading='{plex}',
-                   message=lang(30128),
-                   icon='{error}',
-                   time=3000)
+            utils.dialog('notification',
+                         heading='{plex}',
+                         message=utils.lang(30128),
+                         icon='{error}',
+                         time=3000)
             setResolvedUrl(HANDLE, False, ListItem())
         elif result.listitem:
-            listitem = convert_PKC_to_listitem(result.listitem)
+            listitem = pkc_listitem.convert_pkc_to_listitem(result.listitem)
             setResolvedUrl(HANDLE, True, listitem)
 
     @staticmethod
     def deviceid():
-        deviceId_old = window('plex_client_Id')
-        from clientinfo import getDeviceId
+        deviceId_old = pickler.pickl_window('plex_client_Id')
+        from resources.lib import clientinfo
         try:
-            deviceId = getDeviceId(reset=True)
+            deviceId = clientinfo.getDeviceId(reset=True)
         except Exception as e:
             log.error('Failed to generate a new device Id: %s' % e)
-            dialog('ok', lang(29999), lang(33032))
+            utils.dialog('ok', utils.lang(29999), utils.lang(33032))
         else:
             log.info('Successfully removed old device ID: %s New deviceId:'
                      '%s' % (deviceId_old, deviceId))
             # 'Kodi will now restart to apply the changes'
-            dialog('ok', lang(29999), lang(33033))
+            utils.dialog('ok', utils.lang(29999), utils.lang(33033))
             executebuiltin('RestartApp')
 
 

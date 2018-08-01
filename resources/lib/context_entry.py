@@ -1,35 +1,33 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-
-from xbmcaddon import Addon
 import xbmc
-import xbmcplugin
 import xbmcgui
-import context
 
-import plexdb_functions as plexdb
-from utils import window, settings, dialog, language as lang
-import PlexFunctions as PF
-from PlexAPI import API
-import playqueue as PQ
-import variables as v
-import state
+from . import context
+from . import plexdb_functions as plexdb
+from . import utils
+from . import plex_functions as PF
+from .plex_api import API
+from . import playqueue as PQ
+from . import variables as v
+from . import state
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.context_entry')
 
 OPTIONS = {
-    'Refresh': lang(30410),
-    'Delete': lang(30409),
-    'Addon': lang(30408),
-    # 'AddFav': lang(30405),
-    # 'RemoveFav': lang(30406),
-    # 'RateSong': lang(30407),
-    'Transcode': lang(30412),
-    'PMS_Play': lang(30415),  # Use PMS to start playback
-    'Extras': lang(30235)
+    'Refresh': utils.lang(30410),
+    'Delete': utils.lang(30409),
+    'Addon': utils.lang(30408),
+    # 'AddFav': utils.lang(30405),
+    # 'RemoveFav': utils.lang(30406),
+    # 'RateSong': utils.lang(30407),
+    'Transcode': utils.lang(30412),
+    'PMS_Play': utils.lang(30415),  # Use PMS to start playback
+    'Extras': utils.lang(30235)
 }
 
 ###############################################################################
@@ -98,14 +96,14 @@ class ContextMenu(object):
             options.append(OPTIONS['Transcode'])
 
         # Delete item, only if the Plex Home main user is logged in
-        if (window('plex_restricteduser') != 'true' and
-                window('plex_allows_mediaDeletion') == 'true'):
+        if (utils.window('plex_restricteduser') != 'true' and
+                utils.window('plex_allows_mediaDeletion') == 'true'):
             options.append(OPTIONS['Delete'])
         # Addon settings
         options.append(OPTIONS['Addon'])
         context_menu = context.ContextMenu(
             "script-plex-context.xml",
-            Addon('plugin.video.plexkodiconnect').getAddonInfo('path'),
+            utils.try_encode(v.ADDON_PATH),
             "default",
             "1080i")
         context_menu.set_options(options)
@@ -138,14 +136,14 @@ class ContextMenu(object):
         Delete item on PMS
         """
         delete = True
-        if settings('skipContextMenu') != "true":
-            if not dialog("yesno", heading="{plex}", line1=lang(33041)):
+        if utils.settings('skipContextMenu') != "true":
+            if not utils.dialog("yesno", heading="{plex}", line1=utils.lang(33041)):
                 LOG.info("User skipped deletion for: %s", self.plex_id)
                 delete = False
         if delete:
             LOG.info("Deleting Plex item with id %s", self.plex_id)
             if PF.delete_item_from_pms(self.plex_id) is False:
-                dialog("ok", heading="{plex}", line1=lang(30414))
+                utils.dialog("ok", heading="{plex}", line1=utils.lang(30414))
 
     def _PMS_play(self):
         """

@@ -1,5 +1,21 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# THREAD SAFE
+"""
+THREAD SAFE
+"""
+from __future__ import absolute_import, division, unicode_literals
+from threading import Lock, RLock
+
+
+# LOCKS
+####################
+# Need to lock all methods and functions messing with Plex Companion subscribers
+LOCK_SUBSCRIBER = RLock()
+# Need to lock everything messing with Kodi/PKC playqueues
+LOCK_PLAYQUEUES = RLock()
+# Necessary to temporarily hold back librarysync/websocket listener when doing
+# a full sync
+LOCK_PLAYLISTS = Lock()
 
 # Quit PKC
 STOP_PKC = False
@@ -41,6 +57,12 @@ FORCE_RELOAD_SKIN = True
 SYNC_DIALOG = True
 # Shall Kodi show dialogs for syncing/caching images? (e.g. images left to sync)
 IMAGE_SYNC_NOTIFICATIONS = True
+# Sync playlists from Plex to Kodi and vice-versa?
+SYNC_PLAYLISTS = True
+# Only sync specific Plex playlists to Kodi?
+SYNC_SPECIFIC_PLEX_PLAYLISTS = False
+# Only sync specific Kodi playlists to Plex?
+SYNC_SPECIFIC_KODI_PLAYLISTS = False
 # Is synching of Plex music enabled?
 ENABLE_MUSIC = True
 # How often shall we sync?

@@ -1,16 +1,15 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from re import compile as re_compile
 from xml.etree.ElementTree import ParseError
 
-from utils import XmlKodiSetting, reboot_kodi, language as lang
-from PlexAPI import API
-import variables as v
+from . import utils
+from .plex_api import API
+from . import variables as v
 
 ###############################################################################
-LOG = getLogger("PLEX." + __name__)
-
-REGEX_MUSICPATH = re_compile(r'''^\^(.+)\$$''')
+LOG = getLogger('PLEX.music')
 ###############################################################################
 
 
@@ -37,9 +36,10 @@ def excludefromscan_music_folders(xml):
                                             omit_check=True)
                 paths.append(__turn_to_regex(path))
     try:
-        with XmlKodiSetting('advancedsettings.xml',
-                            force_create=True,
-                            top_element='advancedsettings') as xml_file:
+        with utils.XmlKodiSetting(
+                'advancedsettings.xml',
+                force_create=True,
+                top_element='advancedsettings') as xml_file:
             parent = xml_file.set_setting(['audio', 'excludefromscan'])
             for path in paths:
                 for element in parent:
@@ -71,7 +71,7 @@ def excludefromscan_music_folders(xml):
     if reboot is True:
         #  'New Plex music library detected. Sorry, but we need to
         #  restart Kodi now due to the changes made.'
-        reboot_kodi(lang(39711))
+        utils.reboot_kodi(utils.lang(39711))
 
 
 def __turn_to_regex(path):

@@ -1,23 +1,17 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-###############################################################################
 from logging import getLogger
-import websocket
 from json import loads
 import xml.etree.ElementTree as etree
 from threading import Thread
 from ssl import CERT_NONE
-
 from xbmc import sleep
 
-from utils import window, settings, thread_methods
-from companion import process_command
-import state
-import variables as v
+from . import websocket, utils, companion, state, variables as v
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.websocket_client')
 
 ###############################################################################
 
@@ -140,14 +134,14 @@ class WebSocket(Thread):
         LOG.info("##===---- %s Stopped ----===##", self.__class__.__name__)
 
 
-@thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD',
-                              'BACKGROUND_SYNC_DISABLED'])
+@utils.thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD',
+                                    'BACKGROUND_SYNC_DISABLED'])
 class PMS_Websocket(WebSocket):
     """
     Websocket connection with the PMS for Plex Companion
     """
     def getUri(self):
-        server = window('pms_server')
+        server = utils.window('pms_server')
         # Get the appropriate prefix for the websocket
         if server.startswith('https'):
             server = "wss%s" % server[5:]
@@ -158,7 +152,7 @@ class PMS_Websocket(WebSocket):
         if state.PLEX_TOKEN:
             uri += '?X-Plex-Token=%s' % state.PLEX_TOKEN
         sslopt = {}
-        if settings('sslverify') == "false":
+        if utils.settings('sslverify') == "false":
             sslopt["cert_reqs"] = CERT_NONE
         LOG.debug("%s: Uri: %s, sslopt: %s",
                   self.__class__.__name__, uri, sslopt)
@@ -206,7 +200,7 @@ class Alexa_Websocket(WebSocket):
     """
     Websocket connection to talk to Amazon Alexa.
 
-    Can't use thread_methods!
+    Can't use utils.thread_methods!
     """
     thread_stopped = False
     thread_suspended = False
@@ -244,9 +238,9 @@ class Alexa_Websocket(WebSocket):
             LOG.error('%s: Could not parse Alexa message',
                       self.__class__.__name__)
             return
-        process_command(message.attrib['path'][1:], message.attrib)
+        companion.process_command(message.attrib['path'][1:], message.attrib)
 
-    # Path in thread_methods
+    # Path in utils.thread_methods
     def stop(self):
         self.thread_stopped = True
 

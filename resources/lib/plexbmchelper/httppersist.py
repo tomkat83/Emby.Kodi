@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import httplib
 import traceback
@@ -7,7 +10,7 @@ from socket import error as socket_error
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.httppersist')
 
 ###############################################################################
 

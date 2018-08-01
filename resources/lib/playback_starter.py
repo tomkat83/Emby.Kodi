@@ -1,19 +1,20 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from threading import Thread
 from urlparse import parse_qsl
 
-import playback
-from context_entry import ContextMenu
-import state
-import json_rpc as js
-from pickler import pickle_me, Playback_Successful
-import kodidb_functions as kodidb
+from . import playback
+from . import context_entry
+from . import json_rpc as js
+from . import pickler
+from . import kodidb_functions as kodidb
+from . import state
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.playback_starter')
 
 ###############################################################################
 
@@ -29,7 +30,7 @@ class PlaybackStarter(Thread):
         except ValueError:
             # E.g. other add-ons scanning for Extras folder
             LOG.debug('Detected 3rd party add-on call - ignoring')
-            pickle_me(Playback_Successful())
+            pickler.pickle_me(pickler.Playback_Successful())
             return
         params = dict(parse_qsl(params))
         mode = params.get('mode')
@@ -54,10 +55,10 @@ class PlaybackStarter(Thread):
             else:
                 LOG.error('Could not find tv show id for %s', item)
             if resolve:
-                pickle_me(Playback_Successful())
+                pickler.pickle_me(pickler.Playback_Successful())
         elif mode == 'context_menu':
-            ContextMenu(kodi_id=params.get('kodi_id'),
-                        kodi_type=params.get('kodi_type'))
+            context_entry.ContextMenu(kodi_id=params.get('kodi_id'),
+                                      kodi_type=params.get('kodi_type'))
 
     def run(self):
         queue = state.COMMAND_PIPELINE_QUEUE

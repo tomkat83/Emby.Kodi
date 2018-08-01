@@ -1,35 +1,65 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 The Plex Companion master python file
 """
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from threading import Thread
 from Queue import Empty
 from socket import SHUT_RDWR
 from urllib import urlencode
-
 from xbmc import sleep, executebuiltin, Player
 
-from utils import settings, thread_methods, language as lang, dialog
-from plexbmchelper import listener, plexgdm, subscribers, httppersist
-from plexbmchelper.subscribers import LOCKER
-from PlexFunctions import ParseContainerKey, GetPlexMetadata, DownloadChunks
-from PlexAPI import API
-from playlist_func import get_pms_playqueue, get_plextype_from_xml, \
-    get_playlist_details_from_xml
-from playback import playback_triage, play_xml
-import json_rpc as js
-import variables as v
-import state
-import playqueue as PQ
+from .plexbmchelper import listener, plexgdm, subscribers, httppersist
+from .plex_api import API
+from . import utils
+from . import plex_functions as PF
+from . import playlist_func as PL
+from . import playback
+from . import json_rpc as js
+from . import playqueue as PQ
+from . import variables as v
+from . import state
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.plex_companion')
 
 ###############################################################################
 
 
-@thread_methods(add_suspends=['PMS_STATUS'])
+def update_playqueue_from_PMS(playqueue,
+                              playqueue_id=None,
+                              repeat=None,
+                              offset=None,
+                              transient_token=None):
+    """
+    Completely updates the Kodi playqueue with the new Plex playqueue. Pass
+    in playqueue_id if we need to fetch a new playqueue
+
+    repeat = 0, 1, 2
+    offset = time offset in Plextime (milliseconds)
+    """
+    LOG.info('New playqueue %s received from Plex companion with offset '
+             '%s, repeat %s', playqueue_id, offset, repeat)
+    # Safe transient token from being deleted
+    if transient_token is None:
+        transient_token = playqueue.plex_transient_token
+    with state.LOCK_PLAYQUEUES:
+        xml = PL.get_PMS_playlist(playqueue, playqueue_id)
+        playqueue.clear()
+        try:
+            PL.get_playlist_details_from_xml(playqueue, xml)
+        except PL.PlaylistError:
+            LOG.error('Could not get playqueue ID %s', playqueue_id)
+            return
+        playqueue.repeat = 0 if not repeat else int(repeat)
+        playqueue.plex_transient_token = transient_token
+        playback.play_xml(playqueue, xml, offset)
+
+
+@utils.thread_methods(add_suspends=['PMS_STATUS'])
 class PlexCompanion(Thread):
     """
     Plex Companion monitoring class. Invoke only once
@@ -47,9 +77,8 @@ class PlexCompanion(Thread):
         self.subscription_manager = None
         Thread.__init__(self)
 
-    @LOCKER.lockthis
     def _process_alexa(self, data):
-        xml = GetPlexMetadata(data['key'])
+        xml = PF.GetPlexMetadata(data['key'])
         try:
             xml[0].attrib
         except (AttributeError, IndexError, TypeError):
@@ -62,28 +91,33 @@ class PlexCompanion(Thread):
                 api.plex_id(),
                 transient_token=data.get('token'))
         elif data['containerKey'].startswith('/playQueues/'):
-            _, container_key, _ = ParseContainerKey(data['containerKey'])
-            xml = DownloadChunks('{server}/playQueues/%s?' % container_key)
+            _, container_key, _ = PF.ParseContainerKey(data['containerKey'])
+            xml = PF.DownloadChunks('{server}/playQueues/%s?' % container_key)
             if xml is None:
                 # "Play error"
-                dialog('notification', lang(29999), lang(30128), icon='{error}')
+                utils.dialog('notification',
+                             utils.lang(29999),
+                             utils.lang(30128),
+                             icon='{error}')
                 return
             playqueue = PQ.get_playqueue_from_type(
                 v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
             playqueue.clear()
-            get_playlist_details_from_xml(playqueue, xml)
+            PL.get_playlist_details_from_xml(playqueue, xml)
             playqueue.plex_transient_token = data.get('token')
             if data.get('offset') != '0':
                 offset = float(data['offset']) / 1000.0
             else:
                 offset = None
-            play_xml(playqueue, xml, offset)
+            playback.play_xml(playqueue, xml, offset)
         else:
             state.PLEX_TRANSIENT_TOKEN = data.get('token')
             if data.get('offset') != '0':
                 state.RESUMABLE = True
                 state.RESUME_PLAYBACK = True
-            playback_triage(api.plex_id(), api.plex_type(), resolve=False)
+            playback.playback_triage(api.plex_id(),
+                                     api.plex_type(),
+                                     resolve=False)
 
     @staticmethod
     def _process_node(data):
@@ -99,17 +133,16 @@ class PlexCompanion(Thread):
         executebuiltin('RunPlugin(plugin://%s?%s)'
                        % (v.ADDON_ID, urlencode(params)))
 
-    @LOCKER.lockthis
     def _process_playlist(self, data):
         # Get the playqueue ID
-        _, container_key, query = ParseContainerKey(data['containerKey'])
+        _, container_key, query = PF.ParseContainerKey(data['containerKey'])
         try:
             playqueue = PQ.get_playqueue_from_type(
                 v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[data['type']])
         except KeyError:
             # E.g. Plex web does not supply the media type
             # Still need to figure out the type (video vs. music vs. pix)
-            xml = GetPlexMetadata(data['key'])
+            xml = PF.GetPlexMetadata(data['key'])
             try:
                 xml[0].attrib
             except (AttributeError, IndexError, TypeError):
@@ -118,14 +151,12 @@ class PlexCompanion(Thread):
             api = API(xml[0])
             playqueue = PQ.get_playqueue_from_type(
                 v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
-        PQ.update_playqueue_from_PMS(
-            playqueue,
-            playqueue_id=container_key,
-            repeat=query.get('repeat'),
-            offset=data.get('offset'),
-            transient_token=data.get('token'))
+        update_playqueue_from_PMS(playqueue,
+                                  playqueue_id=container_key,
+                                  repeat=query.get('repeat'),
+                                  offset=data.get('offset'),
+                                  transient_token=data.get('token'))
 
-    @LOCKER.lockthis
     def _process_streams(self, data):
         """
         Plex Companion client adjusted audio or subtitle stream
@@ -147,17 +178,16 @@ class PlexCompanion(Thread):
         else:
             LOG.error('Unknown setStreams command: %s', data)
 
-    @LOCKER.lockthis
     def _process_refresh(self, data):
         """
         example data: {'playQueueID': '8475', 'commandID': '11'}
         """
-        xml = get_pms_playqueue(data['playQueueID'])
+        xml = PL.get_pms_playqueue(data['playQueueID'])
         if xml is None:
             return
         if len(xml) == 0:
             LOG.debug('Empty playqueue received - clearing playqueue')
-            plex_type = get_plextype_from_xml(xml)
+            plex_type = PL.get_plextype_from_xml(xml)
             if plex_type is None:
                 return
             playqueue = PQ.get_playqueue_from_type(
@@ -166,7 +196,7 @@ class PlexCompanion(Thread):
             return
         playqueue = PQ.get_playqueue_from_type(
             v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[xml[0].attrib['type']])
-        PQ.update_playqueue_from_PMS(playqueue, data['playQueueID'])
+        update_playqueue_from_PMS(playqueue, data['playQueueID'])
 
     def _process_tasks(self, task):
         """
@@ -186,14 +216,17 @@ class PlexCompanion(Thread):
         LOG.debug('Processing: %s', task)
         data = task['data']
         if task['action'] == 'alexa':
-            self._process_alexa(data)
+            with state.LOCK_PLAYQUEUES:
+                self._process_alexa(data)
         elif (task['action'] == 'playlist' and
                 data.get('address') == 'node.plexapp.com'):
             self._process_node(data)
         elif task['action'] == 'playlist':
-            self._process_playlist(data)
+            with state.LOCK_PLAYQUEUES:
+                self._process_playlist(data)
         elif task['action'] == 'refreshPlayQueue':
-            self._process_refresh(data)
+            with state.LOCK_PLAYQUEUES:
+                self._process_refresh(data)
         elif task['action'] == 'setStreams':
             try:
                 self._process_streams(data)
@@ -231,7 +264,7 @@ class PlexCompanion(Thread):
                                                            self.player)
         self.subscription_manager = subscription_manager
 
-        if settings('plexCompanion') == 'true':
+        if utils.settings('plexCompanion') == 'true':
             # Start up httpd
             start_count = 0
             while True:

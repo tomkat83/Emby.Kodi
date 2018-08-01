@@ -1,24 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Plex Companion listener
 """
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from re import sub
 from SocketServer import ThreadingMixIn
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from urlparse import urlparse, parse_qs
+import xbmc
 
-from xbmc import sleep, Player, Monitor
-
-from companion import process_command
-import json_rpc as js
-from clientinfo import getXArgsDeviceInfo
-import variables as v
+from .. import companion
+from .. import json_rpc as js
+from .. import clientinfo
+from .. import variables as v
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
-PLAYER = Player()
-MONITOR = Monitor()
+LOG = getLogger('PLEX.listener')
+PLAYER = xbmc.Player()
+MONITOR = xbmc.Monitor()
 
 # Hack we need in order to keep track of the open connections from Plex Web
 CLIENT_DICT = {}
@@ -122,7 +124,7 @@ class MyHandler(BaseHTTPRequestHandler):
                 RESOURCES_XML.format(
                     title=v.DEVICENAME,
                     machineIdentifier=v.PKC_MACHINE_IDENTIFIER),
-                getXArgsDeviceInfo(include_token=False))
+                clientinfo.getXArgsDeviceInfo(include_token=False))
         elif request_path == 'player/timeline/poll':
             # Plex web does polling if connected to PKC via Companion
             # Only reply if there is indeed something playing
@@ -188,7 +190,7 @@ class MyHandler(BaseHTTPRequestHandler):
                     code=500)
         elif "/subscribe" in request_path:
             self.response(v.COMPANION_OK_MESSAGE,
-                          getXArgsDeviceInfo(include_token=False))
+                          clientinfo.getXArgsDeviceInfo(include_token=False))
             protocol = params.get('protocol')
             host = self.client_address[0]
             port = params.get('port')
@@ -201,14 +203,14 @@ class MyHandler(BaseHTTPRequestHandler):
                                    command_id)
         elif "/unsubscribe" in request_path:
             self.response(v.COMPANION_OK_MESSAGE,
-                          getXArgsDeviceInfo(include_token=False))
+                          clientinfo.getXArgsDeviceInfo(include_token=False))
             uuid = self.headers.get('X-Plex-Client-Identifier') \
                 or self.client_address[0]
             sub_mgr.remove_subscriber(uuid)
         else:
             # Throw it to companion.py
-            process_command(request_path, params)
-            self.response('', getXArgsDeviceInfo(include_token=False))
+            companion.process_command(request_path, params)
+            self.response('', clientinfo.getXArgsDeviceInfo(include_token=False))
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):

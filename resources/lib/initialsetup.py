@@ -1,30 +1,34 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from Queue import Queue
 import xml.etree.ElementTree as etree
 
 from xbmc import executebuiltin, translatePath
 
-from utils import settings, window, language as lang, try_decode, dialog, \
-    XmlKodiSetting, reboot_kodi
-from migration import check_migration
-from downloadutils import DownloadUtils as DU
-from userclient import UserClient
-from clientinfo import getDeviceId
-import PlexFunctions as PF
-import plex_tv
-import json_rpc as js
-import playqueue as PQ
-from videonodes import VideoNodes
-import state
-import variables as v
+from . import utils
+from . import path_ops
+from . import migration
+from .downloadutils import DownloadUtils as DU
+from . import videonodes
+from . import userclient
+from . import clientinfo
+from . import plex_functions as PF
+from . import plex_tv
+from . import json_rpc as js
+from . import playqueue as PQ
+from . import state
+from . import variables as v
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.initialsetup')
 
 ###############################################################################
+
+if not path_ops.exists(v.EXTERNAL_SUBTITLE_TEMP_PATH):
+    path_ops.makedirs(v.EXTERNAL_SUBTITLE_TEMP_PATH)
 
 
 WINDOW_PROPERTIES = (
@@ -48,27 +52,28 @@ def reload_pkc():
     reload(state)
     # Reset window props
     for prop in WINDOW_PROPERTIES:
-        window(prop, clear=True)
+        utils.window(prop, clear=True)
     # Clear video nodes properties
-    VideoNodes().clearProperties()
+    videonodes.VideoNodes().clearProperties()
 
     # Initializing
-    state.VERIFY_SSL_CERT = settings('sslverify') == 'true'
-    state.SSL_CERT_PATH = settings('sslcert') \
-        if settings('sslcert') != 'None' else None
-    state.FULL_SYNC_INTERVALL = int(settings('fullSyncInterval')) * 60
-    state.SYNC_THREAD_NUMBER = int(settings('syncThreadNumber'))
-    state.SYNC_DIALOG = settings('dbSyncIndicator') == 'true'
-    state.ENABLE_MUSIC = settings('enableMusic') == 'true'
-    state.BACKGROUND_SYNC_DISABLED = settings(
+    state.VERIFY_SSL_CERT = utils.settings('sslverify') == 'true'
+    state.SSL_CERT_PATH = utils.settings('sslcert') \
+        if utils.settings('sslcert') != 'None' else None
+    state.FULL_SYNC_INTERVALL = int(utils.settings('fullSyncInterval')) * 60
+    state.SYNC_THREAD_NUMBER = int(utils.settings('syncThreadNumber'))
+    state.SYNC_DIALOG = utils.settings('dbSyncIndicator') == 'true'
+    state.ENABLE_MUSIC = utils.settings('enableMusic') == 'true'
+    state.BACKGROUND_SYNC_DISABLED = utils.settings(
         'enableBackgroundSync') == 'false'
     state.BACKGROUNDSYNC_SAFTYMARGIN = int(
-        settings('backgroundsync_saftyMargin'))
-    state.REPLACE_SMB_PATH = settings('replaceSMB') == 'true'
-    state.REMAP_PATH = settings('remapSMB') == 'true'
-    state.KODI_PLEX_TIME_OFFSET = float(settings('kodiplextimeoffset'))
-    state.FETCH_PMS_ITEM_NUMBER = settings('fetch_pms_item_number')
-    state.FORCE_RELOAD_SKIN = settings('forceReloadSkinOnPlaybackStop') == 'true'
+        utils.settings('backgroundsync_saftyMargin'))
+    state.REPLACE_SMB_PATH = utils.settings('replaceSMB') == 'true'
+    state.REMAP_PATH = utils.settings('remapSMB') == 'true'
+    state.KODI_PLEX_TIME_OFFSET = float(utils.settings('kodiplextimeoffset'))
+    state.FETCH_PMS_ITEM_NUMBER = utils.settings('fetch_pms_item_number')
+    state.FORCE_RELOAD_SKIN = \
+        utils.settings('forceReloadSkinOnPlaybackStop') == 'true'
     # Init some Queues()
     state.COMMAND_PIPELINE_QUEUE = Queue()
     state.COMPANION_QUEUE = Queue(maxsize=100)
@@ -76,9 +81,9 @@ def reload_pkc():
     set_replace_paths()
     set_webserver()
     # To detect Kodi profile switches
-    window('plex_kodiProfile',
-           value=try_decode(translatePath("special://profile")))
-    getDeviceId()
+    utils.window('plex_kodiProfile',
+                 value=utils.try_decode(translatePath("special://profile")))
+    clientinfo.getDeviceId()
     # Initialize the PKC playqueues
     PQ.init_playqueues()
     LOG.info('Done (re-)loading PKC settings')
@@ -92,7 +97,7 @@ def set_replace_paths():
     for typus in v.REMAP_TYPE_FROM_PLEXTYPE.values():
         for arg in ('Org', 'New'):
             key = 'remapSMB%s%s' % (typus, arg)
-            value = settings(key)
+            value = utils.settings(key)
             if '://' in value:
                 protocol = value.split('://', 1)[0]
                 value = value.replace(protocol, protocol.lower())
@@ -129,8 +134,8 @@ def _write_pms_settings(url, token):
     for entry in xml:
         if entry.attrib.get('id', '') == 'allowMediaDeletion':
             value = 'true' if entry.get('value', '1') == '1' else 'false'
-            settings('plex_allows_mediaDeletion', value=value)
-            window('plex_allows_mediaDeletion', value=value)
+            utils.settings('plex_allows_mediaDeletion', value=value)
+            utils.window('plex_allows_mediaDeletion', value=value)
 
 
 class InitialSetup(object):
@@ -140,8 +145,8 @@ class InitialSetup(object):
     """
     def __init__(self):
         LOG.debug('Entering initialsetup class')
-        self.server = UserClient().get_server()
-        self.serverid = settings('plex_machineIdentifier')
+        self.server = userclient.UserClient().get_server()
+        self.serverid = utils.settings('plex_machineIdentifier')
         # Get Plex credentials from settings file, if they exist
         plexdict = PF.GetPlexLoginFromSettings()
         self.myplexlogin = plexdict['myplexlogin'] == 'true'
@@ -149,7 +154,7 @@ class InitialSetup(object):
         self.plex_token = plexdict['plexToken']
         self.plexid = plexdict['plexid']
         # Token for the PMS, not plex.tv
-        self.pms_token = settings('accessToken')
+        self.pms_token = utils.settings('accessToken')
         if self.plex_token:
             LOG.debug('Found a plex.tv token in the settings')
 
@@ -179,20 +184,20 @@ class InitialSetup(object):
             # HTTP Error: unauthorized. Token is no longer valid
             LOG.info('plex.tv connection returned HTTP %s', str(chk))
             # Delete token in the settings
-            settings('plexToken', value='')
-            settings('plexLogin', value='')
+            utils.settings('plexToken', value='')
+            utils.settings('plexLogin', value='')
             # Could not login, please try again
-            dialog('ok', lang(29999), lang(39009))
+            utils.dialog('ok', utils.lang(29999), utils.lang(39009))
             answer = self.plex_tv_sign_in()
         elif chk is False or chk >= 400:
             # Problems connecting to plex.tv. Network or internet issue?
             LOG.info('Problems connecting to plex.tv; connection returned '
                      'HTTP %s', str(chk))
-            dialog('ok', lang(29999), lang(39010))
+            utils.dialog('ok', utils.lang(29999), utils.lang(39010))
             answer = False
         else:
             LOG.info('plex.tv connection with token successful')
-            settings('plex_status', value=lang(39227))
+            utils.settings('plex_status', value=utils.lang(39227))
             # Refresh the info from Plex.tv
             xml = DU().downloadUrl('https://plex.tv/users/account',
                                    authenticate=False,
@@ -202,11 +207,12 @@ class InitialSetup(object):
             except (AttributeError, KeyError):
                 LOG.error('Failed to update Plex info from plex.tv')
             else:
-                settings('plexLogin', value=self.plex_login)
+                utils.settings('plexLogin', value=self.plex_login)
                 home = 'true' if xml.attrib.get('home') == '1' else 'false'
-                settings('plexhome', value=home)
-                settings('plexAvatar', value=xml.attrib.get('thumb'))
-                settings('plexHomeSize', value=xml.attrib.get('homeSize', '1'))
+                utils.settings('plexhome', value=home)
+                utils.settings('plexAvatar', value=xml.attrib.get('thumb'))
+                utils.settings('plexHomeSize',
+                               value=xml.attrib.get('homeSize', '1'))
                 LOG.info('Updated Plex info from plex.tv')
         return answer
 
@@ -233,7 +239,7 @@ class InitialSetup(object):
                 LOG.warn('Could not retrieve machineIdentifier')
                 answer = False
             else:
-                settings('plex_machineIdentifier', value=self.serverid)
+                utils.settings('plex_machineIdentifier', value=self.serverid)
         elif answer is True:
             temp_server_id = PF.GetMachineIdentifier(self.server)
             if temp_server_id != self.serverid:
@@ -325,7 +331,7 @@ class InitialSetup(object):
                     if item.get('machineIdentifier') == self.serverid:
                         server = item
                 if server is None:
-                    name = settings('plex_servername')
+                    name = utils.settings('plex_servername')
                     LOG.warn('The PMS you have used before with a unique '
                              'machineIdentifier of %s and name %s is '
                              'offline', self.serverid, name)
@@ -356,18 +362,18 @@ class InitialSetup(object):
         """
         https_updated = False
         # Searching for PMS
-        dialog('notification',
-               heading='{plex}',
-               message=lang(30001),
-               icon='{plex}',
-               time=5000)
+        utils.dialog('notification',
+                     heading='{plex}',
+                     message=utils.lang(30001),
+                     icon='{plex}',
+                     time=5000)
         while True:
             if https_updated is False:
                 serverlist = PF.discover_pms(self.plex_token)
                 # Exit if no servers found
                 if not serverlist:
                     LOG.warn('No plex media servers found!')
-                    dialog('ok', lang(29999), lang(39011))
+                    utils.dialog('ok', utils.lang(29999), utils.lang(39011))
                     return
                 # Get a nicer list
                 dialoglist = []
@@ -375,10 +381,10 @@ class InitialSetup(object):
                     if server['local']:
                         # server is in the same network as client.
                         # Add"local"
-                        msg = lang(39022)
+                        msg = utils.lang(39022)
                     else:
                         # Add 'remote'
-                        msg = lang(39054)
+                        msg = utils.lang(39054)
                     if server.get('ownername'):
                         # Display username if its not our PMS
                         dialoglist.append('%s (%s, %s)'
@@ -389,7 +395,7 @@ class InitialSetup(object):
                         dialoglist.append('%s (%s)'
                                           % (server['name'], msg))
                 # Let user pick server from a list
-                resp = dialog('select', lang(39012), dialoglist)
+                resp = utils.dialog('select', utils.lang(39012), dialoglist)
                 if resp == -1:
                     # User cancelled
                     return
@@ -406,17 +412,19 @@ class InitialSetup(object):
                 LOG.warn('Not yet authorized for Plex server %s',
                          server['name'])
                 # Please sign in to plex.tv
-                dialog('ok',
-                       lang(29999),
-                       lang(39013) + server['name'],
-                       lang(39014))
+                utils.dialog('ok',
+                             utils.lang(29999),
+                             utils.lang(39013) + server['name'],
+                             utils.lang(39014))
                 if self.plex_tv_sign_in() is False:
                     # Exit while loop if user cancels
                     return
             # Problems connecting
             elif chk >= 400 or chk is False:
                 # Problems connecting to server. Pick another server?
-                answ = dialog('yesno', lang(29999), lang(39015))
+                answ = utils.dialog('yesno',
+                                    utils.lang(29999),
+                                    utils.lang(39015))
                 # Exit while loop if user chooses No
                 if not answ:
                     return
@@ -429,30 +437,31 @@ class InitialSetup(object):
         """
         Saves server to file settings
         """
-        settings('plex_machineIdentifier', server['machineIdentifier'])
-        settings('plex_servername', server['name'])
-        settings('plex_serverowned', 'true' if server['owned'] else 'false')
+        utils.settings('plex_machineIdentifier', server['machineIdentifier'])
+        utils.settings('plex_servername', server['name'])
+        utils.settings('plex_serverowned',
+                       'true' if server['owned'] else 'false')
         # Careful to distinguish local from remote PMS
         if server['local']:
             scheme = server['scheme']
-            settings('ipaddress', server['ip'])
-            settings('port', server['port'])
+            utils.settings('ipaddress', server['ip'])
+            utils.settings('port', server['port'])
             LOG.debug("Setting SSL verify to false, because server is "
                       "local")
-            settings('sslverify', 'false')
+            utils.settings('sslverify', 'false')
         else:
             baseURL = server['baseURL'].split(':')
             scheme = baseURL[0]
-            settings('ipaddress', baseURL[1].replace('//', ''))
-            settings('port', baseURL[2])
+            utils.settings('ipaddress', baseURL[1].replace('//', ''))
+            utils.settings('port', baseURL[2])
             LOG.debug("Setting SSL verify to true, because server is not "
                       "local")
-            settings('sslverify', 'true')
+            utils.settings('sslverify', 'true')
 
         if scheme == 'https':
-            settings('https', 'true')
+            utils.settings('https', 'true')
         else:
-            settings('https', 'false')
+            utils.settings('https', 'false')
         # And finally do some logging
         LOG.debug("Writing to Kodi user settings file")
         LOG.debug("PMS machineIdentifier: %s, ip: %s, port: %s, https: %s ",
@@ -468,9 +477,9 @@ class InitialSetup(object):
         """
         LOG.info("Initial setup called.")
         try:
-            with XmlKodiSetting('advancedsettings.xml',
-                                force_create=True,
-                                top_element='advancedsettings') as xml:
+            with utils.XmlKodiSetting('advancedsettings.xml',
+                                      force_create=True,
+                                      top_element='advancedsettings') as xml:
                 # Get current Kodi video cache setting
                 cache = xml.get_setting(['cache', 'memorysize'])
                 # Disable foreground "Loading media information from files"
@@ -493,13 +502,13 @@ class InitialSetup(object):
         # Kodi default cache if no setting is set
         cache = str(cache.text) if cache is not None else '20971520'
         LOG.info('Current Kodi video memory cache in bytes: %s', cache)
-        settings('kodi_video_cache', value=cache)
+        utils.settings('kodi_video_cache', value=cache)
 
         # Hack to make PKC Kodi master lock compatible
         try:
-            with XmlKodiSetting('sources.xml',
-                                force_create=True,
-                                top_element='sources') as xml:
+            with utils.XmlKodiSetting('sources.xml',
+                                      force_create=True,
+                                      top_element='sources') as xml:
                 root = xml.set_setting(['video'])
                 count = 2
                 for source in root.findall('.//path'):
@@ -526,21 +535,21 @@ class InitialSetup(object):
             pass
 
         # Do we need to migrate stuff?
-        check_migration()
+        migration.check_migration()
         # Reload the server IP cause we might've deleted it during migration
-        self.server = UserClient().get_server()
+        self.server = userclient.UserClient().get_server()
 
         # Display a warning if Kodi puts ALL movies into the queue, basically
         # breaking playback reporting for PKC
         if js.settings_getsettingvalue('videoplayer.autoplaynextitem'):
             LOG.warn('Kodi setting videoplayer.autoplaynextitem is enabled!')
-            if settings('warned_setting_videoplayer.autoplaynextitem') == 'false':
+            if utils.settings('warned_setting_videoplayer.autoplaynextitem') == 'false':
                 # Only warn once
-                settings('warned_setting_videoplayer.autoplaynextitem',
-                         value='true')
+                utils.settings('warned_setting_videoplayer.autoplaynextitem',
+                               value='true')
                 # Warning: Kodi setting "Play next video automatically" is
                 # enabled. This could break PKC. Deactivate?
-                if dialog('yesno', lang(29999), lang(30003)):
+                if utils.dialog('yesno', utils.lang(29999), utils.lang(30003)):
                     js.settings_setsettingvalue('videoplayer.autoplaynextitem',
                                                 False)
         # Set any video library updates to happen in the background in order to
@@ -556,7 +565,7 @@ class InitialSetup(object):
                          self.server, self.serverid)
                 _write_pms_settings(self.server, self.pms_token)
                 if reboot is True:
-                    reboot_kodi()
+                    utils.reboot_kodi()
                 return
 
         # If not already retrieved myplex info, optionally let user sign in
@@ -570,78 +579,90 @@ class InitialSetup(object):
             self.write_pms_to_settings(server)
 
         # User already answered the installation questions
-        if settings('InstallQuestionsAnswered') == 'true':
+        if utils.settings('InstallQuestionsAnswered') == 'true':
             if reboot is True:
-                reboot_kodi()
+                utils.reboot_kodi()
             return
 
         # Additional settings where the user needs to choose
         # Direct paths (\\NAS\mymovie.mkv) or addon (http)?
         goto_settings = False
-        if dialog('yesno',
-                  lang(29999),
-                  lang(39027),
-                  lang(39028),
-                  nolabel="Addon (Default)",
-                  yeslabel="Native (Direct Paths)"):
+        if utils.dialog('yesno',
+                        utils.lang(29999),
+                        utils.lang(39027),
+                        utils.lang(39028),
+                        nolabel="Addon (Default)",
+                        yeslabel="Native (Direct Paths)"):
             LOG.debug("User opted to use direct paths.")
-            settings('useDirectPaths', value="1")
+            utils.settings('useDirectPaths', value="1")
             state.DIRECT_PATHS = True
             # Are you on a system where you would like to replace paths
             # \\NAS\mymovie.mkv with smb://NAS/mymovie.mkv? (e.g. Windows)
-            if dialog('yesno', heading=lang(29999), line1=lang(39033)):
+            if utils.dialog('yesno',
+                            heading=utils.lang(29999),
+                            line1=utils.lang(39033)):
                 LOG.debug("User chose to replace paths with smb")
             else:
-                settings('replaceSMB', value="false")
+                utils.settings('replaceSMB', value="false")
 
             # complete replace all original Plex library paths with custom SMB
-            if dialog('yesno', heading=lang(29999), line1=lang(39043)):
+            if utils.dialog('yesno',
+                            heading=utils.lang(29999),
+                            line1=utils.lang(39043)):
                 LOG.debug("User chose custom smb paths")
-                settings('remapSMB', value="true")
+                utils.settings('remapSMB', value="true")
                 # Please enter your custom smb paths in the settings under
                 # "Sync Options" and then restart Kodi
-                dialog('ok', heading=lang(29999), line1=lang(39044))
+                utils.dialog('ok',
+                             heading=utils.lang(29999),
+                             line1=utils.lang(39044))
                 goto_settings = True
 
             # Go to network credentials?
-            if dialog('yesno',
-                      heading=lang(29999),
-                      line1=lang(39029),
-                      line2=lang(39030)):
+            if utils.dialog('yesno',
+                            heading=utils.lang(29999),
+                            line1=utils.lang(39029),
+                            line2=utils.lang(39030)):
                 LOG.debug("Presenting network credentials dialog.")
-                from utils import passwords_xml
-                passwords_xml()
+                utils.passwords_xml()
         # Disable Plex music?
-        if dialog('yesno', heading=lang(29999), line1=lang(39016)):
+        if utils.dialog('yesno',
+                        heading=utils.lang(29999),
+                        line1=utils.lang(39016)):
             LOG.debug("User opted to disable Plex music library.")
-            settings('enableMusic', value="false")
+            utils.settings('enableMusic', value="false")
 
         # Download additional art from FanArtTV
-        if dialog('yesno', heading=lang(29999), line1=lang(39061)):
+        if utils.dialog('yesno',
+                        heading=utils.lang(29999),
+                        line1=utils.lang(39061)):
             LOG.debug("User opted to use FanArtTV")
-            settings('FanartTV', value="true")
+            utils.settings('FanartTV', value="true")
         # Do you want to replace your custom user ratings with an indicator of
         # how many versions of a media item you posses?
-        if dialog('yesno', heading=lang(29999), line1=lang(39718)):
+        if utils.dialog('yesno',
+                        heading=utils.lang(29999),
+                        line1=utils.lang(39718)):
             LOG.debug("User opted to replace user ratings with version number")
-            settings('indicate_media_versions', value="true")
+            utils.settings('indicate_media_versions', value="true")
 
         # If you use several Plex libraries of one kind, e.g. "Kids Movies" and
         # "Parents Movies", be sure to check https://goo.gl/JFtQV9
-        # dialog.ok(heading=lang(29999), line1=lang(39076))
+        # dialog.ok(heading=utils.lang(29999), line1=utils.lang(39076))
 
         # Need to tell about our image source for collections: themoviedb.org
-        # dialog.ok(heading=lang(29999), line1=lang(39717))
+        # dialog.ok(heading=utils.lang(29999), line1=utils.lang(39717))
         # Make sure that we only ask these questions upon first installation
-        settings('InstallQuestionsAnswered', value='true')
+        utils.settings('InstallQuestionsAnswered', value='true')
 
         if goto_settings is False:
             # Open Settings page now? You will need to restart!
-            goto_settings = dialog('yesno',
-                                   heading=lang(29999),
-                                   line1=lang(39017))
+            goto_settings = utils.dialog('yesno',
+                                         heading=utils.lang(29999),
+                                         line1=utils.lang(39017))
         if goto_settings:
             state.PMS_STATUS = 'Stop'
-            executebuiltin('Addon.OpenSettings(plugin.video.plexkodiconnect)')
+            executebuiltin(
+                'Addon.Openutils.settings(plugin.video.plexkodiconnect)')
         elif reboot is True:
-            reboot_kodi()
+            utils.reboot_kodi()

@@ -1,14 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import xml.etree.ElementTree as etree
 import requests
 
-from utils import window, language as lang, dialog
-import clientinfo as client
-
-import state
+from . import utils
+from . import clientinfo
+from . import state
 
 ###############################################################################
 
@@ -16,7 +15,7 @@ import state
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.downloadutils')
 
 ###############################################################################
 
@@ -75,22 +74,22 @@ class DownloadUtils():
         # Start session
         self.s = requests.Session()
 
-        self.deviceId = client.getDeviceId()
+        self.deviceId = clientinfo.getDeviceId()
         # Attach authenticated header to the session
-        self.s.headers = client.getXArgsDeviceInfo()
+        self.s.headers = clientinfo.getXArgsDeviceInfo()
         self.s.encoding = 'utf-8'
         # Set SSL settings
         self.setSSL()
 
         # Set other stuff
-        self.setServer(window('pms_server'))
+        self.setServer(utils.window('pms_server'))
 
         # Counters to declare PMS dead or unauthorized
         # Use window variables because start of movies will be called with a
         # new plugin instance - it's impossible to share data otherwise
         if reset is True:
-            window('countUnauthorized', value='0')
-            window('countError', value='0')
+            utils.window('countUnauthorized', value='0')
+            utils.window('countError', value='0')
 
         # Retry connections to the server
         self.s.mount("http://", requests.adapters.HTTPAdapter(max_retries=1))
@@ -110,7 +109,7 @@ class DownloadUtils():
         LOG.info('Request session stopped')
 
     def getHeader(self, options=None):
-        header = client.getXArgsDeviceInfo()
+        header = clientinfo.getXArgsDeviceInfo()
         if options is not None:
             header.update(options)
         return header
@@ -227,9 +226,9 @@ class DownloadUtils():
         else:
             # We COULD contact the PMS, hence it ain't dead
             if authenticate is True:
-                window('countError', value='0')
+                utils.window('countError', value='0')
                 if r.status_code != 401:
-                    window('countUnauthorized', value='0')
+                    utils.window('countUnauthorized', value='0')
 
             if r.status_code == 204:
                 # No body in the response
@@ -247,9 +246,10 @@ class DownloadUtils():
                 LOG.info(r.text)
                 if '401 Unauthorized' in r.text:
                     # Truly unauthorized
-                    window('countUnauthorized',
-                           value=str(int(window('countUnauthorized')) + 1))
-                    if (int(window('countUnauthorized')) >=
+                    utils.window(
+                        'countUnauthorized',
+                        value=str(int(utils.window('countUnauthorized')) + 1))
+                    if (int(utils.window('countUnauthorized')) >=
                             self.unauthorizedAttempts):
                         LOG.warn('We seem to be truly unauthorized for PMS'
                                  ' %s ', url)
@@ -258,11 +258,11 @@ class DownloadUtils():
                             LOG.debug('Setting PMS server status to '
                                       'unauthorized')
                             state.PMS_STATUS = '401'
-                            window('plex_serverStatus', value="401")
-                            dialog('notification',
-                                   lang(29999),
-                                   lang(30017),
-                                   icon='{error}')
+                            utils.window('plex_serverStatus', value="401")
+                            utils.dialog('notification',
+                                         utils.lang(29999),
+                                         utils.lang(30017),
+                                         icon='{error}')
                 else:
                     # there might be other 401 where e.g. PMS under strain
                     LOG.info('PMS might only be under strain')
@@ -312,12 +312,12 @@ class DownloadUtils():
         if authenticate is True:
             # Make the addon aware of status
             try:
-                window('countError',
-                       value=str(int(window('countError')) + 1))
-                if int(window('countError')) >= self.connectionAttempts:
+                utils.window('countError',
+                             value=str(int(utils.window('countError')) + 1))
+                if int(utils.window('countError')) >= self.connectionAttempts:
                     LOG.warn('Failed to connect to %s too many times. '
                              'Declare PMS dead', url)
-                    window('plex_online', value="false")
+                    utils.window('plex_online', value="false")
             except ValueError:
                 # 'countError' not yet set
                 pass

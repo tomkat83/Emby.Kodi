@@ -1,19 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Processes Plex companion inputs from the plexbmchelper to Kodi commands
 """
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-
 from xbmc import Player
 
-from variables import ALEXA_TO_COMPANION
-import playqueue as PQ
-from PlexFunctions import GetPlexKeyNumber
-import json_rpc as js
-import state
+from . import playqueue as PQ
+from . import plex_functions as PF
+from . import json_rpc as js
+from . import variables as v
+from . import state
 
 ###############################################################################
 
-LOG = getLogger("PLEX." + __name__)
+LOG = getLogger('PLEX.companion')
 
 ###############################################################################
 
@@ -25,7 +27,7 @@ def skip_to(params):
     Does not seem to be implemented yet by Plex!
     """
     playqueue_item_id = params.get('playQueueItemID')
-    _, plex_id = GetPlexKeyNumber(params.get('key'))
+    _, plex_id = PF.GetPlexKeyNumber(params.get('key'))
     LOG.debug('Skipping to playQueueItemID %s, plex_id %s',
               playqueue_item_id, plex_id)
     found = True
@@ -51,8 +53,8 @@ def convert_alexa_to_companion(dictionary):
     The params passed by Alexa must first be converted to Companion talk
     """
     for key in dictionary:
-        if key in ALEXA_TO_COMPANION:
-            dictionary[ALEXA_TO_COMPANION[key]] = dictionary[key]
+        if key in v.ALEXA_TO_COMPANION:
+            dictionary[v.ALEXA_TO_COMPANION[key]] = dictionary[key]
             del dictionary[key]
 
 
