@@ -652,7 +652,7 @@ def get_PMS_playlist(playlist, playlist_id=None):
     if playlist.kind == 'playList':
         xml = DU().downloadUrl("{server}/playlists/%s/items" % playlist_id)
     else:
-        xml = DU().downloadUrl("{server}/playqueues/%s" % playlist_id)
+        xml = DU().downloadUrl("{server}/playQueues/%s" % playlist_id)
     try:
         xml.attrib
     except AttributeError:

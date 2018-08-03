@@ -1,3 +1,6 @@
+version 2.3.2:
+- Fix casting to PKC failing
+
 version 2.3.1:
 - Fix library sync crashing due to Plex photo albums
 
