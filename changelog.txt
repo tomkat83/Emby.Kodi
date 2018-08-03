@@ -1,3 +1,6 @@
+version 2.3.1:
+- Fix library sync crashing due to Plex photo albums
+
 version 2.3.0:
 Major stable version bump. Highlights:
 - Sync Plex playlists to Kodi and Kodi playlists to Plex!

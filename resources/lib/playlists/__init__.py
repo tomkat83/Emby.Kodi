@@ -237,8 +237,6 @@ def sync_plex_playlist(plex_id=None, xml=None, playlist=None):
 
     Pass in either the plex_id or an xml (where API(xml) will be used)
     """
-    if not state.SYNC_SPECIFIC_PLEX_PLAYLISTS:
-        return True
     if playlist:
         # Mainly once we DELETED a Plex playlist that we're NOT supposed
         # to sync
@@ -254,8 +252,13 @@ def sync_plex_playlist(plex_id=None, xml=None, playlist=None):
             api = API(xml[0])
         else:
             api = API(xml)
+        if api.playlist_type() == v.PLEX_TYPE_PHOTO_PLAYLIST:
+            # Not supported by Kodi
+            return False
         name = api.title()
         typus = v.KODI_PLAYLIST_TYPE_FROM_PLEX[api.playlist_type()]
+    if not state.SYNC_SPECIFIC_PLEX_PLAYLISTS:
+        return True
     if (not state.ENABLE_MUSIC and typus == v.PLEX_PLAYLIST_TYPE_AUDIO):
         LOG.debug('Not synching Plex audio playlist')
         return False
