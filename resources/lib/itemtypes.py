@@ -207,11 +207,7 @@ class Movies(Items):
             studio = studios[0]
         except IndexError:
             studio = None
-
-        trailer = api.trailer_id()
-        if trailer:
-            trailer = ('plugin://%s.movies/?plex_id=%s&plex_type=%s&mode=play'
-                       % (v.ADDON_ID, trailer, v.PLEX_TYPE_CLIP))
+        trailer = api.trailers()
 
         # GET THE FILE AND PATH #####
         do_indirect = not state.DIRECT_PATHS

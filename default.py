@@ -6,7 +6,7 @@ import logging
 from sys import argv
 from urlparse import parse_qsl
 from xbmc import sleep, executebuiltin
-from xbmcgui import ListItem
+from xbmcgui import ListItem, getCurrentWindowId
 from xbmcplugin import setResolvedUrl
 
 from resources.lib import entrypoint, utils, pickler, pkc_listitem, \
@@ -68,6 +68,16 @@ class Main():
 
         elif mode == 'channels':
             entrypoint.channels()
+
+        elif mode == 'route_to_extras':
+            # Hack so we can store this path in the Kodi DB
+            handle = ('plugin://%s?mode=extras&plex_id=%s'
+                      % (v.ADDON_ID, params.get('plex_id')))
+            if getCurrentWindowId() == 10025:
+                # Video Window
+                executebuiltin('Container.Update(\"%s\")' % handle)
+            else:
+                executebuiltin('ActivateWindow(videos, \"%s\")' % handle)
 
         elif mode == 'extras':
             entrypoint.extras(plex_id=params.get('plex_id'))

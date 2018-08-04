@@ -1,3 +1,6 @@
+version 2.3.3:
+- Choose trailer if several are present (DB reset required)
+
 version 2.3.2:
 - Fix casting to PKC failing
 

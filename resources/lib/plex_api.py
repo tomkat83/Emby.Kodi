@@ -728,10 +728,13 @@ class API(object):
                 answ.append(extra)
         return answ
 
-    def trailer_id(self):
+    def trailers(self):
         """
-        Returns the ratingKey (plex_id) of the trailer or None
+        Returns the URL for a single trailer, an addon path for extras
+        (route_to_extras) if several trailers are present. Or None
         """
+        url = None
+        number = 0
         for extras in self.item.iterfind('Extras'):
             for extra in extras:
                 try:
@@ -740,7 +743,16 @@ class API(object):
                     typus = None
                 if typus != 1:
                     continue
-                return extra.get('ratingKey')
+                number += 1
+                url = extra.get('ratingKey')
+        if number > 1:
+            # Several trailers present. Hence let the user choose
+            url = ('plugin://%s?mode=route_to_extras&plex_id=%s'
+                   % (v.ADDON_ID, self.plex_id()))
+        elif url:
+            url = ('plugin://%s.movies/?plex_id=%s&plex_type=%s&mode=play'
+                   % (v.ADDON_ID, url, v.PLEX_TYPE_CLIP))
+        return url
 
     def mediastreams(self):
         """
