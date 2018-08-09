@@ -48,6 +48,8 @@ KODI_PROFILE = try_decode(xbmc.translatePath("special://profile"))
 
 if xbmc.getCondVisibility('system.platform.osx'):
     PLATFORM = "MacOSX"
+elif xbmc.getCondVisibility("system.platform.uwp"):
+    PLATFORM = "Microsoft UWP"
 elif xbmc.getCondVisibility('system.platform.atv2'):
     PLATFORM = "AppleTV2"
 elif xbmc.getCondVisibility('system.platform.ios'):

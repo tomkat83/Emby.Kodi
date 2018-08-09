@@ -51,7 +51,6 @@ STATE_SETTINGS = {
     'forceReloadSkinOnPlaybackStop': 'FORCE_RELOAD_SKIN',
     'fetch_pms_item_number': 'FETCH_PMS_ITEM_NUMBER',
     'imageSyncNotifications': 'IMAGE_SYNC_NOTIFICATIONS',
-    'enablePlaylistSync': 'SYNC_PLAYLISTS',
     'syncSpecificPlexPlaylists': 'SYNC_SPECIFIC_PLEX_PLAYLISTS',
     'syncSpecificKodiPlaylists': 'SYNC_SPECIFIC_KODI_PLAYLISTS'
 }

@@ -20,9 +20,16 @@ from . import plex_functions as PF
 from .plex_api import API
 from .library_sync import get_metadata, process_metadata, fanart, sync_info
 from . import music
-from . import playlists
 from . import variables as v
 from . import state
+
+if (v.PLATFORM != 'Microsoft UWP' and
+        utils.settings('enablePlaylistSync') == 'true'):
+    # Xbox cannot use watchdog, a dependency for PKC playlist features
+    from . import playlists
+    PLAYLIST_SYNC_ENABLED = True
+else:
+    PLAYLIST_SYNC_ENABLED = False
 
 ###############################################################################
 
@@ -265,7 +272,7 @@ class LibrarySync(Thread):
                  repair)
         if not self._full_sync():
             return False
-        if not playlists.full_sync():
+        if PLAYLIST_SYNC_ENABLED and not playlists.full_sync():
             return False
         return True
 
@@ -1186,7 +1193,7 @@ class LibrarySync(Thread):
                 continue
             status = int(item['state'])
             if typus == 'playlist':
-                if not state.SYNC_PLAYLISTS:
+                if not PLAYLIST_SYNC_ENABLED:
                     continue
                 playlists.websocket(plex_id=unicode(item['itemID']),
                                     status=status)
@@ -1560,7 +1567,8 @@ class LibrarySync(Thread):
                     initial_sync_done = True
                     kodi_db_version_checked = True
                     last_sync = utils.unix_timestamp()
-                    playlist_monitor = playlists.kodi_playlist_monitor()
+                    if PLAYLIST_SYNC_ENABLED:
+                        playlist_monitor = playlists.kodi_playlist_monitor()
                     self.sync_fanart()
                     self.fanartthread.start()
                 else:
@@ -1612,7 +1620,8 @@ class LibrarySync(Thread):
                     initial_sync_done = True
                     last_sync = utils.unix_timestamp()
                     LOG.info('Done initial sync on Kodi startup')
-                    playlist_monitor = playlists.kodi_playlist_monitor()
+                    if PLAYLIST_SYNC_ENABLED:
+                        playlist_monitor = playlists.kodi_playlist_monitor()
                     artwork.Artwork().cache_major_artwork()
                     self.sync_fanart()
                     self.fanartthread.start()

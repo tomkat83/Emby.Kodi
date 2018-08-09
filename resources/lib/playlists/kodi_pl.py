@@ -115,7 +115,7 @@ def _write_playlist_to_file(playlist, xml):
             text += ('#EXTINF:%s,%s\n%s\n'
                      % (api.runtime(), api.title(), api.path()))
     text += '\n'
-    text = text.encode(v.M3U_ENCODING, 'strict')
+    text = text.encode(v.M3U_ENCODING, 'ignore')
     try:
         with open(path_ops.encode_path(playlist.kodi_path), 'wb') as f:
             f.write(text)

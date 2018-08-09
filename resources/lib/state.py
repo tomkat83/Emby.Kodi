@@ -57,8 +57,6 @@ FORCE_RELOAD_SKIN = True
 SYNC_DIALOG = True
 # Shall Kodi show dialogs for syncing/caching images? (e.g. images left to sync)
 IMAGE_SYNC_NOTIFICATIONS = True
-# Sync playlists from Plex to Kodi and vice-versa?
-SYNC_PLAYLISTS = True
 # Only sync specific Plex playlists to Kodi?
 SYNC_SPECIFIC_PLEX_PLAYLISTS = False
 # Only sync specific Kodi playlists to Plex?

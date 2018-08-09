@@ -38,9 +38,11 @@ def config():
 class LogHandler(logging.StreamHandler):
     def __init__(self):
         logging.StreamHandler.__init__(self)
-        self.setFormatter(logging.Formatter(fmt="%(name)s: %(message)s"))
+        self.setFormatter(logging.Formatter(fmt=b"%(name)s: %(message)s"))
 
     def emit(self, record):
+        if isinstance(record.msg, unicode):
+            record.msg = record.msg.encode('utf-8')
         try:
             xbmc.log(self.format(record), level=LEVELS[record.levelno])
         except UnicodeEncodeError:

@@ -53,6 +53,19 @@ LOG = getLogger('PLEX.plex_api')
 ###############################################################################
 
 
+def _unicode_or_none(value):
+    """
+    Tries to decode value to unicode. Returns None if this fails
+    """
+    try:
+        return value.decode('utf-8')
+    except TypeError:
+        # e.g. Android TV's Python
+        return value.decode()
+    except AttributeError:
+        pass
+
+
 class API(object):
     """
     API(item)
@@ -77,9 +90,10 @@ class API(object):
 
     def plex_type(self):
         """
-        Returns the type of media, e.g. 'movie' or 'clip' for trailers
+        Returns the type of media, e.g. 'movie' or 'clip' for trailers as
+        Unicode or None.
         """
-        return self.item.get('type')
+        return _unicode_or_none(self.item.get('type'))
 
     def playlist_type(self):
         """
@@ -104,9 +118,9 @@ class API(object):
 
     def plex_id(self):
         """
-        Returns the Plex ratingKey such as '246922' as a string or None
+        Returns the Plex ratingKey such as '246922' as Unicode or None
         """
-        return self.item.get('ratingKey')
+        return _unicode_or_none(self.item.get('ratingKey'))
 
     def path(self, force_first_media=True, force_addon=False,
              direct_paths=None):
@@ -664,12 +678,11 @@ class API(object):
     def item_id(self):
         """
         Returns current playQueueItemID or if unsuccessful the playListItemID
+        as Unicode.
         If not found, None is returned
         """
-        answ = self.item.get('playQueueItemID')
-        if answ is None:
-            answ = self.item.get('playListItemID')
-        return answ
+        return _unicode_or_none(self.item.get('playQueueItemID') or
+                                self.item.get('playListItemID'))
 
     def _data_from_part_or_media(self, key):
         """

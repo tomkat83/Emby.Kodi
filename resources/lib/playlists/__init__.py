@@ -113,9 +113,6 @@ def full_sync():
     Full sync of playlists between Kodi and Plex. Returns True is successful,
     False otherwise
     """
-    if not state.SYNC_PLAYLISTS:
-        LOG.debug('Not syncing playlists')
-        return True
     LOG.info('Starting playlist full sync')
     with state.LOCK_PLAYLISTS:
         return _full_sync()
@@ -282,9 +279,6 @@ class PlaylistEventhandler(events.FileSystemEventHandler):
         :type event:
             :class:`FileSystemEvent`
         """
-        if not state.SYNC_PLAYLISTS:
-            # Sync is deactivated
-            return
         path = event.dest_path if event.event_type == events.EVENT_TYPE_MOVED \
             else event.src_path
         if not sync_kodi_playlist(path):

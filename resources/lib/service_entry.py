@@ -58,6 +58,7 @@ class Service():
                  utils.settings('syncThreadNumber'))
         LOG.info('Playlist m3u encoding: %s', v.M3U_ENCODING)
         LOG.info("Full sys.argv received: %s", sys.argv)
+        LOG.info('Sync playlists: %s', utils.settings('enablePlaylistSync'))
         LOG.info('Synching only specific Kodi playlists: %s',
                  utils.settings('syncSpecificKodiPlaylists') == 'true')
         LOG.info('Kodi playlist prefix: %s',

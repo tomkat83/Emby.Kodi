@@ -11,7 +11,7 @@ from xbmcplugin import setResolvedUrl
 
 from resources.lib import entrypoint, utils, pickler, pkc_listitem, \
     variables as v, loghandler
-from resources.lib.watchdog.utils import unicode_paths
+from resources.lib.tools import unicode_paths
 
 ###############################################################################
 

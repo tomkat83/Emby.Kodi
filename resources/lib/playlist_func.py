@@ -33,36 +33,7 @@ class PlaylistError(Exception):
     pass
 
 
-class PlaylistObjectBaseclase(object):
-    """
-    Base class
-    """
-    def __init__(self):
-        self.id = None
-        self.type = None
-
-    def __repr__(self):
-        """
-        Print the playlist, e.g. to log. Returns unicode
-        """
-        answ = '{\'%s\': {\'id\': %s, ' % (self.__class__.__name__, self.id)
-        # For some reason, can't use dir directly
-        for key in self.__dict__:
-            if key in ('id', 'kodi_pl'):
-                continue
-            if isinstance(getattr(self, key), str):
-                answ += '\'%s\': \'%s\', ' % (key,
-                                              utils.try_decode(getattr(self,
-                                                                       key)))
-            elif isinstance(getattr(self, key), unicode):
-                answ += '\'%s\': \'%s\', ' % (key, getattr(self, key))
-            else:
-                # e.g. int
-                answ += '\'%s\': %s, ' % (key, unicode(getattr(self, key)))
-        return answ + '}}'
-
-
-class Playqueue_Object(PlaylistObjectBaseclase):
+class Playqueue_Object(object):
     """
     PKC object to represent PMS playQueues and Kodi playlist for queueing
 
@@ -85,6 +56,8 @@ class Playqueue_Object(PlaylistObjectBaseclase):
     kind = 'playQueue'
 
     def __init__(self):
+        self.id = None
+        self.type = None
         self.playlistid = None
         self.kodi_pl = None
         self.items = []
@@ -104,7 +77,25 @@ class Playqueue_Object(PlaylistObjectBaseclase):
         # To keep track if Kodi playback was initiated from a Kodi playlist
         # There are a couple of pitfalls, unfortunately...
         self.kodi_playlist_playback = False
-        PlaylistObjectBaseclase.__init__(self)
+
+    def __repr__(self):
+        answ = ("{{"
+                "'playlistid': {self.playlistid}, "
+                "'id': {self.id}, "
+                "'version': {self.version}, "
+                "'type': '{self.type}', "
+                "'selectedItemID': {self.selectedItemID}, "
+                "'selectedItemOffset': {self.selectedItemOffset}, "
+                "'shuffled': {self.shuffled}, "
+                "'repeat': {self.repeat}, "
+                "'kodi_playlist_playback': {self.kodi_playlist_playback}, "
+                "'pkc_edit': {self.pkc_edit}, ".format(self=self))
+        answ = answ.encode('utf-8')
+        # Since list.__repr__ will return string, not unicode
+        return answ + b"'items': {self.items}}}".format(self=self)
+
+    def __str__(self):
+        return self.__repr__()
 
     def is_pkc_clear(self):
         """
@@ -181,28 +172,27 @@ class Playlist_Item(object):
         self.force_transcode = False
 
     def __repr__(self):
-        """
-        Print the playlist item, e.g. to log. Returns unicode
-        """
-        answ = ('{\'%s\': {\'id\': \'%s\', \'plex_id\': \'%s\', '
-                % (self.__class__.__name__, self.id, self.plex_id))
-        for key in self.__dict__:
-            if key in ('id', 'plex_id', 'xml'):
-                continue
-            if isinstance(getattr(self, key), str):
-                answ += '\'%s\': \'%s\', ' % (key,
-                                              utils.try_decode(getattr(self,
-                                                                       key)))
-            elif isinstance(getattr(self, key), unicode):
-                answ += '\'%s\': \'%s\', ' % (key, getattr(self, key))
-            else:
-                # e.g. int
-                answ += '\'%s\': %s, ' % (key, unicode(getattr(self, key)))
-        if self.xml is None:
-            answ += '\'xml\': None}}'
-        else:
-            answ += '\'xml\': \'%s\'}}' % self.xml.tag
-        return answ
+        answ = ("{{"
+                "'id': {self.id}, "
+                "'plex_id': {self.plex_id}, "
+                "'plex_type': '{self.plex_type}', "
+                "'plex_uuid': '{self.plex_uuid}', "
+                "'kodi_id': {self.kodi_id}, "
+                "'kodi_type': '{self.kodi_type}', "
+                "'file': '{self.file}', "
+                "'uri': '{self.uri}', "
+                "'guid': '{self.guid}', "
+                "'playmethod': '{self.playmethod}', "
+                "'playcount': {self.playcount}, "
+                "'offset': {self.offset}, "
+                "'force_transcode': {self.force_transcode}, "
+                "'part': {self.part}, ".format(self=self))
+        answ = answ.encode('utf-8')
+        # etree xml.__repr__() could return string, not unicode
+        return answ + b"'xml': \"{self.xml}\"}}".format(self=self)
+
+    def __str__(self):
+        return self.__repr__()
 
     def plex_stream_index(self, kodi_stream_index, stream_type):
         """
@@ -412,12 +402,13 @@ def get_playlist_details_from_xml(playlist, xml):
 
     Raises PlaylistError if something went wrong.
     """
-    playlist.id = xml.get('%sID' % playlist.kind)
-    playlist.version = xml.get('%sVersion' % playlist.kind)
-    playlist.shuffled = xml.get('%sShuffled' % playlist.kind)
-    playlist.selectedItemID = xml.get('%sSelectedItemID' % playlist.kind)
+    playlist.id = xml.get('%sID' % playlist.kind).decode('utf-8')
+    playlist.version = xml.get('%sVersion' % playlist.kind).decode('utf-8')
+    playlist.shuffled = xml.get('%sShuffled' % playlist.kind).decode('utf-8')
+    playlist.selectedItemID = xml.get(
+        '%sSelectedItemID' % playlist.kind).decode('utf-8')
     playlist.selectedItemOffset = xml.get(
-        '%sSelectedItemOffset' % playlist.kind)
+        '%sSelectedItemOffset' % playlist.kind).decode('utf-8')
     LOG.debug('Updated playlist from xml: %s', playlist)
 
 
@@ -781,4 +772,4 @@ def get_plextype_from_xml(xml):
     except (TypeError, IndexError, AttributeError):
         LOG.error('Could not get plex metadata for plex id %s', plex_id)
         return
-    return new_xml[0].attrib.get('type')
+    return new_xml[0].attrib.get('type').decode('utf-8')

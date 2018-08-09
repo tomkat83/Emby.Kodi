@@ -18,7 +18,7 @@ from distutils import dir_util
 import xbmc
 import xbmcvfs
 
-from .watchdog.utils import unicode_paths
+from .tools import unicode_paths
 
 # Kodi seems to encode in utf-8 in ALL cases (unlike e.g. the OS filesystem)
 KODI_ENCODING = 'utf-8'

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.3.3" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.3.8" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests" version="2.9.1" />
@@ -73,7 +73,24 @@
     <summary lang="uk_UA">Нативна інтеграція Plex в Kodi</summary>
     <description lang="uk_UA">Підключає Kodi до серверу Plex. Цей плагін передбачає, що ви керуєте всіма своїми відео за допомогою Plex (і ніяк не Kodi). Ви можете втратити дані, які вже зберігаються у відео та музичних БД Kodi (оскільки цей плагін безпосередньо їх змінює). Використовуйте на свій страх і ризик!</description>
     <disclaimer lang="uk_UA">Використовуйте на свій ризик</disclaimer>
-    <news>version 2.3.3:
+    <news>version 2.3.8:
+- Fix typo
+- Make version 2.3.4-2.3.7 available for everyone
+
+version 2.3.7 (beta only):
+- Fix library sync crash due to exotic playlist characters
+- Force-deactivate playlist sync for Microsoft UWP for Kodi 18
+
+version 2.3.6 (beta only):
+- Fix PKC not starting by decoupling watchdog/subprocess modules
+
+version 2.3.5 (beta only):
+- Fix PKC not starting by importing playlist module only when sync enabled
+
+version 2.3.4 (beta only):
+- Fix playback sometimes not starting and UnicodeEncodeError for logging
+
+version 2.3.3:
 - Choose trailer if several are present (DB reset required)
 
 version 2.3.2:

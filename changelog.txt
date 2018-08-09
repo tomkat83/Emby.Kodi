@@ -1,3 +1,20 @@
+version 2.3.8:
+- Fix typo
+- Make version 2.3.4-2.3.7 available for everyone
+
+version 2.3.7 (beta only):
+- Fix library sync crash due to exotic playlist characters
+- Force-deactivate playlist sync for Microsoft UWP for Kodi 18
+
+version 2.3.6 (beta only):
+- Fix PKC not starting by decoupling watchdog/subprocess modules
+
+version 2.3.5 (beta only):
+- Fix PKC not starting by importing playlist module only when sync enabled
+
+version 2.3.4 (beta only):
+- Fix playback sometimes not starting and UnicodeEncodeError for logging
+
 version 2.3.3:
 - Choose trailer if several are present (DB reset required)
 
