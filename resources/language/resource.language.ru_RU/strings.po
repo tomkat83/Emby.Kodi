@@ -124,7 +124,7 @@ msgstr "Поиск FanartTV завершен"
 
 # PKC settings sync options
 msgctxt "#30020"
-msgid "Sync Plex playlists"
+msgid "Sync Plex playlists (reboot Kodi!)"
 msgstr ""
 
 # PKC settings sync options
@@ -593,6 +593,11 @@ msgstr "Не просить выбрать качество потока"
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Всегда выбирать лучшее качество для трейлеров"
+
+# PKC Settings - Artwork
+msgctxt "#30543"
+msgid "Prefer Kodi artwork for collections/sets"
+msgstr ""
 
 msgctxt "#30544"
 msgid "Artwork"

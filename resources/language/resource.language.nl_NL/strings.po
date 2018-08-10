@@ -118,7 +118,7 @@ msgstr ""
 
 # PKC settings sync options
 msgctxt "#30020"
-msgid "Sync Plex playlists"
+msgid "Sync Plex playlists (reboot Kodi!)"
 msgstr ""
 
 # PKC settings sync options
@@ -586,6 +586,11 @@ msgstr "Niet vragen om een bepaalde stream/kwaliteit te kiezen"
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Kies altijd beste kwaliteit voor trailers"
+
+# PKC Settings - Artwork
+msgctxt "#30543"
+msgid "Prefer Kodi artwork for collections/sets"
+msgstr ""
 
 msgctxt "#30544"
 msgid "Artwork"

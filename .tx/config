@@ -2,8 +2,9 @@
 host = https://www.transifex.com
 
 [pkc.stringspo]
+file_filter = resources/language/resource.language.<lang>/strings.po
+minimum_perc = 60
 source_file = resources/language/resource.language.en_gb/strings.po
 source_lang = en_gb
 type = PO
-file_filter = resources/language/resource.language.<lang>/strings.po
-minimum_perc = 60
+

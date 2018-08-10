@@ -1,5 +1,7 @@
 import os
 
+path = "C:\\Users\\kat\\AppData\\Local\\Continuum\\anaconda3\\envs\\kodi\\Scripts"
+command = os.path.join(path, "tx.exe")
 languages = [
     'nl_NL',
     'fr_CA',
@@ -27,4 +29,4 @@ languages = [
 os.system("cd ..")
 
 for lang in languages:
-    os.system("tx pull -f -l %s" % lang)
+    os.system(command + " pull -f -l %s" % lang)
