@@ -26,7 +26,7 @@ msgstr "Dirección del servidor (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Buscando el PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -40,6 +40,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Advertencia: El ajuste de Kodi \"Reproducir el siguiente video "
+"automáticamente\" está activado.  Esto puede dañar PKC. ¿Desactivar?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -48,32 +50,33 @@ msgstr "Usuario: "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Hachiendo caché en %s imágenes de Plex"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "El caché de imágenes de Plex fue completado"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Activar notificaciones para caché de imágenes"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
+"Activar caché de imágenes durante la reproducción en Kodi (reinicie Kodi)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Progreso aproximado"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Arte pendiente de cache"
 
 # Button text
 msgctxt "#30012"
@@ -92,7 +95,7 @@ msgstr "Conexión"
 # PKC settings - Artwork
 msgctxt "#30015"
 msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgstr "Búsquedas en Fanart.tv de películas y series pendientes de hacer:"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -106,22 +109,22 @@ msgstr "No autorizado para PMS"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "Verificando en Fanart.tv %s ítems"
 
 # Sync notification displayed when FanartTV lookup is completed
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "Búsqueda en fanart.tv completada"
 
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Sincronizar listas de reproducción de Plex (reiniciar Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Sólo sincronizar listas de reproducción específicas de Plex con Kodi"
 
 # PKC settings category
 msgctxt "#30022"
@@ -131,7 +134,7 @@ msgstr "Avanzado"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Sólo sincronizar listas de reproducción específicas de Kodi con Plex"
 
 msgctxt "#30024"
 msgid "Username"
@@ -145,11 +148,15 @@ msgstr "Mostrar mensaje si el PMS está desconectado"
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
 msgstr ""
+"Prefijo en el nombre de la lista de reproducción en Plex para designer la "
+"sincronización"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
 msgstr ""
+"Prefijo en el nombre de la lista de reproducción de Kodi para designer la "
+"sincronización"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -466,12 +473,17 @@ msgstr "Modo de reproducción"
 # PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Cache all artwork for a smooth Kodi experience"
-msgstr ""
+msgstr "Hacer caché de todo el arte para una experiencia óptima en Kodi"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Limitar hilos de caché de arte (recomendado para rpi)"
+
+# PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -501,7 +513,7 @@ msgstr "Preguntar si reproducir tráilers"
 # PKC Settings - Plex
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
-msgstr ""
+msgstr "Omitir la confirmación de borrado PMS (utilice a su propio riesgo)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -547,6 +559,7 @@ msgstr "Mensajes del servidor"
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
 msgstr ""
+"Generar un nuevo id de dispositivo único de Plex (ej. para clonar Kodi)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -562,6 +575,8 @@ msgstr "REINICIAR KODI SI HACE CAMBIOS"
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
 msgstr ""
+"Se require un restablecimiento manual complete de la base de datos de Kodi, "
+"vea \"Avanzado\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -586,7 +601,7 @@ msgstr "Escoger siempre la mejor calidad para tráilers"
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Preferir arte de Kodi para colecciones/sagas"
 
 msgctxt "#30544"
 msgid "Artwork"
@@ -682,7 +697,7 @@ msgstr "Tamaño de subtítulos incrustados"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Cantidad de hilos simultáneos de descarga"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -758,11 +773,15 @@ msgstr ""
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
 msgstr ""
+"Reparar la base de datos de Kodi (actualización forzosa de todo el "
+"contenido)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
 msgstr ""
+"Restablecer la base de datos de Kodi y oopcionalmente restablecer "
+"PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
@@ -826,6 +845,8 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Kodi no puede localizer el archive %s. Por favoer verificar sus ajustes de "
+"PKC. ¿Detener la sincronización?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
@@ -1005,7 +1026,7 @@ msgstr "Añadidos Recientemente: Además mostrar episodios ya vistos"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Refrescar el skin de Kodi al detener la reproducción"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"

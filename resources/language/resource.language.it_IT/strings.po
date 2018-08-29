@@ -2,13 +2,14 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
 # Angela Calò <angycalo@libero.it>, 2018
+# Cristiano Bozzi <c.bozzi@nextworks.it>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Angela Calò <angycalo@libero.it>, 2018\n"
+"Last-Translator: Cristiano Bozzi <c.bozzi@nextworks.it>, 2018\n"
 "Language-Team: Italian (Italy) (https://www.transifex.com/croneter/teams/73837/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr "Indirizzo Server (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr "Cercando per PMS"
+msgstr "Ricerca PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -73,12 +74,12 @@ msgstr ""
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Avanzamento appossimativo"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Copertine cachate"
 
 # Button text
 msgctxt "#30012"
@@ -97,7 +98,7 @@ msgstr "Connessione"
 # PKC settings - Artwork
 msgctxt "#30015"
 msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgstr "Film e show FanartTV da fare:"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -111,22 +112,22 @@ msgstr "Non autorizzato per PMS"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "Checking %s FanartTV"
 
 # Sync notification displayed when FanartTV lookup is completed
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "Ricerca FanartTV completata"
 
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Sync Plex playlists (riavvio Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Sincronizza solo specifiche playlist Kodi"
 
 # PKC settings category
 msgctxt "#30022"
@@ -136,7 +137,7 @@ msgstr "Avanzate"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Sincronizza solo specifiche playlist da Plex"
 
 msgctxt "#30024"
 msgid "Username"
@@ -149,12 +150,12 @@ msgstr "Mostra un messaggio se PMS va offline"
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
-msgstr ""
+msgstr "Prefisso per sincronizzazione playlist da Plex "
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
+msgstr "Prefisso per sincronizzazione playlist da Kodi"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -471,12 +472,17 @@ msgstr "Modalità di riproduzione"
 # PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Cache all artwork for a smooth Kodi experience"
-msgstr ""
+msgstr "cache di tutte le copertine per una visione più fluida da Kodi"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
 msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Limita numero thread di caching delle artwork (raccomandato per rpi)"
+
+# PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -507,6 +513,7 @@ msgstr "Richiedi di riprodurre trailer"
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
 msgstr ""
+"Salta conferma per la cancellazione (usare a proprio rischio e pericolo)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -552,6 +559,7 @@ msgstr "Messaggi del server"
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
 msgstr ""
+"Genera un nuovo e unico Plex Id per il dispositivo (es. clonazione di Kodi)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -567,6 +575,8 @@ msgstr "RIAVVIA KODI SE FAI DELLE MODIFICHE"
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
 msgstr ""
+"E' neccessario fare un reset manuale del database di Kodi, cerca in "
+"\"Avanzate\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -591,7 +601,7 @@ msgstr "Scegli sempre qualità migliore per i trailer"
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Preferisci immagini di Kodi per collezioni/serie"
 
 msgctxt "#30544"
 msgid "Artwork"
@@ -687,7 +697,7 @@ msgstr "Dimensione sottotitoli in sovraimpressione"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Numero di thread di scaricamento simultanei"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -764,12 +774,12 @@ msgstr ""
 # PKC Settings - Advanced
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
-msgstr ""
+msgstr "Ripara database di Kodi (forza aggiornamento di tutti i contenuti)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
-msgstr ""
+msgstr "Reset database di Kodi e opzionalmente reset PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
@@ -806,6 +816,11 @@ msgid ""
 "shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or "
 "\\\\myNAS/mymovie.mkv)!"
 msgstr ""
+"ATTENZIONE! In caso di selezione della modaliatà \"Nativa\", potresti "
+"perdere l'acccesso ad alcune funzionalità di Plex come ad esempio: trailer "
+"Plex ed opzioni di transcodifica. TUTTE le condivisioni Plex devono usare "
+"l'opzione path diretto (es. smb://myNAS/mymovie.mkv or "
+"\\\\myNAS/mymovie.mkv)!"
 
 # Pop-up on initial sync
 msgctxt "#39029"
@@ -830,6 +845,8 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Impossibile trovare il file %s di Kodi. Verificare la configurazione del "
+"plugin PKC. Arrestare la sincronizzazione?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
@@ -837,11 +854,13 @@ msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
 " paths, smb://myNas/mymovie.mkv? (recommended)"
 msgstr ""
+"Trasforma i Plex path UNC della libreria \\\\myNas\\mymovie.mkv "
+"automatically in path smb, smb://myNas/mymovie.mkv? (raccomandato)"
 
 # PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
-msgstr ""
+msgstr "Sostituisci i path Plex UNC \\\\myNas con smb://myNas"
 
 # PKC Settings - Customize Paths
 msgctxt "#39035"
@@ -849,6 +868,8 @@ msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
 "paths smb://NAS/mystuff"
 msgstr ""
+"Sostituisci i Plex path /volume1/media o \\\\myserver\\media con path SMB "
+"custom smb://NAS/mystuff"
 
 # PKC Settings - Customize Paths
 msgctxt "#39037"
@@ -1009,7 +1030,7 @@ msgstr "Aggiunti di recente: mostra anche gli episodi già visti"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Forza aggiornamento della skin Kodi dopo lo stop di un contenuto"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
@@ -1198,12 +1219,12 @@ msgstr "Solo mancanti"
 # Message in the PKC settings if user has not logged in to plex.tv
 msgctxt "#39226"
 msgid "Not logged in to plex.tv"
-msgstr ""
+msgstr "Autenticazione negata su plex.tv"
 
 # Message in the PKC settings if user is logged in to plex.tv
 msgctxt "#39227"
 msgid "Logged in to plex.tv"
-msgstr ""
+msgstr "Autenticazione concessa su plex.tv"
 
 # Message in the PKC settings to display the plex.tv username. Leave the colon
 # :
@@ -1328,7 +1349,7 @@ msgstr "ERRORE nella sincronizzazione della libreria"
 
 msgctxt "#39500"
 msgid "On Deck"
-msgstr ""
+msgstr "In primo piano"
 
 msgctxt "#39501"
 msgid "Collections"
@@ -1372,7 +1393,7 @@ msgstr "Sfoglia cartelle"
 # Addon Summary
 msgctxt "#39703"
 msgid "Native Integration of Plex into Kodi"
-msgstr ""
+msgstr "Integrazione nativa di Plex su Kodi"
 
 # For use with addon.xml (PKC metadata for Kodi, e.g. description)
 # Addon Description
@@ -1383,18 +1404,22 @@ msgid ""
 "stored in the Kodi video and music databases (as this plugin directly "
 "changes them). Use at your own risk!"
 msgstr ""
+"Connetti Kodi al tuo Plex Media Server. Questo plugin assume che tu gestisca"
+" tutti i video con Plex (e non con Kodi). Potresti perdere i dati dei film e"
+" della musica già memorizzati nel database di Kodi (questo plugin modifica "
+"direttamente il database stesso). Usa a tuo rischio e pericolo!"
 
 # For use with addon.xml (PKC metadata for Kodi, e.g. description)
 # Addon Disclaimer
 msgctxt "#39705"
 msgid "Use at your own risk"
-msgstr ""
+msgstr "Usa a tuo rischio e pericolo"
 
 # If user gets prompted to choose between several subtitles. Leave the number
 # one at the beginning of the string!
 msgctxt "#39706"
 msgid "1 No subtitles"
-msgstr ""
+msgstr "1 No sottotitoli"
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown
@@ -1412,14 +1437,14 @@ msgstr "Default"
 # "forced" flag
 msgctxt "#39709"
 msgid "Forced"
-msgstr ""
+msgstr "Forzato"
 
 # If user gets prompted to choose between several subtitles the subtitle
 # cannot be downloaded (has no 'key' attribute from the PMS), the subtitle
 # needs to be burned in
 msgctxt "#39710"
 msgid "burn-in"
-msgstr ""
+msgstr "masterizza"
 
 # Dialog text if PKC detected a new Music library and Kodi needs to be
 # restarted
@@ -1428,6 +1453,8 @@ msgid ""
 "New Plex music library detected. Sorry, but we need to restart Kodi now due "
 "to the changes made."
 msgstr ""
+"Identificata nuova libreria musicale Plex. Necessario riavvio di Kodi a "
+"causa delle modifiche effettuate."
 
 # Shown during sync process
 msgctxt "#39712"
@@ -1447,7 +1474,7 @@ msgstr "Sync"
 # Shown during sync process
 msgctxt "#39715"
 msgid "items"
-msgstr ""
+msgstr "contenuti"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!
@@ -1456,12 +1483,16 @@ msgid ""
 "Kodi cannot parse {0}. PKC will not function correctly. Please visit {1} and"
 " correct your file!"
 msgstr ""
+"Kodi non può analizzare {0}. PKC non funzionerà correttamente. Controlla {1}"
+" e correggi il tuo file!"
 
 # Shown once on first installation to comply with the terms of use of
 # themoviedb.org
 msgctxt "#39717"
 msgid "PKC uses free additional artwork from www.themoviedb.org. Many thanks!"
 msgstr ""
+"PKC utilizza servizi di immagini addizionali gratuiti provenienti da "
+"www.themoviedb.org. Molte grazie!"
 
 # Shown during very first PKC setup only
 msgctxt "#39718"
@@ -1469,8 +1500,12 @@ msgid ""
 "Do you want to replace your custom user ratings with an indicator of how "
 "many versions of a media item you posses?"
 msgstr ""
+"Vuoi sostituire la valutazione dei contenuti dell'utente con l'indicazione "
+"di quante versioni del contenuto sono disponibili?"
 
 # In PKC Settings under Sync
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr ""
+"Sostituisci la valutazione contenuti con il numero delle versioni del "
+"contenuto disponibili"

@@ -472,6 +472,11 @@ msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "限制快取背景海報(對Raspberry Pi是必須的)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "同時對伺服器請求最多的項目數"

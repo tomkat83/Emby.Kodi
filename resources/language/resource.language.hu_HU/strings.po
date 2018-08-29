@@ -478,6 +478,11 @@ msgstr ""
 " esetén javasolt)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "A szervertől egyszerre lekérhető elemek maximális száma"

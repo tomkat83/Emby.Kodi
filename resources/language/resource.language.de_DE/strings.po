@@ -477,6 +477,11 @@ msgstr ""
 "Limitiere Threads zur Bildsynchronisation (empfohlen für Raspberry Pi)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr "Alle Plex Extras anzeigen statt Trailer abspielen"
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Max. Anzahl gleichzeitig anzufragender PMS Einträge"

@@ -120,7 +120,7 @@ msgstr "Vyhledávání na FanartTV dokončeno"
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Synchronizovat playlisty Plexu (restartujte Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
@@ -478,6 +478,11 @@ msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Omezit vlákna mezipaměti obrázků (doporučeno pro rpi)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Maximální počet položek vyžádaných najednou ze serveru"
@@ -592,7 +597,7 @@ msgstr "Vždy vybrat nejlepší kvalitu ukázek"
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Upřednostňovat obrázky z Kodi pro kolekce/sady"
 
 msgctxt "#30544"
 msgid "Artwork"

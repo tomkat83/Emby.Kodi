@@ -473,6 +473,11 @@ msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "限制插图缓存线程(rpi下推荐)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "一次从服务器请求最大项目数"
