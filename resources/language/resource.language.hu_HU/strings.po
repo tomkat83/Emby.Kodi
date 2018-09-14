@@ -50,32 +50,32 @@ msgstr "Felhasználónév: "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "%s Plex kép gyorsítótárazása"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "a Plex képek gyorsítótárazása befejeződött"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "A képek gyorsítótárazásával kapcsolatos értesítés engedélyezése"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
-msgstr ""
+msgstr "A képek gyorsítótárazásának engedélyezése lejátszás alatt (indítsa újra a Kodi-t!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Hozzávetőleges állapot"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Hátralévő gyorsítótárazásra váró elemek:"
 
 # Button text
 msgctxt "#30012"
@@ -94,7 +94,7 @@ msgstr "Kapcsolat"
 # PKC settings - Artwork
 msgctxt "#30015"
 msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgstr "Hátralévő film és sorozat FanartTV lekérdezések:"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -108,22 +108,22 @@ msgstr "PMS hitelesítés sikertelen"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "%s elem keresése a FanartTV-n"
 
 # Sync notification displayed when FanartTV lookup is completed
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "A FanartTV lekérdezés befejeződött"
 
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Plex lejátszási listák szinkronizálása (indítsa újra a Kodi-t!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Csak a meghatározott lejátszási listák szinkronizálása a Kodi-val"
 
 # PKC settings category
 msgctxt "#30022"
@@ -133,7 +133,7 @@ msgstr "Haladó"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Csak a meghatározott lejátszási listák szinkronizálása a Plex-szel"
 
 msgctxt "#30024"
 msgid "Username"
@@ -146,12 +146,12 @@ msgstr "Üzenet megjelenítése ha a PMS elérhetetlenné válik"
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
-msgstr ""
+msgstr "Plex lejátszási lista előtag szinkronizálásra kijelöléshez"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
+msgstr "Kodi lejátszási lista előtag szinkronizálásra kijelöléshez"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -468,7 +468,7 @@ msgstr "Lejátszási mód"
 # PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Cache all artwork for a smooth Kodi experience"
-msgstr ""
+msgstr "Az összes művészkép gyorsítótárazása a gördülékeny Kodi élményért"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
@@ -480,7 +480,7 @@ msgstr ""
 # PKC Settings - Sync Options
 msgctxt "#30514"
 msgid "Show all Plex extras instead of immediately playing trailers"
-msgstr ""
+msgstr "Az összes Plex extra mutatása az azonnali előzetes-lejátszás helyett"
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -555,7 +555,7 @@ msgstr "Szerverüzenetek"
 # PKC Settings - Advanced
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
-msgstr ""
+msgstr "Új egyéni Plex eszközazonosító generálása (pl. Kodi klónozásához)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -572,7 +572,7 @@ msgstr "INDÍTSA ÚJRA A KODI-T HA BÁRMIT ÁTÁLLÍT"
 # PKC Settings warning
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
-msgstr ""
+msgstr "A Kodi adatbázis kézi visszaállítása szükséges, lásd \"Haladó\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -597,7 +597,7 @@ msgstr "Mindig válassza a legjobb minőséget filmelőzetesek lejátszásakor"
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Kodi művészképek előnyben részesítése kollekcióknál/gyűjteményeknél"
 
 msgctxt "#30544"
 msgid "Artwork"
@@ -693,7 +693,7 @@ msgstr "Égetett felirat mérete"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Egyidejűleg futó letöltési szálak száma"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -769,12 +769,12 @@ msgstr ""
 # PKC Settings - Advanced
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
-msgstr ""
+msgstr "Kodi adatbázis javítása (minden tartalom kényszerített frissítése)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
-msgstr ""
+msgstr "Kodi adatbázis visszaállítása és a PlexKodiConnect választható visszaállítása"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
