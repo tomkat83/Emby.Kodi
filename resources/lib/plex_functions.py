@@ -11,9 +11,8 @@ from threading import Thread
 from xbmc import sleep
 
 from .downloadutils import DownloadUtils as DU
-from . import utils
-from . import plex_tv
-from . import variables as v
+from .plexapi.base import PlexServer, Connection
+from . import utils, plex_tv, variables as v
 
 ###############################################################################
 LOG = getLogger('PLEX.plex_functions')
@@ -193,7 +192,7 @@ def discover_pms(token=None):
     """
     LOG.info('Start discovery of Plex Media Servers')
     # Look first for local PMS in the LAN
-    local_pms_list = _plex_gdm()
+    local_pms_list = plex_gdm()
     LOG.debug('PMS found in the local LAN using Plex GDM: %s', local_pms_list)
     # Get PMS from plex.tv
     if token:
@@ -236,7 +235,7 @@ def _log_pms(pms_list):
     LOG.debug('Found the following PMS: %s', log_list)
 
 
-def _plex_gdm():
+def plex_gdm():
     """
     PlexGDM - looks for PMS in the local LAN and returns a list of the PMS found
     """
@@ -278,44 +277,54 @@ def _plex_gdm():
         # Check if we had a positive HTTP response
         if '200 OK' not in response['data']:
             continue
-        pms = {
-            'ip': response['from'][0],
-            'scheme': None,
-            'local': True,  # Since we found it using GDM
-            'product': None,
-            'baseURL': None,
-            'name': None,
-            'version': None,
-            'token': None,
-            'ownername': None,
-            'device': None,
-            'platform': None,
-            'owned': None,
-            'relay': None,
-            'presence': True,  # Since we're talking to the PMS
-            'httpsRequired': None,
-        }
+        connection = Connection(local=True)
+        # Local LAN IP from GDM
+        connection.address = response['from'][0]
+        pms = PlexServer()
+        pms.presence = True
+        pms.connections.append(connection)
         for line in response['data'].split('\n'):
-            if 'Content-Type:' in line:
-                pms['product'] = utils.try_decode(line.split(':')[1].strip())
-            elif 'Host:' in line:
-                pms['baseURL'] = line.split(':')[1].strip()
-            elif 'Name:' in line:
-                pms['name'] = utils.try_decode(line.split(':')[1].strip())
-            elif 'Port:' in line:
-                pms['port'] = line.split(':')[1].strip()
-            elif 'Resource-Identifier:' in line:
-                pms['machineIdentifier'] = line.split(':')[1].strip()
-            elif 'Version:' in line:
-                pms['version'] = line.split(':')[1].strip()
+            try:
+                kind, info = line.split(':', 1)
+            except ValueError:
+                continue
+            else:
+                kind, info = kind.strip(), info.strip()
+            if kind == 'Name':
+                pms.name = info
+            elif kind == 'Resource-Identifier':
+                pms.clientIdentifier = info
+            elif kind == 'Content-Type':
+                pms.product = info
+            elif kind == 'Version':
+                pms.productVersion = info
+            elif kind == 'Updated-At':
+                pms.lastSeenAt = int(info)
+            elif kind == 'Host':
+                # Example: "Host: <....sfe...>.plex.direct"
+                connection.uri = info
+            elif kind == 'Port':
+                connection.port = int(info)
+        # Assume https
+        connection.protocol = 'https'
+        if connection.uri != connection.address:
+            # The PMS might return both local IP and plex.direct address
+            alt_connection = deepcopy(connection)
+            alt_connection.uri = 'https://%s:%s' % (connection.address,
+                                                    connection.port)
+            pms.connections.append(alt_connection)
+        connection.uri = 'https://%s:%s' % (connection.uri,
+                                            connection.port)
         pms_list.append(pms)
+        LOG.debug('Found PMS in the LAN: %s: %s', pms, pms.connections)
     return pms_list
 
 
-def _pms_list_from_plex_tv(token):
+def pms_from_plex_tv(token):
     """
     get Plex media Server List from plex.tv/pms/resources
     """
+    pms_list = []
     xml = DU().downloadUrl('https://plex.tv/api/resources',
                            authenticate=False,
                            parameters={'includeHttps': 1},
@@ -324,49 +333,20 @@ def _pms_list_from_plex_tv(token):
         xml.attrib
     except AttributeError:
         LOG.error('Could not get list of PMS from plex.tv')
-        return []
-
-    from Queue import Queue
-    queue = Queue()
-    thread_queue = []
-
-    max_age_in_seconds = 2 * 60 * 60 * 24
+        return pms_list
     for device in xml.findall('Device'):
-        if 'server' not in device.get('provides'):
+        if 'server' not in device.get('provides', ''):
             # No PMS - skip
             continue
         if device.find('Connection') is None:
             # no valid connection - skip
             continue
-        # check MyPlex data age - skip if >2 days
-        info_age = time() - int(device.get('lastSeenAt'))
-        if info_age > max_age_in_seconds:
-            LOG.debug("Skip server %s not seen for 2 days", device.get('name'))
-            continue
-        pms = {
-            'machineIdentifier': device.get('clientIdentifier'),
-            'name': device.get('name'),
-            'token': device.get('accessToken'),
-            'ownername': device.get('sourceTitle'),
-            'product': device.get('product'),  # e.g. 'Plex Media Server'
-            'version': device.get('productVersion'),  # e.g. '1.11.2.4772-3e..'
-            'device': device.get('device'),  # e.g. 'PC' or 'Windows'
-            'platform': device.get('platform'),  # e.g. 'Windows', 'Android'
-            'local': device.get('publicAddressMatches') == '1',
-            'owned': device.get('owned') == '1',
-            'relay': device.get('relay') == '1',
-            'presence': device.get('presence') == '1',
-            'httpsRequired': device.get('httpsRequired') == '1',
-            'connections': []
-        }
-        # Try a local connection first, no matter what plex.tv tells us
-        for connection in device.findall('Connection'):
-            if connection.get('local') == '1':
-                pms['connections'].append(connection)
-        # Then try non-local
-        for connection in device.findall('Connection'):
-            if connection.get('local') != '1':
-                pms['connections'].append(connection)
+        pms = PlexServer(xml=device)
+        pms_list.append(pms)
+    return pms_list
+
+
+
         # Spawn threads to ping each PMS simultaneously
         thread = Thread(target=_poke_pms, args=(pms, queue))
         thread_queue.append(thread)

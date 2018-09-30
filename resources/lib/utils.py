@@ -249,6 +249,46 @@ def ERROR(txt='', hide_tb=False, notify=False):
     return short
 
 
+def to_list(value, itemcast=None, delim=','):
+    """
+    Returns a list of unicodes from the specified value [unicode].
+
+    Parameters:
+        value [unicode]: (comma) delimited string to convert to list.
+        itemcast (func): Function to cast each list item to (default unicode).
+        delim (str): string delimiter (optional; default ',').
+    """
+    value = value or ''
+    itemcast = itemcast or unicode
+    return [itemcast(item) for item in value.split(delim) if item != '']
+
+
+def cast(func, value):
+    """
+    Cast the specified value to the specified type (returned by func).
+    Currently supports int, float, bool, unicode (if str supplied), str
+    Will return None if value=None
+
+    Parameters:
+        func (func): Calback function to used cast to type
+        value (any): value to be cast and returned.
+    """
+    if value is None:
+        return value
+    if func == bool:
+        return bool(int(value))
+    elif func in (int, float):
+        try:
+            return func(value)
+        except ValueError:
+            return float('nan')
+    elif func == unicode:
+        return value.decode('utf-8')
+    elif func == str:
+        return value.encode('utf-8')
+    return func(value)
+
+
 class AttributeDict(dict):
     """
     Turns an etree xml response's xml.attrib into an object with attributes
