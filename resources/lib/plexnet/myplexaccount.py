@@ -1,3 +1,4 @@
+import logging
 import json
 import time
 import hashlib
@@ -11,6 +12,7 @@ import asyncadapter
 
 import util
 
+LOG = logging.getLogger('PLEX.myplexaccount')
 ACCOUNT = None
 
 
@@ -71,7 +73,7 @@ class MyPlexAccount(object):
     def loadState(self):
         # Look for the new JSON serialization. If it's not there, look for the
         # old token and Plex Pass values.
-
+        LOG.debug('Loading State')
         plexapp.APP.addInitializer("myplex")
 
         jstring = plexapp.INTERFACE.getRegistry("MyPlexAccount", None, "myplex")

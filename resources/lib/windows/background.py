@@ -42,3 +42,27 @@ def setSplash(on=True):
 
 def setShutdown(on=True):
     utils.setGlobalProperty('background.shutdown', on and '1' or '')
+
+
+class BackgroundContext(object):
+    """
+    Context Manager to open a Plex background window - in the background. This
+    will e.g. ensure that you can capture key-presses
+    Use like this:
+        with BackgroundContext(function) as win:
+            <now function will be executed immediately. Get its results:>
+            result = win.result
+    """
+    def __init__(self, function=None):
+        self.window = None
+        self.result = None
+        self.function = function
+
+    def __enter__(self):
+        self.window = BackgroundWindow.create(function=self.function)
+        self.window.modal()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.result = self.window.result
+        del self.window

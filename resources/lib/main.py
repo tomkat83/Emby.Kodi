@@ -3,7 +3,13 @@
 from __future__ import absolute_import, division, unicode_literals
 import logging
 import sys
+import threading
+import gc
+
 import xbmc
+
+from . import plex, util, backgroundthread
+from .plexnet import plexapp, threadutils
 
 from . import utils
 from . import userclient
@@ -23,7 +29,7 @@ from . import loghandler
 
 ###############################################################################
 loghandler.config()
-LOG = logging.getLogger("PLEX.service_entry")
+LOG = logging.getLogger("PLEX.main")
 ###############################################################################
 
 
@@ -264,22 +270,104 @@ class Service():
         LOG.info("======== STOP %s ========", v.ADDON_NAME)
 
 
-def start():
-    # Safety net - Kody starts PKC twice upon first installation!
-    if utils.window('plex_service_started') == 'true':
-        EXIT = True
-    else:
-        utils.window('plex_service_started', value='true')
-        EXIT = False
+def waitForThreads():
+    LOG.debug('Checking for any remaining threads')
+    while len(threading.enumerate()) > 1:
+        for t in threading.enumerate():
+            if t != threading.currentThread():
+                if t.isAlive():
+                    LOG.debug('Waiting on thread: %s', t.name)
+                    if isinstance(t, threading._Timer):
+                        t.cancel()
+                        t.join()
+                    elif isinstance(t, threadutils.KillableThread):
+                        t.kill(force_and_wait=True)
+                    else:
+                        t.join()
+    LOG.debug('All threads done')
 
-    # Delay option
-    DELAY = int(utils.settings('startupDelay'))
 
-    LOG.info("Delaying Plex startup by: %s sec...", DELAY)
-    if EXIT:
-        LOG.error('PKC service.py already started - exiting this instance')
-    elif DELAY and xbmc.Monitor().waitForAbort(DELAY):
-        # Start the service
-        LOG.info("Abort requested while waiting. PKC not started.")
-    else:
-        Service().ServiceEntryPoint()
+def signout():
+    util.setSetting('auth.token', '')
+    LOG.info('Signing out...')
+    plexapp.ACCOUNT.signOut()
+
+
+def main():
+    LOG.info('Starting %s', util.ADDON.getAddonInfo('version'))
+    LOG.info('User-agent: %s', plex.defaultUserAgent())
+
+    try:
+        while not xbmc.abortRequested:
+            if plex.init():
+                while not xbmc.abortRequested:
+                    if (
+                        not plexapp.ACCOUNT.isOffline and not
+                        plexapp.ACCOUNT.isAuthenticated and
+                        (len(plexapp.ACCOUNT.homeUsers) > 1 or plexapp.ACCOUNT.isProtected)
+
+                    ):
+                        result = userselect.start()
+                        if not result:
+                            return
+                        elif result == 'signout':
+                            signout()
+                            break
+                        elif result == 'signin':
+                            break
+                        LOG.info('User selected')
+
+                    try:
+                        selectedServer = plexapp.SERVERMANAGER.selectedServer
+
+                        if not selectedServer:
+                            LOG.debug('Waiting for selected server...')
+                            for timeout, skip_preferred, skip_owned in ((10, True, False), (10, True, True)):
+                                plex.CallbackEvent(plexapp.APP, 'change:selectedServer', timeout=timeout).wait()
+
+                                selectedServer = plexapp.SERVERMANAGER.checkSelectedServerSearch(skip_preferred=skip_preferred, skip_owned=skip_owned)
+                                if selectedServer:
+                                    break
+                            else:
+                                LOG.debug('Finished waiting for selected server...')
+
+                        LOG.info('Starting with server: %s', selectedServer)
+
+                        windowutils.HOME = home.HomeWindow.open()
+                        util.CRON.cancelReceiver(windowutils.HOME)
+
+                        if not windowutils.HOME.closeOption:
+                            return
+
+                        closeOption = windowutils.HOME.closeOption
+
+                        windowutils.shutdownHome()
+
+                        if closeOption == 'signout':
+                            signout()
+                            break
+                        elif closeOption == 'switch':
+                            plexapp.ACCOUNT.isAuthenticated = False
+                    finally:
+                        windowutils.shutdownHome()
+                        gc.collect(2)
+
+            else:
+                break
+    except:
+        util.ERROR()
+    finally:
+        LOG.info('SHUTTING DOWN...')
+        # player.shutdown()
+        plexapp.APP.preShutdown()
+        if util.CRON:
+            util.CRON.stop()
+        backgroundthread.BGThreader.shutdown()
+        plexapp.APP.shutdown()
+        waitForThreads()
+        LOG.info('SHUTDOWN FINISHED')
+
+        from .windows import kodigui
+        kodigui.MONITOR = None
+        util.shutdown()
+        gc.collect(2)
