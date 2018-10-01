@@ -338,13 +338,6 @@ def _authorize():
 
     back = signin.Background.create()
 
-    pre = signin.PreSignInWindow.open()
-    try:
-        if not pre.doSignin:
-            return None
-    finally:
-        del pre
-
     try:
         while True:
             pinLoginWindow = signin.PinLoginWindow.create()
