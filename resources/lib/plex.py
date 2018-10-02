@@ -13,7 +13,7 @@ import requests
 import xbmc
 
 from .plexnet import plexapp, myplex
-from . import util
+from . import util, utils
 
 LOG = logging.getLogger('PLEX.plex')
 
@@ -345,7 +345,8 @@ def _authorize():
                 pl = myplex.PinLogin()
             except requests.ConnectionError:
                 util.ERROR()
-                util.messageDialog(util.T(32427, 'Failed'), util.T(32449, 'Sign-in failed. Cound not connect to plex.tv'))
+                # Could not sign in to plex.tv Try again later
+                utils.messageDialog(utils.lang(29999), utils.lang(39305))
                 return
 
             pinLoginWindow.setPin(pl.pin)
@@ -354,7 +355,7 @@ def _authorize():
                 pl.startTokenPolling()
                 while not pl.finished():
                     if pinLoginWindow.abort:
-                        util.DEBUG_LOG('SIGN IN: Pin login aborted')
+                        LOG.info('Pin login aborted')
                         pl.abort()
                         return
                     xbmc.sleep(100)
@@ -370,11 +371,11 @@ def _authorize():
                 del pinLoginWindow
 
             if pl.expired():
-                util.DEBUG_LOG('SIGN IN: Pin expired')
+                LOG.info('Pin expired')
                 expiredWindow = signin.ExpiredWindow.open()
                 try:
                     if not expiredWindow.refresh:
-                        util.DEBUG_LOG('SIGN IN: Pin refresh aborted')
+                        LOG.info('Pin refresh aborted')
                         return
                 finally:
                     del expiredWindow
