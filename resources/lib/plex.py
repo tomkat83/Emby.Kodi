@@ -282,7 +282,9 @@ def init():
     while retry:
         retry = False
         if not plexapp.ACCOUNT.authToken:
-            token = authorize()
+            from .windows import background
+            with background.BackgroundContext(function=authorize) as d:
+                token = d.result
 
             if not token:
                 LOG.info('FAILED TO AUTHORIZE')
@@ -326,12 +328,6 @@ def requirePlexPass():
 
 
 def authorize():
-    from .windows import background
-    with background.BackgroundContext(function=_authorize) as win:
-        return win.result
-
-
-def _authorize():
     from .windows import signin, background
 
     background.setSplash(False)

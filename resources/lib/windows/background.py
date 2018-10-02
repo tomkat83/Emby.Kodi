@@ -49,9 +49,9 @@ class BackgroundContext(object):
     Context Manager to open a Plex background window - in the background. This
     will e.g. ensure that you can capture key-presses
     Use like this:
-        with BackgroundContext(function) as win:
+        with BackgroundContext(function) as d:
             <now function will be executed immediately. Get its results:>
-            result = win.result
+            result = d.result
     """
     def __init__(self, function=None):
         self.window = None
