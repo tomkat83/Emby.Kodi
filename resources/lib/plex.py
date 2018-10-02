@@ -64,7 +64,7 @@ def defaultUserAgent():
         p_system = 'Unknown'
         p_release = 'Unknown'
 
-    return " ".join(['%s/%s' % ('Plex-for-Kodi', util.ADDON.getAddonInfo('version')),
+    return " ".join(['%s/%s' % ('PlexKodiConnect', util.ADDON.getAddonInfo('version')),
                      '%s/%s' % ('Kodi', xbmc.getInfoLabel('System.BuildVersion').replace(' ', '-')),
                      '%s/%s' % (_implementation, _implementation_version),
                      '%s/%s' % (p_system, p_release)])
