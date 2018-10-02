@@ -82,7 +82,7 @@ class PlexInterface(plexapp.AppInterface):
         'provides': 'client,controller,player,pubsub-player',
         'device': util.getPlatform() or plexapp.PLATFORM,
         'model': 'Unknown',
-        'friendlyName': 'Kodi Add-on ({0})'.format(platform.node()),
+        'friendlyName': 'PlexKodiConnect {0}'.format(platform.node()),
         'supports1080p60': True,
         'vp9Support': True,
         'transcodeVideoQualities': [
