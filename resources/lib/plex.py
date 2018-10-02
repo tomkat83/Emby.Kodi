@@ -356,7 +356,7 @@ def _authorize():
                     if pinLoginWindow.abort:
                         util.DEBUG_LOG('SIGN IN: Pin login aborted')
                         pl.abort()
-                        return None
+                        return
                     xbmc.sleep(100)
                 else:
                     if not pl.expired():
@@ -364,7 +364,7 @@ def _authorize():
                             pinLoginWindow.setLinking()
                             return pl.authenticationToken
                         else:
-                            return None
+                            return
             finally:
                 pinLoginWindow.doClose()
                 del pinLoginWindow
@@ -375,7 +375,7 @@ def _authorize():
                 try:
                     if not expiredWindow.refresh:
                         util.DEBUG_LOG('SIGN IN: Pin refresh aborted')
-                        return None
+                        return
                 finally:
                     del expiredWindow
     finally:

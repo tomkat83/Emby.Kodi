@@ -61,8 +61,8 @@ class BackgroundContext(object):
     def __enter__(self):
         self.window = BackgroundWindow.create(function=self.function)
         self.window.modal()
+        self.result = self.window.result
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.result = self.window.result
         del self.window
