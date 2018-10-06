@@ -294,7 +294,7 @@ def signout():
 
 
 def main():
-    LOG.info('Starting %s', util.ADDON.getAddonInfo('version'))
+    LOG.info('Starting PKC %s', util.ADDON.getAddonInfo('version'))
     LOG.info('User-agent: %s', plex.defaultUserAgent())
 
     try:

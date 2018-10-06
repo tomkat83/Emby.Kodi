@@ -138,10 +138,7 @@ class MyPlexAccount(object):
             self.hasQueue = bool(data.attrib.get('queueEmail'))
 
             # PIN
-            if data.attrib.get('pin'):
-                self.pin = data.attrib.get('pin')
-            else:
-                self.pin = None
+            self.pin = data.attrib.get('pin')
             self.isProtected = bool(self.pin)
 
             # update the list of users in the home

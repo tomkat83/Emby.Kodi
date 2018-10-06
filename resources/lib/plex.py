@@ -229,7 +229,7 @@ plexapp.setUserAgent(defaultUserAgent())
 
 
 class CallbackEvent(plexapp.CompatEvent):
-    def __init__(self, context, signal, timeout=15, *args, **kwargs):
+    def __init__(self, context, signal, timeout=20, *args, **kwargs):
         threading._Event.__init__(self, *args, **kwargs)
         self.start = time.time()
         self.context = context
@@ -243,8 +243,11 @@ class CallbackEvent(plexapp.CompatEvent):
     def __exit__(self, exc_type, exc_value, traceback):
         self.wait()
 
-    def __repr__(self):
+    def __unicode__(self):
         return '<{0}:{1}>'.format(self.__class__.__name__, self.signal)
+
+    def __repr__(self):
+        return self.__unicode__().encode('utf-8')
 
     def set(self, **kwargs):
         threading._Event.set(self)
@@ -277,54 +280,19 @@ def init():
         plexapp.init()
         LOG.info('Waiting for account initialization...')
 
-    retry = True
+    if not plexapp.ACCOUNT.authToken:
+        from .windows import background
+        with background.BackgroundContext(function=authorize) as d:
+            token = d.result
 
-    while retry:
-        retry = False
-        if not plexapp.ACCOUNT.authToken:
-            from .windows import background
-            with background.BackgroundContext(function=authorize) as d:
-                token = d.result
+        if not token:
+            LOG.info('Did not get a Plex token')
+            return False
 
-            if not token:
-                LOG.info('FAILED TO AUTHORIZE')
-                return False
-
-            with CallbackEvent(plexapp.APP, 'account:response'):
-                plexapp.ACCOUNT.validateToken(token)
-                LOG.info('Waiting for account initialization')
-
-        # if not PLEX:
-        #     util.messageDialog('Connection Error', u'Unable to connect to any servers')
-        #     util.DEBUG_LOG('SIGN IN: Failed to connect to any servers')
-        #     return False
-
-        # util.DEBUG_LOG('SIGN IN: Connected to server: {0} - {1}'.format(PLEX.friendlyName, PLEX.baseuri))
-        success = requirePlexPass()
-        if success == 'RETRY':
-            retry = True
-            continue
-
-        return success
-
-
-def requirePlexPass():
+        with CallbackEvent(plexapp.APP, 'account:response'):
+            plexapp.ACCOUNT.validateToken(token)
+            LOG.info('Waiting for account initialization')
     return True
-    # if not plexapp.ACCOUNT.hasPlexPass():
-    #     from windows import signin, background
-    #     background.setSplash(False)
-    #     w = signin.SignInPlexPass.open()
-    #     retry = w.retry
-    #     del w
-    #     util.DEBUG_LOG('PlexPass required. Signing out...')
-    #     plexapp.ACCOUNT.signOut()
-    #     plexapp.SERVERMANAGER.clearState()
-    #     if retry:
-    #         return 'RETRY'
-    #     else:
-    #         return False
-
-    # return True
 
 
 def authorize():
