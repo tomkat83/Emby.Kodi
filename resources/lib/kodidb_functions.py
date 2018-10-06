@@ -1253,3 +1253,30 @@ def kodiid_from_filename(path, kodi_type=None, db_type=None):
             except TypeError:
                 LOG.debug('No kodi video db element found for path %s', path)
     return kodi_id, kodi_type
+
+
+def wipe_kodi_dbs():
+    """
+    Completely resets the Kodi databases 'video', 'texture' and 'music' (if
+    music sync is enabled)
+    """
+    LOG.warn('Wiping Kodi databases!')
+    query = "SELECT name FROM sqlite_master WHERE type = 'table'"
+    kinds = ['video', 'texture']
+    if state.ENABLE_MUSIC:
+        LOG.info('Also deleting music database')
+        kinds.append('music')
+    for db in kinds:
+        with GetKodiDB(db) as kodi_db:
+            kodi_db.cursor.execute(query)
+            tables = kodi_db.cursor.fetchall()
+            tables = [i[0] for i in tables]
+            if 'version' in tables:
+                tables.remove('version')
+            for table in tables:
+                delete_query = 'DELETE FROM %s' % table
+                kodi_db.cursor.execute(delete_query)
+    import xbmc
+    xbmc.executebuiltin('UpdateLibrary(video)')
+    if state.ENABLE_MUSIC:
+        xbmc.executebuiltin('UpdateLibrary(music)')

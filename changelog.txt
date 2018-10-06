@@ -1,3 +1,8 @@
+version 2.4.5 (beta only):
+- Fix playback not starting up at all
+- Rewire Kodi library refreshs
+- Wipe Kodi database on first PKC run to more reliably install PKC
+
 version 2.4.4 (beta only):
 - Fix rare case when playback would not start-up
 - Increase logging

@@ -39,6 +39,25 @@ LOG = getLogger('PLEX.librarysync')
 ###############################################################################
 
 
+def update_library(video=True, music=True):
+    """
+    Updates the Kodi library and thus refreshes the Kodi views and widgets
+    """
+    if xbmc.getCondVisibility('Container.Content(musicvideos)') or \
+            xbmc.getCondVisibility('Window.IsMedia'):
+        # Prevent cursor from moving
+        LOG.debug("Refreshing container")
+        xbmc.executebuiltin('Container.Refresh')
+    else:
+        # Update widgets
+        if video:
+            LOG.debug("Doing Kodi Video Lib update")
+            xbmc.executebuiltin('UpdateLibrary(video)')
+        if music:
+            LOG.debug("Doing Kodi Music Lib update")
+            xbmc.executebuiltin('UpdateLibrary(music)')
+
+
 @utils.thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD', 'STOP_SYNC'])
 class LibrarySync(Thread):
     """
@@ -58,8 +77,8 @@ class LibrarySync(Thread):
         # Need to be set accordingly later
         self.compare = None
         self.new_items_only = None
-        self.update_kodi_video_library = None
-        self.update_kodi_music_library = None
+        self.update_kodi_video_library = False
+        self.update_kodi_music_library = False
         self.nodes = {}
         self.playlists = {}
         self.sorted_views = []
@@ -288,9 +307,7 @@ class LibrarySync(Thread):
                 return False
 
         # Let kodi update the views in any case, since we're doing a full sync
-        xbmc.executebuiltin('UpdateLibrary(video)')
-        if state.ENABLE_MUSIC:
-            xbmc.executebuiltin('UpdateLibrary(music)')
+        update_library(video=True, music=state.ENABLE_MUSIC)
 
         if utils.window('plex_scancrashed') == 'true':
             # Show warning if itemtypes.py crashed at some point
@@ -1081,8 +1098,6 @@ class LibrarySync(Thread):
             6: 'analyzing',
             9: 'deleted'
         """
-        self.update_kodi_video_library = False
-        self.update_kodi_music_library = False
         now = utils.unix_timestamp()
         delete_list = []
         for i, item in enumerate(self.items_to_process):
@@ -1119,12 +1134,11 @@ class LibrarySync(Thread):
             self.items_to_process = self.multi_delete(self.items_to_process,
                                                       delete_list)
         # Let Kodi know of the change
-        if self.update_kodi_video_library is True:
-            LOG.info("Doing Kodi Video Lib update")
-            xbmc.executebuiltin('UpdateLibrary(video)')
-        if self.update_kodi_music_library is True:
-            LOG.info("Doing Kodi Music Lib update")
-            xbmc.executebuiltin('UpdateLibrary(music)')
+        if self.update_kodi_video_library or self.update_kodi_music_library:
+            update_library(video=self.update_kodi_video_library,
+                           music=self.update_kodi_music_library)
+            self.update_kodi_video_library = False
+            self.update_kodi_music_library = False
 
     def process_newitems(self, item):
         xml = PF.GetPlexMetadata(item['ratingKey'])

@@ -637,6 +637,10 @@ class InitialSetup(object):
         # dialog.ok(heading=utils.lang(29999), line1=utils.lang(39717))
         # Make sure that we only ask these questions upon first installation
         utils.settings('InstallQuestionsAnswered', value='true')
+        
+        # New installation - make sure we start with a clean slate
+        from . import kodidb_functions
+        kodidb_functions.wipe_kodi_dbs()
 
         if goto_settings is False:
             # Open Settings page now? You will need to restart!
