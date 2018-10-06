@@ -535,7 +535,7 @@ def _playback_cleanup(ended=False):
         state.PLAYER_STATES[playerid] = copy.deepcopy(state.PLAYSTATE)
     # As all playback has halted, reset the players that have been active
     state.ACTIVE_PLAYERS = set()
-    LOG.debug('Finished PKC playback cleanup')
+    LOG.info('Finished PKC playback cleanup')
 
 
 def _record_playstate(status, ended):

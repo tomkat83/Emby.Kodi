@@ -1,3 +1,7 @@
+version 2.4.4 (beta only):
+- Fix rare case when playback would not start-up
+- Increase logging
+
 version 2.4.3:
 - Fix Kodi addons throwing jsonrpc errors (database reset needed)
 
