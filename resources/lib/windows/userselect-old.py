@@ -6,14 +6,14 @@
            (home) users
 """
 from __future__ import absolute_import, division, unicode_literals
+from logging import getLogger
 import xbmc
 import xbmcgui
 
-from . import kodigui, dropdown
-from .. import util, image, backgroundthread
-from ..util import T
-from ..plexnet import plexapp
+from . import kodigui
+from .. import backgroundthread, utils, plex_tv, variables as v
 
+LOG = getLogger('PLEX.' + __name__)
 
 
 class UserThumbTask(backgroundthread.Task):
@@ -26,14 +26,13 @@ class UserThumbTask(backgroundthread.Task):
         for user in self.users:
             if self.isCanceled():
                 return
-
-            thumb, back = image.getImage(user.thumb, user.id)
+            thumb, back = user.thumb, ''
             self.callback(user, thumb, back)
 
 
 class UserSelectWindow(kodigui.BaseWindow):
     xmlFile = 'script-plex-user_select.xml'
-    path = util.ADDON.getAddonInfo('path')
+    path = v.ADDON_PATH
     theme = 'Main'
     res = '1080i'
     width = 1920
@@ -45,7 +44,8 @@ class UserSelectWindow(kodigui.BaseWindow):
 
     def __init__(self, *args, **kwargs):
         self.task = None
-        self.selected = False
+        self.user = None
+        self.aborted = False
         kodigui.BaseWindow.__init__(self, *args, **kwargs)
 
     def onFirstInit(self):
@@ -77,7 +77,7 @@ class UserSelectWindow(kodigui.BaseWindow):
                     self.pinEntryClicked(211)
                     return
         except:
-            util.ERROR()
+            utils.ERROR()
 
         kodigui.BaseWindow.onAction(self, action)
 
@@ -91,7 +91,7 @@ class UserSelectWindow(kodigui.BaseWindow):
         elif 200 < controlID < 212:
             self.pinEntryClicked(controlID)
         elif controlID == self.HOME_BUTTON_ID:
-            self.shutdownClicked()
+            self.home_button_clicked()
 
     def onFocus(self, controlID):
         if controlID == self.USER_LIST_ID:
@@ -107,7 +107,7 @@ class UserSelectWindow(kodigui.BaseWindow):
     def start(self):
         self.setProperty('busy', '1')
         try:
-            users = plexapp.ACCOUNT.homeUsers
+            users = plex_tv.plex_home_users(utils.settings('plexToken'))
 
             items = []
             for user in users:
@@ -133,15 +133,13 @@ class UserSelectWindow(kodigui.BaseWindow):
         """
         Action taken if user clicked the home button
         """
-        self.selected = False
+        self.user = None
+        self.aborted = True
         self.doClose()
 
     def pinEntryClicked(self, controlID):
         item = self.userList.getSelectedItem()
-        if item.getProperty('editing.pin'):
-            pin = item.getProperty('editing.pin')
-        else:
-            pin = ''
+        pin = item.getProperty('editing.pin') or ''
 
         if len(pin) > 3:
             return
@@ -163,24 +161,22 @@ class UserSelectWindow(kodigui.BaseWindow):
             item.setProperty('editing.pin', '')
 
     def userSelected(self, item, pin=None):
-        user = item.dataSource
-        # xbmc.sleep(500)
-        util.DEBUG_LOG('Home user selected: {0}'.format(user))
-
-        from .. import plex
-        with plex.CallbackEvent(plexapp.APP, 'account:response') as e:
-            if plexapp.ACCOUNT.switchHomeUser(user.id, pin) and plexapp.ACCOUNT.switchUser:
-                util.DEBUG_LOG('Waiting for user change...')
-            else:
-                e.close()
-                item.setProperty('pin', item.dataSource.title)
-                item.setProperty('editing.pin', '')
-                util.messageDialog(T(30135, 'Error'),
-                                   '%s %s' % (T(39229, 'Login failed with plex.tv for user'),
-                                              self.user.username))
-                return
-
-        self.selected = True
+        self.user = item.dataSource
+        LOG.info('Home user selected: %s', self.user)
+        self.user.authToken = plex_tv.switch_home_user(
+            self.user.id,
+            pin,
+            utils.settings('plexToken'),
+            utils.settings('plex_machineIdentifier'))
+        if self.user.authToken is None:
+            self.user = None
+            item.setProperty('pin', item.dataSource.title)
+            item.setProperty('editing.pin', '')
+            # 'Error': 'Login failed with plex.tv for user'
+            utils.messageDialog(utils.lang(30135),
+                                '%s %s' % (utils.lang(39229),
+                                           self.user.username))
+            return
         self.doClose()
 
     def finished(self):
@@ -189,7 +185,18 @@ class UserSelectWindow(kodigui.BaseWindow):
 
 
 def start():
+    """
+    Hit this function to open a dialog to choose the Plex user
+
+    Returns
+    =======
+    tuple (user, aborted)
+    user : HomeUser
+        Or None if user switch failed or aborted by the user)
+    aborted : bool
+        True if the user cancelled the dialog
+    """
     w = UserSelectWindow.open()
-    selected = w.selected
+    user, aborted = w.user, w.aborted
     del w
-    return selected
+    return user, aborted

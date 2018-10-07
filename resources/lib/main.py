@@ -10,6 +10,7 @@ import xbmc
 
 from . import plex, util, backgroundthread
 from .plexnet import plexapp, threadutils
+from .windows import userselect
 
 from . import utils
 from . import userclient

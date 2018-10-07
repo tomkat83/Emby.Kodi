@@ -45,7 +45,7 @@ MONITOR = UtilityMonitor()
 
 
 def T(ID, eng=''):
-    return ADDON.getLocalizedString(ID)
+    return ADDON.getLocalizedString(ID) or xbmc.getLocalizedString(ID)
 
 
 def LOG(msg, level=xbmc.LOGNOTICE):
