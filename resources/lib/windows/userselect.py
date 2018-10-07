@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, unicode_literals
 import xbmc
 import xbmcgui
 
-from . import kodigui, dropdown
+from . import kodigui
 from .. import util, image, backgroundthread
 from ..util import T
 from ..plexnet import plexapp
