@@ -5,13 +5,9 @@ Connect to the Kodi databases (video and music) and operate on them
 """
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from ntpath import dirname
 from sqlite3 import IntegrityError
 
-from . import artwork
-from . import utils
-from . import variables as v
-from . import state
+from . import artwork, utils, variables as v, state, path_ops
 
 ###############################################################################
 
@@ -104,17 +100,30 @@ class KodiDBMethods(object):
                                         1,
                                         0))
 
+    def setup_music_db_dummy_entries(self):
+        """
+        Kodi Krypton Krypton has some dummy first entries that we might've
+        deleted
+            idArtist: 1  strArtist: [Missing Tag]
+            strMusicBrainzArtistID: Artist Tag Missing
+        """
+        query = '''
+            INSERT OR REPLACE INTO artist(
+                idArtist, strArtist, strMusicBrainzArtistID)
+            VALUES (?, ?, ?)
+        '''
+        self.cursor.execute(query, (1,
+                                    '[Missing Tag]',
+                                    'Artist Tag Missing'))
+
     def parent_path_id(self, path):
         """
         Video DB: Adds all subdirectories to path table while setting a "trail"
         of parent path ids
         """
-        if "\\" in path:
-            # Local path
-            parentpath = "%s\\" % dirname(dirname(path))
-        else:
-            # Network path
-            parentpath = "%s/" % dirname(dirname(path))
+        parentpath = path_ops.path.abspath(
+            path_ops.path.join(path,
+                               path_ops.decode_path(path_ops.path.pardir)))
         pathid = self.get_path(parentpath)
         if pathid is None:
             self.cursor.execute("SELECT COALESCE(MAX(idPath),0) FROM path")
@@ -125,9 +134,11 @@ class KodiDBMethods(object):
                 VALUES (?, ?, ?)
             '''
             self.cursor.execute(query, (pathid, parentpath, datetime))
-            parent_id = self.parent_path_id(parentpath)
-            query = 'UPDATE path SET idParentPath = ? WHERE idPath = ?'
-            self.cursor.execute(query, (parent_id, pathid))
+            if parentpath != path:
+                # In case we end up having media in the filesystem root, C:\
+                parent_id = self.parent_path_id(parentpath)
+                query = 'UPDATE path SET idParentPath = ? WHERE idPath = ?'
+                self.cursor.execute(query, (parent_id, pathid))
         return pathid
 
     def add_video_path(self, path, date_added=None, id_parent_path=None,
@@ -297,11 +308,13 @@ class KodiDBMethods(object):
                                     (path_id,))
 
     def _modify_link_and_table(self, kodi_id, kodi_type, entries, link_table,
-                               table, key):
+                               table, key, first_id=None):
+        first_id = first_id if first_id is not None else 1
         query = '''
             SELECT %s FROM %s WHERE name = ? COLLATE NOCASE LIMIT 1
         ''' % (key, table)
-        query_id = 'SELECT COALESCE(MAX(%s), 0) FROM %s' % (key, table)
+        query_id = ('SELECT COALESCE(MAX(%s), %s) FROM %s'
+                    % (key, first_id - 1, table))
         query_new = ('INSERT INTO %s(%s, name) values(?, ?)'
                      % (table, key))
         entry_ids = []
@@ -911,12 +924,8 @@ class KodiDBMethods(object):
             except TypeError:
                 # Krypton has a dummy first entry idArtist: 1  strArtist:
                 # [Missing Tag] strMusicBrainzArtistID: Artist Tag Missing
-                if v.KODIVERSION >= 17:
-                    self.cursor.execute(
-                        "SELECT COALESCE(MAX(idArtist),1) FROM artist")
-                else:
-                    self.cursor.execute(
-                        "SELECT COALESCE(MAX(idArtist),0) FROM artist")
+                self.cursor.execute(
+                    "SELECT COALESCE(MAX(idArtist),1) FROM artist")
                 artistid = self.cursor.fetchone()[0] + 1
                 query = '''
                     INSERT INTO artist(idArtist, strArtist,

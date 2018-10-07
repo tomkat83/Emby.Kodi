@@ -5,7 +5,6 @@ Various functions and decorators for PKC
 """
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from cProfile import Profile
 from pstats import Stats
 from sqlite3 import connect, OperationalError
 from datetime import datetime, timedelta
@@ -578,31 +577,6 @@ def reset(ask_user=True):
         LOG.info("Deleting: settings.xml")
         path_ops.remove("%ssettings.xml" % v.ADDON_PROFILE)
     reboot_kodi()
-
-
-def profiling(sortby="cumulative"):
-    """
-    Will print results to Kodi log. Must be enabled in the Python source code
-    """
-    def decorator(func):
-        """
-        decorator construct
-        """
-        def wrapper(*args, **kwargs):
-            """
-            wrapper construct
-            """
-            profile = Profile()
-            profile.enable()
-            result = func(*args, **kwargs)
-            profile.disable()
-            string_io = StringIO()
-            stats = Stats(profile, stream=string_io).sort_stats(sortby)
-            stats.print_stats()
-            LOG.info(string_io.getvalue())
-            return result
-        return wrapper
-    return decorator
 
 
 def compare_version(current, minimum):

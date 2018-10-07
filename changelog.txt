@@ -1,3 +1,9 @@
+version 2.4.6 (beta only):
+- Fix PKC not starting up on Enigma
+- Fix sync issues if video lies in root of file system
+- Make sure we retain a dummy first music artist entry
+- Increase logging
+
 version 2.4.5 (beta only):
 - Fix playback not starting up at all
 - Rewire Kodi library refreshs

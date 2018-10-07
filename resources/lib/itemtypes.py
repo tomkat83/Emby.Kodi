@@ -145,6 +145,7 @@ class Movies(Items):
         # If the item doesn't exist, we'll add it to the database
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding movie with plex_id %s', itemid)
         # Cannot parse XML, abort
         if not itemid:
             LOG.error("Cannot parse XML data for movie")
@@ -485,6 +486,7 @@ class TVShows(Items):
         api = API(item)
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding show with plex_id %s', itemid)
         if not itemid:
             LOG.error("Cannot parse XML data for TV show")
             return
@@ -690,6 +692,7 @@ class TVShows(Items):
         """
         api = API(item)
         plex_id = api.plex_id()
+        LOG.debug('Adding season with plex_id %s', plex_id)
         if not plex_id:
             LOG.error('Error getting plex_id for season, skipping')
             return
@@ -740,6 +743,7 @@ class TVShows(Items):
         api = API(item)
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding episode with plex_id %s', itemid)
         if not itemid:
             LOG.error('Error getting itemid for episode, skipping')
             return
@@ -1131,6 +1135,7 @@ class Music(Items):
 
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding artist with plex_id %s', itemid)
         plex_dbitem = plex_db.getItem_byId(itemid)
         try:
             artistid = plex_dbitem[0]
@@ -1222,6 +1227,7 @@ class Music(Items):
 
         update_item = True
         plex_id = api.plex_id()
+        LOG.debug('Adding album with plex_id %s', plex_id)
         if not plex_id:
             LOG.error('Error processing Album, skipping')
             return
@@ -1382,9 +1388,9 @@ class Music(Items):
         plex_db = self.plex_db
         artwork = self.artwork
         api = API(item)
-
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding song with plex_id %s', itemid)
         if not itemid:
             LOG.error('Error processing Song; skipping')
             return

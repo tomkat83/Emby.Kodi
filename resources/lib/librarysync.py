@@ -1543,9 +1543,13 @@ class LibrarySync(Thread):
         LOG.info("Db version: %s", utils.settings('dbCreatedWithVersion'))
 
         LOG.info('Refreshing video nodes and playlists now')
-        # Setup the paths for addon-paths (even when using direct paths)
         with kodidb.GetKodiDB('video') as kodi_db:
+            # Setup the paths for addon-paths (even when using direct paths)
             kodi_db.setup_path_table()
+        with kodidb.GetKodiDB('music') as kodi_db:
+            # Hack for a dummy genre entry - even when we're not using
+            # Plex Music
+            kodi_db.setup_music_db_dummy_entries()
         utils.window('plex_dbScan', clear=True)
         state.DB_SCAN = False
         playlist_monitor = None
