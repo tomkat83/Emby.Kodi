@@ -275,33 +275,50 @@ class CallbackEvent(plexapp.CompatEvent):
 
 def init():
     LOG.info('Initializing')
-
     with CallbackEvent(plexapp.APP, 'init'):
         plexapp.init()
         LOG.info('Waiting for account initialization...')
+    LOG.info('Account initialization done...')
 
-    if not plexapp.ACCOUNT.authToken:
-        from .windows import background
-        with background.BackgroundContext(function=authorize) as d:
-            token = d.result
 
-        if not token:
-            LOG.info('Did not get a Plex token')
-            return False
+def authorize_user():
+    """
+    Display userselect dialog. Returns True if user has been selected
+    and a valid token has been retrieved, False otherwise
+    """
+    LOG.info('Displaying userselect dialog')
+    from .windows import background
+    with background.BackgroundContext(function=authorize) as d:
+        token = d.result
+    if not token:
+        LOG.info('Did not get a Plex token')
+        return False
+    with CallbackEvent(plexapp.APP, 'account:response'):
+        plexapp.ACCOUNT.validateToken(token)
+        LOG.info('Waiting for account initialization')
+    return plexapp.ACCOUNT.isSignedIn
 
-        with CallbackEvent(plexapp.APP, 'account:response'):
-            plexapp.ACCOUNT.validateToken(token)
-            LOG.info('Waiting for account initialization')
-    return True
+
+def select_user():
+    """
+    """
+    pass
+
+
+def select_server():
+    """
+    Displays a window for the user to select a pms.
+    """
+    pass
 
 
 def authorize():
+    """
+    Shows dialogs to sign in to plex.tv with pin. Returns token or None
+    """
     from .windows import signin, background
-
     background.setSplash(False)
-
     back = signin.Background.create()
-
     try:
         while True:
             pinLoginWindow = signin.PinLoginWindow.create()

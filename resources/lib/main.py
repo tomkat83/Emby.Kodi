@@ -298,63 +298,84 @@ def main():
     LOG.info('Starting PKC %s', util.ADDON.getAddonInfo('version'))
     LOG.info('User-agent: %s', plex.defaultUserAgent())
 
+    server_select_shown = False
+
     try:
+        plex.init()
+        # Check plex.tv sign-in status
+        if not plexapp.ACCOUNT.authToken:
+            LOG.info('Not signed in to plex.tv yet')
+            if utils.settings('myplexlogin') == 'true':
+                plex.authorize_user()
+        # Main Loop
         while not xbmc.abortRequested:
-            if plex.init():
-                while not xbmc.abortRequested:
-                    if (
-                        not plexapp.ACCOUNT.isOffline and not
-                        plexapp.ACCOUNT.isAuthenticated and
-                        (len(plexapp.ACCOUNT.homeUsers) > 1 or plexapp.ACCOUNT.isProtected)
+            # Check whether a PMS server has been set
+            selectedServer = plexapp.SERVERMANAGER.selectedServer
+            if not selectedServer:
+                if not server_select_shown:
+                    server_select_shown = True
+                    LOG.debug('No PMS set yet, presenting dialog')
+                    plex.select_server()
+                else:
+                    util.MONITOR.waitForAbort(1)
+                continue
+            # Ping the PMS until we're sure its online
+            if not selectedServer.isReachable():
+                selectedServer.updateReachability(force=True,
+                                                  allowFallback=True)
+                continue
+            while not xbmc.abortRequested:
 
-                    ):
-                        result = userselect.start()
-                        if not result:
-                            return
-                        elif result == 'signout':
-                            signout()
-                            break
-                        elif result == 'signin':
-                            break
-                        LOG.info('User selected')
+                if (
+                    not plexapp.ACCOUNT.isOffline and not
+                    plexapp.ACCOUNT.isAuthenticated and
+                    (len(plexapp.ACCOUNT.homeUsers) > 1 or plexapp.ACCOUNT.isProtected)
 
-                    try:
-                        selectedServer = plexapp.SERVERMANAGER.selectedServer
+                ):
+                    result = userselect.start()
+                    if not result:
+                        return
+                    elif result == 'signout':
+                        signout()
+                        break
+                    elif result == 'signin':
+                        break
+                    LOG.info('User selected')
 
-                        if not selectedServer:
-                            LOG.debug('Waiting for selected server...')
-                            for timeout, skip_preferred, skip_owned in ((10, True, False), (10, True, True)):
-                                plex.CallbackEvent(plexapp.APP, 'change:selectedServer', timeout=timeout).wait()
+                try:
+                    selectedServer = plexapp.SERVERMANAGER.selectedServer
 
-                                selectedServer = plexapp.SERVERMANAGER.checkSelectedServerSearch(skip_preferred=skip_preferred, skip_owned=skip_owned)
-                                if selectedServer:
-                                    break
-                            else:
-                                LOG.debug('Finished waiting for selected server...')
+                    if not selectedServer:
+                        LOG.debug('Waiting for selected server...')
+                        for timeout, skip_preferred, skip_owned in ((10, True, False), (10, True, True)):
+                            plex.CallbackEvent(plexapp.APP, 'change:selectedServer', timeout=timeout).wait()
 
-                        LOG.info('Starting with server: %s', selectedServer)
+                            selectedServer = plexapp.SERVERMANAGER.checkSelectedServerSearch(skip_preferred=skip_preferred, skip_owned=skip_owned)
+                            if selectedServer:
+                                break
+                        else:
+                            LOG.debug('Finished waiting for selected server...')
 
-                        windowutils.HOME = home.HomeWindow.open()
-                        util.CRON.cancelReceiver(windowutils.HOME)
+                    LOG.info('Starting with server: %s', selectedServer)
 
-                        if not windowutils.HOME.closeOption:
-                            return
+                    windowutils.HOME = home.HomeWindow.open()
+                    util.CRON.cancelReceiver(windowutils.HOME)
 
-                        closeOption = windowutils.HOME.closeOption
+                    if not windowutils.HOME.closeOption:
+                        return
 
-                        windowutils.shutdownHome()
+                    closeOption = windowutils.HOME.closeOption
 
-                        if closeOption == 'signout':
-                            signout()
-                            break
-                        elif closeOption == 'switch':
-                            plexapp.ACCOUNT.isAuthenticated = False
-                    finally:
-                        windowutils.shutdownHome()
-                        gc.collect(2)
+                    windowutils.shutdownHome()
 
-            else:
-                break
+                    if closeOption == 'signout':
+                        signout()
+                        break
+                    elif closeOption == 'switch':
+                        plexapp.ACCOUNT.isAuthenticated = False
+                finally:
+                    windowutils.shutdownHome()
+                    gc.collect(2)
     except:
         util.ERROR()
     finally:
