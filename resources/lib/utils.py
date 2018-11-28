@@ -9,16 +9,10 @@ from sqlite3 import connect, OperationalError
 from datetime import datetime, timedelta
 from time import localtime, strftime
 from unicodedata import normalize
-try:
-    import xml.etree.cElementTree as etree
-    import defusedxml.cElementTree as defused_etree  # etree parse unsafe
-    from xml.etree.ElementTree import ParseError
-    ETREE = 'cElementTree'
-except ImportError:
-    import xml.etree.ElementTree as etree
-    import defusedxml.ElementTree as defused_etree  # etree parse unsafe
-    from xml.etree.ElementTree import ParseError
-    ETREE = 'ElementTree'
+# Originally tried faster cElementTree, but does NOT work reliably with Kodi
+import xml.etree.ElementTree as etree
+import defusedxml.ElementTree as defused_etree  # etree parse unsafe
+from xml.etree.ElementTree import ParseError
 from functools import wraps, partial
 from urllib import quote_plus
 import hashlib
