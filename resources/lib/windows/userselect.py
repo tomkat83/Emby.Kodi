@@ -196,6 +196,11 @@ def start():
     aborted : bool
         True if the user cancelled the dialog
     """
+    # Fix for:
+    #   DEBUG: Activating window ID: 13000
+    #   INFO: Activate of window '13000' refused because there are active modal dialogs
+    #   DEBUG: Activating window ID: 13000
+    xbmc.executebuiltin("Dialog.Close(all, true)")
     w = UserSelectWindow.open()
     user, aborted = w.user, w.aborted
     del w
