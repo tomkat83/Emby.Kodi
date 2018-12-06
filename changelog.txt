@@ -1,3 +1,9 @@
+version 2.4.11:
+- Fix Plex.tv login not showing up
+- Fix user select dialog not opening
+- Fix crash on switching Kodi profile
+- Kodi 18: Fix Kodi wanting to scan the music library
+
 version 2.4.10 (beta only):
 - Use xml.etree.cElementTree whenever possible to avoid memory leaks
 
