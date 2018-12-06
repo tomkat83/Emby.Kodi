@@ -67,6 +67,7 @@ class Service():
                  utils.settings('syncSpecificPlexPlaylistsPrefix') == 'true')
         LOG.info('Play playlist prefix: %s',
                  utils.settings('syncSpecificPlexPlaylistsPrefix'))
+        LOG.info('XML decoding being used: %s', utils.ETREE)
         self.monitor = xbmc.Monitor()
         # Load/Reset PKC entirely - important for user/Kodi profile switch
         initialsetup.reload_pkc()

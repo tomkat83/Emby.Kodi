@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from xml.etree.ElementTree import ParseError
 
 from . import utils
 from .plex_api import API
@@ -66,7 +65,7 @@ def excludefromscan_music_folders(xml):
                              element.text)
                     parent.remove(element)
                     xml_file.write_xml = True
-    except (ParseError, IOError):
+    except (utils.ParseError, IOError):
         LOG.error('Could not adjust advancedsettings.xml')
     if reboot is True:
         #  'New Plex music library detected. Sorry, but we need to

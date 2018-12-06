@@ -5,25 +5,30 @@ Various functions and decorators for PKC
 """
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from cProfile import Profile
-from pstats import Stats
 from sqlite3 import connect, OperationalError
 from datetime import datetime, timedelta
-from StringIO import StringIO
 from time import localtime, strftime
 from unicodedata import normalize
-import xml.etree.ElementTree as etree
+try:
+    import xml.etree.cElementTree as etree
+    import defusedxml.cElementTree as defused_etree  # etree parse unsafe
+    from xml.etree.ElementTree import ParseError
+    ETREE = 'cElementTree'
+except ImportError:
+    import xml.etree.ElementTree as etree
+    import defusedxml.ElementTree as defused_etree  # etree parse unsafe
+    from xml.etree.ElementTree import ParseError
+    ETREE = 'ElementTree'
 from functools import wraps, partial
 from urllib import quote_plus
 import hashlib
 import re
+import gc
 import xbmc
 import xbmcaddon
 import xbmcgui
 
-from . import path_ops
-from . import variables as v
-from . import state
+from . import path_ops, variables as v, state
 
 ###############################################################################
 
@@ -38,7 +43,6 @@ REGEX_PLEX_ID = re.compile(r'''plex_id=(\d+)''')
 # Return the numbers at the end of an url like '.../.../XXXX'
 REGEX_END_DIGITS = re.compile(r'''/(.+)/(\d+)$''')
 REGEX_PLEX_DIRECT = re.compile(r'''\.plex\.direct:\d+$''')
-REGEX_FILE_NUMBERING = re.compile(r'''_(\d+)\.\w+$''')
 # Plex API
 REGEX_IMDB = re.compile(r'''/(tt\d+)''')
 REGEX_TVDB = re.compile(r'''thetvdb:\/\/(.+?)\?''')
@@ -51,6 +55,25 @@ REGEX_PLEX_ID_FROM_URL = re.compile(r'''metadata%2F(\d+)''')
 # Main methods
 
 
+def garbageCollect():
+    gc.collect(2)
+
+
+def setGlobalProperty(key, val):
+    xbmcgui.Window(10000).setProperty(
+        'plugin.video.plexkodiconnect.{0}'.format(key), val)
+
+
+def setGlobalBoolProperty(key, boolean):
+    xbmcgui.Window(10000).setProperty(
+        'plugin.video.plexkodiconnect.{0}'.format(key), boolean and '1' or '')
+
+
+def getGlobalProperty(key):
+    return xbmc.getInfoLabel(
+        'Window(10000).Property(plugin.video.plexkodiconnect.{0})'.format(key))
+
+
 def reboot_kodi(message=None):
     """
     Displays an OK prompt with 'Kodi will now restart to apply the changes'
@@ -59,7 +82,7 @@ def reboot_kodi(message=None):
     Set optional custom message
     """
     message = message or lang(33033)
-    dialog('ok', heading='{plex}', line1=message)
+    messageDialog(lang(29999), message)
     xbmc.executebuiltin('RestartApp')
 
 
@@ -121,6 +144,23 @@ def lang(stringid):
     """
     return (ADDON.getLocalizedString(stringid) or
             xbmc.getLocalizedString(stringid))
+
+
+def messageDialog(heading, msg):
+    """
+    Shows a dialog using the Plex layout
+    """
+    from .windows import optionsdialog
+    optionsdialog.show(heading, msg, lang(186))
+
+
+def yesno_dialog(heading, msg):
+    """
+    Shows a dialog with a yes and a no button using the Plex layout.
+    Returns True if the user selected yes, False otherwise
+    """
+    from .windows import optionsdialog
+    return optionsdialog.show(heading, msg, lang(107), lang(106)) == 0
 
 
 def dialog(typus, *args, **kwargs):
@@ -191,6 +231,46 @@ def dialog(typus, *args, **kwargs):
         'numeric': dia.numeric
     }
     return types[typus](*args, **kwargs)
+
+
+def ERROR(txt='', hide_tb=False, notify=False):
+    import sys
+    short = str(sys.exc_info()[1])
+    LOG.error('Error encountered: %s - %s', txt, short)
+    if hide_tb:
+        return short
+
+    import traceback
+    trace = traceback.format_exc()
+    LOG.error("_____________________________________________________________")
+    for line in trace.splitlines():
+        LOG.error('    ' + line)
+    LOG.error("_____________________________________________________________")
+    if notify:
+        dialog('notification',
+               heading='{plex}',
+               message=short,
+               icon='{error}')
+    return short
+
+
+class AttributeDict(dict):
+    """
+    Turns an etree xml response's xml.attrib into an object with attributes
+    """
+    def __getattr__(self, attr):
+        return self.get(attr)
+
+    def __setattr__(self, attr, value):
+        self[attr] = value
+
+    def __unicode__(self):
+        return '<{0}:{1}:{2}>'.format(self.__class__.__name__,
+                                      self.id,
+                                      self.get('title', 'None'))
+
+    def __repr__(self):
+        return self.__unicode__().encode('utf-8')
 
 
 def millis_to_kodi_time(milliseconds):
@@ -395,81 +475,37 @@ def wipe_database():
     as Plex databases completely.
     Will also delete all cached artwork.
     """
+    LOG.warn('Start wiping')
     # Clean up the playlists
     delete_playlists()
     # Clean up the video nodes
     delete_nodes()
-
-    # Wipe the kodi databases
-    LOG.info("Resetting the Kodi video database.")
-    connection = kodi_sql('video')
-    cursor = connection.cursor()
-    cursor.execute('SELECT tbl_name FROM sqlite_master WHERE type="table"')
-    rows = cursor.fetchall()
-    for row in rows:
-        tablename = row[0]
-        if tablename != "version":
-            cursor.execute("DELETE FROM %s" % tablename)
-    connection.commit()
-    cursor.close()
-
-    if settings('enableMusic') == "true":
-        LOG.info("Resetting the Kodi music database.")
-        connection = kodi_sql('music')
-        cursor = connection.cursor()
-        cursor.execute('SELECT tbl_name FROM sqlite_master WHERE type="table"')
-        rows = cursor.fetchall()
-        for row in rows:
-            tablename = row[0]
-            if tablename != "version":
-                cursor.execute("DELETE FROM %s" % tablename)
-        connection.commit()
-        cursor.close()
-
-    # Wipe the Plex database
-    LOG.info("Resetting the Plex database.")
-    connection = kodi_sql('plex')
-    cursor = connection.cursor()
+    from . import kodidb_functions
+    kodidb_functions.wipe_dbs()
+    from . import plexdb_functions
     # First get the paths to all synced playlists
     playlist_paths = []
-    cursor.execute('SELECT kodi_path FROM playlists')
-    for entry in cursor.fetchall():
-        playlist_paths.append(entry[0])
-    cursor.execute('SELECT tbl_name FROM sqlite_master WHERE type="table"')
-    rows = cursor.fetchall()
-    for row in rows:
-        tablename = row[0]
-        if tablename != "version":
-            cursor.execute("DELETE FROM %s" % tablename)
-    connection.commit()
-    cursor.close()
-
+    with plexdb_functions.Get_Plex_DB() as plex_db:
+        plex_db.plexcursor.execute('SELECT kodi_path FROM playlists')
+        for entry in plex_db.plexcursor.fetchall():
+            playlist_paths.append(entry[0])
+    plexdb_functions.wipe_dbs()
     # Delete all synced playlists
     for path in playlist_paths:
         try:
             path_ops.remove(path)
+            LOG.info('Removed playlist %s', path)
         except (OSError, IOError):
-            pass
+            LOG.warn('Could not remove playlist %s', path)
 
     LOG.info("Resetting all cached artwork.")
-    # Remove all existing textures first
+    # Remove all cached artwork
     path = path_ops.translate_path("special://thumbnails/")
     if path_ops.exists(path):
         path_ops.rmtree(path, ignore_errors=True)
-    # remove all existing data from texture DB
-    connection = kodi_sql('texture')
-    cursor = connection.cursor()
-    query = 'SELECT tbl_name FROM sqlite_master WHERE type=?'
-    cursor.execute(query, ("table", ))
-    rows = cursor.fetchall()
-    for row in rows:
-        table_name = row[0]
-        if table_name != "version":
-            cursor.execute("DELETE FROM %s" % table_name)
-    connection.commit()
-    cursor.close()
     # reset the install run flag
     settings('SyncInstallRunDone', value="false")
+    LOG.info('Wiping done')
 
 
 def reset(ask_user=True):
@@ -478,9 +514,7 @@ def reset(ask_user=True):
     database and possibly PKC entirely
     """
     # Are you sure you want to reset your local Kodi database?
-    if ask_user and not dialog('yesno',
-                               heading='{plex} %s ' % lang(30132),
-                               line1=lang(39600)):
+    if ask_user and not yesno_dialog(lang(29999), lang(39600)):
         return
 
     # first stop any db sync
@@ -491,9 +525,7 @@ def reset(ask_user=True):
         count -= 1
         if count == 0:
             # Could not stop the database from running. Please try again later.
-            dialog('ok',
-                   heading='{plex} %s' % lang(30132),
-                   line1=lang(39601))
+            messageDialog(lang(29999), lang(39601))
             return
         xbmc.sleep(1000)
 
@@ -502,38 +534,11 @@ def reset(ask_user=True):
 
     # Reset all PlexKodiConnect Addon settings? (this is usually NOT
     # recommended and unnecessary!)
-    if ask_user and dialog('yesno',
-                           heading='{plex} %s ' % lang(30132),
-                           line1=lang(39603)):
+    if ask_user and yesno_dialog(lang(29999), lang(39603)):
         # Delete the settings
         LOG.info("Deleting: settings.xml")
         path_ops.remove("%ssettings.xml" % v.ADDON_PROFILE)
     reboot_kodi()
-
-
-def profiling(sortby="cumulative"):
-    """
-    Will print results to Kodi log. Must be enabled in the Python source code
-    """
-    def decorator(func):
-        """
-        decorator construct
-        """
-        def wrapper(*args, **kwargs):
-            """
-            wrapper construct
-            """
-            profile = Profile()
-            profile.enable()
-            result = func(*args, **kwargs)
-            profile.disable()
-            string_io = StringIO()
-            stats = Stats(profile, stream=string_io).sort_stats(sortby)
-            stats.print_stats()
-            LOG.info(string_io.getvalue())
-            return result
-        return wrapper
-    return decorator
 
 
 def compare_version(current, minimum):
@@ -616,14 +621,14 @@ def indent(elem, level=0):
     """
     Prettifies xml trees. Pass the etree root in
     """
-    i = "\n" + level*"  "
+    i = "\n" + level * "  "
     if len(elem):
         if not elem.text or not elem.text.strip():
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
         for elem in elem:
-            indent(elem, level+1)
+            indent(elem, level + 1)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
     else:
@@ -650,7 +655,7 @@ class XmlKodiSetting(object):
 
     Raises IOError if the file does not exist or is empty and force_create
     has been set to False.
-    Raises etree.ParseError if the file could not be parsed by etree
+    Raises utils.ParseError if the file could not be parsed by etree
 
     xml.write_xml        Set to True if we need to write the XML to disk
     """
@@ -669,25 +674,24 @@ class XmlKodiSetting(object):
 
     def __enter__(self):
         try:
-            self.tree = etree.parse(self.path)
+            self.tree = defused_etree.parse(self.path)
         except IOError:
             # Document is blank or missing
             if self.force_create is False:
                 LOG.debug('%s does not seem to exist; not creating', self.path)
                 # This will abort __enter__
-                self.__exit__(IOError, None, None)
+                self.__exit__(IOError('File not found'), None, None)
             # Create topmost xml entry
-            self.tree = etree.ElementTree(
-                element=etree.Element(self.top_element))
+            self.tree = etree.ElementTree(etree.Element(self.top_element))
             self.write_xml = True
-        except etree.ParseError:
+        except ParseError:
             LOG.error('Error parsing %s', self.path)
             # "Kodi cannot parse {0}. PKC will not function correctly. Please
             # visit {1} and correct your file!"
-            dialog('ok', lang(29999), lang(39716).format(
+            messageDialog(lang(29999), lang(39716).format(
                 self.filename,
                 'http://kodi.wiki'))
-            self.__exit__(etree.ParseError, None, None)
+            self.__exit__(ParseError('Error parsing XML'), None, None)
         self.root = self.tree.getroot()
         return self
 
@@ -700,7 +704,7 @@ class XmlKodiSetting(object):
             # Indent and make readable
             indent(self.root)
             # Safe the changed xml
-            self.tree.write(self.path, encoding="UTF-8")
+            self.tree.write(self.path, encoding='utf-8')
 
     def _is_empty(self, element, empty_elements):
         empty = True
@@ -828,16 +832,16 @@ def passwords_xml():
     path = path_ops.translate_path('special://userdata/')
     xmlpath = "%spasswords.xml" % path
     try:
-        xmlparse = etree.parse(xmlpath)
+        xmlparse = defused_etree.parse(xmlpath)
     except IOError:
         # Document is blank or missing
         root = etree.Element('passwords')
         skip_find = True
-    except etree.ParseError:
+    except ParseError:
         LOG.error('Error parsing %s', xmlpath)
         # "Kodi cannot parse {0}. PKC will not function correctly. Please visit
         # {1} and correct your file!"
-        dialog('ok', lang(29999), lang(39716).format(
+        messageDialog(lang(29999), lang(39716).format(
             'passwords.xml', 'http://forum.kodi.tv/'))
         return
     else:
@@ -893,8 +897,7 @@ def passwords_xml():
                 return
     else:
         # No credentials added
-        dialog('ok',
-               "Network credentials",
+        messageDialog("Network credentials",
                'Input the server name or IP address as indicated in your plex '
                'library paths. For example, the server name: '
                '\\\\SERVER-PC\\path\\ or smb://SERVER-PC/path is SERVER-PC')
@@ -929,10 +932,10 @@ def passwords_xml():
     if skip_find:
         # Server not found, add it.
         path = etree.SubElement(root, 'path')
-        etree.SubElement(path, 'from', attrib={'pathversion': "1"}).text = \
+        etree.SubElement(path, 'from', {'pathversion': "1"}).text = \
             "smb://%s/" % server
         topath = "smb://%s:%s@%s/" % (user, password, server)
-        etree.SubElement(path, 'to', attrib={'pathversion': "1"}).text = topath
+        etree.SubElement(path, 'to', {'pathversion': "1"}).text = topath
 
     # Add credentials
     settings('networkCreds', value="%s" % server)

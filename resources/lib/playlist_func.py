@@ -14,7 +14,6 @@ from . import plexdb_functions as plexdb
 from . import kodidb_functions as kodidb
 from .downloadutils import DownloadUtils as DU
 from . import utils
-from . import path_ops
 from . import json_rpc as js
 from . import variables as v
 from . import state

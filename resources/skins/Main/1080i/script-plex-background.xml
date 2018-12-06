@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <defaultcontrol>100</defaultcontrol>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <backgroundcolor>0xff111111</backgroundcolor>
+    <controls>
+        <control type="image">
+            <visible>!String.IsEmpty(Window(10000).Property(plugin.video.plexkodiconnect.background.splash))</visible>
+            <posx>710</posx>
+            <posy>459</posy>
+            <width>500</width>
+            <height>162</height>
+            <texture>plugin.video.plexkodiconnect/splash.png</texture>
+        </control>
+
+        <control type="group">
+            <visible>!String.IsEmpty(Window(10000).Property(plugin.video.plexkodiconnect.background.busy))</visible>
+            <control type="image">
+                <posx>812</posx>
+                <posy>135</posy>
+                <width>300</width>
+                <height>97</height>
+                <texture>plugin.video.plexkodiconnect/user_select/plex.png</texture>
+            </control>
+            <control type="image">
+                <posx>840</posx>
+                <posy>465</posy>
+                <width>240</width>
+                <height>150</height>
+                <texture>plugin.video.plexkodiconnect/busy-back.png</texture>
+                <colordiffuse>A0FFFFFF</colordiffuse>
+            </control>
+            <control type="image">
+                <posx>915</posx>
+                <posy>521</posy>
+                <width>90</width>
+                <height>38</height>
+                <texture diffuse="plugin.video.plexkodiconnect/busy-diffuse.png">plugin.video.plexkodiconnect/busy.gif</texture>
+            </control>
+        </control>
+
+        <control type="group">
+            <visible>!String.IsEmpty(Window(10000).Property(plugin.video.plexkodiconnect.background.shutdown))</visible>
+            <control type="image">
+                <posx>840</posx>
+                <posy>465</posy>
+                <width>240</width>
+                <height>150</height>
+                <texture>plugin.video.plexkodiconnect/busy-back.png</texture>
+                <colordiffuse>A0FFFFFF</colordiffuse>
+            </control>
+            <control type="image">
+                <posx>915</posx>
+                <posy>521</posy>
+                <width>90</width>
+                <height>38</height>
+                <texture diffuse="plugin.video.plexkodiconnect/busy-diffuse.png">plugin.video.plexkodiconnect/busy.gif</texture>
+            </control>
+        </control>
+    </controls>
+</window>

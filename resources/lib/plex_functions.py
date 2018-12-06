@@ -90,27 +90,22 @@ def GetPlexLoginFromSettings():
     Returns a dict:
         'plexLogin': utils.settings('plexLogin'),
         'plexToken': utils.settings('plexToken'),
-        'plexhome': utils.settings('plexhome'),
         'plexid': utils.settings('plexid'),
         'myplexlogin': utils.settings('myplexlogin'),
         'plexAvatar': utils.settings('plexAvatar'),
-        'plexHomeSize': utils.settings('plexHomeSize')
 
     Returns strings or unicode
 
     Returns empty strings '' for a setting if not found.
 
     myplexlogin is 'true' if user opted to log into plex.tv (the default)
-    plexhome is 'true' if plex home is used (the default)
     """
     return {
         'plexLogin': utils.settings('plexLogin'),
         'plexToken': utils.settings('plexToken'),
-        'plexhome': utils.settings('plexhome'),
         'plexid': utils.settings('plexid'),
         'myplexlogin': utils.settings('myplexlogin'),
         'plexAvatar': utils.settings('plexAvatar'),
-        'plexHomeSize': utils.settings('plexHomeSize')
     }
 
 
@@ -266,7 +261,8 @@ def _plex_gdm():
         while True:
             try:
                 data, server = gdm.recvfrom(1024)
-                return_data.append({'from': server, 'data': data})
+                return_data.append({'from': server,
+                                    'data': data.decode('utf-8')})
             except socket.timeout:
                 break
     except Exception as e:
@@ -812,15 +808,11 @@ def GetUserArtworkURL(username):
     Returns the URL for the user's Avatar. Or False if something went
     wrong.
     """
-    users = plex_tv.list_home_users(utils.settings('plexToken'))
+    users = plex_tv.plex_home_users(utils.settings('plexToken'))
     url = ''
-    # If an error is encountered, set to False
-    if not users:
-        LOG.info("Couldnt get user from plex.tv. No URL for user avatar")
-        return False
     for user in users:
-        if username in user['title']:
-            url = user['thumb']
+        if user.title == username:
+            url = user.thumb
     LOG.debug("Avatar url for user %s is: %s", username, url)
     return url
 

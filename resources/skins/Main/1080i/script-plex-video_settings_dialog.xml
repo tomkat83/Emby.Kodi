@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <!-- <zorder>101</zorder> -->
+    <controls>
+        <control type="group">
+            <visible>!String.IsEmpty(Window.Property(via.OSD))</visible>
+            <animation effect="fade" start="100" end="0">Hidden</animation>
+            <posx>0</posx>
+            <posy>0</posy>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture>plugin.video.plexkodiconnect/player-fade.png</texture>
+                <colordiffuse>FF080808</colordiffuse>
+            </control>
+        </control>
+        <control type="group">
+            <visible>!Window.IsVisible(sliderdialog) + !Window.IsVisible(osdvideosettings) + !Window.IsVisible(osdaudiosettings)</visible>
+            <posx>460</posx>
+            <posy>200</posy>
+            <control type="image">
+                <posx>-40</posx>
+                <posy>-40</posy>
+                <width>1080</width>
+                <height>770</height>
+                <texture border="42">plugin.video.plexkodiconnect/drop-shadow.png</texture>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1000</width>
+                <height>80</height>
+                <texture border="10">plugin.video.plexkodiconnect/white-square-top-rounded.png</texture>
+                <colordiffuse>F21F1F1F</colordiffuse>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>80</posy>
+                <width>1000</width>
+                <height>610</height>
+                <texture flipy="true" border="10">plugin.video.plexkodiconnect/white-square-top-rounded.png</texture>
+                <colordiffuse>F2606060</colordiffuse>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>80</posy>
+                <width>400</width>
+                <height>610</height>
+                <texture flipy="true" border="10">plugin.video.plexkodiconnect/white-square-tl-rounded.png</texture>
+                <colordiffuse>30000000</colordiffuse>
+            </control>
+            <control type="label">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1000</width>
+                <height>80</height>
+                <font>font12</font>
+                <align>center</align>
+                <aligny>center</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B][UPPERCASE]$INFO[Window.Property(heading)][/UPPERCASE][/B]</label>
+            </control>
+            <control type="list" id="100">
+                <posx>0</posx>
+                <posy>80</posy>
+                <width>1000</width>
+                <height>600</height>
+                <onup>noop</onup>
+                <ondown>noop</ondown>
+                <scrolltime>200</scrolltime>
+                <orientation>vertical</orientation>
+                <!-- ITEM LAYOUT ########################################## -->
+                <itemlayout height="100">
+                    <control type="label">
+                        <posx>20</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>100</height>
+                        <font>font12</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <posx>320</posx>
+                        <posy>0</posy>
+                        <width>660</width>
+                        <height>100</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout height="100">
+                    <control type="image">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>1000</width>
+                        <height>100</height>
+                        <texture colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/white-square.png</texture>
+                    </control>
+                    <control type="label">
+                        <posx>20</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>100</height>
+                        <font>font12</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <posx>320</posx>
+                        <posy>0</posy>
+                        <width>660</width>
+                        <height>100</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>
+
+    </controls>
+</window>

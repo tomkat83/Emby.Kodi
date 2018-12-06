@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-import xml.etree.ElementTree as etree
-import xbmc
 
 from . import utils
+from .utils import etree
 from . import path_ops
 from . import variables as v
 from . import state
@@ -23,21 +22,21 @@ class VideoNodes(object):
 
         if roottype == 0:
             # Index
-            root = etree.Element('node', attrib={'order': "%s" % order})
+            root = etree.Element('node', {'order': "%s" % order})
         elif roottype == 1:
             # Filter
             root = etree.Element('node',
-                                 attrib={'order': "%s" % order, 'type': "filter"})
+                                 {'order': "%s" % order, 'type': "filter"})
             etree.SubElement(root, 'match').text = "all"
             # Add tag rule
             rule = etree.SubElement(root,
                                     'rule',
-                                    attrib={'field': "tag", 'operator': "is"})
+                                    {'field': "tag", 'operator': "is"})
             etree.SubElement(rule, 'value').text = tagname
         else:
             # Folder
             root = etree.Element('node',
-                                 attrib={'order': "%s" % order, 'type': "folder"})
+                                 {'order': "%s" % order, 'type': "folder"})
 
         etree.SubElement(root, 'label').text = label
         etree.SubElement(root, 'icon').text = "special://home/addons/plugin.video.plexkodiconnect/icon.png"
@@ -392,7 +391,7 @@ class VideoNodes(object):
                     etree.SubElement(rule, 'value').text = "0"
                     rule2 = etree.SubElement(root,
                                              'rule',
-                                             attrib={'field': "rating", 'operator': "greaterthan"})
+                                             {'field': "rating", 'operator': "greaterthan"})
                     etree.SubElement(rule2, 'value').text = "7"
                 elif nodetype == "recentepisodes":
                     # Kodi Isengard, Jarvis
@@ -409,7 +408,7 @@ class VideoNodes(object):
                     etree.SubElement(root, 'limit').text = limit
                     rule = etree.SubElement(root,
                                             'rule',
-                                            attrib={'field': "inprogress", 'operator':"true"})
+                                            {'field': "inprogress", 'operator':"true"})
             try:
                 utils.indent(root)
             except:

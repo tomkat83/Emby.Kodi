@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <defaultcontrol>100</defaultcontrol>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <backgroundcolor>0xff111111</backgroundcolor>
+    <controls>
+        <control type="group">
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture>plugin.video.plexkodiconnect/home/background-fallback.png</texture>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <fadetime>1000</fadetime>
+                <texture  background="true">$INFO[Window.Property(background)]</texture>
+            </control>
+        </control>
+
+        <control type="group" id="50">
+            <posx>0</posx>
+            <posy>115</posy>
+            <defaultcontrol always="true">101</defaultcontrol>
+
+            <control type="group" id="100">
+                <visible>Integer.IsGreater(Container(101).NumItems,0) + String.IsEmpty(Window.Property(drawing))</visible>
+                <defaultcontrol>101</defaultcontrol>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>360</height>
+                <control type="label">
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1800</width>
+                    <height>80</height>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[UPPERCASE]$ADDON[plugin.video.plexkodiconnect 32048][/UPPERCASE]</label>
+                </control>
+                <control type="list" id="101">
+                    <posx>0</posx>
+                    <posy>30</posy>
+                    <width>1920</width>
+                    <height>390</height>
+                    <onup>200</onup>
+                    <ondown>301</ondown>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <preloaditems>2</preloaditems>
+                    <!-- ITEM LAYOUT ########################################## -->
+                    <itemlayout width="298">
+                        <control type="group">
+                            <posx>40</posx>
+                            <posy>40</posy>
+                            <control type="group">
+                                <posx>21</posx>
+                                <posy>21</posy>
+                                <control type="image">
+                                    <posx>0</posx>
+                                    <posy>0</posy>
+                                    <width>238</width>
+                                    <height>238</height>
+                                    <texture>$INFO[ListItem.Property(thumb.fallback)]</texture>
+                                    <aspectratio>scale</aspectratio>
+                                </control>
+                                <control type="image">
+                                    <posx>0</posx>
+                                    <posy>0</posy>
+                                    <width>238</width>
+                                    <height>238</height>
+                                    <texture background="true">$INFO[ListItem.Thumb]</texture>
+                                    <aspectratio>scale</aspectratio>
+                                </control>
+                                <control type="label">
+                                    <posx>-30</posx>
+                                    <posy>248</posy>
+                                    <width>298</width>
+                                    <height>40</height>
+                                    <font>font10</font>
+                                    <align>center</align>
+                                    <textcolor>FFFFFFFF</textcolor>
+                                    <label>$INFO[ListItem.Label]</label>
+                                </control>
+                                <control type="label">
+                                    <posx>-30</posx>
+                                    <posy>278</posy>
+                                    <width>298</width>
+                                    <height>40</height>
+                                    <font>font10</font>
+                                    <align>center</align>
+                                    <textcolor>FFFFFFFF</textcolor>
+                                    <label>$INFO[ListItem.Label2]</label>
+                                </control>
+                            </control>
+                        </control>
+                    </itemlayout>
+
+                    <!-- FOCUSED LAYOUT ####################################### -->
+                    <focusedlayout width="298">
+                        <control type="group">
+                            <posx>40</posx>
+                            <posy>40</posy>
+                            <control type="group">
+                                <animation effect="zoom" start="100" end="116" time="100" center="140,140" reversible="false">Focus</animation>
+                                <animation effect="zoom" start="116" end="100" time="100" center="140,140" reversible="false">UnFocus</animation>
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <control type="image">
+                                    <visible>Control.HasFocus(101)</visible>
+                                    <posx>-19</posx>
+                                    <posy>-19</posy>
+                                    <width>318</width>
+                                    <height>318</height>
+                                    <texture border="42">plugin.video.plexkodiconnect/drop-shadow.png</texture>
+                                </control>
+                                <control type="group">
+                                    <posx>21</posx>
+                                    <posy>21</posy>
+                                    <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
+                                        <width>238</width>
+                                        <height>238</height>
+                                        <texture>$INFO[ListItem.Property(thumb.fallback)]</texture>
+                                        <aspectratio>scale</aspectratio>
+                                    </control>
+                                    <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
+                                        <width>238</width>
+                                        <height>238</height>
+                                        <texture background="true">$INFO[ListItem.Thumb]</texture>
+                                        <aspectratio>scale</aspectratio>
+                                    </control>
+                                    <control type="label">
+                                        <posx>-30</posx>
+                                        <posy>248</posy>
+                                        <width>298</width>
+                                        <height>40</height>
+                                        <font>font10</font>
+                                        <align>center</align>
+                                        <textcolor>FFFFFFFF</textcolor>
+                                        <label>$INFO[ListItem.Label]</label>
+                                    </control>
+                                    <control type="label">
+                                        <posx>-30</posx>
+                                        <posy>278</posy>
+                                        <width>298</width>
+                                        <height>40</height>
+                                        <font>font10</font>
+                                        <align>center</align>
+                                        <textcolor>FFFFFFFF</textcolor>
+                                        <label>$INFO[ListItem.Label2]</label>
+                                    </control>
+                                </control>
+                                <control type="image">
+                                    <visible>Control.HasFocus(101)</visible>
+                                    <posx>16</posx>
+                                    <posy>16</posy>
+                                    <width>248</width>
+                                    <height>248</height>
+                                    <texture border="10">plugin.video.plexkodiconnect/home/selected.png</texture>
+                                </control>
+                            </control>
+                        </control>
+                    </focusedlayout>
+                </control>
+            </control>
+
+            <control type="group" id="300">
+                <visible>Integer.IsGreater(Container(301).NumItems,0) + String.IsEmpty(Window.Property(drawing))</visible>
+                <animation effect="slide" end="0,-420" condition="!Control.IsVisible(100)">Conditional</animation>
+                <defaultcontrol>301</defaultcontrol>
+                <posx>0</posx>
+                <posy>445</posy>
+                <width>1920</width>
+                <height>360</height>
+                <control type="image">
+                    <visible>Control.IsVisible(100)</visible>
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1800</width>
+                    <height>2</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>661F1F1F</colordiffuse>
+                </control>
+                <control type="label">
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1800</width>
+                    <height>80</height>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[UPPERCASE]$ADDON[plugin.video.plexkodiconnect 32053][/UPPERCASE]</label>
+                </control>
+                <control type="list" id="301">
+                    <posx>-21.5</posx>
+                    <posy>30</posy>
+                    <width>1941.5</width>
+                    <height>700</height>
+                    <onup>101</onup>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <preloaditems>2</preloaditems>
+                    <!-- ITEM LAYOUT ########################################## -->
+                    <itemlayout width="602">
+                        <control type="group">
+                            <posx>40</posx>
+                            <posy>40</posy>
+                            <control type="group">
+                                <posx>41.5</posx>
+                                <posy>25.5</posy>
+                                <control type="image">
+                                    <posx>0</posx>
+                                    <posy>0</posy>
+                                    <width>537</width>
+                                    <height>303</height>
+                                    <texture>$INFO[ListItem.Property(thumb.fallback)]</texture>
+                                    <aspectratio>scale</aspectratio>
+                                </control>
+                                <control type="image">
+                                    <posx>0</posx>
+                                    <posy>0</posy>
+                                    <width>537</width>
+                                    <height>303</height>
+                                    <texture background="true">$INFO[ListItem.Thumb]</texture>
+                                    <aspectratio>scale</aspectratio>
+                                </control>
+                                <control type="label">
+                                    <posx>-30</posx>
+                                    <posy>313</posy>
+                                    <width>597</width>
+                                    <height>40</height>
+                                    <font>font10</font>
+                                    <align>center</align>
+                                    <textcolor>FFFFFFFF</textcolor>
+                                    <label>$INFO[ListItem.Label]</label>
+                                </control>
+                                <control type="label">
+                                    <posx>-30</posx>
+                                    <posy>343</posy>
+                                    <width>597</width>
+                                    <height>40</height>
+                                    <font>font10</font>
+                                    <align>center</align>
+                                    <textcolor>FFFFFFFF</textcolor>
+                                    <label>$INFO[ListItem.Label2]</label>
+                                </control>
+                            </control>
+                        </control>
+                    </itemlayout>
+
+                    <!-- FOCUSED LAYOUT ####################################### -->
+                    <focusedlayout width="602">
+                        <control type="group">
+                            <posx>40</posx>
+                            <posy>40</posy>
+                            <control type="group">
+                                <animation effect="zoom" start="100" end="110" time="100" center="310,177" reversible="false">Focus</animation>
+                                <animation effect="zoom" start="110" end="100" time="100" center="310,177" reversible="false">UnFocus</animation>
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <control type="image">
+                                    <visible>Control.HasFocus(301)</visible>
+                                    <posx>1.5</posx>
+                                    <posy>-15.5</posy>
+                                    <width>617</width>
+                                    <height>383</height>
+                                    <texture border="42">plugin.video.plexkodiconnect/drop-shadow.png</texture>
+                                </control>
+                                <control type="group">
+                                    <posx>41.5</posx>
+                                    <posy>25.5</posy>
+                                    <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
+                                        <width>537</width>
+                                        <height>303</height>
+                                        <texture>$INFO[ListItem.Property(thumb.fallback)]</texture>
+                                        <aspectratio>scale</aspectratio>
+                                    </control>
+                                    <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
+                                        <width>537</width>
+                                        <height>303</height>
+                                        <texture background="true">$INFO[ListItem.Thumb]</texture>
+                                        <aspectratio>scale</aspectratio>
+                                    </control>
+                                    <control type="label">
+                                        <posx>-30</posx>
+                                        <posy>313</posy>
+                                        <width>597</width>
+                                        <height>40</height>
+                                        <font>font10</font>
+                                        <align>center</align>
+                                        <textcolor>FFFFFFFF</textcolor>
+                                        <label>$INFO[ListItem.Label]</label>
+                                    </control>
+                                    <control type="label">
+                                        <posx>-30</posx>
+                                        <posy>343</posy>
+                                        <width>597</width>
+                                        <height>40</height>
+                                        <font>font10</font>
+                                        <align>center</align>
+                                        <textcolor>FFFFFFFF</textcolor>
+                                        <label>$INFO[ListItem.Label2]</label>
+                                    </control>
+                                </control>
+                                <control type="image">
+                                    <visible>Control.HasFocus(301)</visible>
+                                    <posx>36.5</posx>
+                                    <posy>20.5</posy>
+                                    <width>547</width>
+                                    <height>313</height>
+                                    <texture border="10">plugin.video.plexkodiconnect/home/selected.png</texture>
+                                </control>
+                            </control>
+                        </control>
+                    </focusedlayout>
+                </control>
+            </control>
+        </control>
+
+
+        <control type="group" id="200">
+            <defaultcontrol always="true">201</defaultcontrol>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>135</height>
+            <control type="image">
+                <animation effect="fade" start="0" end="100" time="200" tween="quadratic" easing="out" reversible="true">VisibleChange</animation>
+                <visible>ControlGroup(200).HasFocus(0) + false</visible>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>135</height>
+                <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                <colordiffuse>C0000000</colordiffuse>
+            </control>
+            <control type="grouplist">
+                <posx>60</posx>
+                <posy>47.5</posy>
+                <width>1000</width>
+                <height>40</height>
+                <align>left</align>
+                <itemgap>60</itemgap>
+                <orientation>horizontal</orientation>
+                <ondown>50</ondown>
+                <control type="group">
+                    <width>40</width>
+                    <height>40</height>
+                    <control type="button" id="201">
+                        <animation effect="zoom" start="100" end="177" time="100" center="20,20" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="177" end="100" time="100" center="20,20" reversible="false">UnFocus</animation>
+                        <width>40</width>
+                        <height>40</height>
+                        <onright>202</onright>
+                        <ondown>50</ondown>
+                        <font>font12</font>
+                        <focusedcolor>FF000000</focusedcolor>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/home-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/home.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                </control>
+                <control type="label">
+                    <width max="500">auto</width>
+                    <height>40</height>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[UPPERCASE]$ADDON[plugin.video.plexkodiconnect 32333][/UPPERCASE]</label>
+                </control>
+                <control type="group">
+                    <width>40</width>
+                    <height>40</height>
+                    <control type="button" id="202">
+                        <animation effect="zoom" start="100" end="177" time="100" center="20,20" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="177" end="100" time="100" center="20,20" reversible="false">UnFocus</animation>
+                        <width>40</width>
+                        <height>40</height>
+                        <onright>204</onright>
+                        <onleft>201</onleft>
+                        <ondown>50</ondown>
+                        <font>font12</font>
+                        <focusedcolor>FF000000</focusedcolor>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/search-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/search.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                </control>
+            </control>
+            <control type="group">
+                <visible>Player.HasAudio</visible>
+                <posx>438</posx>
+                <posy>0</posy>
+                <control type="button" id="204">
+                    <visible>Player.HasAudio</visible>
+                    <posx>-10</posx>
+                    <posy>38</posy>
+                    <width>260</width>
+                    <height>75</height>
+                    <onleft>202</onleft>
+                    <ondown>50</ondown>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <texturefocus colordiffuse="FFE5A00D" border="10">plugin.video.plexkodiconnect/white-square-rounded.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <textoffsetx>100</textoffsetx>
+                    <textoffsety>0</textoffsety>
+                    <label> </label>
+                </control>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>48</posy>
+                    <width>42</width>
+                    <height>42</height>
+                    <texture>$INFO[Player.Art(thumb)]</texture>
+                </control>
+
+                <control type="group">
+                    <visible>!Control.HasFocus(204)</visible>
+                    <control type="label">
+                        <posx>53</posx>
+                        <posy>48</posy>
+                        <width>187</width>
+                        <height>20</height>
+                        <font>font10</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <info>MusicPlayer.Artist</info>
+                    </control>
+                    <control type="label">
+                        <posx>53</posx>
+                        <posy>72</posy>
+                        <width>187</width>
+                        <height>20</height>
+                        <font>font10</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <info>MusicPlayer.Title</info>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>Control.HasFocus(204)</visible>
+                    <control type="label">
+                        <posx>53</posx>
+                        <posy>48</posy>
+                        <width>187</width>
+                        <height>20</height>
+                        <font>font10</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF000000</textcolor>
+                        <info>MusicPlayer.Artist</info>
+                    </control>
+                    <control type="label">
+                        <posx>53</posx>
+                        <posy>72</posy>
+                        <width>187</width>
+                        <height>20</height>
+                        <font>font10</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF000000</textcolor>
+                        <info>MusicPlayer.Title</info>
+                    </control>
+                </control>
+
+                <control type="progress">
+                    <description>Progressbar</description>
+                    <posx>0</posx>
+                    <posy>102</posy>
+                    <width>240</width>
+                    <height>1</height>
+                    <texturebg colordiffuse="9AFFFFFF">plugin.video.plexkodiconnect/white-square-1px.png</texturebg>
+                    <lefttexture>-</lefttexture>
+                    <midtexture colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/white-square-1px.png</midtexture>
+                    <righttexture>-</righttexture>
+                    <overlaytexture>-</overlaytexture>
+                    <info>Player.Progress</info>
+                </control>
+            </control>
+            <control type="label">
+                <right>213</right>
+                <posy>35</posy>
+                <width>200</width>
+                <height>65</height>
+                <font>font12</font>
+                <align>right</align>
+                <aligny>center</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>$INFO[System.Time]</label>
+            </control>
+            <control type="image">
+                <posx>153r</posx>
+                <posy>54</posy>
+                <width>93</width>
+                <height>30</height>
+                <texture>plugin.video.plexkodiconnect/home/plex.png</texture>
+            </control>
+        </control>
+
+        <control type="group">
+            <visible>!String.IsEmpty(Window.Property(search.dialog))</visible>
+            <control type="group" >
+                <visible>!String.IsEmpty(Window.Property(search.dialog.hasresults))</visible>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <texture>plugin.video.plexkodiconnect/home/background-fallback.png</texture>
+                </control>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <texture background="true">$INFO[Window.Property(background)]</texture>
+                </control>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture colordiffuse="99606060">plugin.video.plexkodiconnect/white-square.png</texture>
+            </control>
+        </control>
+
+    </controls>
+</window>

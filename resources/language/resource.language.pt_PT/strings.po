@@ -117,7 +117,7 @@ msgstr ""
 
 # PKC settings sync options
 msgctxt "#30020"
-msgid "Sync Plex playlists"
+msgid "Sync Plex playlists (reboot Kodi!)"
 msgstr ""
 
 # PKC settings sync options
@@ -476,6 +476,11 @@ msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr "Limitar operações de cache das ilustrações (recomendado para rpi)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Máximo de itens a pedir do servidor de uma vez"
@@ -584,6 +589,11 @@ msgstr "Não perguntar para escolher uma certa qualidade/transmissão"
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Escolher sempre a melhor qualidade para trailers"
+
+# PKC Settings - Artwork
+msgctxt "#30543"
+msgid "Prefer Kodi artwork for collections/sets"
+msgstr ""
 
 msgctxt "#30544"
 msgid "Artwork"

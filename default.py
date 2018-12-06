@@ -106,7 +106,7 @@ class Main():
         elif mode in ('manualsync', 'repair'):
             if pickler.pickl_window('plex_online') != 'true':
                 # Server is not online, do not run the sync
-                utils.dialog('ok', utils.lang(29999), utils.lang(39205))
+                utils.messageDialog(utils.lang(29999), utils.lang(39205))
                 log.error('Not connected to a PMS.')
             else:
                 if mode == 'repair':
@@ -190,12 +190,12 @@ class Main():
             deviceId = clientinfo.getDeviceId(reset=True)
         except Exception as e:
             log.error('Failed to generate a new device Id: %s' % e)
-            utils.dialog('ok', utils.lang(29999), utils.lang(33032))
+            utils.messageDialog(utils.lang(29999), utils.lang(33032))
         else:
             log.info('Successfully removed old device ID: %s New deviceId:'
                      '%s' % (deviceId_old, deviceId))
             # 'Kodi will now restart to apply the changes'
-            utils.dialog('ok', utils.lang(29999), utils.lang(33033))
+            utils.messageDialog(utils.lang(29999), utils.lang(33033))
             executebuiltin('RestartApp')
 
 

@@ -6,6 +6,7 @@ from threading import Thread
 import Queue
 from random import shuffle
 import copy
+from collections import OrderedDict
 import xbmc
 from xbmcvfs import exists
 
@@ -38,6 +39,25 @@ LOG = getLogger('PLEX.librarysync')
 ###############################################################################
 
 
+def update_library(video=True, music=True):
+    """
+    Updates the Kodi library and thus refreshes the Kodi views and widgets
+    """
+    if xbmc.getCondVisibility('Container.Content(musicvideos)') or \
+            xbmc.getCondVisibility('Window.IsMedia'):
+        # Prevent cursor from moving
+        LOG.debug("Refreshing container")
+        xbmc.executebuiltin('Container.Refresh')
+    else:
+        # Update widgets
+        if video:
+            LOG.debug("Doing Kodi Video Lib update")
+            xbmc.executebuiltin('UpdateLibrary(video)')
+        if music:
+            LOG.debug("Doing Kodi Music Lib update")
+            xbmc.executebuiltin('UpdateLibrary(music)')
+
+
 @utils.thread_methods(add_suspends=['SUSPEND_LIBRARY_THREAD', 'STOP_SYNC'])
 class LibrarySync(Thread):
     """
@@ -57,15 +77,15 @@ class LibrarySync(Thread):
         # Need to be set accordingly later
         self.compare = None
         self.new_items_only = None
-        self.update_kodi_video_library = None
-        self.update_kodi_music_library = None
+        self.update_kodi_video_library = False
+        self.update_kodi_music_library = False
         self.nodes = {}
         self.playlists = {}
         self.sorted_views = []
         self.old_views = []
         self.updatelist = []
         self.all_plex_ids = {}
-        self.all_kodi_ids = {}
+        self.all_kodi_ids = OrderedDict()
         Thread.__init__(self)
 
     def suspend_item_sync(self):
@@ -287,19 +307,17 @@ class LibrarySync(Thread):
                 return False
 
         # Let kodi update the views in any case, since we're doing a full sync
-        xbmc.executebuiltin('UpdateLibrary(video)')
-        if state.ENABLE_MUSIC:
-            xbmc.executebuiltin('UpdateLibrary(music)')
+        update_library(video=True, music=state.ENABLE_MUSIC)
 
         if utils.window('plex_scancrashed') == 'true':
             # Show warning if itemtypes.py crashed at some point
-            utils.dialog('ok', heading='{plex}', line1=utils.lang(39408))
+            utils.messageDialog(utils.lang(29999), utils.lang(39408))
             utils.window('plex_scancrashed', clear=True)
         elif utils.window('plex_scancrashed') == '401':
             utils.window('plex_scancrashed', clear=True)
             if state.PMS_STATUS not in ('401', 'Auth'):
                 # Plex server had too much and returned ERROR
-                utils.dialog('ok', heading='{plex}', line1=utils.lang(39409))
+                utils.messageDialog(utils.lang(29999), utils.lang(39409))
         return True
 
     def _process_view(self, folder_item, kodi_db, plex_db, totalnodes):
@@ -530,15 +548,15 @@ class LibrarySync(Thread):
                      message=utils.lang(30052),
                      icon='{plex}',
                      sound=False)
-        for item in delete_movies:
-            with itemtypes.Movies() as movie_db:
+        with itemtypes.Movies() as movie_db:
+            for item in delete_movies:
                 movie_db.remove(item['plex_id'])
-        for item in delete_tv:
-            with itemtypes.TVShows() as tv_db:
+        with itemtypes.TVShows() as tv_db:
+            for item in delete_tv:
                 tv_db.remove(item['plex_id'])
         # And for the music DB:
-        for item in delete_music:
-            with itemtypes.Music() as music_db:
+        with itemtypes.Music() as music_db:
+            for item in delete_music:
                 music_db.remove(item['plex_id'])
 
     def get_updatelist(self, xml, item_class, method, view_name, view_id,
@@ -650,7 +668,15 @@ class LibrarySync(Thread):
         item_number = len(self.updatelist)
         if item_number == 0:
             return
-
+        if (utils.settings('FanartTV') == 'true' and
+                item_class in ('Movies', 'TVShows')):
+            for item in self.updatelist:
+                if item['plex_type'] in (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_SHOW):
+                    self.fanartqueue.put({
+                        'plex_id': item['plex_id'],
+                        'plex_type': item['plex_type'],
+                        'refresh': False
+                    })
         # Run through self.updatelist, get XML metadata per item
         # Initiate threads
         LOG.debug("Starting sync threads")
@@ -661,8 +687,8 @@ class LibrarySync(Thread):
         sync_info.PROCESS_METADATA_COUNT = 0
         sync_info.PROCESSING_VIEW_NAME = ''
         # Populate queue: GetMetadata
-        for item in self.updatelist:
-            download_queue.put(item)
+        for _ in range(0, len(self.updatelist)):
+            download_queue.put(self.updatelist.pop(0))
         # Spawn GetMetadata threads for downloading
         threads = []
         for _ in range(min(state.SYNC_THREAD_NUMBER, item_number)):
@@ -705,16 +731,6 @@ class LibrarySync(Thread):
             except:
                 pass
         LOG.debug("Sync threads finished")
-        if (utils.settings('FanartTV') == 'true' and
-                item_class in ('Movies', 'TVShows')):
-            for item in self.updatelist:
-                if item['plex_type'] in (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_SHOW):
-                    self.fanartqueue.put({
-                        'plex_id': item['plex_id'],
-                        'plex_type': item['plex_type'],
-                        'refresh': False
-                    })
-        self.updatelist = []
 
     @utils.log_time
     def plex_movies(self):
@@ -726,16 +742,16 @@ class LibrarySync(Thread):
         views = [x for x in self.views if x['itemtype'] == v.KODI_TYPE_MOVIE]
         LOG.info("Processing Plex %s. Libraries: %s", item_class, views)
 
-        self.all_kodi_ids = {}
+        self.all_kodi_ids = OrderedDict()
         if self.compare:
             with plexdb.Get_Plex_DB() as plex_db:
                 # Get movies from Plex server
                 # Pull the list of movies and boxsets in Kodi
                 try:
-                    self.all_kodi_ids = dict(
+                    self.all_kodi_ids = OrderedDict(
                         plex_db.checksum(v.PLEX_TYPE_MOVIE))
                 except ValueError:
-                    self.all_kodi_ids = {}
+                    self.all_kodi_ids = OrderedDict()
 
         # PROCESS MOVIES #####
         self.updatelist = []
@@ -813,7 +829,7 @@ class LibrarySync(Thread):
         views = [x for x in self.views if x['itemtype'] == 'show']
         LOG.info("Media folders for %s: %s", item_class, views)
 
-        self.all_kodi_ids = {}
+        self.all_kodi_ids = OrderedDict()
         if self.compare:
             with plexdb.Get_Plex_DB() as plex:
                 # Pull the list of TV shows already in Kodi
@@ -961,7 +977,7 @@ class LibrarySync(Thread):
             if self.suspend_item_sync():
                 return False
             LOG.debug("Start processing music %s", kind)
-            self.all_kodi_ids = {}
+            self.all_kodi_ids = OrderedDict()
             self.all_plex_ids = {}
             self.updatelist = []
             if not self.process_music(views,
@@ -980,7 +996,7 @@ class LibrarySync(Thread):
             self.plex_update_watched(view['id'], item_class)
 
         # reset stuff
-        self.all_kodi_ids = {}
+        self.all_kodi_ids = OrderedDict()
         self.all_plex_ids = {}
         self.updatelist = []
         LOG.info("%s sync is finished.", item_class)
@@ -1080,8 +1096,6 @@ class LibrarySync(Thread):
             6: 'analyzing',
             9: 'deleted'
         """
-        self.update_kodi_video_library = False
-        self.update_kodi_music_library = False
         now = utils.unix_timestamp()
         delete_list = []
         for i, item in enumerate(self.items_to_process):
@@ -1118,12 +1132,11 @@ class LibrarySync(Thread):
             self.items_to_process = self.multi_delete(self.items_to_process,
                                                       delete_list)
         # Let Kodi know of the change
-        if self.update_kodi_video_library is True:
-            LOG.info("Doing Kodi Video Lib update")
-            xbmc.executebuiltin('UpdateLibrary(video)')
-        if self.update_kodi_music_library is True:
-            LOG.info("Doing Kodi Music Lib update")
-            xbmc.executebuiltin('UpdateLibrary(music)')
+        if self.update_kodi_video_library or self.update_kodi_music_library:
+            update_library(video=self.update_kodi_video_library,
+                           music=self.update_kodi_music_library)
+            self.update_kodi_video_library = False
+            self.update_kodi_music_library = False
 
     def process_newitems(self, item):
         xml = PF.GetPlexMetadata(item['ratingKey'])
@@ -1406,7 +1419,7 @@ class LibrarySync(Thread):
         # Checking FanartTV for %s items
         self.fanartqueue.put(artwork.ArtworkSyncMessage(
             utils.lang(30018) % len(items)))
-        for i, item in enumerate(items):
+        for item in items:
             self.fanartqueue.put({
                 'plex_id': item['plex_id'],
                 'plex_type': item['plex_type'],
@@ -1464,11 +1477,11 @@ class LibrarySync(Thread):
         elif state.RUN_LIB_SCAN == 'fanart':
             # Only look for missing fanart (No)
             # or refresh all fanart (Yes)
-            refresh = utils.dialog('yesno',
-                                   heading='{plex}',
-                                   line1=utils.lang(39223),
-                                   nolabel=utils.lang(39224),
-                                   yeslabel=utils.lang(39225))
+            from .windows import optionsdialog
+            refresh = optionsdialog.show(utils.lang(29999),
+                                         utils.lang(39223),
+                                         utils.lang(39224),  # refresh all
+                                         utils.lang(39225)) == 0
             self.sync_fanart(missing_only=not refresh, refresh=refresh)
         elif state.RUN_LIB_SCAN == 'textures':
             state.DB_SCAN = True
@@ -1492,7 +1505,7 @@ class LibrarySync(Thread):
             import traceback
             LOG.error("Traceback:\n%s", traceback.format_exc())
             # Library sync thread has crashed
-            utils.dialog('ok', heading='{plex}', line1=utils.lang(39400))
+            utils.messageDialog(utils.lang(29999), utils.lang(39400))
             raise
 
     def _run_internal(self):
@@ -1516,7 +1529,7 @@ class LibrarySync(Thread):
             LOG.error('Current Kodi version: %s', utils.try_decode(
                 xbmc.getInfoLabel('System.BuildVersion')))
             # "Current Kodi version is unsupported, cancel lib sync"
-            utils.dialog('ok', heading='{plex}', line1=utils.lang(39403))
+            utils.messageDialog(utils.lang(29999), utils.lang(39403))
             return
 
         # Do some initializing
@@ -1528,8 +1541,8 @@ class LibrarySync(Thread):
         LOG.info("Db version: %s", utils.settings('dbCreatedWithVersion'))
 
         LOG.info('Refreshing video nodes and playlists now')
-        # Setup the paths for addon-paths (even when using direct paths)
         with kodidb.GetKodiDB('video') as kodi_db:
+            # Setup the paths for addon-paths (even when using direct paths)
             kodi_db.setup_path_table()
         utils.window('plex_dbScan', clear=True)
         state.DB_SCAN = False
@@ -1587,16 +1600,13 @@ class LibrarySync(Thread):
                     LOG.warn("Db version out of date: %s minimum version "
                              "required: %s", current_version, v.MIN_DB_VERSION)
                     # DB out of date. Proceed to recreate?
-                    resp = utils.dialog('yesno',
-                                        heading=utils.lang(29999),
-                                        line1=utils.lang(39401))
-                    if not resp:
+                    if not utils.yesno_dialog(utils.lang(29999),
+                                              utils.lang(39401)):
                         LOG.warn("Db version out of date! USER IGNORED!")
                         # PKC may not work correctly until reset
-                        utils.dialog('ok',
-                                     heading='{plex}',
-                                     line1='%s%s' % (utils.lang(29999),
-                                                     utils.lang(39402)))
+                        utils.messageDialog(utils.lang(29999),
+                                            '%s%s' % (utils.lang(29999),
+                                                      utils.lang(39402)))
                     else:
                         utils.reset(ask_user=False)
                     break

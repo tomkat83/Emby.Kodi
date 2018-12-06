@@ -24,12 +24,11 @@ class PlayUtils():
 
     def getPlayUrl(self):
         """
-        Returns the playurl for the part
+        Returns the playurl [unicode] for the part or returns None.
         (movie might consist of several files)
-
-        playurl is in unicode!
         """
-        self.api.mediastream_number()
+        if self.api.mediastream_number() is None:
+            return
         playurl = self.isDirectPlay()
         if playurl is not None:
             LOG.info("File is direct playing.")
@@ -98,7 +97,7 @@ class PlayUtils():
             LOG.info('Plex clip or music track, not transcoding')
             return False
         videoCodec = self.api.video_codec()
-        LOG.info("videoCodec: %s" % videoCodec)
+        LOG.info("videoCodec: %s", videoCodec)
         if self.item.force_transcode is True:
             LOG.info('User chose to force-transcode')
             return True
@@ -108,7 +107,7 @@ class PlayUtils():
             LOG.info('No codec from PMS, not transcoding.')
             return False
         if ((utils.settings('transcodeHi10P') == 'true' and
-                videoCodec['bitDepth'] == '10') and 
+                videoCodec['bitDepth'] == '10') and
                 ('h264' in codec)):
             LOG.info('Option to transcode 10bit h264 video content enabled.')
             return True
@@ -119,8 +118,8 @@ class PlayUtils():
             return False
         if bitrate > self.get_max_bitrate():
             LOG.info('Video bitrate of %s is higher than the maximal video'
-                     'bitrate of %s that the user chose. Transcoding'
-                     % (bitrate, self.get_max_bitrate()))
+                     'bitrate of %s that the user chose. Transcoding',
+                     bitrate, self.get_max_bitrate())
             return True
         try:
             resolution = int(videoCodec['resolution'])
@@ -129,9 +128,9 @@ class PlayUtils():
             return False
         if 'h265' in codec or 'hevc' in codec:
             if resolution >= self.getH265():
-                LOG.info("Option to transcode h265/HEVC enabled. Resolution "
-                         "of the media: %s, transcoding limit resolution: %s"
-                         % (str(resolution), str(self.getH265())))
+                LOG.info('Option to transcode h265/HEVC enabled. Resolution '
+                         'of the media: %s, transcoding limit resolution: %s',
+                         resolution, self.getH265())
                 return True
         return False
 
@@ -232,8 +231,9 @@ class PlayUtils():
         stream by a PUT request to the PMS
         """
         # Set media and part where we're at
-        if self.api.mediastream is None:
-            self.api.mediastream_number()
+        if (self.api.mediastream is None and
+                self.api.mediastream_number() is None):
+            return
         try:
             mediastreams = self.api.plex_media_streams()
         except (TypeError, IndexError):

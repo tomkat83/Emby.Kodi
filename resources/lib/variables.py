@@ -87,26 +87,26 @@ PKC_MACHINE_IDENTIFIER = None
 MIN_DB_VERSION = '2.0.27'
 
 # Database paths
-_DB_VIDEO_VERSION = {
+DB_VIDEO_VERSION = {
     17: 107,  # Krypton
-    18: 110   # Leia
+    18: 112   # Leia
 }
 DB_VIDEO_PATH = try_decode(xbmc.translatePath(
-    "special://database/MyVideos%s.db" % _DB_VIDEO_VERSION[KODIVERSION]))
+    "special://database/MyVideos%s.db" % DB_VIDEO_VERSION[KODIVERSION]))
 
-_DB_MUSIC_VERSION = {
+DB_MUSIC_VERSION = {
     17: 60,   # Krypton
     18: 72    # Leia
 }
 DB_MUSIC_PATH = try_decode(xbmc.translatePath(
-    "special://database/MyMusic%s.db" % _DB_MUSIC_VERSION[KODIVERSION]))
+    "special://database/MyMusic%s.db" % DB_MUSIC_VERSION[KODIVERSION]))
 
-_DB_TEXTURE_VERSION = {
+DB_TEXTURE_VERSION = {
     17: 13,   # Krypton
     18: 13    # Leia
 }
 DB_TEXTURE_PATH = try_decode(xbmc.translatePath(
-    "special://database/Textures%s.db" % _DB_TEXTURE_VERSION[KODIVERSION]))
+    "special://database/Textures%s.db" % DB_TEXTURE_VERSION[KODIVERSION]))
 
 DB_PLEX_PATH = try_decode(xbmc.translatePath("special://database/plex.db"))
 

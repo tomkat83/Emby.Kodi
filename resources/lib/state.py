@@ -45,6 +45,9 @@ RESTRICTED_USER = False
 DIRECT_PATHS = False
 # Shall we replace custom user ratings with the number of versions available?
 INDICATE_MEDIA_VERSIONS = False
+# Will sync movie trailer differently: either play trailer directly or show
+# all the Plex extras for the user to choose
+SHOW_EXTRAS_INSTEAD_OF_PLAYING_TRAILER = False
 # Do we need to run a special library scan?
 RUN_LIB_SCAN = None
 # Number of items to fetch and display in widgets

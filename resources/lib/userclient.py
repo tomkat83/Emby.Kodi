@@ -6,10 +6,10 @@ from threading import Thread
 
 from xbmc import sleep, executebuiltin
 
+from .windows import userselect
 from .downloadutils import DownloadUtils as DU
 from . import utils
 from . import path_ops
-from . import plex_tv
 from . import plex_functions as PF
 from . import variables as v
 from . import state
@@ -34,6 +34,7 @@ class UserClient(Thread):
 
         self.auth = True
         self.retry = 0
+        self.aborted = False
 
         self.user = None
         self.has_access = True
@@ -189,12 +190,14 @@ class UserClient(Thread):
         LOG.debug('Authenticating user')
 
         # Give attempts at entering password / selecting user
-        if self.retry >= 2:
-            LOG.error("Too many retries to login.")
-            state.PMS_STATUS = 'Stop'
-            utils.dialog('ok', utils.lang(33001), utils.lang(39023))
-            executebuiltin(
-                'Addon.Openutils.settings(plugin.video.plexkodiconnect)')
+        if self.retry > 0:
+            if not self.aborted:
+                LOG.error("Too many retries to login.")
+                state.PMS_STATUS = 'Stop'
+                # Failed to authenticate. Did you login to plex.tv?
+                utils.messageDialog(utils.lang(29999),utils.lang(39023))
+                executebuiltin(
+                    'Addon.OpenSettings(plugin.video.plexkodiconnect)')
             return False
 
         # If there's no settings.xml
@@ -237,22 +240,22 @@ class UserClient(Thread):
         plextoken = utils.settings('plexToken')
         if plextoken:
             LOG.info("Trying to connect to plex.tv to get a user list")
-            userInfo = plex_tv.choose_home_user(plextoken)
-            if userInfo is False:
+            user, self.aborted = userselect.start()
+            if not user:
                 # FAILURE: Something went wrong, try again
                 self.auth = True
                 self.retry += 1
                 return False
-            username = userInfo['username']
-            userId = userInfo['userid']
-            usertoken = userInfo['token']
+            username = user.title
+            user_id = user.id
+            usertoken = user.authToken
         else:
             LOG.info("Trying to authenticate without a token")
             username = ''
-            userId = ''
+            user_id = ''
             usertoken = ''
 
-        if self.load_user(username, userId, usertoken, authenticated=False):
+        if self.load_user(username, user_id, usertoken, authenticated=False):
             # SUCCESS: loaded a user from the settings
             return True
         # Something went wrong, try again

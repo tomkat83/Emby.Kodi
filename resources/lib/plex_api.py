@@ -203,7 +203,8 @@ class API(object):
             files are present for the same PMS item
         """
         if self.mediastream is None and force_first_media is False:
-            self.mediastream_number()
+            if self.mediastream_number() is None:
+                return
         try:
             if force_first_media is False:
                 ans = self.item[self.mediastream][self.part].attrib['file']
@@ -743,26 +744,33 @@ class API(object):
 
     def trailers(self):
         """
-        Returns the URL for a single trailer, an addon path for extras
-        (route_to_extras) if several trailers are present. Or None
+        Returns the URL for a single trailer (local trailer preferred; first
+        trailer found returned) or an add-on path to list all Plex extras
+        if the user setting showExtrasInsteadOfTrailer is set.
+        Returns None if nothing is found.
         """
         url = None
-        number = 0
         for extras in self.item.iterfind('Extras'):
+            # There will always be only 1 extras element
+            if (len(extras) > 0 and
+                    state.SHOW_EXTRAS_INSTEAD_OF_PLAYING_TRAILER):
+                return ('plugin://%s?mode=route_to_extras&plex_id=%s'
+                        % (v.ADDON_ID, self.plex_id()))
             for extra in extras:
                 try:
                     typus = int(extra.attrib['extraType'])
                 except (KeyError, TypeError):
                     typus = None
                 if typus != 1:
+                    # Skip non-trailers
                     continue
-                number += 1
-                url = extra.get('ratingKey')
-        if number > 1:
-            # Several trailers present. Hence let the user choose
-            url = ('plugin://%s?mode=route_to_extras&plex_id=%s'
-                   % (v.ADDON_ID, self.plex_id()))
-        elif url:
+                if extra.get('guid', '').startswith('file:'):
+                    url = extra.get('ratingKey')
+                    # Always prefer local trailers (first one listed)
+                    break
+                elif not url:
+                    url = extra.get('ratingKey')
+        if url:
             url = ('plugin://%s.movies/?plex_id=%s&plex_type=%s&mode=play'
                    % (v.ADDON_ID, url, v.PLEX_TYPE_CLIP))
         return url
@@ -1287,6 +1295,9 @@ class API(object):
         Returns the Media stream as an int (mostly 0). Will let the user choose
         if several media streams are present for a PMS item (if settings are
         set accordingly)
+
+        Returns None if the user aborted selection (leaving self.mediastream at
+        its default of None)
         """
         # How many streams do we have?
         count = 0
@@ -1338,6 +1349,9 @@ class API(object):
                 option = utils.try_encode(option.strip())
                 dialoglist.append(option)
             media = utils.dialog('select', 'Select stream', dialoglist)
+            if media == -1:
+                LOG.info('User cancelled media stream selection')
+                return
         else:
             media = 0
         self.mediastream = media
@@ -1364,8 +1378,8 @@ class API(object):
 
         TODO: mediaIndex
         """
-        if self.mediastream is None:
-            self.mediastream_number()
+        if self.mediastream is None and self.mediastream_number() is None:
+            return
         if quality is None:
             quality = {}
         xargs = clientinfo.getXArgsDeviceInfo()
@@ -1773,10 +1787,7 @@ class API(object):
         LOG.warn('Cannot access file: %s', url)
         # Kodi cannot locate the file #s. Please verify your PKC settings. Stop
         # syncing?
-        resp = utils.dialog('yesno',
-                            heading='{plex}',
-                            line1=utils.lang(39031) % url)
-        return resp
+        return utils.yesno_dialog(utils.lang(29999), utils.lang(39031) % url)
 
     @staticmethod
     def _set_listitem_artprop(listitem, arttype, path):

@@ -1,3 +1,81 @@
+version 2.4.10 (beta only):
+- Use xml.etree.cElementTree whenever possible to avoid memory leaks
+
+version 2.4.9:
+- Fix Kodi crashing due to PKC memory leak 
+
+version 2.4.8:
+- Make 2.4.4-2.4.7 available for everyone
+
+version 2.4.7 (beta only):
+- Try to fix PKC for Enigma 2
+- Fix Kodi 18 wanting to scan tags for songs all the time (you will need to reset the database in the PKC settings)
+- Optimize resetting of Kodi and Plex databases
+
+version 2.4.6 (beta only):
+- Fix PKC not starting up on Enigma
+- Fix sync issues if video lies in root of file system
+- Make sure we retain a dummy first music artist entry
+- Increase logging
+
+version 2.4.5 (beta only):
+- Fix playback not starting up at all
+- Rewire Kodi library refreshs
+- Wipe Kodi database on first PKC run to more reliably install PKC
+
+version 2.4.4 (beta only):
+- Fix rare case when playback would not start-up
+- Increase logging
+
+version 2.4.3:
+- Fix Kodi addons throwing jsonrpc errors (database reset needed)
+
+version 2.4.2:
+- Make version 2.4.1 available for everyone
+
+version 2.4.1 (beta only):
+- Hopefully fix endless playlist sync loops
+- Ensure shows are deleted before seasons before episodes
+- Fix library sync crash on deleting episode with missing season
+- Fix numbering of already existing playlist files
+- Optimize logging
+
+version 2.4.0:
+- Use pretty Plex dialogs for everyone!
+
+version 2.3.14 (beta only):
+- Fix AttributeError on forcing texture caching
+- Switch to Plex style dialogs
+- Include PKC info in plex.tv dialogs
+- Include PKC info in user selection dialog
+
+version 2.3.13 (beta only):
+- Pretty Plex dialogs for plex.tv sign-in and user selection
+- Fix UnicodeDecodeError for PMS with non ASCII chars on local LAN discovery
+- Fix add-on settings not opening on installation
+- Greatly speed up deleting of items on the Kodi side
+- Safely parse XMLs using defusedxml
+- Fix PKC trying to sync audio playlists even when audio sync disabled
+- Some code cleanup
+
+version 2.3.12:
+- Fix Kodi hanging if media stream selection is aborted
+- Fix potential sync crash
+- Revert "Fix Kodi crash by committing to DB frequently"
+
+version 2.3.11 (beta only):
+- Fix Kodi crash by committing to DB frequently
+
+version 2.3.10:
+- Compatibility with Kodi 18 Leia Beta 1
+- Update translations
+- Make version 2.3.9 available for everyone
+
+version 2.3.9 (beta only):
+- Fix playback not resuming (Kodi 18 ignores listitem "StartOffset")
+- Fix playerid not being retrieved for Kodi 18
+- Prefer local trailers; new setting to list extras instead of playing trailer
+
 version 2.3.8:
 - Fix typo
 - Make version 2.3.4-2.3.7 available for everyone

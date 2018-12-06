@@ -2,118 +2,55 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from xbmc import sleep, executebuiltin
+import time
+import threading
+import xbmc
+import xbmcgui
 
 from .downloadutils import DownloadUtils as DU
-from . import utils
-from . import variables as v
-from . import state
+from . import utils, variables as v, state
 
 ###############################################################################
-LOG = getLogger('PLEX.plex_tx')
+LOG = getLogger('PLEX.plex_tv')
 ###############################################################################
 
 
-def choose_home_user(token):
+class HomeUser(utils.AttributeDict):
     """
-    Let's user choose from a list of Plex home users. Will switch to that
-    user accordingly.
-
-    Returns a dict:
-    {
-        'username':             Unicode
-        'userid': ''            Plex ID of the user
-        'token': ''             User's token
-        'protected':            True if PIN is needed, else False
-    }
-
-    Will return False if something went wrong (wrong PIN, no connection)
+    Turns an etree xml answer into an object with attributes
+    Adds the additional properties:
+        isProtected
+        isAdmin
+        isManaged
     """
-    # Get list of Plex home users
-    users = list_home_users(token)
-    if not users:
-        LOG.error("User download failed.")
-        return False
-    userlist = []
-    userlist_coded = []
-    for user in users:
-        username = user['title']
-        userlist.append(username)
-        # To take care of non-ASCII usernames
-        userlist_coded.append(utils.try_encode(username))
-    usernumber = len(userlist)
-    username = ''
-    usertoken = ''
-    trials = 0
-    while trials < 3:
-        if usernumber > 1:
-            # Select user
-            user_select = utils.dialog(
-                'select',
-                '%s%s' % (utils.lang(29999), utils.lang(39306)),
-                userlist_coded)
-            if user_select == -1:
-                LOG.info("No user selected.")
-                utils.settings('username', value='')
-                executebuiltin('Addon.Openutils.settings(%s)' % v.ADDON_ID)
-                return False
-        # Only 1 user received, choose that one
-        else:
-            user_select = 0
-        selected_user = userlist[user_select]
-        LOG.info("Selected user: %s", selected_user)
-        user = users[user_select]
-        # Ask for PIN, if protected:
-        pin = None
-        if user['protected'] == '1':
-            LOG.debug('Asking for users PIN')
-            pin = utils.dialog('input',
-                               '%s%s' % (utils.lang(39307), selected_user),
-                               '',
-                               type='{numeric}',
-                               option='{hide}')
-            # User chose to cancel
-            # Plex bug: don't call url for protected user with empty PIN
-            if not pin:
-                trials += 1
-                continue
-        # Switch to this Plex Home user, if applicable
-        result = switch_home_user(user['id'],
-                                  pin,
-                                  token,
-                                  utils.settings('plex_machineIdentifier'))
-        if result:
-            # Successfully retrieved username: break out of while loop
-            username = result['username']
-            usertoken = result['usertoken']
-            break
-        # Couldn't get user auth
-        else:
-            trials += 1
-            # Could not login user, please try again
-            if not utils.dialog('yesno',
-                                heading='{plex}',
-                                line1='%s%s' % (utils.lang(39308),
-                                                selected_user),
-                                line2=utils.lang(39309)):
-                # User chose to cancel
-                break
-    if not username:
-        LOG.error('Failed signing in a user to plex.tv')
-        executebuiltin('Addon.Openutils.settings(%s)' % v.ADDON_ID)
-        return False
-    return {
-        'username': username,
-        'userid': user['id'],
-        'protected': True if user['protected'] == '1' else False,
-        'token': usertoken
-    }
+    @property
+    def isProtected(self):
+        return self.protected == '1'
+
+    @property
+    def isAdmin(self):
+        return self.admin == '1'
+
+    @property
+    def isManaged(self):
+        return self.restricted == '1'
 
 
-def switch_home_user(userid, pin, token, machineIdentifier):
+def homeuser_to_settings(user):
     """
-    Retrieves Plex home token for a Plex home user.
-    Returns False if unsuccessful
+    Writes one HomeUser to the Kodi settings file
+    """
+    utils.settings('myplexlogin', 'true')
+    utils.settings('plexLogin', user.title)
+    utils.settings('plexToken', user.authToken)
+    utils.settings('plexid', user.id)
+    utils.settings('plexAvatar', user.thumb)
+    utils.settings('plex_status', value=utils.lang(39227))
+
+
+def switch_home_user(userid, pin, token, machine_identifier):
+    """
+    Retrieves Plex home token for a Plex home user. Returns None if this fails
 
     Input:
         userid          id of the Plex home user
@@ -121,40 +58,37 @@ def switch_home_user(userid, pin, token, machineIdentifier):
         token           token for plex.tv
 
     Output:
-        {
-            'username'
-            'usertoken'         Might be empty strings if no token found
-                                for the machineIdentifier that was chosen
-        }
+        usertoken       Might be empty strings if no token found
+                        for the machine_identifier that was chosen
 
     utils.settings('userid') and utils.settings('username') with new plex token
     """
     LOG.info('Switching to user %s', userid)
-    url = 'https://plex.tv/api/home/users/' + userid + '/switch'
+    url = 'https://plex.tv/api/home/users/%s/switch' % userid
     if pin:
-        url += '?pin=' + pin
-    answer = DU().downloadUrl(url,
-                              authenticate=False,
-                              action_type="POST",
-                              headerOptions={'X-Plex-Token': token})
+        url += '?pin=%s' % pin
+    xml = DU().downloadUrl(url,
+                           authenticate=False,
+                           action_type="POST",
+                           headerOptions={'X-Plex-Token': token})
     try:
-        answer.attrib
+        xml.attrib
     except AttributeError:
-        LOG.error('Error: plex.tv switch HomeUser change failed')
-        return False
+        LOG.error('Switch HomeUser change failed')
+        return
 
-    username = answer.attrib.get('title', '')
-    token = answer.attrib.get('authenticationToken', '')
+    username = xml.get('title', '')
+    token = xml.get('authenticationToken', '')
 
     # Write to settings file
     utils.settings('username', username)
     utils.settings('accessToken', token)
-    utils.settings('userid', answer.attrib.get('id', ''))
+    utils.settings('userid', xml.get('id', ''))
     utils.settings('plex_restricteduser',
-                   'true' if answer.attrib.get('restricted', '0') == '1'
+                   'true' if xml.get('restricted', '0') == '1'
                    else 'false')
     state.RESTRICTED_USER = True if \
-        answer.attrib.get('restricted', '0') == '1' else False
+        xml.get('restricted', '0') == '1' else False
 
     # Get final token to the PMS we've chosen
     url = 'https://plex.tv/api/resources?includeHttps=1'
@@ -169,133 +103,178 @@ def switch_home_user(userid, pin, token, machineIdentifier):
         xml = []
 
     found = 0
-    LOG.debug('Our machineIdentifier is %s', machineIdentifier)
+    LOG.debug('Our machine_identifier is %s', machine_identifier)
     for device in xml:
         identifier = device.attrib.get('clientIdentifier')
-        LOG.debug('Found a Plex machineIdentifier: %s', identifier)
-        if identifier == machineIdentifier:
+        LOG.debug('Found the Plex clientIdentifier: %s', identifier)
+        if identifier == machine_identifier:
             found += 1
             token = device.attrib.get('accessToken')
-
-    result = {
-        'username': username,
-    }
     if found == 0:
         LOG.info('No tokens found for your server! Using empty string')
-        result['usertoken'] = ''
-    else:
-        result['usertoken'] = token
+        token = ''
     LOG.info('Plex.tv switch HomeUser change successfull for user %s',
              username)
-    return result
+    return token
 
 
-def list_home_users(token):
+def plex_home_users(token):
     """
-    Returns a list for myPlex home users for the current plex.tv account.
-
-    Input:
-        token for plex.tv
-    Output:
-        List of users, where one entry is of the form:
-            "id": userId,
-            "admin": '1'/'0',
-            "guest": '1'/'0',
-            "restricted": '1'/'0',
-            "protected": '1'/'0',
-            "email": email,
-            "title": title,
-            "username": username,
-            "thumb": thumb_url
-        }
-    If any value is missing, None is returned instead (or "" from plex.tv)
-    If an error is encountered, False is returned
+    Returns a list of HomeUser elements from plex.tv
     """
     xml = DU().downloadUrl('https://plex.tv/api/home/users/',
                            authenticate=False,
                            headerOptions={'X-Plex-Token': token})
+    users = []
     try:
         xml.attrib
     except AttributeError:
         LOG.error('Download of Plex home users failed.')
-        return False
-    users = []
-    for user in xml:
-        users.append(user.attrib)
+    else:
+        for user in xml:
+            users.append(HomeUser(user.attrib))
     return users
+
+
+class PinLogin(object):
+    """
+    Signs user in to plex.tv
+    """
+    INIT = 'https://plex.tv/pins.xml'
+    POLL = 'https://plex.tv/pins/{0}.xml'
+    ACCOUNT = 'https://plex.tv/users/account'
+    POLL_INTERVAL = 1
+
+    def __init__(self, callback=None):
+        self._callback = callback
+        self.id = None
+        self.pin = None
+        self.token = None
+        self.finished = False
+        self._abort = False
+        self.expired = False
+        self.xml = None
+        self._init()
+
+    def _init(self):
+        xml = DU().downloadUrl(self.INIT,
+                               authenticate=False,
+                               action_type="POST")
+        try:
+            xml.attrib
+        except AttributeError:
+            LOG.error("Error, no PIN from plex.tv provided")
+            raise RuntimeError
+        self.pin = xml.find('code').text
+        self.id = xml.find('id').text
+        LOG.debug('Successfully retrieved code and id from plex.tv')
+
+    def _poll(self):
+        LOG.debug('Start polling plex.tv for token')
+        start = time.time()
+        while (not self._abort and
+               time.time() - start < 300 and
+               not state.STOP_PKC):
+            xml = DU().downloadUrl(self.POLL.format(self.id),
+                                   authenticate=False)
+            try:
+                token = xml.find('auth_token').text
+            except AttributeError:
+                time.sleep(self.POLL_INTERVAL)
+                continue
+            if token:
+                self.token = token
+                break
+            time.sleep(self.POLL_INTERVAL)
+        if self._callback:
+            self._callback(self.token, self.xml)
+        if self.token:
+            # Use temp token to get the final plex credentials
+            self.xml = DU().downloadUrl(self.ACCOUNT,
+                                        authenticate=False,
+                                        parameters={'X-Plex-Token': self.token})
+        self.finished = True
+        LOG.debug('Polling done')
+
+    def start_token_poll(self):
+        t = threading.Thread(target=self._poll, name='PIN-LOGIN:Token-Poll')
+        t.start()
+        return t
+
+    def wait_for_token(self):
+        t = self.start_token_poll()
+        t.join()
+        return self.token
+
+    def abort(self):
+        self._abort = True
 
 
 def sign_in_with_pin():
     """
     Prompts user to sign in by visiting https://plex.tv/pin
 
-    Writes to Kodi settings file. Also returns:
-    {
-        'plexhome':          'true' if Plex Home, 'false' otherwise
-        'username':
-        'avatar':             URL to user avator
-        'token':
-        'plexid':             Plex user ID
-        'homesize':           Number of Plex home users (defaults to '1')
-    }
-    Returns False if authentication did not work.
+    Writes to Kodi settings file and returns the HomeUser or None
     """
-    code, identifier = get_pin()
-    if not code:
-        # Problems trying to contact plex.tv. Try again later
-        utils.dialog('ok', heading='{plex}', line1=utils.lang(39303))
-        return False
-    # Go to https://plex.tv/pin and enter the code:
-    # Or press No to cancel the sign in.
-    answer = utils.dialog('yesno',
-                          heading='{plex}',
-                          line1='%s%s' % (utils.lang(39304), "\n\n"),
-                          line2='%s%s' % (code, "\n\n"),
-                          line3=utils.lang(39311))
-    if not answer:
-        return False
-    count = 0
-    # Wait for approx 30 seconds (since the PIN is not visible anymore :-))
-    while count < 30:
-        xml = check_pin(identifier)
-        if xml is not False:
-            break
-        # Wait for 1 seconds
-        sleep(1000)
-        count += 1
-    if xml is False:
-        # Could not sign in to plex.tv Try again later
-        utils.dialog('ok', heading='{plex}', line1=utils.lang(39305))
-        return False
-    # Parse xml
-    userid = xml.attrib.get('id')
-    home = xml.get('home', '0')
-    if home == '1':
-        home = 'true'
-    else:
-        home = 'false'
-    username = xml.get('username', '')
-    avatar = xml.get('thumb', '')
-    token = xml.findtext('authentication-token')
-    home_size = xml.get('homeSize', '1')
-    result = {
-        'plexhome': home,
-        'username': username,
-        'avatar': avatar,
-        'token': token,
-        'plexid': userid,
-        'homesize': home_size
-    }
-    utils.settings('plexLogin', username)
-    utils.settings('plexToken', token)
-    utils.settings('plexhome', home)
-    utils.settings('plexid', userid)
-    utils.settings('plexAvatar', avatar)
-    utils.settings('plexHomeSize', home_size)
-    # Let Kodi log into plex.tv on startup from now on
-    utils.settings('myplexlogin', 'true')
-    utils.settings('plex_status', value=utils.lang(39227))
-    return result
+    from .windows import background
+    bkgrd = background.BackgroundWindow.create(function=_sign_in_with_pin)
+    bkgrd.modal()
+    xml = bkgrd.result
+    del bkgrd
+
+    if not xml:
+        return
+    user = HomeUser(xml.attrib)
+    homeuser_to_settings(user)
+    return user
+
+
+def _sign_in_with_pin():
+    """
+    Returns the user xml answer from plex.tv or None if unsuccessful
+    """
+    from .windows import signin, background
+
+    background.setSplash(False)
+    back = signin.Background.create()
+
+    try:
+        while True:
+            pin_login_window = signin.PinLoginWindow.create()
+            try:
+                try:
+                    pinlogin = PinLogin()
+                except RuntimeError:
+                    # Could not sign in to plex.tv Try again later
+                    utils.messageDialog(utils.lang(29999), utils.lang(39305))
+                    return
+                pin_login_window.setPin(pinlogin.pin)
+                pinlogin.start_token_poll()
+                while not pinlogin.finished:
+                    if pin_login_window.abort:
+                        LOG.debug('Pin login aborted')
+                        pinlogin.abort()
+                        return
+                    xbmc.sleep(100)
+                if not pinlogin.expired:
+                    if pinlogin.xml:
+                        pin_login_window.setLinking()
+                    return pinlogin.xml
+            finally:
+                pin_login_window.doClose()
+                del pin_login_window
+            if pinlogin.expired:
+                LOG.debug('Pin expired')
+                expired_window = signin.ExpiredWindow.open()
+                try:
+                    if not expired_window.refresh:
+                        LOG.debug('Pin refresh aborted')
+                        return
+                finally:
+                    del expired_window
+    finally:
+        back.doClose()
+        del back
 
 
 def get_pin():
@@ -323,7 +302,7 @@ def check_pin(identifier):
     """
     Checks with plex.tv whether user entered the correct PIN on plex.tv/pin
 
-    Returns False if not yet done so, or the XML response file as etree
+    Returns None if not yet done so, or the XML response file as etree
     """
     # Try to get a temporary token
     xml = DU().downloadUrl('https://plex.tv/pins/%s.xml' % identifier,
@@ -332,9 +311,9 @@ def check_pin(identifier):
         temp_token = xml.find('auth_token').text
     except AttributeError:
         LOG.error("Could not find token in plex.tv answer")
-        return False
+        return
     if not temp_token:
-        return False
+        return
     # Use temp token to get the final plex credentials
     xml = DU().downloadUrl('https://plex.tv/users/account',
                            authenticate=False,

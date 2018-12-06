@@ -163,7 +163,7 @@ class Artwork():
                  length)
         # Caching %s Plex images
         self.queue.put(ArtworkSyncMessage(utils.lang(30006) % length))
-        for i, url in enumerate(artworks_to_cache):
+        for url in artworks_to_cache:
             self.queue.put(url[0])
         # Plex image caching done
         self.queue.put(ArtworkSyncMessage(utils.lang(30007)))
@@ -173,13 +173,13 @@ class Artwork():
         This method will sync all Kodi artwork to textures13.db
         and cache them locally. This takes diskspace!
         """
-        if not utils.dialog('yesno', "Image Texture Cache", utils.lang(39250)):
+        if not utils.yesno_dialog("Image Texture Cache", utils.lang(39250)):
             return
 
         LOG.info("Doing Image Cache Sync")
 
         # ask to rest all existing or not
-        if utils.dialog('yesno', "Image Texture Cache", utils.lang(39251)):
+        if utils.yesno_dialog("Image Texture Cache", utils.lang(39251)):
             LOG.info("Resetting all cache data first")
             # Remove all existing textures first
             path = path_ops.translate_path('special://thumbnails/')
@@ -318,7 +318,7 @@ class Artwork():
                  "Video", "plex")
         for path in paths:
             new_path = path_ops.translate_path("special://thumbnails/%s" % path)
-            path_ops.makedirs(utils.encode_path(new_path))
+            path_ops.makedirs(path_ops.encode_path(new_path))
 
 
 class ArtworkSyncMessage(object):

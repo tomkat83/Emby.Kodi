@@ -465,6 +465,11 @@ msgid "Limit artwork cache threads (recommended for rpi)"
 msgstr ""
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr ""
@@ -1007,6 +1012,22 @@ msgctxt "#39079"
 msgid "Plex Companion could not open the GDM port. Please change it in the PKC settings."
 msgstr ""
 
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are identical!
+msgctxt "#39080"
+msgid "Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr ""
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr ""
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr ""
@@ -1112,6 +1133,11 @@ msgstr ""
 # Message in the PKC settings to display the plex.tv username. Leave the colon :
 msgctxt "#39228"
 msgid "Plex user:"
+msgstr ""
+
+# Error message if user could not log in; the actual user name will be appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
 msgstr ""
 
 msgctxt "#39250"

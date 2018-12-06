@@ -5,6 +5,7 @@ Create and delete playlists on the Kodi side of things
 """
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
+import re
 
 from .common import Playlist, PlaylistError
 from . import db, pms
@@ -15,6 +16,8 @@ from .. import utils, path_ops, variables as v
 LOG = getLogger('PLEX.playlists.kodi_pl')
 
 ###############################################################################
+
+REGEX_FILE_NUMBERING = re.compile(r'''_(\d+)\.\w+$''')
 
 
 def create(plex_id):
@@ -43,18 +46,15 @@ def create(plex_id):
                               '%s.m3u' % name)
     while path_ops.exists(path) or db.get_playlist(path=path):
         # In case the Plex playlist names are not unique
-        occurance = utils.REGEX_FILE_NUMBERING.search(path)
+        occurance = REGEX_FILE_NUMBERING.search(path)
         if not occurance:
             path = path_ops.path.join(v.PLAYLIST_PATH,
                                       playlist.kodi_type,
                                       '%s_01.m3u' % name[:min(len(name), 248)])
         else:
-            occurance = int(occurance.group(1)) + 1
-            path = path_ops.path.join(v.PLAYLIST_PATH,
-                                      playlist.kodi_type,
-                                      '%s_%02d.m3u' % (name[:min(len(name),
-                                                                 248)],
-                                                       occurance))
+            number = int(occurance.group(1)) + 1
+            basename = re.sub(REGEX_FILE_NUMBERING, '', path)
+            path = '%s_%02d.m3u' % (basename, number)
     LOG.debug('Kodi playlist path: %s', path)
     playlist.kodi_path = path
     xml_playlist = pms.get_playlist(plex_id)

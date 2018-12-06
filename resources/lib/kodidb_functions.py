@@ -5,13 +5,9 @@ Connect to the Kodi databases (video and music) and operate on them
 """
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from ntpath import dirname
 from sqlite3 import IntegrityError
 
-from . import artwork
-from . import utils
-from . import variables as v
-from . import state
+from . import artwork, utils, variables as v, state, path_ops
 
 ###############################################################################
 
@@ -109,12 +105,9 @@ class KodiDBMethods(object):
         Video DB: Adds all subdirectories to path table while setting a "trail"
         of parent path ids
         """
-        if "\\" in path:
-            # Local path
-            parentpath = "%s\\" % dirname(dirname(path))
-        else:
-            # Network path
-            parentpath = "%s/" % dirname(dirname(path))
+        parentpath = path_ops.path.abspath(
+            path_ops.path.join(path,
+                               path_ops.decode_path(path_ops.path.pardir)))
         pathid = self.get_path(parentpath)
         if pathid is None:
             self.cursor.execute("SELECT COALESCE(MAX(idPath),0) FROM path")
@@ -125,9 +118,11 @@ class KodiDBMethods(object):
                 VALUES (?, ?, ?)
             '''
             self.cursor.execute(query, (pathid, parentpath, datetime))
-            parent_id = self.parent_path_id(parentpath)
-            query = 'UPDATE path SET idParentPath = ? WHERE idPath = ?'
-            self.cursor.execute(query, (parent_id, pathid))
+            if parentpath != path:
+                # In case we end up having media in the filesystem root, C:\
+                parent_id = self.parent_path_id(parentpath)
+                query = 'UPDATE path SET idParentPath = ? WHERE idPath = ?'
+                self.cursor.execute(query, (parent_id, pathid))
         return pathid
 
     def add_video_path(self, path, date_added=None, id_parent_path=None,
@@ -297,11 +292,13 @@ class KodiDBMethods(object):
                                     (path_id,))
 
     def _modify_link_and_table(self, kodi_id, kodi_type, entries, link_table,
-                               table, key):
+                               table, key, first_id=None):
+        first_id = first_id if first_id is not None else 1
         query = '''
             SELECT %s FROM %s WHERE name = ? COLLATE NOCASE LIMIT 1
         ''' % (key, table)
-        query_id = 'SELECT COALESCE(MAX(%s), -1) FROM %s' % (key, table)
+        query_id = ('SELECT COALESCE(MAX(%s), %s) FROM %s'
+                    % (key, first_id - 1, table))
         query_new = ('INSERT INTO %s(%s, name) values(?, ?)'
                      % (table, key))
         entry_ids = []
@@ -508,7 +505,7 @@ class KodiDBMethods(object):
             actor_id = self.cursor.fetchone()[0]
         except TypeError:
             # Not yet in actor DB, add person
-            self.cursor.execute('SELECT COALESCE(MAX(actor_id),-1) FROM actor')
+            self.cursor.execute('SELECT COALESCE(MAX(actor_id),0) FROM actor')
             actor_id = self.cursor.fetchone()[0] + 1
             self.cursor.execute('INSERT INTO actor(actor_id, name) '
                                 'VALUES (?, ?)',
@@ -911,12 +908,8 @@ class KodiDBMethods(object):
             except TypeError:
                 # Krypton has a dummy first entry idArtist: 1  strArtist:
                 # [Missing Tag] strMusicBrainzArtistID: Artist Tag Missing
-                if v.KODIVERSION >= 17:
-                    self.cursor.execute(
-                        "SELECT COALESCE(MAX(idArtist),1) FROM artist")
-                else:
-                    self.cursor.execute(
-                        "SELECT COALESCE(MAX(idArtist),0) FROM artist")
+                self.cursor.execute(
+                    "SELECT COALESCE(MAX(idArtist),1) FROM artist")
                 artistid = self.cursor.fetchone()[0] + 1
                 query = '''
                     INSERT INTO artist(idArtist, strArtist,
@@ -1253,3 +1246,61 @@ def kodiid_from_filename(path, kodi_type=None, db_type=None):
             except TypeError:
                 LOG.debug('No kodi video db element found for path %s', path)
     return kodi_id, kodi_type
+
+
+def setup_kodi_default_entries():
+    """
+    Makes sure that we retain the Kodi standard databases. E.g. that there
+    is a dummy artist with ID 1
+    """
+    if utils.settings('enableMusic') == 'true':
+        with GetKodiDB('music') as kodi_db:
+            query = '''
+                INSERT OR REPLACE INTO artist(
+                    idArtist, strArtist, strMusicBrainzArtistID)
+                VALUES (?, ?, ?)
+            '''
+            kodi_db.cursor.execute(query, (1,
+                                           '[Missing Tag]',
+                                           'Artist Tag Missing'))
+            if v.KODIVERSION >= 18:
+                query = '''
+                    INSERT OR REPLACE INTO versiontagscan(
+                        idVersion, iNeedsScan, lastscanned)
+                    VALUES (?, ?, ?)
+                '''
+                kodi_db.cursor.execute(query, (v.DB_MUSIC_VERSION[v.KODIVERSION],
+                                               0,
+                                               utils.unix_date_to_kodi(
+                                                   utils.unix_timestamp())))
+
+
+def wipe_dbs():
+    """
+    Completely resets the Kodi databases 'video', 'texture' and 'music' (if
+    music sync is enabled)
+    """
+    LOG.warn('Wiping Kodi databases!')
+    query = "SELECT name FROM sqlite_master WHERE type = 'table'"
+    kinds = ['video', 'texture']
+    if utils.settings('enableMusic') == 'true':
+        LOG.info('Also deleting music database')
+        kinds.append('music')
+    for db in kinds:
+        with GetKodiDB(db) as kodi_db:
+            kodi_db.cursor.execute(query)
+            tables = kodi_db.cursor.fetchall()
+            tables = [i[0] for i in tables]
+            if 'version' in tables:
+                tables.remove('version')
+            if 'versiontagscan' in tables:
+                tables.remove('versiontagscan')
+            for table in tables:
+                delete_query = 'DELETE FROM %s' % table
+                kodi_db.cursor.execute(delete_query)
+    setup_kodi_default_entries()
+    # Make sure Kodi knows we wiped the databases
+    import xbmc
+    xbmc.executebuiltin('UpdateLibrary(video)')
+    if utils.settings('enableMusic') == 'true':
+        xbmc.executebuiltin('UpdateLibrary(music)')

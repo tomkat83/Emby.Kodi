@@ -1,17 +1,22 @@
-[![stable version](https://img.shields.io/badge/stable_version-2.3.8-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip) 
-[![beta version](https://img.shields.io/badge/beta_version-2.3.8-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip)
+[![stable version](https://img.shields.io/badge/stable_version-2.4.9-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip) 
+[![beta version](https://img.shields.io/badge/beta_version-2.4.10-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip)
 
 [![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
 [![Forum](https://img.shields.io/badge/forum-plex-orange.svg?maxAge=60&style=flat)](https://forums.plex.tv/discussion/210023/plexkodiconnect-let-kodi-talk-to-your-plex)
 
-[![GitHub issues](https://img.shields.io/github/issues/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/pulls) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a66870f19ced4fb98f94d9fd56e34e87)](https://www.codacy.com/app/croneter/PlexKodiConnect?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=croneter/PlexKodiConnect&amp;utm_campaign=Badge_Grade)
+[![GitHub issues](https://img.shields.io/github/issues/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/pulls) [![HitCount](http://hits.dwyl.io/croneter/PlexKodiConnect.svg)](http://hits.dwyl.io/croneter/PlexKodiConnect) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a66870f19ced4fb98f94d9fd56e34e87)](https://www.codacy.com/app/croneter/PlexKodiConnect?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=croneter/PlexKodiConnect&amp;utm_campaign=Badge_Grade)
 
 
 # PlexKodiConnect (PKC)
 **Combine the best frontend media player Kodi with the best multimedia backend server Plex**
 
-PKC combines the best of Kodi - ultra smooth navigation, beautiful and highly customizable user interfaces and playback of any file under the sun - and the Plex Media Server.
+PKC synchronizes your media from your Plex server to the native Kodi database. Hence:
+- Use virtually any other Kodi add-on
+- Use any Kodi skin, completely customize Kodi's look
+- Browse your media very fluently (cached artwork)
+- Automatically get additional artwork (more than Plex offers)
+- Use Plex features with a Kodi interface
 
 Have a look at [some screenshots](https://github.com/croneter/PlexKodiConnect/wiki/Some-PKC-Screenshots) to see what's possible. 
 
@@ -21,7 +26,6 @@ Unfortunately, the PKC Kodi repository had to move because it stopped working (t
 
 ### Content
 * [**Download and Installation**](#download-and-installation)
-* [**What does PKC do?**](#what-does-pkc-do)
 * [**Warning**](#warning)
 * [**PKC Features**](#pkc-features)
 * [**Additional Artwork**](#additional-artwork)
@@ -38,14 +42,6 @@ Install PKC via the PlexKodiConnect Kodi repository download button just below (
 |----------------|--------------|
 | [![stable version](https://img.shields.io/badge/stable_version-latest-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip)  | [![beta version](https://img.shields.io/badge/beta_version-latest-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip) |
 
-### What does PKC do?
-PKC synchronizes your media from your Plex server to the native Kodi database. Hence:
-- Use virtually any other Kodi add-on
-- Use any Kodi skin, completely customize Kodi's look
-- Browse your media at full speed (cached artwork)
-- Automatically get additional artwork (more than Plex offers)
-- Enjoy Plex features using the Kodi interface
-
 ### Warning
 Use at your own risk! This plugin assumes that you manage all your videos with Plex (and none with Kodi). You might lose data already stored in the Kodi video and music databases as this plugin directly changes them. Don't worry if you want Plex to manage all your media (like you should ;-)). 
 
@@ -53,7 +49,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 
 ### PKC Features
 
-- Support for Kodi 18 Leia Alpha 3 (nightly versions are NOT supported!)
+- Support for Kodi 18 Beta 3
 - Support for Kodi 17 Krypton
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
@@ -65,7 +61,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 - Automatically group movies into [movie sets](http://kodi.wiki/view/movie_sets)
 - [Direct play](https://github.com/croneter/PlexKodiConnect/wiki/Direct-Play) from network paths (e.g. "\\\\server\\Plex\\movie.mkv"), something unique to PKC
 - Delete PMS items from the Kodi context menu
-- PKC is available in the following languages:
+- PKC is available in the following languages. [Please help and easily translate PKC!](https://www.transifex.com/croneter/pkc)
     + English
     + German
     + Czech, thanks @Pavuucek
@@ -81,7 +77,6 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
     + Russian, thanks @UncleStark
     + Hungarian, thanks @savage93
     + Ukrainian, thanks @uniss
-    + [Please help and easily translate PKC!](https://www.transifex.com/croneter/pkc)
 
 ### Additional Artwork
 PKC uses additional artwork for free from [TheMovieDB](https://www.themoviedb.org). Many thanks for lettings us use the API, guys!

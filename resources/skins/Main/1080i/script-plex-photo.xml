@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <defaultcontrol>250</defaultcontrol>
+    <zorder>100</zorder>
+    <onload>SetProperty(photo,plugin.video.plexkodiconnect/home/background-fallback.png)</onload>
+    <controls>
+        <control type="group">
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture>plugin.video.plexkodiconnect/home/background-fallback.png</texture>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <fadetime>1000</fadetime>
+                <texture background="true">$INFO[Window.Property(background)]</texture>
+            </control>
+            <control type="image" id="600">
+                <!-- Doesn't work for all aspects -->
+                <!-- <animation effect="zoom" start="56" end="100" time="200" center="960,540" reversible="false" condition="StringCompare(Window.Property(rotate),90) | StringCompare(Window.Property(rotate),270)">Conditional</animation>
+                <animation effect="zoom" start="178" end="100" time="200" center="960,540" reversible="false" condition="StringCompare(Window.Property(rotate),0) | StringCompare(Window.Property(rotate),180)">Conditional</animation> -->
+                <animation effect="rotate" time="200" start="0" end="90" center="960,540" reversible="false" condition="Integer.IsGreater(Window.Property(rotate),89)">Conditional</animation>
+                <animation effect="rotate" time="200" start="0" end="90" center="960,540" reversible="false" condition="Integer.IsGreater(Window.Property(rotate),179)">Conditional</animation>
+                <animation effect="rotate" time="200" start="0" end="90" center="960,540" reversible="false" condition="Integer.IsGreater(Window.Property(rotate),269)">Conditional</animation>
+                <animation effect="rotate" time="200" start="270" end="360" center="960,540" reversible="false" condition="!Integer.IsGreater(Window.Property(rotate),89)">Conditional</animation>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <fadetime>200</fadetime>
+                <texture fallback="plugin.video.plexkodiconnect/thumb_fallbacks/broken-photo.png" background="true">$INFO[Window.Property(photo)]</texture>
+                <aspectratio>keep</aspectratio>
+            </control>
+        </control>
+        <control type="togglebutton" id="250">
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <usealttexture>!String.IsEmpty(Window.Property(OSD))</usealttexture>
+            <alttexturefocus>-</alttexturefocus>
+            <alttexturenofocus>-</alttexturenofocus>
+            <label> </label>
+            <onclick>SetProperty(OSD,1)</onclick>
+            <onclick>SetFocus(400)</onclick>
+            <altclick>SetProperty(OSD,)</altclick>
+            <ondown>SetProperty(OSD,1)</ondown>
+            <ondown>SetFocus(400)</ondown>
+            <onfocus condition="!String.IsEmpty(Window.Property(show.pqueue))">SetFocus(501)</onfocus>
+            <onfocus condition="!String.IsEmpty(Window.Property(OSD))">SetFocus(400)</onfocus>
+        </control>
+        <control type="group" id="200">
+            <animation effect="slide" start="0,0" end="0,-135" time="100" condition="!String.IsEmpty(Window.Property(show.pqueue))">Conditional</animation>
+            <posx>0</posx>
+            <posy>0</posy>
+            <control type="group">
+                <visible allowhiddenfocus="true">!String.IsEmpty(Window.Property(OSD))</visible>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>940</posy>
+                    <width>1920</width>
+                    <height>140</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>A0000000</colordiffuse>
+                </control>
+                <control type="grouplist" id="400">
+                    <defaultcontrol>406</defaultcontrol>
+                    <hitrect x="460" y="998" w="1000" h="55" />
+                    <posx>360</posx>
+                    <posy>964</posy>
+                    <width>1200</width>
+
+                    <height>124</height>
+                    <align>center</align>
+                    <onup>250</onup>
+                    <onup>SetProperty(OSD,)</onup>
+                    <ondown>250</ondown>
+                    <onup>SetProperty(OSD,)</onup>
+                    <itemgap>-40</itemgap>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic" easing="out">200</scrolltime>
+                    <usecontrolcoords>true</usecontrolcoords>
+
+                    <control type="togglebutton" id="401">
+                        <visible>String.IsEmpty(Window.Property(no.playlist))</visible>
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/repeat-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/repeat.png</texturenofocus>
+                        <usealttexture>!String.IsEmpty(Window.Property(pq.repeat))</usealttexture>
+                        <alttexturefocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/repeat-focus.png</alttexturefocus>
+                        <alttexturenofocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/repeat.png</alttexturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="421">
+                        <enable>false</enable>
+                        <visible>!String.IsEmpty(Window.Property(no.playlist))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle.png</texturenofocus>
+                        <label> </label>
+                    </control>
+
+                    <control type="togglebutton" id="402">
+                        <visible>String.IsEmpty(Window.Property(no.playlist))</visible>
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle.png</texturenofocus>
+                        <usealttexture>!String.IsEmpty(Window.Property(pq.shuffled))</usealttexture>
+                        <alttexturefocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</alttexturefocus>
+                        <alttexturenofocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/shuffle.png</alttexturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="422">
+                        <enable>false</enable>
+                        <visible>!String.IsEmpty(Window.Property(no.playlist))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle.png</texturenofocus>
+                        <label> </label>
+                    </control>
+
+                    <control type="button" id="403">
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/rotate-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/rotate.png</texturenofocus>
+                        <label> </label>
+                    </control>
+
+
+                    <control type="button" id="404">
+                        <visible>String.IsEmpty(Window.Property(hide.prev))</visible>
+                        <animation effect="zoom" start="100" end="124" time="100" center="93,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="93,50" reversible="false">UnFocus</animation>
+                        <hitrect x="58" y="28" w="69" h="45" />
+                        <posx>30</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus flipx="true" colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                        <texturenofocus flipx="true" colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="424">
+                        <enable>false</enable>
+                        <visible>!String.IsEmpty(Window.Property(hide.prev))</visible>
+                        <posx>30</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus flipx="true" colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                        <texturenofocus flipx="true" colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="togglebutton" id="406">
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/play-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/play.png</texturenofocus>
+                        <usealttexture>!String.IsEmpty(Window.Property(playing))</usealttexture>
+                        <alttexturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/pause-focus.png</alttexturefocus>
+                        <alttexturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/pause.png</alttexturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="407">
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/stop-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/stop.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="409">
+                        <visible>String.IsEmpty(Window.Property(hide.next))</visible>
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="419">
+                        <enable>false</enable>
+                        <visible>!String.IsEmpty(Window.Property(hide.next))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <texturefocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                        <label> </label>
+                    </control>
+
+
+                    <control type="togglebutton" id="412">
+                        <animation effect="zoom" start="100" end="124" time="100" center="93,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="93,50" reversible="false">UnFocus</animation>
+                        <hitrect x="58" y="28" w="69" h="45" />
+                        <posx>30</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/square2x2-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/square2x2.png</texturenofocus>
+                        <usealttexture>!String.IsEmpty(Window.Property(show.pqueue))</usealttexture>
+                        <alttexturefocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/square2x2-focus.png</alttexturefocus>
+                        <alttexturenofocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/square2x2-focus.png</alttexturenofocus>
+                        <onclick>SetProperty(show.pqueue,1)</onclick>
+                        <altclick>SetProperty(show.pqueue,)</altclick>
+                        <label> </label>
+                    </control>
+                    <control type="togglebutton" id="413">
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/info-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/info.png</texturenofocus>
+                        <usealttexture>!String.IsEmpty(Window.Property(show.info))</usealttexture>
+                        <alttexturefocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/info-focus.png</alttexturefocus>
+                        <alttexturenofocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/info-focus.png</alttexturenofocus>
+                        <onclick>SetProperty(show.info,1)</onclick>
+                        <altclick>SetProperty(show.info,)</altclick>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="414">
+                        <visible>false</visible>
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/tags-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/tags.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="button" id="411">
+                        <visible>false</visible>
+                        <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                        <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <font>font12</font>
+                        <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/more-focus.png</texturefocus>
+                        <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/more.png</texturenofocus>
+                        <label> </label>
+                    </control>
+                </control>
+            </control>
+
+            <control type="button" id="501">
+                <posx>0</posx>
+                <posy>1080</posy>
+                <width>1920</width>
+                <height>135</height>
+                <onup>SetProperty(OSD,1)</onup>
+                <onup>400</onup>
+                <font>font12</font>
+                <texturefocus>-</texturefocus>
+                <texturenofocus>-</texturenofocus>
+                <label> </label>
+                <onclick>SetProperty(OSD,1)</onclick>
+                <onclick>SetFocus(400)</onclick>
+            </control>
+
+            <control type="image">
+                <posx>0</posx>
+                <posy>1080</posy>
+                <width>1920</width>
+                <height>135</height>
+                <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                <colordiffuse>FF000000</colordiffuse>
+            </control>
+            <control type="fixedlist" id="500">
+                <posx>0</posx>
+                <posy>1080</posy>
+                <width>1920</width>
+                <height>135</height>
+                <hitrect x="28" y="28" w="69" h="45" />
+
+                <scrolltime>0</scrolltime>
+                <orientation>horizontal</orientation>
+                <preloaditems>4</preloaditems>
+                <focusposition>7</focusposition>
+                <!-- ITEM LAYOUT ########################################## -->
+                <itemlayout width="128">
+                    <control type="group">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <control type="group">
+                            <posx>2.5</posx>
+                            <posy>6</posy>
+                            <control type="image">
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <width>123</width>
+                                <height>123</height>
+                                <texture>plugin.video.plexkodiconnect/thumb_fallbacks/photo.png</texture>
+                            </control>
+                            <control type="image">
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <width>123</width>
+                                <height>123</height>
+                                <texture fallback="plugin.video.plexkodiconnect/thumb_fallbacks/broken-photo-thumb.png" background="true">$INFO[ListItem.Thumb]</texture>
+                                <aspectratio>scale</aspectratio>
+                            </control>
+                        </control>
+                    </control>
+                </itemlayout>
+
+                <!-- FOCUSED LAYOUT ####################################### -->
+                <focusedlayout width="128">
+                    <control type="group">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <control type="group">
+                            <posx>2.5</posx>
+                            <posy>6</posy>
+                            <control type="image">
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <width>123</width>
+                                <height>123</height>
+                                <texture>plugin.video.plexkodiconnect/thumb_fallbacks/photo.png</texture>
+                            </control>
+                            <control type="image">
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <width>123</width>
+                                <height>123</height>
+                                <texture fallback="plugin.video.plexkodiconnect/thumb_fallbacks/broken-photo-thumb.png" background="true">$INFO[ListItem.Thumb]</texture>
+                                <aspectratio>scale</aspectratio>
+                            </control>
+                        </control>
+                    </control>
+                </focusedlayout>
+            </control>
+            <control type="image">
+                <posx>892.5</posx>
+                <posy>1080</posy>
+                <width>135</width>
+                <height>135</height>
+                <texture border="10">plugin.video.plexkodiconnect/home/selected.png</texture>
+            </control>
+
+        </control>
+
+        <control type="group">
+            <visible>!String.IsEmpty(Window.Property(show.info))</visible>
+            <posx>1470</posx>
+            <posy>0</posy>
+            <width>450</width>
+            <height>1080</height>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>450</width>
+                <height>1080</height>
+                <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                <colordiffuse>4C000000</colordiffuse>
+            </control>
+            <control type="grouplist">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>450</width>
+                <height>1080</height>
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+
+                <control type="button">
+                    <!-- margin -->
+                    <width>450</width>
+                    <height>21</height>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <colordiffuse>00000000</colordiffuse>
+                    <label> </label>
+                </control>
+                <control type="button" id="650">
+                    <width>450</width>
+                    <height>37</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>00000000</colordiffuse>
+                    <align>left</align>
+                    <align>center</align>
+                    <textoffsetx>28</textoffsetx>
+                    <font>font12</font>
+                    <label>[B]$INFO[Window.Property(photo.title)][/B]</label>
+                </control>
+                <control type="button" id="659">
+                    <width>450</width>
+                    <height>37</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>00000000</colordiffuse>
+                    <align>left</align>
+                    <align>center</align>
+                    <textoffsetx>28</textoffsetx>
+                    <font>font12</font>
+                    <label>$INFO[Window.Property(photo.date)]</label>
+                </control>
+                <control type="button">
+                    <!-- margin -->
+                    <width>450</width>
+                    <height>21</height>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <colordiffuse>00000000</colordiffuse>
+                    <label> </label>
+                </control>
+
+                <control type="button">
+                    <!-- margin -->
+                    <width>450</width>
+                    <height>21</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>99000000</colordiffuse>
+                    <label> </label>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEmpty(Window.Property(camera.model))</visible>
+                    <width>450</width>
+                    <height>37</height>
+                    <control type="button">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>450</width>
+                        <height>37</height>
+                        <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                        <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                        <colordiffuse>99000000</colordiffuse>
+                        <align>left</align>
+                        <align>center</align>
+                        <textoffsetx>28</textoffsetx>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(camera.model)]</label>
+                    </control>
+                    <control type="image">
+                        <posx>393</posx>
+                        <posy>6</posy>
+                        <width>29</width>
+                        <height>24</height>
+                        <texture>plugin.video.plexkodiconnect/indicators/camera.png</texture>
+                        <colordiffuse>A0FFFFFF</colordiffuse>
+                    </control>
+                </control>
+                <control type="button">
+                    <visible>!String.IsEmpty(Window.Property(camera.lens))</visible>
+                    <width>450</width>
+                    <height>37</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>99000000</colordiffuse>
+                    <align>left</align>
+                    <align>center</align>
+                    <textoffsetx>28</textoffsetx>
+                    <font>font12</font>
+                    <label>$INFO[Window.Property(camera.lens)]</label>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEmpty(Window.Property(photo.container))</visible>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>450</width>
+                    <height>37</height>
+                    <control type="button">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>450</width>
+                        <height>37</height>
+                        <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                        <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                        <colordiffuse>99000000</colordiffuse>
+                        <align>left</align>
+                        <align>center</align>
+                        <textoffsetx>28</textoffsetx>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(photo.dims)]</label>
+                    </control>
+                    <control type="grouplist">
+                        <right>28</right>
+                        <posy>5</posy>
+                        <width>200</width>
+                        <height>26</height>
+                        <itemgap>0</itemgap>
+                        <orientation>horizontal</orientation>
+                        <align>right</align>
+                        <control type="button">
+                            <width>auto</width>
+                            <height>26</height>
+                            <font>font10</font>
+                            <align>center</align>
+                            <aligny>top</aligny>
+                            <focusedcolor>FF000000</focusedcolor>
+                            <textcolor>FF000000</textcolor>
+                            <textoffsetx>5</textoffsetx>
+                            <textoffsety>-3</textoffsety>
+                            <texturefocus colordiffuse="A0FFFFFF" border="12">plugin.video.plexkodiconnect/white-square-rounded.png</texturefocus>
+                            <texturenofocus colordiffuse="A0FFFFFF" border="12">plugin.video.plexkodiconnect/white-square-rounded.png</texturenofocus>
+                            <label>[UPPERCASE]$INFO[Window.Property(photo.container)][/UPPERCASE]</label>
+                        </control>
+                        </control>
+                </control>
+                <control type="button">
+                    <!-- margin -->
+                    <width>450</width>
+                    <height>21</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>99000000</colordiffuse>
+                    <label> </label>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEmpty(Window.Property(camera.settings))</visible>
+                    <width>450</width>
+                    <height>80</height>
+                    <!-- sep -->
+                    <control type="image">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>450</width>
+                        <height>1</height>
+                        <texture border="30,0,30,0">plugin.video.plexkodiconnect/indicators/info-sep.png</texture>
+                        <colordiffuse>99000000</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <posx>28</posx>
+                        <posy>0</posy>
+                        <width>394</width>
+                        <height>1</height>
+                        <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                        <colordiffuse>999B9B9B</colordiffuse>
+                    </control>
+                    <control type="button">
+                        <!-- margin -->
+                        <posx>0</posx>
+                        <posy>1</posy>
+                        <width>450</width>
+                        <height>21</height>
+                        <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                        <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                        <colordiffuse>99000000</colordiffuse>
+                        <label> </label>
+                    </control>
+                    <control type="button">
+                        <posx>0</posx>
+                        <posy>22</posy>
+                        <width>450</width>
+                        <height>37</height>
+                        <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                        <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                        <colordiffuse>99000000</colordiffuse>
+                        <align>left</align>
+                        <align>center</align>
+                        <textoffsetx>28</textoffsetx>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(camera.settings)]</label>
+                    </control>
+                    <control type="button">
+                        <!-- margin -->
+                        <posx>0</posx>
+                        <posy>59</posy>
+                        <width>450</width>
+                        <height>21</height>
+                        <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                        <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                        <colordiffuse>99000000</colordiffuse>
+                        <label> </label>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <visible>!String.IsEmpty(Window.Property(photo.summary))</visible>
+                    <width>450</width>
+                    <height>152</height>
+                    <control type="image">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>450</width>
+                        <height>152</height>
+                        <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                        <colordiffuse>661F1F1F</colordiffuse>
+                    </control>
+                    <control type="textbox">
+                        <posx>28</posx>
+                        <posy>24</posy>
+                        <width>394</width>
+                        <height>100</height>
+                        <font>font12</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <label>$INFO[Window.Property(photo.summary)]</label>
+                    </control>
+                </control>
+
+                <!-- <control type="button">
+                    <width>450</width>
+                    <height>147</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>66000000</colordiffuse>
+                    <font>font12</font>
+                </control>
+                <control type="button">
+                    <width>450</width>
+                    <height>150</height>
+                    <texturefocus>plugin.video.plexkodiconnect/white-square.png</texturefocus>
+                    <texturenofocus>plugin.video.plexkodiconnect/white-square.png</texturenofocus>
+                    <colordiffuse>661F1F1F</colordiffuse>
+                    <font>font12</font>
+                </control> -->
+            </control>
+        </control>
+    </controls>
+</window>

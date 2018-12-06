@@ -1,0 +1,201 @@
+<window>
+    <onload>SetProperty(dropdown,1)</onload>
+    <defaultcontrol>100</defaultcontrol>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <zorder>100</zorder>
+    <controls>
+        <control type="button" id="700">
+            <!-- dummy for clicks off list -->
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+        </control>
+        <control type="group" id="100">
+            <defaultcontrol>250</defaultcontrol>
+            <visible>!String.IsEmpty(Window.Property(show))</visible>
+            <posx>0</posx>
+            <posy>0</posy>
+            <control type="image" id="110">
+                <posx>-40</posx>
+                <posy>-40</posy>
+                <width>380</width>
+                <height>146</height>
+                <texture border="42">plugin.video.plexkodiconnect/drop-shadow.png</texture>
+            </control>
+            <control type="list" id="250">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>300</width>
+                <height>924</height>
+                <onup condition="StringCompare(Window.Property(close.direction),top)">Close</onup>
+                <onup condition="!StringCompare(Window.Property(close.direction),top)">noop</onup>
+                <onleft condition="StringCompare(Window.Property(close.direction),left)">Close</onleft>
+                <onright condition="StringCompare(Window.Property(close.direction),right)">Close</onright>
+                <ondown condition="StringCompare(Window.Property(close.direction),down)">Close</ondown>
+                <ondown condition="!StringCompare(Window.Property(close.direction),down)">noop</ondown>
+                <scrolltime>200</scrolltime>
+                <orientation>vertical</orientation>
+                <!-- ITEM LAYOUT ########################################## -->
+                <itemlayout height="66">
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(first))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture colordiffuse="FF323232" border="10">plugin.video.plexkodiconnect/white-square-top-rounded.png</texture>
+                    </control>
+                    <control type="image">
+                        <visible>String.IsEmpty(ListItem.Property(first)) + String.IsEmpty(ListItem.Property(last)) + String.IsEmpty(ListItem.Property(only))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture colordiffuse="FF323232">plugin.video.plexkodiconnect/white-square.png</texture>
+                    </control>
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(last))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture flipy="true" colordiffuse="FF323232" border="10">plugin.video.plexkodiconnect/white-square-top-rounded.png</texture>
+                    </control>
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(only))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture colordiffuse="FF323232" border="10">plugin.video.plexkodiconnect/white-square-rounded.png</texture>
+                    </control>
+                    <control type="label">
+                        <visible>String.IsEmpty(ListItem.Property(with.indicator))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEmpty(ListItem.Property(with.indicator))</visible>
+                        <control type="label">
+                            <posx>20</posx>
+                            <posy>0</posy>
+                            <width>280</width>
+                            <height>66</height>
+                            <font>font12</font>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="image">
+                            <posx>254</posx>
+                            <posy>20</posy>
+                            <width>26</width>
+                            <height>26</height>
+                            <texture colordiffuse="FFFFFFFF">$INFO[ListItem.Thumb]</texture>
+                            <aspectratio>keep</aspectratio>
+                        </control>
+                    </control>
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(separator))</visible>
+                        <posx>0</posx>
+                        <posy>64</posy>
+                        <width>300</width>
+                        <height>2</height>
+                        <texture colordiffuse="FF000000">plugin.video.plexkodiconnect/white-square.png</texture>
+                    </control>
+                </itemlayout>
+                <focusedlayout height="66">
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(first))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture colordiffuse="FFE5A00D" border="10">plugin.video.plexkodiconnect/white-square-top-rounded.png</texture>
+                    </control>
+                    <control type="image">
+                        <visible>String.IsEmpty(ListItem.Property(first)) + String.IsEmpty(ListItem.Property(last)) + String.IsEmpty(ListItem.Property(only))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/white-square.png</texture>
+                    </control>
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(last))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture flipy="true" colordiffuse="FFE5A00D" border="10">plugin.video.plexkodiconnect/white-square-top-rounded.png</texture>
+                    </control>
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(only))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <texture colordiffuse="FFE5A00D" border="10">plugin.video.plexkodiconnect/white-square-rounded.png</texture>
+                    </control>
+                    <control type="label">
+                        <visible>String.IsEmpty(ListItem.Property(with.indicator))</visible>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>300</width>
+                        <height>66</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEmpty(ListItem.Property(with.indicator))</visible>
+                        <control type="label">
+                            <posx>20</posx>
+                            <posy>0</posy>
+                            <width>280</width>
+                            <height>66</height>
+                            <font>font12</font>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <textcolor>FF000000</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="image">
+                            <posx>254</posx>
+                            <posy>20</posy>
+                            <width>26</width>
+                            <height>26</height>
+                            <texture colordiffuse="FF000000">$INFO[ListItem.Thumb]</texture>
+                            <aspectratio>keep</aspectratio>
+                        </control>
+                    </control>
+                    <control type="image">
+                        <visible>!String.IsEmpty(ListItem.Property(separator))</visible>
+                        <posx>0</posx>
+                        <posy>64</posy>
+                        <width>300</width>
+                        <height>2</height>
+                        <texture colordiffuse="FF000000">plugin.video.plexkodiconnect/white-square.png</texture>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>
+    </controls>
+</window>

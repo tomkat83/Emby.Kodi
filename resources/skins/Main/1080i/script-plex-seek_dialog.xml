@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <zorder>100</zorder>
+    <defaultcontrol>800</defaultcontrol>
+    <controls>
+        <control type="button" id="800">
+            <visible allowhiddenfocus="true">String.IsEmpty(Window.Property(show.OSD))</visible>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <label> </label>
+            <onclick>SetProperty(show.OSD,1)</onclick>
+        </control>
+        <control type="group" id="802">
+            <visible>[!String.IsEmpty(Window.Property(show.OSD)) | Window.IsVisible(seekbar)] + !Window.IsVisible(osdvideosettings) + !Window.IsVisible(osdaudiosettings) + !Window.IsVisible(subtitlesearch) + !Window.IsActive(playerprocessinfo)</visible>
+            <animation effect="fade" time="200" delay="200" end="0">Hidden</animation>
+            <control type="group">
+                <visible>String.IsEmpty(Window.Property(settings.visible)) + [Window.IsVisible(seekbar) | Window.IsVisible(videoosd) | Player.ShowInfo]</visible>
+                <animation effect="fade" start="100" end="0">Hidden</animation>
+                <posx>0</posx>
+                <posy>0</posy>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <texture>plugin.video.plexkodiconnect/player-fade.png</texture>
+                    <colordiffuse>FF080808</colordiffuse>
+                </control>
+            </control>
+
+            <control type="group">
+                <posx>0</posx>
+                <posy>0</posy>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1920</width>
+                    <height>140</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>A0000000</colordiffuse>
+                </control>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>940</posy>
+                    <width>1920</width>
+                    <height>140</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>A0000000</colordiffuse>
+                </control>
+            </control>
+
+            <control type="group">
+                <posx>0</posx>
+                <posy>40</posy>
+                <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(is.show))</visible>
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1500</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[B]$INFO[VideoPlayer.TVShowTitle][/B]$INFO[VideoPlayer.Title, &#8226; ]$INFO[VideoPlayer.Season, &#8226; Season ]$INFO[VideoPlayer.Episode, Episode ]</label>
+                </control>
+                <control type="label">
+                    <visible>String.IsEmpty(Window.Property(is.show))</visible>
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1500</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[B]$INFO[VideoPlayer.Title][/B]$INFO[VideoPlayer.Year, &#8226; ]</label>
+                </control>
+                <control type="label">
+                    <posx>1860</posx>
+                    <posy>0</posy>
+                    <width>300</width>
+                    <height>60</height>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[System.Time]</label>
+                </control>
+            </control>
+
+            <control type="group">
+                <posx>0</posx>
+                <posy>965</posy>
+                <control type="label">
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1000</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(time.current)]</label>
+                </control>
+                <control type="label">
+                    <posx>1860</posx>
+                    <posy>0</posy>
+                    <width>800</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(time.left)]</label>
+                </control>
+                <control type="label">
+                    <posx>1860</posx>
+                    <posy>40</posy>
+                    <width>800</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>A0FFFFFF</textcolor>
+                    <label>$INFO[Window.Property(time.end)]</label>
+                </control>
+                <control type="label">
+                    <visible>Player.Paused + String.IsEmpty(Window.Property(show.OSD))</visible>
+                    <animation effect="fade" time="200" delay="200" end="100">Visible</animation>
+                    <posx>0</posx>
+                    <posy>20</posy>
+                    <width>1920</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFCC7B19</textcolor>
+                    <label>[UPPERCASE]$ADDON[plugin.video.plexkodiconnect 32436][/UPPERCASE]</label>
+                </control>
+            </control>
+
+            <control type="group">
+                <posx>0</posx>
+                <posy>940</posy>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1920</width>
+                    <height>10</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>A0000000</colordiffuse>
+                </control>
+                <control type="image" id="200">
+                    <visible>Control.HasFocus(100) | !String.IsEmpty(Window.Property(button.seek))</visible>
+                    <posx>0</posx>
+                    <posy>1</posy>
+                    <width>1</width>
+                    <height>8</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>FFE5A00D</colordiffuse>
+                </control>
+                <control type="image" id="201">
+                    <posx>0</posx>
+                    <posy>2</posy>
+                    <width>1</width>
+                    <height>6</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>FFAC5B00</colordiffuse>
+                </control>
+            </control>
+        </control>
+        <control type="group" id="801">
+            <visible>!String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(osdvideosettings) + !Window.IsVisible(osdaudiosettings)</visible>
+            <animation effect="fade" time="200" delay="200" end="0">Hidden</animation>
+            <control type="group" id="300">
+                <visible>!String.IsEmpty(Window.Property(has.bif)) + [Control.HasFocus(100) | Control.HasFocus(501) | !String.IsEmpty(Window.Property(button.seek))]</visible>
+                <animation effect="fade" time="100" delay="100" end="100">Visible</animation>
+                <posx>0</posx>
+                <posy>752</posy>
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>324</width>
+                    <height>184</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>FF000000</colordiffuse>
+                </control>
+                <control type="image">
+                    <posx>2</posx>
+                    <posy>2</posy>
+                    <width>320</width>
+                    <height>180</height>
+                    <fadetime>10</fadetime>
+                    <texture>$INFO[Window.Property(bif.image)]</texture>
+                </control>
+            </control>
+
+            <control type="grouplist" id="400">
+                <defaultcontrol>406</defaultcontrol>
+                <hitrect x="460" y="998" w="1000" h="55" />
+                <posx>360</posx>
+                <posy>964</posy>
+                <width>1200</width>
+
+                <height>124</height>
+                <align>center</align>
+                <onup>100</onup>
+                <itemgap>-40</itemgap>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="quadratic" easing="out">200</scrolltime>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="group" id="421">
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false" condition="Control.HasFocus(401)">Conditional</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false" condition="!Control.HasFocus(401)">Conditional</animation>
+                    <width>125</width>
+                    <height>101</height>
+                    <control type="button" id="401">
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <onup>100</onup>
+                        <onright>402</onright>
+                        <onleft>412</onleft>
+                        <font>font12</font>
+                        <texturefocus>-</texturefocus>
+                        <texturenofocus>-</texturenofocus>
+                        <label> </label>
+                    </control>
+                    <control type="group">
+                        <visible>!Control.HasFocus(401)</visible>
+                        <control type="image">
+                            <visible>!Playlist.IsRepeatOne + !Playlist.IsRepeat + String.IsEmpty(Window.Property(pq.repeat))</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/repeat.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>Playlist.IsRepeat | !String.IsEmpty(Window.Property(pq.repeat))</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/repeat.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>Playlist.IsRepeatOne | !String.IsEmpty(Window.Property(pq.repeat.one))</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/repeat-one.png</texture>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(401)</visible>
+                        <control type="image">
+                            <visible>!Playlist.IsRepeatOne + !Playlist.IsRepeat + String.IsEmpty(Window.Property(pq.repeat))</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/repeat-focus.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>Playlist.IsRepeat | !String.IsEmpty(Window.Property(pq.repeat))</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/repeat-focus.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>Playlist.IsRepeatOne | !String.IsEmpty(Window.Property(pq.repeat.one))</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/repeat-one-focus.png</texture>
+                        </control>
+                    </control>
+                </control>
+
+                <control type="togglebutton" id="402">
+                    <visible>!String.IsEmpty(Window.Property(has.playlist))</visible>
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle.png</texturenofocus>
+                    <usealttexture>!String.IsEmpty(Window.Property(pq.shuffled))</usealttexture>
+                    <alttexturefocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="FFCC7B19">plugin.video.plexkodiconnect/buttons/shuffle.png</alttexturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="422">
+                    <enable>false</enable>
+                    <visible>String.IsEmpty(Window.Property(has.playlist))</visible>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/shuffle.png</texturenofocus>
+                    <label> </label>
+                </control>
+
+                <control type="button" id="403">
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/settings-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/settings.png</texturenofocus>
+                    <label> </label>
+                </control>
+
+
+                <control type="button" id="404">
+                    <visible>!String.IsEmpty(Window.Property(pq.hasprev))</visible>
+                    <animation effect="zoom" start="100" end="124" time="100" center="93,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="93,50" reversible="false">UnFocus</animation>
+                    <hitrect x="58" y="28" w="69" h="45" />
+                    <posx>30</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus flipx="true" colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                    <texturenofocus flipx="true" colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="424">
+                    <enable>false</enable>
+                    <visible>String.IsEmpty(Window.Property(pq.hasprev))</visible>
+                    <posx>30</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus flipx="true" colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                    <texturenofocus flipx="true" colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="405">
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus flipx="true" colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/skip-forward-focus.png</texturefocus>
+                    <texturenofocus flipx="true" colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/skip-forward.png</texturenofocus>
+                    <label> </label>
+                </control>
+
+                <control type="group" id="426">
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false" condition="Control.HasFocus(406)">Conditional</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false" condition="!Control.HasFocus(406)">Conditional</animation>
+                    <width>125</width>
+                    <height>101</height>
+                    <control type="button" id="406">
+                        <hitrect x="28" y="28" w="69" h="45" />
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>125</width>
+                        <height>101</height>
+                        <onup>100</onup>
+                        <onright>407</onright>
+                        <onleft>405</onleft>
+                        <font>font12</font>
+                        <texturefocus>-</texturefocus>
+                        <texturenofocus>-</texturenofocus>
+                        <label> </label>
+                        <onclick>PlayerControl(Play)</onclick>
+                    </control>
+                    <control type="group">
+                        <visible>!Control.HasFocus(406)</visible>
+                        <control type="image">
+                            <visible>!Player.Paused + !Player.Forwarding + !Player.Rewinding</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/pause.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>Player.Paused | Player.Forwarding | Player.Rewinding</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/play.png</texture>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(406)</visible>
+                        <control type="image">
+                            <visible>!Player.Paused + !Player.Forwarding + !Player.Rewinding</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/pause-focus.png</texture>
+                        </control>
+                        <control type="image">
+                            <visible>Player.Paused | Player.Forwarding | Player.Rewinding</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>125</width>
+                            <height>101</height>
+                            <texture colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/play-focus.png</texture>
+                        </control>
+                    </control>
+                </control>
+
+                <control type="button" id="407">
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/stop-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/stop.png</texturenofocus>
+                    <onclick>PlayerControl(Stop)</onclick>
+                    <label> </label>
+                </control>
+                <control type="button" id="408">
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/skip-forward-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/skip-forward.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="409">
+                    <visible>!String.IsEmpty(Window.Property(pq.hasnext))</visible>
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="419">
+                    <enable>false</enable>
+                    <visible>String.IsEmpty(Window.Property(pq.hasnext))</visible>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <texturefocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/next.png</texturenofocus>
+                    <label> </label>
+                </control>
+
+
+                <control type="button" id="410">
+                    <visible>!String.IsEmpty(Window.Property(pq.hasnext)) | !String.IsEmpty(Window.Property(pq.hasprev))</visible>
+                    <animation effect="zoom" start="100" end="124" time="100" center="93,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="93,50" reversible="false">UnFocus</animation>
+                    <hitrect x="58" y="28" w="69" h="45" />
+                    <posx>30</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/pqueue-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/pqueue.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="430">
+                    <enable>false</enable>
+                    <visible>String.IsEmpty(Window.Property(pq.hasnext)) + String.IsEmpty(Window.Property(pq.hasprev))</visible>
+                    <animation effect="zoom" start="100" end="124" time="100" center="93,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="93,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>30</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/pqueue-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="40FFFFFF">plugin.video.plexkodiconnect/buttons/pqueue.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="412">
+                    <visible>!String.IsEmpty(Window.Property(subtitle.downloads))</visible>
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false">Focus</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
+                    <hitrect x="28" y="28" w="69" h="45" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>125</width>
+                    <height>101</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="FFE5A00D">plugin.video.plexkodiconnect/buttons/subtitle-focus.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">plugin.video.plexkodiconnect/buttons/subtitle.png</texturenofocus>
+                    <label> </label>
+                </control>
+            </control>
+
+            <control type="group">
+                <posx>0</posx>
+                <posy>940</posy>
+                <control type="button" id="100">
+                    <hitrect x="0" y="-19" w="1920" h="48" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1920</width>
+                    <height>10</height>
+                    <onup>501</onup>
+                    <ondown>400</ondown>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                </control>
+            </control>
+
+            <control type="group" id="500">
+                <animation effect="slide" time="100" start="0,0" end="0,20" reversible="true" condition="Control.HasFocus(501)">Conditional</animation>
+                <visible allowhiddenfocus="true">String.IsEmpty(Window.Property(mouse.mode)) + String.IsEmpty(Window.Property(hide.bigseek)) + [Control.HasFocus(501) | Control.HasFocus(100)]</visible>
+                <posx>-8</posx>
+                <posy>917</posy>
+                <control type="image">
+                    <posx>-200</posx>
+                    <posy>5</posy>
+                    <width>2320</width>
+                    <height>6</height>
+                    <texture>plugin.video.plexkodiconnect/white-square.png</texture>
+                    <colordiffuse>A0000000</colordiffuse>
+                </control>
+                <control type="list" id="501">
+                    <hitrect x="-20" y="-20" w="10" h="10" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1928</width>
+                    <height>16</height>
+                    <ondown>100</ondown>
+                    <onfocus>SetProperty(hide.bigseek,)</onfocus>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <preloaditems>4</preloaditems>
+                    <!-- ITEM LAYOUT ########################################## -->
+                    <itemlayout width="160">
+                        <control type="image">
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>16</width>
+                            <height>16</height>
+                            <texture>plugin.video.plexkodiconnect/indicators/seek-selection-marker.png</texture>
+                            <colordiffuse>FF606060</colordiffuse>
+                        </control>
+                    </itemlayout>
+
+                    <!-- FOCUSED LAYOUT ####################################### -->
+                    <focusedlayout width="160">
+                        <control type="image">
+                            <visible>!Control.HasFocus(501)</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>16</width>
+                            <height>16</height>
+                            <texture>plugin.video.plexkodiconnect/indicators/seek-selection-marker.png</texture>
+                            <colordiffuse>FF606060</colordiffuse>
+                        </control>
+                        <control type="image">
+                            <visible>Control.HasFocus(501)</visible>
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>16</width>
+                            <height>16</height>
+                            <texture>plugin.video.plexkodiconnect/indicators/seek-selection-marker.png</texture>
+                            <colordiffuse>FFE5A00D</colordiffuse>
+                        </control>
+                    </focusedlayout>
+                </control>
+            </control>
+
+            <control type="group" id="202">
+                <visible>Control.HasFocus(100) | Control.HasFocus(501) | !String.IsEmpty(Window.Property(button.seek))</visible>
+                <posx>0</posx>
+                <posy>896</posy>
+                <control type="group" id="203">
+                    <posx>-50</posx>
+                    <posy>0</posy>
+                    <control type="image">
+                        <animation effect="fade" time="100" delay="100" end="100">Visible</animation>
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>101</width>
+                        <height>39</height>
+                        <texture>plugin.video.plexkodiconnect/indicators/player-selection-time_box.png</texture>
+                        <colordiffuse>D0000000</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <posx>0</posx>
+                        <posy>0</posy>
+                        <width>101</width>
+                        <height>40</height>
+                        <font>font10</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[Window.Property(time.selection)]</label>
+                    </control>
+                </control>
+                <control type="image">
+                    <animation effect="fade" time="100" delay="100" end="100">Visible</animation>
+                    <posx>-6</posx>
+                    <posy>39</posy>
+                    <width>15</width>
+                    <height>7</height>
+                    <texture>plugin.video.plexkodiconnect/indicators/player-selection-time_arrow.png</texture>
+                    <colordiffuse>D0000000</colordiffuse>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

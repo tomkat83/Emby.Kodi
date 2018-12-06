@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <controls>
+        <control type="group">
+            <animation effect="fade" start="0" end="100" delay="500">WindowOpen</animation>
+            <control type="image">
+                <posx>840</posx>
+                <posy>465</posy>
+                <width>240</width>
+                <height>150</height>
+                <texture>plugin.video.plexkodiconnect/busy-back.png</texture>
+                <colordiffuse>A0FFFFFF</colordiffuse>
+            </control>
+            <control type="image">
+                <posx>915</posx>
+                <posy>521</posy>
+                <width>90</width>
+                <height>38</height>
+                <texture diffuse="plugin.video.plexkodiconnect/busy-diffuse.png">plugin.video.plexkodiconnect/busy.gif</texture>
+            </control>
+        </control>
+    </controls>
+</window>

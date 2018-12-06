@@ -118,13 +118,13 @@ msgstr "Огляд FanartTV завершено"
 
 # PKC settings sync options
 msgctxt "#30020"
-msgid "Sync Plex playlists"
-msgstr ""
+msgid "Sync Plex playlists (reboot Kodi!)"
+msgstr "Синхронізовувати плейлісти Plex (перезапустіть Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Синхронізовувати в Kodi тільки специфічні плейлисти Plex"
 
 # PKC settings category
 msgctxt "#30022"
@@ -134,7 +134,7 @@ msgstr "Розширені"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Синхронізовувати в Plex тільки специфічні плейлисти Kodi"
 
 msgctxt "#30024"
 msgid "Username"
@@ -147,12 +147,12 @@ msgstr "Показувати повідомлення якщо PMS офлайн"
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
-msgstr ""
+msgstr "Префікс в іменах плейлистів Plex для вмикання синхронізації"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
+msgstr "Префікс в іменах плейлистів Kodi для вмикання синхронізації"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -478,6 +478,11 @@ msgstr ""
 "Обмежити кількість потоків кешування зображень (рекомендовано для RPi)"
 
 # PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr ""
+
+# PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
 msgstr "Максимальна кількість одночасних запитів від сервера"
@@ -588,6 +593,11 @@ msgstr "Не запитувати обирання певного потоку �
 msgctxt "#30542"
 msgid "Always pick best quality for trailers"
 msgstr "Завжди обирати найліпшу якість трейлерів"
+
+# PKC Settings - Artwork
+msgctxt "#30543"
+msgid "Prefer Kodi artwork for collections/sets"
+msgstr "Віддавати перевагу для колекцій/наборів зображенням Kodi"
 
 msgctxt "#30544"
 msgid "Artwork"

@@ -123,12 +123,14 @@ class plexgdm:
                       "be registered. Change the Plex Companion update port!"
                       % self.client_update_port)
             if utils.settings('companion_show_gdm_port_warning') == 'true':
-                if utils.dialog('yesno',
-                                utils.lang(29999),
-                                'Port %s' % self.client_update_port,
-                                utils.lang(39079),
-                                yeslabel=utils.lang(30013),  # Never show again
-                                nolabel=utils.lang(30012)):  # OK
+                from .windows import optionsdialog
+                # Plex Companion could not open the GDM port. Please change it
+                # in the PKC settings.
+                if optionsdialog.show(utils.lang(29999),
+                                      'Port %s\n%s' % (self.client_update_port,
+                                                       utils.lang(39079)),
+                                      utils.lang(30013),  # Never show again
+                                      utils.lang(186)) == 0:
                     utils.settings('companion_show_gdm_port_warning',
                                    value='false')
                 from xbmc import executebuiltin

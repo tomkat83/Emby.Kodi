@@ -74,7 +74,6 @@ def toggle_plex_tv_sign_in():
         utils.settings('plexLogin', value="")
         utils.settings('plexToken', value="")
         utils.settings('plexid', value="")
-        utils.settings('plexHomeSize', value="1")
         utils.settings('plexAvatar', value="")
         utils.settings('plex_status', value=utils.lang(39226))
 
@@ -96,8 +95,7 @@ def reset_authorization():
     """
     User tried login and failed too many times. Reset # of logins
     """
-    resp = utils.dialog('yesno', heading="{plex}", line1=utils.lang(39206))
-    if resp == 1:
+    if utils.yesno_dialog(utils.lang(29999), utils.lang(39206)):
         LOG.info("Reset login attempts.")
         utils.plex_command('PMS_STATUS', 'Auth')
     else:
@@ -969,11 +967,10 @@ def create_new_pms():
     Opens dialogs for the user the plug in the PMS details
     """
     # "Enter your Plex Media Server's IP or URL. Examples are:"
-    utils.dialog('ok',
-                 utils.lang(29999),
-                 utils.lang(39215),
-                 '192.168.1.2',
-                 'plex.myServer.org')
+    utils.messageDialog(utils.lang(29999),
+                        '%s\n%s\n%s' % (utils.lang(39215),
+                                        '192.168.1.2',
+                                        'plex.myServer.org'))
     address = utils.dialog('input', "Enter PMS IP or URL")
     if address == '':
         return
@@ -983,7 +980,7 @@ def create_new_pms():
     url = '%s:%s' % (address, port)
     # "Does your Plex Media Server support SSL connections?
     # (https instead of http)"
-    https = utils.dialog('yesno', utils.lang(29999), utils.lang(39217))
+    https = utils.yesno_dialog(utils.lang(29999), utils.lang(39217))
     if https:
         url = 'https://%s' % url
     else:
@@ -993,11 +990,10 @@ def create_new_pms():
     if machine_identifier is None:
         # "Error contacting url
         # Abort (Yes) or save address anyway (No)"
-        if utils.dialog('yesno',
-                        utils.lang(29999),
-                        '%s %s. %s' % (utils.lang(39218),
-                                       url,
-                                       utils.lang(39219))):
+        if utils.yesno_dialog(utils.lang(29999),
+                              '%s %s. %s' % (utils.lang(39218),
+                                             url,
+                                             utils.lang(39219))):
             return
         else:
             utils.settings('plex_machineIdentifier', '')
@@ -1049,7 +1045,7 @@ def _log_out():
     while utils.window('plex_dbScan') == 'true':
         if counter > 200:
             # Failed to reset PMS and plex.tv connects. Try to restart Kodi.
-            utils.dialog('ok', utils.lang(29999), utils.lang(39208))
+            utils.messageDialog(utils.lang(29999), utils.lang(39208))
             # Resuming threads, just in case
             utils.plex_command('SUSPEND_LIBRARY_THREAD', 'False')
             LOG.error("Could not stop library sync, aborting")
@@ -1066,7 +1062,7 @@ def _log_out():
     while utils.window('plex_serverStatus') == "401":
         if counter > 100:
             # 'Failed to reset PKC. Try to restart Kodi.'
-            utils.dialog('ok', utils.lang(29999), utils.lang(39208))
+            utils.messageDialog(utils.lang(29999), utils.lang(39208))
             LOG.error("Could not sign out user, aborting")
             return False
         counter += 1

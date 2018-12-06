@@ -145,6 +145,7 @@ class Movies(Items):
         # If the item doesn't exist, we'll add it to the database
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding movie with plex_id %s', itemid)
         # Cannot parse XML, abort
         if not itemid:
             LOG.error("Cannot parse XML data for movie")
@@ -485,6 +486,7 @@ class TVShows(Items):
         api = API(item)
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding show with plex_id %s', itemid)
         if not itemid:
             LOG.error("Cannot parse XML data for TV show")
             return
@@ -690,6 +692,7 @@ class TVShows(Items):
         """
         api = API(item)
         plex_id = api.plex_id()
+        LOG.debug('Adding season with plex_id %s', plex_id)
         if not plex_id:
             LOG.error('Error getting plex_id for season, skipping')
             return
@@ -740,6 +743,7 @@ class TVShows(Items):
         api = API(item)
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding episode with plex_id %s', itemid)
         if not itemid:
             LOG.error('Error getting itemid for episode, skipping')
             return
@@ -804,20 +808,24 @@ class TVShows(Items):
         seasonid = self.kodi_db.add_season(showid, season)
 
         # GET THE FILE AND PATH #####
+        do_indirect = not state.DIRECT_PATHS
         if state.DIRECT_PATHS:
             playurl = api.file_path(force_first_media=True)
-            playurl = api.validate_playurl(playurl, v.PLEX_TYPE_EPISODE)
-            if "\\" in playurl:
-                # Local path
-                filename = playurl.rsplit("\\", 1)[1]
+            if playurl is None:
+                do_indirect = True
             else:
-                # Network share
-                filename = playurl.rsplit("/", 1)[1]
-            path = playurl.replace(filename, "")
-            parent_path_id = self.kodi_db.parent_path_id(path)
-            pathid = self.kodi_db.add_video_path(path,
-                                                 id_parent_path=parent_path_id)
-        else:
+                playurl = api.validate_playurl(playurl, v.PLEX_TYPE_EPISODE)
+                if "\\" in playurl:
+                    # Local path
+                    filename = playurl.rsplit("\\", 1)[1]
+                else:
+                    # Network share
+                    filename = playurl.rsplit("/", 1)[1]
+                path = playurl.replace(filename, "")
+                parent_path_id = self.kodi_db.parent_path_id(path)
+                pathid = self.kodi_db.add_video_path(path,
+                                                     id_parent_path=parent_path_id)
+        if do_indirect:
             # Set plugin path - do NOT use "intermediate" paths for the show
             # as with direct paths!
             filename = api.file_name(force_first_media=True)
@@ -1004,18 +1012,24 @@ class TVShows(Items):
             # Season verification
             season = self.plex_db.getItem_byKodiId(parent_id,
                                                    v.KODI_TYPE_SEASON)
-            if not self.plex_db.getItem_byParentId(parent_id,
-                                                   v.KODI_TYPE_EPISODE):
-                # No episode left for season - so delete the season
-                self.remove_season(parent_id)
-                self.plex_db.removeItem(season[0])
-            show = self.plex_db.getItem_byKodiId(season[1],
-                                                 v.KODI_TYPE_SHOW)
-            if not self.plex_db.getItem_byParentId(season[1],
-                                                   v.KODI_TYPE_SEASON):
-                # No seasons for show left - so delete entire show
-                self.remove_show(season[1])
-                self.plex_db.removeItem(show[0])
+            if season is not None:
+                if not self.plex_db.getItem_byParentId(parent_id,
+                                                       v.KODI_TYPE_EPISODE):
+                    # No episode left for season - so delete the season
+                    self.remove_season(parent_id)
+                    self.plex_db.removeItem(season[0])
+                show = self.plex_db.getItem_byKodiId(season[1],
+                                                     v.KODI_TYPE_SHOW)
+                if show is not None:
+                    if not self.plex_db.getItem_byParentId(season[1],
+                                                           v.KODI_TYPE_SEASON):
+                        # No seasons for show left - so delete entire show
+                        self.remove_show(season[1])
+                        self.plex_db.removeItem(show[0])
+                else:
+                    LOG.error('No show found in Plex DB for season %s', season)
+            else:
+                LOG.error('No season found in Plex DB!')
         ##### SEASON #####
         elif kodi_type == v.KODI_TYPE_SEASON:
             # Remove episodes, season, verify tvshow
@@ -1121,6 +1135,7 @@ class Music(Items):
 
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding artist with plex_id %s', itemid)
         plex_dbitem = plex_db.getItem_byId(itemid)
         try:
             artistid = plex_dbitem[0]
@@ -1212,6 +1227,7 @@ class Music(Items):
 
         update_item = True
         plex_id = api.plex_id()
+        LOG.debug('Adding album with plex_id %s', plex_id)
         if not plex_id:
             LOG.error('Error processing Album, skipping')
             return
@@ -1372,9 +1388,9 @@ class Music(Items):
         plex_db = self.plex_db
         artwork = self.artwork
         api = API(item)
-
         update_item = True
         itemid = api.plex_id()
+        LOG.debug('Adding song with plex_id %s', itemid)
         if not itemid:
             LOG.error('Error processing Song; skipping')
             return

@@ -57,61 +57,61 @@ def playback_triage(plex_id=None, plex_type=None, path=None, resolve=True):
         utils.dialog('notification', utils.lang(29999), utils.lang(30017))
         _ensure_resolve(abort=True)
         return
-    playqueue = PQ.get_playqueue_from_type(
-        v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[plex_type])
-    try:
-        pos = js.get_position(playqueue.playlistid)
-    except KeyError:
-        # Kodi bug - Playlist plays (not Playqueue) will ALWAYS be audio for
-        # add-on paths
-        LOG.info('No position returned from Kodi player! Assuming playlist')
-        playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_AUDIO)
+    with state.LOCK_PLAYQUEUES:
+        playqueue = PQ.get_playqueue_from_type(
+            v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[plex_type])
         try:
             pos = js.get_position(playqueue.playlistid)
         except KeyError:
-            LOG.info('Assuming video instead of audio playlist playback')
-            playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_VIDEO)
+            # Kodi bug - Playlist plays (not Playqueue) will ALWAYS be audio for
+            # add-on paths
+            LOG.info('No position returned from player! Assuming playlist')
+            playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_AUDIO)
             try:
                 pos = js.get_position(playqueue.playlistid)
             except KeyError:
-                LOG.error('Still no position - abort')
-                # "Play error"
-                utils.dialog('notification',
-                             utils.lang(29999),
-                             utils.lang(30128),
-                             icon='{error}')
-                _ensure_resolve(abort=True)
+                LOG.info('Assuming video instead of audio playlist playback')
+                playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_VIDEO)
+                try:
+                    pos = js.get_position(playqueue.playlistid)
+                except KeyError:
+                    LOG.error('Still no position - abort')
+                    # "Play error"
+                    utils.dialog('notification',
+                                 utils.lang(29999),
+                                 utils.lang(30128),
+                                 icon='{error}')
+                    _ensure_resolve(abort=True)
+                    return
+        # HACK to detect playback of playlists for add-on paths
+        items = js.playlist_get_items(playqueue.playlistid)
+        try:
+            item = items[pos]
+        except IndexError:
+            LOG.info('Could not apply playlist hack! Probably Widget playback')
+        else:
+            if ('id' not in item and
+                    item.get('type') == 'unknown' and item.get('title') == ''):
+                LOG.info('Kodi playlist play detected')
+                _playlist_playback(plex_id, plex_type)
                 return
-    # HACK to detect playback of playlists for add-on paths
-    items = js.playlist_get_items(playqueue.playlistid)
-    try:
-        item = items[pos]
-    except IndexError:
-        LOG.info('Could not apply playlist hack! Probably Widget playback')
-    else:
-        if ('id' not in item and
-                item.get('type') == 'unknown' and item.get('title') == ''):
-            LOG.info('Kodi playlist play detected')
-            _playlist_playback(plex_id, plex_type)
-            return
 
-    # Can return -1 (as in "no playlist")
-    pos = pos if pos != -1 else 0
-    LOG.debug('playQueue position %s for %s', pos, playqueue)
-    # Have we already initiated playback?
-    try:
-        item = playqueue.items[pos]
-    except IndexError:
-        LOG.debug('PKC playqueue yet empty, need to initialize playback')
-        initiate = True
-    else:
-        if item.plex_id != plex_id:
-            LOG.debug('Received new plex_id %s, expected %s. Init playback',
-                      plex_id, item.plex_id)
+        # Can return -1 (as in "no playlist")
+        pos = pos if pos != -1 else 0
+        LOG.debug('playQueue position %s for %s', pos, playqueue)
+        # Have we already initiated playback?
+        try:
+            item = playqueue.items[pos]
+        except IndexError:
+            LOG.debug('PKC playqueue yet empty, need to initialize playback')
             initiate = True
         else:
-            initiate = False
-    with state.LOCK_PLAYQUEUES:
+            if item.plex_id != plex_id:
+                LOG.debug('Received new plex_id %s, expected %s',
+                          plex_id, item.plex_id)
+                initiate = True
+            else:
+                initiate = False
         if initiate:
             _playback_init(plex_id, plex_type, playqueue, pos)
         else:
@@ -200,10 +200,7 @@ def _playback_init(plex_id, plex_type, playqueue, pos):
             utils.settings('enableCinema') == "true"):
         if utils.settings('askCinema') == "true":
             # "Play trailers?"
-            trailers = utils.dialog('yesno',
-                                    utils.lang(29999),
-                                    utils.lang(33016))
-            trailers = True if trailers else False
+            trailers = utils.yesno_dialog(utils.lang(29999), utils.lang(33016))
         else:
             trailers = True
     LOG.debug('Playing trailers: %s', trailers)
@@ -411,7 +408,13 @@ def _conclude_playback(playqueue, pos):
         playutils = PlayUtils(api, item)
         playurl = playutils.getPlayUrl()
     else:
+        api = None
         playurl = item.file
+    if not playurl:
+        LOG.info('Did not get a playurl, aborting playback silently')
+        state.RESUME_PLAYBACK = False
+        pickler.pickle_me(result)
+        return
     listitem.setPath(utils.try_encode(playurl))
     if item.playmethod == 'DirectStream':
         listitem.setSubtitles(api.cache_external_subs())
@@ -428,8 +431,14 @@ def _conclude_playback(playqueue, pos):
             with kodidb.GetKodiDB('video') as kodi_db:
                 item.offset = kodi_db.get_resume(file_id)
         LOG.info('Resuming playback at %s', item.offset)
-        listitem.setProperty('StartOffset', str(item.offset))
-        listitem.setProperty('resumetime', str(item.offset))
+        if v.KODIVERSION >= 18 and api:
+            # Kodi 18 Alpha 3 broke StartOffset
+            percent = item.offset / api.runtime() * 100.0
+            LOG.debug('Resuming at %s percent', percent)
+            listitem.setProperty('StartPercent', str(percent))
+        else:
+            listitem.setProperty('StartOffset', str(item.offset))
+            listitem.setProperty('resumetime', str(item.offset))
     # Reset the resumable flag
     result.listitem = listitem
     pickler.pickle_me(result)

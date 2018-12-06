@@ -490,3 +490,17 @@ class Plex_DB_Functions():
         else:
             raise RuntimeError('Cannot delete playlist: %s' % playlist)
         self.plexcursor.execute(query, (var, ))
+
+
+def wipe_dbs():
+    """
+    Completely resets the Plex database
+    """
+    query = "SELECT name FROM sqlite_master WHERE type = 'table'"
+    with Get_Plex_DB() as plex_db:
+        plex_db.plexcursor.execute(query)
+        tables = plex_db.plexcursor.fetchall()
+        tables = [i[0] for i in tables]
+        for table in tables:
+            delete_query = 'DELETE FROM %s' % table
+            plex_db.plexcursor.execute(delete_query)

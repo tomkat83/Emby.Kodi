@@ -3,11 +3,11 @@
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 from Queue import Queue
-import xml.etree.ElementTree as etree
 
 from xbmc import executebuiltin, translatePath
 
 from . import utils
+from .utils import etree
 from . import path_ops
 from . import migration
 from .downloadutils import DownloadUtils as DU
@@ -164,11 +164,14 @@ class InitialSetup(object):
 
         Returns True if successful, or False if not
         """
-        result = plex_tv.sign_in_with_pin()
-        if result:
-            self.plex_login = result['username']
-            self.plex_token = result['token']
-            self.plexid = result['plexid']
+        try:
+            user = plex_tv.sign_in_with_pin()
+        except:
+            utils.ERROR()
+        if user:
+            self.plex_login = user.username
+            self.plex_token = user.authToken
+            self.plexid = user.id
             return True
         return False
 
@@ -187,13 +190,13 @@ class InitialSetup(object):
             utils.settings('plexToken', value='')
             utils.settings('plexLogin', value='')
             # Could not login, please try again
-            utils.dialog('ok', utils.lang(29999), utils.lang(39009))
+            utils.messageDialog(utils.lang(29999), utils.lang(39009))
             answer = self.plex_tv_sign_in()
         elif chk is False or chk >= 400:
             # Problems connecting to plex.tv. Network or internet issue?
             LOG.info('Problems connecting to plex.tv; connection returned '
                      'HTTP %s', str(chk))
-            utils.dialog('ok', utils.lang(29999), utils.lang(39010))
+            utils.messageDialog(utils.lang(29999), utils.lang(39010))
             answer = False
         else:
             LOG.info('plex.tv connection with token successful')
@@ -209,10 +212,7 @@ class InitialSetup(object):
             else:
                 utils.settings('plexLogin', value=self.plex_login)
                 home = 'true' if xml.attrib.get('home') == '1' else 'false'
-                utils.settings('plexhome', value=home)
                 utils.settings('plexAvatar', value=xml.attrib.get('thumb'))
-                utils.settings('plexHomeSize',
-                               value=xml.attrib.get('homeSize', '1'))
                 LOG.info('Updated Plex info from plex.tv')
         return answer
 
@@ -373,7 +373,7 @@ class InitialSetup(object):
                 # Exit if no servers found
                 if not serverlist:
                     LOG.warn('No plex media servers found!')
-                    utils.dialog('ok', utils.lang(29999), utils.lang(39011))
+                    utils.messageDialog(utils.lang(29999), utils.lang(39011))
                     return
                 # Get a nicer list
                 dialoglist = []
@@ -411,22 +411,20 @@ class InitialSetup(object):
             if chk == 401:
                 LOG.warn('Not yet authorized for Plex server %s',
                          server['name'])
-                # Please sign in to plex.tv
-                utils.dialog('ok',
-                             utils.lang(29999),
-                             utils.lang(39013) + server['name'],
-                             utils.lang(39014))
+                # Not yet authorized for Plex server %s
+                utils.messageDialog(
+                    utils.lang(29999),
+                    '%s %s\n%s' % (utils.lang(39013),
+                                   server['name'].decode('utf-8'),
+                                   utils.lang(39014)))
                 if self.plex_tv_sign_in() is False:
                     # Exit while loop if user cancels
                     return
             # Problems connecting
             elif chk >= 400 or chk is False:
                 # Problems connecting to server. Pick another server?
-                answ = utils.dialog('yesno',
-                                    utils.lang(29999),
-                                    utils.lang(39015))
-                # Exit while loop if user chooses No
-                if not answ:
+                if not utils.yesno_dialog(utils.lang(29999), utils.lang(39015)):
+                    # Exit while loop if user chooses No
                     return
             # Otherwise: connection worked!
             else:
@@ -496,7 +494,7 @@ class InitialSetup(object):
                 xml.set_setting(['video', 'ignoresecondsatstart'],
                                 value='60')
                 reboot = xml.write_xml
-        except etree.ParseError:
+        except utils.ParseError:
             cache = None
             reboot = False
         # Kodi default cache if no setting is set
@@ -527,11 +525,11 @@ class InitialSetup(object):
                         etree.SubElement(
                             source,
                             'path',
-                            attrib={'pathversion': "1"}).text = "smb://"
+                            {'pathversion': "1"}).text = "smb://"
                         etree.SubElement(source, 'allowsharing').text = "true"
                 if reboot is False:
                     reboot = xml.write_xml
-        except etree.ParseError:
+        except utils.ParseError:
             pass
 
         # Do we need to migrate stuff?
@@ -549,7 +547,7 @@ class InitialSetup(object):
                                value='true')
                 # Warning: Kodi setting "Play next video automatically" is
                 # enabled. This could break PKC. Deactivate?
-                if utils.dialog('yesno', utils.lang(29999), utils.lang(30003)):
+                if utils.yesno_dialog(utils.lang(29999), utils.lang(30003)):
                     js.settings_setsettingvalue('videoplayer.autoplaynextitem',
                                                 False)
         # Set any video library updates to happen in the background in order to
@@ -587,62 +585,47 @@ class InitialSetup(object):
         # Additional settings where the user needs to choose
         # Direct paths (\\NAS\mymovie.mkv) or addon (http)?
         goto_settings = False
-        if utils.dialog('yesno',
-                        utils.lang(29999),
-                        utils.lang(39027),
-                        utils.lang(39028),
-                        nolabel="Addon (Default)",
-                        yeslabel="Native (Direct Paths)"):
+        from .windows import optionsdialog
+        # Use Add-on Paths (default, easy) or Direct Paths? PKC will not work
+        # if your Direct Paths setup is wrong!
+        # Buttons: Add-on Paths // Direct Paths
+        if optionsdialog.show(utils.lang(29999), utils.lang(39080),
+                              utils.lang(39081), utils.lang(39082)) == 1:
             LOG.debug("User opted to use direct paths.")
             utils.settings('useDirectPaths', value="1")
             state.DIRECT_PATHS = True
             # Are you on a system where you would like to replace paths
             # \\NAS\mymovie.mkv with smb://NAS/mymovie.mkv? (e.g. Windows)
-            if utils.dialog('yesno',
-                            heading=utils.lang(29999),
-                            line1=utils.lang(39033)):
+            if utils.yesno_dialog(utils.lang(29999), utils.lang(39033)):
                 LOG.debug("User chose to replace paths with smb")
             else:
                 utils.settings('replaceSMB', value="false")
 
             # complete replace all original Plex library paths with custom SMB
-            if utils.dialog('yesno',
-                            heading=utils.lang(29999),
-                            line1=utils.lang(39043)):
+            if utils.yesno_dialog(utils.lang(29999), utils.lang(39043)):
                 LOG.debug("User chose custom smb paths")
                 utils.settings('remapSMB', value="true")
                 # Please enter your custom smb paths in the settings under
                 # "Sync Options" and then restart Kodi
-                utils.dialog('ok',
-                             heading=utils.lang(29999),
-                             line1=utils.lang(39044))
+                utils.messageDialog(utils.lang(29999), utils.lang(39044))
                 goto_settings = True
 
             # Go to network credentials?
-            if utils.dialog('yesno',
-                            heading=utils.lang(29999),
-                            line1=utils.lang(39029),
-                            line2=utils.lang(39030)):
+            if utils.yesno_dialog(utils.lang(39029), utils.lang(39030)):
                 LOG.debug("Presenting network credentials dialog.")
                 utils.passwords_xml()
         # Disable Plex music?
-        if utils.dialog('yesno',
-                        heading=utils.lang(29999),
-                        line1=utils.lang(39016)):
+        if utils.yesno_dialog(utils.lang(29999), utils.lang(39016)):
             LOG.debug("User opted to disable Plex music library.")
             utils.settings('enableMusic', value="false")
 
         # Download additional art from FanArtTV
-        if utils.dialog('yesno',
-                        heading=utils.lang(29999),
-                        line1=utils.lang(39061)):
+        if utils.yesno_dialog(utils.lang(29999), utils.lang(39061)):
             LOG.debug("User opted to use FanArtTV")
             utils.settings('FanartTV', value="true")
         # Do you want to replace your custom user ratings with an indicator of
         # how many versions of a media item you posses?
-        if utils.dialog('yesno',
-                        heading=utils.lang(29999),
-                        line1=utils.lang(39718)):
+        if utils.yesno_dialog(utils.lang(29999), utils.lang(39718)):
             LOG.debug("User opted to replace user ratings with version number")
             utils.settings('indicate_media_versions', value="true")
 
@@ -655,14 +638,17 @@ class InitialSetup(object):
         # Make sure that we only ask these questions upon first installation
         utils.settings('InstallQuestionsAnswered', value='true')
 
+        # New installation - make sure we start with a clean slate
+        from . import kodidb_functions
+        kodidb_functions.wipe_dbs()
+
         if goto_settings is False:
             # Open Settings page now? You will need to restart!
-            goto_settings = utils.dialog('yesno',
-                                         heading=utils.lang(29999),
-                                         line1=utils.lang(39017))
+            goto_settings = utils.yesno_dialog(utils.lang(29999),
+                                               utils.lang(39017))
         if goto_settings:
             state.PMS_STATUS = 'Stop'
             executebuiltin(
-                'Addon.Openutils.settings(plugin.video.plexkodiconnect)')
+                'Addon.OpenSettings(plugin.video.plexkodiconnect)')
         elif reboot is True:
             utils.reboot_kodi()

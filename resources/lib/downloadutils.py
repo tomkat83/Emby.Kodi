@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-import xml.etree.ElementTree as etree
 import requests
 
 from . import utils
@@ -276,7 +275,7 @@ class DownloadUtils():
                     return r
                 try:
                     # xml response
-                    r = etree.fromstring(r.content)
+                    r = utils.defused_etree.fromstring(r.content)
                     return r
                 except:
                     r.encoding = 'utf-8'

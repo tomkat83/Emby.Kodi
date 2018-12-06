@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<window>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+    <backgroundcolor>0xff111111</backgroundcolor>
+    <controls>
+
+        <control type="image">
+            <visible>!String.IsEmpty(Window.Property(pin.image.0))</visible>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texture>plugin.video.plexkodiconnect/sign_in/pin-display.jpg</texture>
+        </control>
+        <control type="image">
+            <visible>String.IsEmpty(Window.Property(pin.image.0)) + String.IsEmpty(Window.Property(linking))</visible>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texture>plugin.video.plexkodiconnect/sign_in/generating-code.jpg</texture>
+        </control>
+        <control type="image">
+            <visible>!String.IsEmpty(Window.Property(linking))</visible>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texture>plugin.video.plexkodiconnect/sign_in/linking-account.jpg</texture>
+        </control>
+
+        <control type="label">
+            <posx>270</posx>
+            <posy>738</posy>
+            <width>800</width>
+            <height>153</height>
+            <font>WeatherTemp</font>
+            <align>left</align>
+            <aligny>center</aligny>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>$INFO[Window.Property(pin)]</label>
+        </control>
+
+        <control type="grouplist" id="400">
+            <defaultcontrol>406</defaultcontrol>
+            <posx>265</posx>
+            <posy>708</posy>
+            <width>1000</width>
+
+            <height>200</height>
+            <align>left</align>
+            <itemgap>0</itemgap>
+            <orientation>horizontal</orientation>
+            <control type="image">
+                <width>200</width>
+                <height>200</height>
+                <texture>$INFO[Window.Property(pin.image.0)]</texture>
+            </control>
+            <control type="image">
+                <width>200</width>
+                <height>200</height>
+                <texture>$INFO[Window.Property(pin.image.1)]</texture>
+            </control>
+            <control type="image">
+                <width>200</width>
+                <height>200</height>
+                <texture>$INFO[Window.Property(pin.image.2)]</texture>
+            </control>
+            <control type="image">
+                <width>200</width>
+                <height>200</height>
+                <texture>$INFO[Window.Property(pin.image.3)]</texture>
+            </control>
+
+        </control>
+        <control type="label">
+            <posx>1820</posx>
+            <posy>940</posy>
+            <width max="500">auto</width>
+            <height>120</height>
+            <font>font20</font>
+            <align>right</align>
+            <aligny>center</aligny>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>[UPPERCASE]$ADDON[plugin.video.plexkodiconnect 29999][/UPPERCASE]</label>
+        </control>
+    </controls>
+</window>

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 from json import loads
-import xml.etree.ElementTree as etree
 from threading import Thread
 from ssl import CERT_NONE
 from xbmc import sleep
@@ -222,7 +221,7 @@ class Alexa_Websocket(WebSocket):
                   self.__class__.__name__)
         LOG.debug('%s: %s', self.__class__.__name__, message)
         try:
-            message = etree.fromstring(message)
+            message = utils.defused_etree.fromstring(message)
         except Exception as ex:
             LOG.error('%s: Error decoding message from Alexa: %s',
                       self.__class__.__name__, ex)
