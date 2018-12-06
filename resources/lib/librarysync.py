@@ -1541,6 +1541,7 @@ class LibrarySync(Thread):
         LOG.info("Db version: %s", utils.settings('dbCreatedWithVersion'))
 
         LOG.info('Refreshing video nodes and playlists now')
+        kodidb.setup_kodi_default_entries()
         with kodidb.GetKodiDB('video') as kodi_db:
             # Setup the paths for addon-paths (even when using direct paths)
             kodi_db.setup_path_table()
