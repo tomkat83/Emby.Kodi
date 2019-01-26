@@ -434,11 +434,6 @@ msgctxt "#30502"
 msgid "Sync Plex artwork from the PMS (recommended)"
 msgstr ""
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr ""
-
 # PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
@@ -495,7 +490,7 @@ msgstr ""
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
+msgid "Enter network credentials"
 msgstr ""
 
 # PKC Settings - Playback
@@ -767,7 +762,7 @@ msgstr ""
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
+msgid "Cache all images to Kodi texture cache now"
 msgstr ""
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
@@ -897,7 +892,7 @@ msgstr ""
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
+msgid "Choose Plex Server from a list"
 msgstr ""
 
 # PKC Settings - Sync
@@ -987,7 +982,7 @@ msgstr ""
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
+msgid "Manually enter Plex Media Server address"
 msgstr ""
 
 # PKC Settings - Connection
@@ -1087,7 +1082,7 @@ msgstr ""
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
+msgid "Toggle plex.tv login (sign in or sign out)"
 msgstr ""
 
 msgctxt "#39210"
@@ -1129,7 +1124,7 @@ msgid "plex.tv toggle successful"
 msgstr ""
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
+msgid "Look for missing fanart on FanartTV now"
 msgstr ""
 
 msgctxt "#39223"
