@@ -84,9 +84,9 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr ""
 
-# Pop-up notification if user tried to manually initiate fanart download
+# PKC settings - Artwork
 msgctxt "#30015"
-msgid "Fanart download already running"
+msgid "Movie and show FanartTV lookups left to do:"
 msgstr ""
 
 msgctxt "#30016"
@@ -103,7 +103,7 @@ msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
 msgstr ""
 
-# PKC settings artwork options: status info
+# Sync notification displayed when FanartTV lookup is completed
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
 msgstr ""
@@ -144,11 +144,6 @@ msgstr ""
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
-
-# PKC settings artwork options: status info
-msgctxt "#30028"
-msgid "PKC-only image caching completed"
 msgstr ""
 
 msgctxt "#30030"
@@ -415,10 +410,6 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr ""
 
-msgctxt "#30417"
-msgid "Could not change the Kodi settings file {0}. PKC might not work correctly. Error: {1}"
-msgstr ""
-
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -427,11 +418,6 @@ msgstr ""
 # PKC Settings - Connection
 msgctxt "#30501"
 msgid "Client SSL certificate"
-msgstr ""
-
-# PKC Settings - Artwork
-msgctxt "#30502"
-msgid "Sync Plex artwork from the PMS (recommended)"
 msgstr ""
 
 # PKC Settings - Connection
@@ -521,11 +507,6 @@ msgstr ""
 # PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
-msgstr ""
-
-# PKC Settings - Sync Options
-msgctxt "#30523"
-msgid "Also show sync progress for playstate and user data"
 msgstr ""
 
 # PKC Settings - Playback
@@ -638,11 +619,7 @@ msgid "Invalid username or password"
 msgstr ""
 
 msgctxt "#33010"
-msgid "User is unauthorized for server {0}"
-msgstr ""
-
-msgctxt "#33011"
-msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgid "Failed to authenticate too many times. Reset in the settings."
 msgstr ""
 
 # Dialog before playback
@@ -823,11 +800,6 @@ msgstr ""
 # PKC Settings - Customize Paths
 msgctxt "#39035"
 msgid "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB paths smb://NAS/mystuff"
-msgstr ""
-
-# PKC Settings - Customize Paths
-msgctxt "#39036"
-msgid "Escape special characters in path (e.g. space to %20)"
 msgstr ""
 
 # PKC Settings - Customize Paths
@@ -1040,28 +1012,16 @@ msgctxt "#39079"
 msgid "Plex Companion could not open the GDM port. Please change it in the PKC settings."
 msgstr ""
 
-# Pop-up on initial sync.
-# Check that next translations for Add-on Paths and Direct Paths are identical!
-msgctxt "#39080"
-msgid "Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if you're unsure. PKC will not work if your Direct Paths setup is wrong!"
-msgstr ""
-
-# Button text for choosing PKC mode
-msgctxt "#39081"
-msgid "Add-on Paths"
-msgstr ""
-
-# Button text for choosing PKC mode
-msgctxt "#39082"
-msgid "Direct Paths"
-msgstr ""
-
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr ""
 
 msgctxt "#39201"
 msgid "Settings"
+msgstr ""
+
+msgctxt "#39203"
+msgid "Refresh Plex playlists/nodes"
 msgstr ""
 
 msgctxt "#39204"
@@ -1159,11 +1119,6 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr ""
 
-# Error message if user could not log in; the actual user name will be appended at the end of the string
-msgctxt "#39229"
-msgid "Login failed with plex.tv for user"
-msgstr ""
-
 msgctxt "#39250"
 msgid "Running the image cache process can take some time. It will happen in the background. Are you sure you want continue?"
 msgstr ""
@@ -1221,7 +1176,7 @@ msgid " may not work correctly until the database is reset."
 msgstr ""
 
 msgctxt "#39403"
-msgid "The current Kodi version is not supported by PKC. Please consult the Plex forum."
+msgid "Cancelling the database syncing process. Current Kodi version is unsupported. Please verify your logs for more info."
 msgstr ""
 
 msgctxt "#39405"
@@ -1230,6 +1185,10 @@ msgstr ""
 
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
+msgstr ""
+
+msgctxt "#39407"
+msgid "Full library sync finished"
 msgstr ""
 
 msgctxt "#39408"
