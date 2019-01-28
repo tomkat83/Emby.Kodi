@@ -2,13 +2,15 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
 # Tony Z <zj45499@gmail.com>, 2017
+# Jingen Chen <jingen.chen@gmail.com>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Tony Z <zj45499@gmail.com>, 2017\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Jingen Chen <jingen.chen@gmail.com>, 2019\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/croneter/teams/73837/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +29,7 @@ msgstr "服务器地址(IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "正在搜索Plex媒体服务器"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -49,22 +51,22 @@ msgstr "用户名 "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "正在缓存Plex图片：%s"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Plex图片缓存完成"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "启用图片缓存通知"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
-msgstr ""
+msgstr "允许Kodi播放时缓存图片（需重启Kodi！）"
 
 # PKC settings - Artwork
 msgctxt "#30010"
@@ -90,9 +92,9 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "连接"
 
-# PKC settings - Artwork
+# Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
-msgid "Movie and show FanartTV lookups left to do:"
+msgid "Fanart download already running"
 msgstr ""
 
 msgctxt "#30016"
@@ -109,7 +111,7 @@ msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
 msgstr ""
 
-# Sync notification displayed when FanartTV lookup is completed
+# PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
 msgstr ""
@@ -150,6 +152,11 @@ msgstr ""
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
+msgstr ""
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
 msgstr ""
 
 msgctxt "#30030"
@@ -307,6 +314,42 @@ msgctxt "#30198"
 msgid "Search"
 msgstr "搜索"
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr ""
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -418,6 +461,12 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Plex服务器配置"
 
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -428,10 +477,10 @@ msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "客户端SSL证书"
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr "[黄色]重置登录尝试[/COLOR]"
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr ""
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -489,8 +538,8 @@ msgstr "回放"
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
-msgstr "[黄色]输入网络凭证[/COLOR]"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -516,6 +565,11 @@ msgstr "跳回继续(秒)"
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "强制h265/HEVC转码"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -627,8 +681,12 @@ msgid "Invalid username or password"
 msgstr "无效的用户名或密码"
 
 msgctxt "#33010"
-msgid "Failed to authenticate too many times. Reset in the settings."
-msgstr "验证失败次数过多。在设置中重置。"
+msgid "User is unauthorized for server {0}"
+msgstr ""
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr ""
 
 # Dialog before playback
 msgctxt "#33013"
@@ -759,8 +817,8 @@ msgstr ""
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
-msgstr "[黄色]现在缓存所有图像到Kodi texture缓存[/COLOR]"
+msgid "Cache all images to Kodi texture cache now"
+msgstr ""
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -828,6 +886,11 @@ msgctxt "#39035"
 msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
 "paths smb://NAS/mystuff"
+msgstr ""
+
+# PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
 msgstr ""
 
 # PKC Settings - Customize Paths
@@ -903,8 +966,8 @@ msgstr "不起作用？试试完全重置！"
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
-msgstr "[黄色]从列表中选择Plex服务器[/COLOR]"
+msgid "Choose Plex Server from a list"
+msgstr ""
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -997,8 +1060,8 @@ msgstr "您当前的Plex媒体服务器："
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
-msgstr "[黄色]手动输入Plex媒体服务器地址[/COLOR]"
+msgid "Manually enter Plex Media Server address"
+msgstr ""
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1054,6 +1117,25 @@ msgid ""
 "settings."
 msgstr "Plex Companion无法打开GDM端口。请在PKC中更改。"
 
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr ""
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr ""
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "退出Plex家庭用户 "
@@ -1061,10 +1143,6 @@ msgstr "退出Plex家庭用户 "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "设置"
-
-msgctxt "#39203"
-msgid "Refresh Plex playlists/nodes"
-msgstr "刷新Plex播放列表/节点"
 
 msgctxt "#39204"
 msgid "Perform manual library sync"
@@ -1091,8 +1169,8 @@ msgstr "重置PKC失败。尝试重启Kodi。"
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
-msgstr "[黄色]切换 plex.tv 登录 (登录或退出)[/COLOR]"
+msgid "Toggle plex.tv login (sign in or sign out)"
+msgstr ""
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1135,8 +1213,8 @@ msgid "plex.tv toggle successful"
 msgstr "plex.tv 切换成功"
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
-msgstr "[黄色]从FanartTV 寻找缺失的fanart[/COLOR]"
+msgid "Look for missing fanart on FanartTV now"
+msgstr ""
 
 msgctxt "#39223"
 msgid ""
@@ -1167,6 +1245,12 @@ msgstr "plex.tv 登录成功"
 msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Plex 用户:"
+
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr ""
 
 msgctxt "#39250"
 msgid ""
@@ -1232,9 +1316,9 @@ msgstr " 重置数据库前可能无法正常运行。"
 
 msgctxt "#39403"
 msgid ""
-"Cancelling the database syncing process. Current Kodi version is "
-"unsupported. Please verify your logs for more info."
-msgstr "正在取消数据库同步进程。不支持当前Kodi版本。请验证logs以获取更多信息。"
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
+msgstr ""
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1243,10 +1327,6 @@ msgstr "Plex 播放列表/节点已刷新"
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
 msgstr "Plex 播放列表/节点刷新失败"
-
-msgctxt "#39407"
-msgid "Full library sync finished"
-msgstr "全库同步完成"
 
 msgctxt "#39408"
 msgid ""

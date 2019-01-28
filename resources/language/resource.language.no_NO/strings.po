@@ -2,13 +2,15 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
 # Jon Mjørud <jon.mjorud@gmail.com>, 2017
+# Kyb ntnu, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Jon Mjørud <jon.mjorud@gmail.com>, 2017\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Kyb ntnu, 2019\n"
 "Language-Team: Norwegian (Norway) (https://www.transifex.com/croneter/teams/73837/no_NO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +29,7 @@ msgstr "Server-adresse (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Søker etter PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -41,6 +43,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Advarsel: Kodi instilling \"Automatisk avspilling av neste video\" er "
+"aktivert. Det kan medføre problemer med PKC. Ønsker du å deaktivere?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -49,32 +53,34 @@ msgstr "Brukernavn:"
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Mellomlagrer %s Plex bilder"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Plex mellomlagring gjennomført"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Aktivere varsling for mellomlagring av bilder"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
+"Aktivere mellomlagring av bilder under Kodi avspilling (krever omstart av "
+"Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Omtrentlig progresjon"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Bilder som gjenstår å mellomlagre:"
 
 # Button text
 msgctxt "#30012"
@@ -90,10 +96,10 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Tilkobling"
 
-# PKC settings - Artwork
+# Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
-msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgid "Fanart download already running"
+msgstr "Nedlasting av bilder gjennomføres"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -107,22 +113,22 @@ msgstr "Uautorisert for tilkobling til PMS"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "Sjekker FanartTV for %s elementer"
 
-# Sync notification displayed when FanartTV lookup is completed
+# PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "FanartTV sjekk gjennomført"
 
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Synkroniser Plex spilliste (restart Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Synkroniser kun bestemte Plex spillister til Kodi"
 
 # PKC settings category
 msgctxt "#30022"
@@ -132,7 +138,7 @@ msgstr "Avansert"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Synkroniser kun bestemte Kodi spillister til Plex"
 
 msgctxt "#30024"
 msgid "Username"
@@ -140,17 +146,24 @@ msgstr "Brukernavn"
 
 msgctxt "#30025"
 msgid "Display message if PMS goes offline"
-msgstr "Gi beskjed hvis PMS går ned"
+msgstr "Informer hvis tilkobling til PMS brytes"
 
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
 msgstr ""
+"Bruk forstavelse i navnet til Plex spilliste for å starte synkronisering"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
 msgstr ""
+"Bruk forstavelse i navnet til Kodi spilliste for å starte synkronisering"
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
+msgstr "PKC mellomlagring av bilder gjennomført"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -167,7 +180,7 @@ msgstr "Informasjon"
 
 msgctxt "#30042"
 msgid "Refresh"
-msgstr "Last på nytt"
+msgstr "Oppdatere"
 
 msgctxt "#30043"
 msgid "Delete"
@@ -307,6 +320,42 @@ msgctxt "#30198"
 msgid "Search"
 msgstr "Søk"
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr ""
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -419,6 +468,14 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Instillinger for Plex Media Server"
 
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+"Kunne ikke endre Kodi instillingsfilen {0}. PKC virker kanskje ikke som "
+"tiltenkt. Feil: {1}"
+
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -429,10 +486,10 @@ msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "Klient SSL-sertifikat"
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr "[COLOR yellow]Nullstill innloggingsforsøk[/COLOR]"
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr "Synkroniser Plex bilder fra PMS (anbefalt)"
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -466,7 +523,7 @@ msgstr "Avspillingsmetode"
 # PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Cache all artwork for a smooth Kodi experience"
-msgstr ""
+msgstr "Mellomlagre alle bilder i Kodi for best mulig opplevelse"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
@@ -476,7 +533,7 @@ msgstr "Begrens artwork cache threads (anbefalt for RPi)"
 # PKC Settings - Sync Options
 msgctxt "#30514"
 msgid "Show all Plex extras instead of immediately playing trailers"
-msgstr ""
+msgstr "Vis alt av Plex tillegg isteden for automatisk avspilling av trailere"
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -490,8 +547,8 @@ msgstr "Avspilling"
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
-msgstr "[COLOR yellow]Skriv inn nettverk konto[/COLOR]"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -506,7 +563,7 @@ msgstr "Spør om å spille trailers"
 # PKC Settings - Plex
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
-msgstr ""
+msgstr "Hopp over PMS bekreftelse ved sletting (på eget ansvar)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
@@ -517,6 +574,11 @@ msgstr "Gå tilbake til fortsett (sekunder)"
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Tving transkode h265/HEVC"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr "Vis progresjon for synkronisering av brukerdata"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -551,7 +613,7 @@ msgstr "Servermeldinger"
 # PKC Settings - Advanced
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
-msgstr ""
+msgstr "Generer en ny og unik Plex enhet id (For å f.eks klone Kodi)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -561,12 +623,12 @@ msgstr "Brukere må logge inn hver gang Kodi starter"
 # PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
-msgstr "START KODI PÅ NYTT HVIS DU GJØR FORANDRINGER"
+msgstr "START KODI PÅ NYTT HVIS DU GJØR ENDRINGER"
 
 # PKC Settings warning
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
-msgstr ""
+msgstr "Manuell nullstilling av Kodi sin database er nødvendig, se \"Avansert\"."
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -591,7 +653,7 @@ msgstr "Velg alltid traileren med best kvalitet"
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Foretrekk Kodi artwork for samlinger"
 
 msgctxt "#30544"
 msgid "Artwork"
@@ -628,8 +690,12 @@ msgid "Invalid username or password"
 msgstr "Feil brukernavn eller passord"
 
 msgctxt "#33010"
-msgid "Failed to authenticate too many times. Reset in the settings."
-msgstr ""
+msgid "User is unauthorized for server {0}"
+msgstr "Bruker er uautorisert for server {0}"
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr "Plex.tv returnerte dessverre ikke en gyldig liste av Plex brukere."
 
 # Dialog before playback
 msgctxt "#33013"
@@ -684,7 +750,7 @@ msgstr "Størrelse på integrert undertekst"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Antall samtidige nedlastinger"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -758,17 +824,17 @@ msgstr ""
 # PKC Settings - Advanced
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
-msgstr ""
+msgstr "Reparer Kodi database (krev oppdatering av alt innhold)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
-msgstr ""
+msgstr "Nullstill Kodi database og evt. nullstill PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
-msgstr ""
+msgid "Cache all images to Kodi texture cache now"
+msgstr "Mellomlagre alle bilder til Kodi nå"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -799,8 +865,9 @@ msgid ""
 "\\\\myNAS/mymovie.mkv)!"
 msgstr ""
 "NB! Hvis du velger \"Native\" mode, kan du miste tilgang til enkelte Plex-"
-"egenskaper som trailers og transkoding. Alle Plex nettverksdrev må bruke "
-"direct paths (f. eks. smb://myNAS/mymovie.mkv eller \\\\myNAS/mymovie.mkv)!"
+"egenskaper som trailere og transkoding. Alle Plex nettverksressurser må "
+"bruke direkte filbaner (f. eks. smb://myNAS/mymovie.mkv eller "
+"\\\\myNAS/mymovie.mkv)!"
 
 # Pop-up on initial sync
 msgctxt "#39029"
@@ -814,6 +881,8 @@ msgid ""
 " this step may generate a message during the initial scan of your content if"
 " Kodi can't locate your content."
 msgstr ""
+"Legg til nettverkslegitimasjon for at Kodi skal få tilgang til innhold?\n"
+"NB: Ved utelating så kan det oppstå tilbakemeldinger under scanning av innhold hvis Kodi ikke finner innholdet."
 
 # Error message displayed when verifying Direct Path sync paths passed by Plex
 msgctxt "#39031"
@@ -821,6 +890,7 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
+"Kodi finner ikke filen %s. Sjekk PKC innstillinger. Stop synkronisering?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
@@ -828,11 +898,13 @@ msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
 " paths, smb://myNas/mymovie.mkv? (recommended)"
 msgstr ""
+"Omforme Plex UNC bibliotek sti \\\\myNas\\mymovie.mkv automatisk til smb sti"
+" smb://myNas/mymovie.mkv? (anbefalt)"
 
 # PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
-msgstr "Erstatt Plex UNC sti \\\\myNAS med smb//myNAS"
+msgstr "Erstatt Plex UNC sti \\\\myNAS med smb://minNAS"
 
 # PKC Settings - Customize Paths
 msgctxt "#39035"
@@ -841,7 +913,12 @@ msgid ""
 "paths smb://NAS/mystuff"
 msgstr ""
 "Erstatt Plex sti /volume1/media eller \\\\myserver\\media med tilpasset sti "
-"smb://NAS/mystuff"
+"smb://NAS/mittInnhold"
+
+# PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
+msgstr "Unngå spesielle tegn i stier (eksempel mellomrom til %20)"
 
 # PKC Settings - Customize Paths
 msgctxt "#39037"
@@ -856,12 +933,12 @@ msgstr "Erstatt Plex FILM med:"
 # PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
-msgstr "Opprinnelig Plex SERIE sti å erstatte:"
+msgstr "Opprinnelig Plex TV SERIE sti å erstatte:"
 
 # PKC Settings - Customize Paths
 msgctxt "#39040"
 msgid "Replace Plex TV SHOWS with:"
-msgstr "Erstatt Plex SERIE med:"
+msgstr "Erstatt Plex TV SERIE med:"
 
 # PKC Settings - Customize Paths
 msgctxt "#39041"
@@ -879,6 +956,8 @@ msgid ""
 "Go a step further and completely replace all original Plex library paths "
 "(/volume1/media) with custom SMB paths (smb://NAS/MyStuff)?"
 msgstr ""
+"Avanser ett steg videre ved å bytte ut alle stier (/volume1/media) med "
+"egendefinert SMB stier (smb://NAS/mittInnhold)?"
 
 # Pop-up on initial sync
 msgctxt "#39044"
@@ -886,6 +965,8 @@ msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
 "and then restart Kodi"
 msgstr ""
+"Legg inn egendefinert smb sti i innsillinger under "
+"\"Synkroniseringsinnstillinger\" og restart Kodi"
 
 # PKC Settings - Customize Paths
 msgctxt "#39045"
@@ -900,12 +981,12 @@ msgstr "Erstatt Plex BILDE med:"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39047"
 msgid "On Deck: Append show title to episode"
-msgstr ""
+msgstr "On Deck: Tilføy episodetittel for show"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39048"
 msgid "On Deck: Append season- and episode-number SxxExx"
-msgstr ""
+msgstr "On Deck: Tilføy sesong- og episodenummer SxxExx"
 
 # PKC Settings - Advanced
 msgctxt "#39049"
@@ -914,8 +995,8 @@ msgstr "Er det ingenting som virker? Prøv en full tilbakestilling!"
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
-msgstr ""
+msgid "Choose Plex Server from a list"
+msgstr "Velg Plex Server fra listen"
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -930,12 +1011,12 @@ msgstr "Bakgrunnsynkronisering"
 # PKC Settings - Sync
 msgctxt "#39053"
 msgid "Do a full library sync every x minutes"
-msgstr ""
+msgstr "Gjennomfør en fullstendig synkronisering hvert x minutt"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39054"
 msgid "remote"
-msgstr ""
+msgstr "fjern"
 
 # Notification pop-up
 msgctxt "#39055"
@@ -945,54 +1026,54 @@ msgstr "Søker etter Plex Media Server"
 # PKC Settings - Customize paths
 msgctxt "#39056"
 msgid "Used by Sync and when attempting to Direct Play"
-msgstr ""
+msgstr "Brukes av Sync og ved direkte avspilling"
 
 # PKC Settings, category name
 msgctxt "#39057"
 msgid "Customize Paths"
-msgstr ""
+msgstr "Egendefinerte stier"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39058"
 msgid "Extend Plex TV Series \"On Deck\" view to all shows"
-msgstr ""
+msgstr "Utvid visning av Plex TV serier \"On Deck\" til alle"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
-msgstr ""
+msgstr "Nylig lagt til: Legg episodetittel til episode"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39060"
 msgid "Recently Added: Append season- and episode-number SxxExx"
-msgstr ""
+msgstr "Nylig lagt til: Legg til sesong- og epsiodenummer SxxExx"
 
 # Pop-up during initial sync
 msgctxt "#39061"
 msgid ""
 "Would you like to download additional artwork from FanArtTV in the "
 "background?"
-msgstr ""
+msgstr "Ønsker du å laste ned tilleggs artwork fra FanArtTV i bakgrunnen?"
 
 # PKC Settings - Sync
 msgctxt "#39062"
 msgid "Sync when screensaver is deactivated"
-msgstr ""
+msgstr "Synkroniser når skjermsparer er deaktivert"
 
 # PKC Settings - Playback
 msgctxt "#39063"
 msgid "Force Transcode Hi10P"
-msgstr ""
+msgstr "Krev transkoding av formatet Hi10P"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
-msgstr ""
+msgstr "Nylig lagt til: Vis også allerede sette episoder"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr ""
+msgstr "Oppdater Kodi skin ved stopping av avspilling"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
@@ -1000,6 +1081,8 @@ msgid ""
 "Recently Added: Also show already watched movies (Refresh Plex "
 "playlist/nodes!)"
 msgstr ""
+"Nylig lagt til: Vis også allerede sette filmer (Oppdater Plex "
+"spilliste/noder!)"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1008,8 +1091,8 @@ msgstr "Pålogget Plex Media Server:"
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
-msgstr ""
+msgid "Manually enter Plex Media Server address"
+msgstr "Legg inn Plex Media Server adresse manuelt"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1029,7 +1112,7 @@ msgstr "Aktuell plex.tv statys:"
 # PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
-msgstr ""
+msgstr "Modifisering av utseende"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39074"
@@ -1039,7 +1122,7 @@ msgstr "TV-show"
 # PKC Settings - Playback
 msgctxt "#39075"
 msgid "Always use default Plex subtitle if possible"
-msgstr ""
+msgstr "Bruk alltid standard Plex undertekst når mulig"
 
 # Pop-up during initial sync
 msgctxt "#39076"
@@ -1047,11 +1130,13 @@ msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
 "\"Parents Movies\", be sure to check the Wiki: https://goo.gl/JFtQV9"
 msgstr ""
+"Hvis du bruker flere Plex biblioteker som f.eks \"Barnefilmer\" og "
+"\"Foreldrefilmer\" etc, sjekk ut Wiki: https://goo.gl/JFtQV9"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
-msgstr ""
+msgstr "Antall PMS elementer som skal vises i widgets (eksempel \"On Deck\")"
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1064,6 +1149,30 @@ msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
 "settings."
 msgstr ""
+"Plex Companion kunne ikke åpne GDM porten. Prøv et annet portnummer i PKC "
+"instillinger."
+
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+"Bruk Add-on stier (standard, enklest) eller direkte stier? Velg Add-on stier"
+" hvis du er usikker. PKC vil ikke fungere hvis direkte stier er "
+"feilkonfigurert."
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr "Add-on stier"
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr "Direkte stier"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1073,10 +1182,6 @@ msgctxt "#39201"
 msgid "Settings"
 msgstr "Innstillinger"
 
-msgctxt "#39203"
-msgid "Refresh Plex playlists/nodes"
-msgstr ""
-
 msgctxt "#39204"
 msgid "Perform manual library sync"
 msgstr "Utfør manuelt biblioteksynkronisering"
@@ -1085,25 +1190,29 @@ msgstr "Utfør manuelt biblioteksynkronisering"
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr ""
+"Ikke i stand til å synkronisere, add-on er ikke sammenkoblet med en Plex "
+"server."
 
 msgctxt "#39206"
 msgid ""
 "Plex might lock your account if you fail to log in too many times. Proceed "
 "anyway?"
 msgstr ""
+"Plex kan stenge kontoen hvis du prøver å logge deg inn for mange ganger uten"
+" å lyktes. Fortsett likevel?"
 
 msgctxt "#39207"
 msgid "Resetting PMS connections, please wait"
-msgstr ""
+msgstr "Nullstiller PMS koblinger, vennligst vent"
 
 msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
-msgstr ""
+msgstr "Feilet å nullstille PKC. Prøv å restarte Kodi."
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
-msgstr ""
+msgid "Toggle plex.tv login (sign in or sign out)"
+msgstr "Vis Plex.tv login (Logge på eller av)"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1120,13 +1229,13 @@ msgstr "er offline"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
-msgstr ""
+msgstr "Legg til Plex Media Server IP eller URL. Eksempel:"
 
 msgctxt "#39217"
 msgid ""
 "Does your Plex Media Server support SSL connections? (https instead of "
 "http)?"
-msgstr ""
+msgstr "Støtter din Plex Media Server SSL (https) tilkoblinger?"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1143,17 +1252,19 @@ msgstr "tilkoblet"
 
 msgctxt "#39221"
 msgid "plex.tv toggle successful"
-msgstr ""
+msgstr "Plex.tv login var vellykket"
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
-msgstr ""
+msgid "Look for missing fanart on FanartTV now"
+msgstr "Søk etter manglende bilder fra FanartTV nå"
 
 msgctxt "#39223"
 msgid ""
 "Only look for missing fanart or refresh all fanart? The scan will take quite"
 " a while and happen in the background."
 msgstr ""
+"Søk kun etter manglende bilder eller oppdatert alle? Scanningen kan ta en "
+"liten stund og skjer i bakgrunnen."
 
 msgctxt "#39224"
 msgid "Refresh all"
@@ -1179,11 +1290,19 @@ msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Plex bruker:"
 
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr "Pålogging feilet med Plex.tv for bruker"
+
 msgctxt "#39250"
 msgid ""
 "Running the image cache process can take some time. It will happen in the "
 "background. Are you sure you want continue?"
 msgstr ""
+"Mellomlagring av bilder kan ta noe tid og vil skje i bakgrunnen. Ønsker du å"
+" fortsette?"
 
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
@@ -1229,13 +1348,15 @@ msgctxt "#39400"
 msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
 "this on the forum"
-msgstr ""
+msgstr "Synkronisering av biblioteket feilet. Restart Kodi og reporter feilen"
 
 msgctxt "#39401"
 msgid ""
 "Detected Kodi database needs to be recreated for this version. This might "
 "take a while. Proceed?"
 msgstr ""
+"Kodi sin database må rekonfigureres for denne versjonen av Kodi. Dette kan "
+"ta noe tid. Fortsett?"
 
 msgctxt "#39402"
 msgid " may not work correctly until the database is reset."
@@ -1243,27 +1364,28 @@ msgstr "vil ikke virke før databasen er nullstilt."
 
 msgctxt "#39403"
 msgid ""
-"Cancelling the database syncing process. Current Kodi version is "
-"unsupported. Please verify your logs for more info."
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
 msgstr ""
+"Nåværende versjon av Kodi er ikke støttet av PKC. Vennligst sjekk PKC sin "
+"hjemmeside."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
-msgstr ""
+msgstr "Plex spilliste/noder oppdatert"
 
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
-msgstr ""
-
-msgctxt "#39407"
-msgid "Full library sync finished"
-msgstr "Fullstendig biblioteksynkronisering fullført"
+msgstr "Plex spilliste/noder feilet å oppdatere"
 
 msgctxt "#39408"
 msgid ""
 "Sync had to skip some items because they could not be processed. Kodi may be"
 " instable now!! Please post your Kodi logs to the Plex forum."
 msgstr ""
+"Synkroniseringen måtte utelate noen elementer fordi de ikke kunne bli "
+"behandlet, hvilket kan medføre ustabilitet. Vennligst rapporter funnet på "
+"PKC sin hjemmeside og legg ved Kodi log."
 
 msgctxt "#39409"
 msgid ""
@@ -1271,6 +1393,9 @@ msgid ""
 "returned ERRORS. Try lowering the number of sync download threads in the "
 "settings. Skipped some items for now."
 msgstr ""
+"Plex Server klarte ikke å håndtere mengden data og returnerte ERRORS. "
+"Redusere antall samtidige nedlastinger i PKC instillinger før du prøver på "
+"nytt."
 
 msgctxt "#39410"
 msgid "ERROR in library sync"
@@ -1418,6 +1543,7 @@ msgstr ""
 msgctxt "#39717"
 msgid "PKC uses free additional artwork from www.themoviedb.org. Many thanks!"
 msgstr ""
+"PKC bruker tillegg artwork fra themoviedb.org gratis. Mange takk for det!"
 
 # Shown during very first PKC setup only
 msgctxt "#39718"
@@ -1425,8 +1551,10 @@ msgid ""
 "Do you want to replace your custom user ratings with an indicator of how "
 "many versions of a media item you posses?"
 msgstr ""
+"Ønsker du å erstatte egendefinert rating av media med en indikator for "
+"antall versjoner du har?"
 
 # In PKC Settings under Sync
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
-msgstr ""
+msgstr "Erstatt rating med antall versjoner av media"

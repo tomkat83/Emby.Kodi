@@ -1,15 +1,16 @@
 #  XBMC Media Center language file
 # Translators:
-# Bruno Guerreiro <american.jesus.pt@gmail.com>, 2017
 # Croneter None <croneter@gmail.com>, 2017
-# Goncalo Campos <gda_campos@hotmail.com>, 2017
+# Bruno Guerreiro <american.jesus.pt@gmail.com>, 2017
+# Goncalo Campos <gda_campos@hotmail.com>, 2018
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Goncalo Campos <gda_campos@hotmail.com>, 2017\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Goncalo Campos <gda_campos@hotmail.com>, 2018\n"
 "Language-Team: Portuguese (Portugal) (https://www.transifex.com/croneter/teams/73837/pt_PT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -91,9 +92,9 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Ligação"
 
-# PKC settings - Artwork
+# Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
-msgid "Movie and show FanartTV lookups left to do:"
+msgid "Fanart download already running"
 msgstr ""
 
 msgctxt "#30016"
@@ -110,7 +111,7 @@ msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
 msgstr ""
 
-# Sync notification displayed when FanartTV lookup is completed
+# PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
 msgstr ""
@@ -151,6 +152,11 @@ msgstr ""
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
+msgstr ""
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
 msgstr ""
 
 msgctxt "#30030"
@@ -308,6 +314,42 @@ msgctxt "#30198"
 msgid "Search"
 msgstr "Procurar"
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr ""
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -421,6 +463,12 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Configurações do Servidor Plex"
 
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -431,10 +479,10 @@ msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "Certificado SSL do cliente"
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr "[COLOR yellow]Repor tentativas de inicio de sessão[/COLOR]"
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr ""
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -492,8 +540,8 @@ msgstr "Reproduzir"
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
-msgstr "[COLOR yellow]Digite as credenciais da rede[/COLOR]"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -519,6 +567,11 @@ msgstr "Salte atrás na reprodução (em segundos)"
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Forçar a transcodificação dos codecs h265/HEVC"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -630,8 +683,12 @@ msgid "Invalid username or password"
 msgstr "Utilizador ou palavra-passe inválidos"
 
 msgctxt "#33010"
-msgid "Failed to authenticate too many times. Reset in the settings."
-msgstr "Falha na autenticação demasiadas vezes. Repor nas definições"
+msgid "User is unauthorized for server {0}"
+msgstr ""
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr ""
 
 # Dialog before playback
 msgctxt "#33013"
@@ -774,9 +831,8 @@ msgstr ""
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
+msgid "Cache all images to Kodi texture cache now"
 msgstr ""
-"[COLOR yellow]Cache todas as imagens para o cache de textura do Kodi[/COLOR]"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -857,6 +913,11 @@ msgstr ""
 "SMB paths smb://NAS/mystuff"
 
 # PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
+msgstr ""
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Caminho original Plex FILME a substituir:"
@@ -932,8 +993,8 @@ msgstr "Nada funciona? Tente uma reposição completa!"
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
-msgstr "[COLOR yellow]Escolha o Servidor Plex de uma lista[/COLOR]"
+msgid "Choose Plex Server from a list"
+msgstr ""
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -1030,10 +1091,8 @@ msgstr "O seu Servidor Plex Media atual:"
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
+msgid "Manually enter Plex Media Server address"
 msgstr ""
-"[COLOR yellow]Inserir manualmente o endereço do Servidor Plex Media "
-"Server[/COLOR]"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1094,6 +1153,25 @@ msgstr ""
 "O Acompanhante Plex não conseguiu abrir a porta GDM. Por favor mude-a nas "
 "definiçoes PKC."
 
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr ""
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr ""
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Sair da sessão do Utilizador Caseiro Plex"
@@ -1101,10 +1179,6 @@ msgstr "Sair da sessão do Utilizador Caseiro Plex"
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Configurações"
-
-msgctxt "#39203"
-msgid "Refresh Plex playlists/nodes"
-msgstr "Atualizar listas de reprodução/nós do Plex"
 
 msgctxt "#39204"
 msgid "Perform manual library sync"
@@ -1135,9 +1209,8 @@ msgstr "Falha na reposição do PKC. Tente reiniciar o Kodi."
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
+msgid "Toggle plex.tv login (sign in or sign out)"
 msgstr ""
-"[COLOR yellow] Alternar inicio de sessão plex.tv (inicio ou saida)[/COLOR]"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1181,8 +1254,8 @@ msgid "plex.tv toggle successful"
 msgstr "alternação da plex.tv bem sucedida "
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
-msgstr "[COLOR yellow]Procurar ilustrações em falha na FanartTV now[/COLOR]"
+msgid "Look for missing fanart on FanartTV now"
+msgstr ""
 
 msgctxt "#39223"
 msgid ""
@@ -1215,6 +1288,12 @@ msgstr "Iniciado na sessão da plex.tv"
 msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Utilizador do Plex:"
+
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr ""
 
 msgctxt "#39250"
 msgid ""
@@ -1286,12 +1365,9 @@ msgstr "poderá não funcionar corretamente até a base de dados ser reposta."
 
 msgctxt "#39403"
 msgid ""
-"Cancelling the database syncing process. Current Kodi version is "
-"unsupported. Please verify your logs for more info."
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
 msgstr ""
-"A cancelar o processo de sincronização da base de dados. A versão corrente "
-"do Kodi não é suportada. Por favor verifique os seus registos para mais "
-"informações."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1300,10 +1376,6 @@ msgstr "Listas de reprodução/nós do Plex foram atualizados"
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
 msgstr "Atualização das listas de reprodução/nós do Plex falharam"
-
-msgctxt "#39407"
-msgid "Full library sync finished"
-msgstr "Sincronização completa da biblioteca terminada"
 
 msgctxt "#39408"
 msgid ""

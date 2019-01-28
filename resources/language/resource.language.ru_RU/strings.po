@@ -1,18 +1,19 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
-# Vladimir Supranenok <stark_v@mail.ru>, 2017
-# Павел Хоменко, 2017
 # Алексей Коробцов <korobcoff@gmail.com>, 2017
-# Alex Freit <alex.nx@mail.ru>, 2017
+# Павел Хоменко, 2017
 # Vlad Anisimov <uniss@ua.fm>, 2018
+# Alex Freit <alex.nx@mail.ru>, 2019
+# Vladimir Supranenok <stark_v@mail.ru>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Vlad Anisimov <uniss@ua.fm>, 2018\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Vladimir Supranenok <stark_v@mail.ru>, 2019\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/croneter/teams/73837/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -98,10 +99,10 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Подключение"
 
-# PKC settings - Artwork
+# Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
-msgid "Movie and show FanartTV lookups left to do:"
-msgstr "Осталось просмотреть FanartTV для фильмов и сериалов:"
+msgid "Fanart download already running"
+msgstr "Fanart уже загружаются"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -117,7 +118,7 @@ msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
 msgstr "FanartTV осталось проверить %s"
 
-# Sync notification displayed when FanartTV lookup is completed
+# PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
 msgstr "Поиск FanartTV завершен"
@@ -125,12 +126,12 @@ msgstr "Поиск FanartTV завершен"
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Синхронизация плейлистов Plex (перезагрузка Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Синхронизировать только некоторые плейлисты из Plex"
 
 # PKC settings category
 msgctxt "#30022"
@@ -140,7 +141,7 @@ msgstr "Расширенные"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Синхронизировать только некоторые плейлисты из Kodi"
 
 msgctxt "#30024"
 msgid "Username"
@@ -153,12 +154,17 @@ msgstr "Сообщать об отключении от сервера Plex "
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
-msgstr ""
+msgstr "Префикс плейлиста в Plex для синхронизации"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
+msgstr "Префикс плейлиста в Kodi для синхронизации"
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
+msgstr "Кеширование изображений PKC завершено"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -315,6 +321,46 @@ msgctxt "#30198"
 msgid "Search"
 msgstr "Поиск"
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+"В следующем окне введите сетевое имя сервера (или его IP-адрес) на котором "
+"находятся медиафайлы. Соблюдайте регистр!"
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr "Введите имя сервера (или IP)"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+"В следующем окне введите сетевой протокол для использования. Например "
+"\"smb\""
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr "Введите сетевой протокол"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr "Введенное вами имя хоста или IP-адрес \"{0}\" не верно."
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr "Введенный вами протокол {0} не поддерживается."
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -426,6 +472,14 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Настройки для сервера Plex"
 
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+"Не удалось изменить файл настроек Kodi {0}. PKC может работать некорректно. "
+"Ошибка: {1}"
+
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -436,10 +490,10 @@ msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "SSL сертификат клиента"
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr "[COLOR yellow]Сбросить попытки входа[/COLOR]"
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr "Синхронизировать иллюстрации с Plex. (рекомендуется)"
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -485,6 +539,8 @@ msgstr ""
 msgctxt "#30514"
 msgid "Show all Plex extras instead of immediately playing trailers"
 msgstr ""
+"Воспроизвести все дополнительные материалы Plex, вместо того, чтобы сразу "
+"воспроизводить трейлеры"
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -498,8 +554,8 @@ msgstr "Воспроизведение"
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
-msgstr "[COLOR yellow]Введите сетевые учетные данные[/COLOR]"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr "Ввести сетевые учетные данные для прямых путей и Direct play"
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -526,6 +582,13 @@ msgstr "Вернуться назад при возобновлении (в се
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Транскодировать h265/HEVC"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr ""
+"Также показать процесс синхронизации отметки воспроизведения и "
+"пользовательских данных"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -602,7 +665,7 @@ msgstr "Всегда выбирать лучшее качество для тр�
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Предпочитать иллюстрации из Kodi для коллекций"
 
 msgctxt "#30544"
 msgid "Artwork"
@@ -639,8 +702,12 @@ msgid "Invalid username or password"
 msgstr "Неверное имя пользователя или пароль"
 
 msgctxt "#33010"
-msgid "Failed to authenticate too many times. Reset in the settings."
-msgstr "Множественная ошибка авторизации. Сбросьте настройки."
+msgid "User is unauthorized for server {0}"
+msgstr "Пользователь не авторизован на сервере {0}"
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr "Plex.tv не предоставил списка пользователей Plex, извините"
 
 # Dialog before playback
 msgctxt "#33013"
@@ -779,9 +846,8 @@ msgstr "Сброс базы данных Kodi и возможная переза
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
-msgstr ""
-"[COLOR yellow]Кешировать все изображения сейчас в Kodi texture cache[/COLOR]"
+msgid "Cache all images to Kodi texture cache now"
+msgstr "Кешировать все изображения в кеш Kodi"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -865,6 +931,11 @@ msgstr ""
 "пользовательские Samba пути smb://NAS/mystuff"
 
 # PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
+msgstr "Преобразуйте специальные символы в пути. (например пробел в %20)"
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Исходный путь ФИЛЬМОВ Plex для замены:"
@@ -939,8 +1010,8 @@ msgstr "Ничего не работает? Попробуйте общий сб
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
-msgstr "[COLOR yellow]Выберите сервер Plex из списка[/COLOR]"
+msgid "Choose Plex Server from a list"
+msgstr "Выбрать сервер Plex из списка"
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -1035,8 +1106,8 @@ msgstr "Ваш текущий сервер Plex:"
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
-msgstr "[COLOR yellow]Вручную ввести адрес сервера Plex[/COLOR]"
+msgid "Manually enter Plex Media Server address"
+msgstr "Ввести адрес сервера Plex вручную"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1096,6 +1167,28 @@ msgid ""
 msgstr ""
 "Plex Companion не может открыть порт GDM. Смените его в настройках PKC."
 
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+"Использовать пути к файлам дополнения (по умолчанию, легко) или прямые пути?"
+" Если не уверены - выбирайте пути аддона. Помните что PKC не будет работать "
+"если прямые пути настроены неверно."
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr "Пути дополнения"
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr "Прямые пути"
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Выйти из Plex"
@@ -1103,10 +1196,6 @@ msgstr "Выйти из Plex"
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Настройки"
-
-msgctxt "#39203"
-msgid "Refresh Plex playlists/nodes"
-msgstr "Обновить плейлисты/списки Plex"
 
 msgctxt "#39204"
 msgid "Perform manual library sync"
@@ -1136,9 +1225,8 @@ msgstr "Невозможно сбросить PKC. Попробуйте пере
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
-msgstr ""
-"[COLOR yellow]Переключить авторизацию plex.tv(войти или выйти)[/COLOR]"
+msgid "Toggle plex.tv login (sign in or sign out)"
+msgstr "Переключить статус plex.tv (войти или выйти)"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1181,8 +1269,8 @@ msgid "plex.tv toggle successful"
 msgstr "переключение plex.tv удачно"
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
-msgstr "[COLOR yellow]Найти отсутствующие иллюстрации на FanartTV[/COLOR]"
+msgid "Look for missing fanart on FanartTV now"
+msgstr "Искать отсутствующие иллюстрации на FanartTV сейчас"
 
 msgctxt "#39223"
 msgid ""
@@ -1215,6 +1303,12 @@ msgstr "Вы вошли в plex.tv"
 msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Пользователь Plex:"
+
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr "Вход в plex.tv неудачен"
 
 msgctxt "#39250"
 msgid ""
@@ -1286,11 +1380,11 @@ msgstr "может работать неправильно до сброса б�
 
 msgctxt "#39403"
 msgid ""
-"Cancelling the database syncing process. Current Kodi version is "
-"unsupported. Please verify your logs for more info."
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
 msgstr ""
-"Синхронизация отменена, текущая версия Kodi не поддерживается. Больше "
-"информации Вы найдёте в логах."
+"Текущая версия Kodi не поддерживается PKC. Пожалуйста проконсультируйтесь на"
+" форуме Plex"
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1299,10 +1393,6 @@ msgstr "Завершено обновление плейлистов/списк�
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
 msgstr "Обновление плейлистов/списков Plex не удалось"
-
-msgctxt "#39407"
-msgid "Full library sync finished"
-msgstr "Полная синхронизация библиотеки завершена"
 
 msgctxt "#39408"
 msgid ""

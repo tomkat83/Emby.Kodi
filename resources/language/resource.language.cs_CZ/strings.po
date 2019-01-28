@@ -1,14 +1,15 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
-# Michal Kuncl <michal.kuncl@gmail.com>, 2017
+# Michal Kuncl <michal.kuncl@gmail.com>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Michal Kuncl <michal.kuncl@gmail.com>, 2017\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Michal Kuncl <michal.kuncl@gmail.com>, 2019\n"
 "Language-Team: Czech (Czech Republic) (https://www.transifex.com/croneter/teams/73837/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -93,10 +94,10 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Připojení"
 
-# PKC settings - Artwork
+# Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
-msgid "Movie and show FanartTV lookups left to do:"
-msgstr "Filmů a seriálů k vyhledání na FanartTV:"
+msgid "Fanart download already running"
+msgstr "Stahování obrázků již běží"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -112,7 +113,7 @@ msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
 msgstr "Vyhledávám %s položek na FanartTV"
 
-# Sync notification displayed when FanartTV lookup is completed
+# PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
 msgstr "Vyhledávání na FanartTV dokončeno"
@@ -154,6 +155,11 @@ msgstr "Předpona jména playlistu v Kodi pro synchronizaci"
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
 msgstr "Předpona jména playlistu v Plexu pro synchronizaci"
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
+msgstr "Stahování obrázků PKC dokončeno"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -310,6 +316,46 @@ msgctxt "#30198"
 msgid "Search"
 msgstr "Hledání"
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+"Do následujícího okna zadejte jméno serveru (nebo IP adresu), na kterém běží"
+" Plex Media Server. Pozor na velká písmena!"
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr "Zadejte jméno serveru (nebo IP adresu)"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+"Do následujícího okna zadejte síťový protokol, který chcete použít. "
+"Pravděpodobně se jedná o 'smb'."
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr "Zadejte síťový protokol"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr "Jméno, nebo IP adresa hostitele '{0}' není platný."
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr "Protocol '{0}', není podporován."
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -423,6 +469,14 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Nastavení Plex Serveru"
 
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+"Nemohu změnit soubor nastavení Kodi - {0}. PKC nemusí fungovat správně. "
+"Chyba: {1}"
+
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -433,10 +487,10 @@ msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "Klientský SSL certifikát"
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr "[COLOR yellow]Resetovat pokusy o přihlášení[/COLOR]"
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr "Synchronizovat obrázky Plexu z PMS (doporučeno)"
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -480,7 +534,7 @@ msgstr "Omezit vlákna mezipaměti obrázků (doporučeno pro rpi)"
 # PKC Settings - Sync Options
 msgctxt "#30514"
 msgid "Show all Plex extras instead of immediately playing trailers"
-msgstr ""
+msgstr "Místo přehrání ukázek zobrazit všechny bonusy"
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -494,8 +548,8 @@ msgstr "Přehrávání"
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
-msgstr "[COLOR yellow]Zadejte přihlašovací údaje k síťi[/COLOR]"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr "Nastavit přihlašovací údaje pro přímé cesty a přímé přehrávání"
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -521,6 +575,12 @@ msgstr "Poskočit vzad při obnovení přehrávání (v sekundách)"
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Vynutit překódování H265/HEVC"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr ""
+"Také zobrazovat průběh synchronizace stavu přehrávání a uživatelských dat"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -634,9 +694,12 @@ msgid "Invalid username or password"
 msgstr "Neplatné uživatelské jméno nebo heslo"
 
 msgctxt "#33010"
-msgid "Failed to authenticate too many times. Reset in the settings."
-msgstr ""
-"Proběhlo moc neúspěšných pokusů o ověření. Proveďte reset v nastavení."
+msgid "User is unauthorized for server {0}"
+msgstr "Uživatel není ověřen u serveru {0}"
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr "Je nám líto, ale plex.tv neposkytl platný seznam uživatelů."
 
 # Dialog before playback
 msgctxt "#33013"
@@ -773,10 +836,8 @@ msgstr "Vyresetovat databázi Kodi a případně i nastavení PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
-msgstr ""
-"[COLOR yellow]Nyní umístit všechny obrázky do texturové mezipaměti "
-"Kodi[/COLOR]"
+msgid "Cache all images to Kodi texture cache now"
+msgstr "Nyní umístit všechny obrázky do texturové mezipaměti Kodi"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -860,6 +921,11 @@ msgstr ""
 "smb://NAS/mystuff"
 
 # PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
+msgstr "Nahrazovat speciální znaky v cestě (např. z mezery na %20)"
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Původní cesta k Plex FILMU:"
@@ -934,8 +1000,8 @@ msgstr "Nic nefunguje? Zkuste plný reset!"
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
-msgstr "[COLOR yellow]Zvolte Plex server ze seznamu[/COLOR]"
+msgid "Choose Plex Server from a list"
+msgstr "Zvolte Plex server ze seznamu"
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -1030,8 +1096,8 @@ msgstr "Váš současný Plex Media Server:"
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
-msgstr "[COLOR yellow]Ručně zadat adresu Plex Media Serveru[/COLOR]"
+msgid "Manually enter Plex Media Server address"
+msgstr "Ručně zadat adresu Plex Media Serveru"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1091,6 +1157,28 @@ msgid ""
 msgstr ""
 "Plex Companion nemůže otevřít GDM port. Prosím změňte ho v nastavení PKC."
 
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+"Použít cesty doplňku (výchozí, snadné), nebo přímé cesty? Pokud si nejste "
+"jistí, vyberte cesty doplňku. Pokud nastavíte přímé cesty špatně, tak nebude"
+" PKC fungovat!"
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr "Cesty doplňku"
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr "Přímé cesty"
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Odhlásit uživatele Plex Home "
@@ -1098,10 +1186,6 @@ msgstr "Odhlásit uživatele Plex Home "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Nastavení"
-
-msgctxt "#39203"
-msgid "Refresh Plex playlists/nodes"
-msgstr "Obnovit playlisty Plexu"
 
 msgctxt "#39204"
 msgid "Perform manual library sync"
@@ -1130,10 +1214,8 @@ msgstr "Nemohu resetovat PKC. Zkuste restartovat Kodi."
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
-msgstr ""
-"[COLOR yellow]Přepnout přihlášení k plex.tv login (přihlásit nebo "
-"odhlásit)[/COLOR]"
+msgid "Toggle plex.tv login (sign in or sign out)"
+msgstr "Přepnout přihlášení přes plex.tv (přihlásit nebo odhlásit)"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1177,8 +1259,8 @@ msgid "plex.tv toggle successful"
 msgstr "přepnutí plex.tv úspěšné"
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
-msgstr "[COLOR yellow]Teď vyhledat chybějící obrázky na FanartTV[/COLOR]"
+msgid "Look for missing fanart on FanartTV now"
+msgstr "Nyní vyhledat chybějící obrázky na FanartTV"
 
 msgctxt "#39223"
 msgid ""
@@ -1211,6 +1293,12 @@ msgstr "Přihlášeno k plex.tv"
 msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Uživatel plexu:"
+
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr "Nezdařilo se přihlášení přes plex.tv pro uživatele"
 
 msgctxt "#39250"
 msgid ""
@@ -1282,11 +1370,9 @@ msgstr " nemusí fungovat správně dokud neprovedete reset databáze."
 
 msgctxt "#39403"
 msgid ""
-"Cancelling the database syncing process. Current Kodi version is "
-"unsupported. Please verify your logs for more info."
-msgstr ""
-"Ruším synchronizaci databáze. Tato verze Kodi není podporována. Pro více "
-"informací se podívejte do záznamů."
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
+msgstr "Tuto verzi Kodi PKC nepodporuje. Prosím projděte si fórum Plexu."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1295,10 +1381,6 @@ msgstr "Plex playlisty obnoveny"
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
 msgstr "Nemohu obnovit Plex playlisty"
-
-msgctxt "#39407"
-msgid "Full library sync finished"
-msgstr "Plná synchronizace knihovny dokončena"
 
 msgctxt "#39408"
 msgid ""

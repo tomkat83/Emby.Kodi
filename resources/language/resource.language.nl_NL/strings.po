@@ -1,14 +1,16 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
-# Michiel van Baak <michiel@vanbaak.info>, 2017
+# Michiel van Baak <michiel@vanbaak.info>, 2019
+# Panja Nul <panja0@protonmail.com>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Michiel van Baak <michiel@vanbaak.info>, 2017\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Panja Nul <panja0@protonmail.com>, 2019\n"
 "Language-Team: Dutch (Netherlands) (https://www.transifex.com/croneter/teams/73837/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +25,7 @@ msgstr "PlexKodiConnect"
 
 msgctxt "#30000"
 msgid "Server Address (IP)"
-msgstr "Serveradres (IP)"
+msgstr "Server adres (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
@@ -41,8 +43,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
-"Waarschuwing: De kodi setting 'Automatisch volgende video afspelen' is "
-"actief. Dit kan voor problemen zorgen. Setting deactiveren?"
+"Waarschuwing: De kodi instelling 'Automatisch volgende video afspelen' is "
+"actief. Dit kan voor problemen zorgen. Instelling deactiveren?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -51,32 +53,32 @@ msgstr "Gebruikersnaam: "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Caching %s Plex afbeeldingen"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Cachen van Plex afbeeldingen afgerond"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Activeer notificaties voor afbeelding caching"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
-msgstr ""
+msgstr "Afbeelding caching inschakelen tijdens Kodi weergave (herstart Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Geschatte voortgang"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Artwork nog te cachen:"
 
 # Button text
 msgctxt "#30012"
@@ -92,10 +94,10 @@ msgctxt "#30014"
 msgid "Connection"
 msgstr "Verbinding"
 
-# PKC settings - Artwork
+# Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
-msgid "Movie and show FanartTV lookups left to do:"
-msgstr ""
+msgid "Fanart download already running"
+msgstr "Het downloaden van fanart is al bezig"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -109,22 +111,22 @@ msgstr "Onbevoegd voor PMS"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "FanartTV controleren op %s items"
 
-# Sync notification displayed when FanartTV lookup is completed
+# PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "FanartTV zoek actie voltooid"
 
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Synchroniseer Plex afspeellijsten (herstart Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Synchroniseer alleen specifieke Plex afspeellijsten met Kodi"
 
 # PKC settings category
 msgctxt "#30022"
@@ -134,7 +136,7 @@ msgstr "Geavanceerd"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Synchroniseer alleen specifieke Kodi afspeellijsten met Plex"
 
 msgctxt "#30024"
 msgid "Username"
@@ -147,12 +149,17 @@ msgstr "Bericht weergeven als PMS offline gaat"
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
-msgstr ""
+msgstr "Voorvoegsel in Plex afspeellijst naam om synchronisatie te activeren"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
+msgstr "Voorvoegsel in Kodi afspeellijst naam om synchronisatie te activeren"
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
+msgstr "PKC afbeelding caching voltooid"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -309,6 +316,46 @@ msgctxt "#30198"
 msgid "Search"
 msgstr "Zoek"
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+"Voer in het volgende venster de hostnaam (of IP) van de server in waar uw "
+"Plex media zich bevindt. Let op: hoofdlettergevoelig!"
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr "Voer de hostnaam van de server in (of IP)"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+"Voer in het volgende venster het netwerkprotocol in dat u wilt gebruiken. "
+"Dit is waarschijnlijk 'smb'."
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr "Voer het netwerkprotocol in"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr "De hostnaam of IP '{0}' die u heeft ingevoerd is niet geldig."
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr "Het protocol '{0}' dat u hebt ingevoerd wordt niet ondersteund."
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -422,6 +469,14 @@ msgctxt "#30416"
 msgid "Settings for the Plex Server"
 msgstr "Instellingen voor de Plex Server"
 
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+"Kon het Kodi instellingen bestand niet wijzigen {0}. PKC werkt mogelijk niet"
+" correct. Fout: {1}"
+
 # PKC Settings - Connection
 msgctxt "#30500"
 msgid "Verify Host SSL Certificate (more secure)"
@@ -432,10 +487,10 @@ msgctxt "#30501"
 msgid "Client SSL certificate"
 msgstr "SSL-clientcertificaat"
 
-# PKC Settings - Connection
-msgctxt "#30505"
-msgid "[COLOR yellow]Reset login attempts[/COLOR]"
-msgstr "[COLOR yellow]Reset inlog pogingen[/COLOR]"
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr "Synchroniseer Plex artwork van de PMS (aanbevolen)"
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -469,7 +524,7 @@ msgstr "Afspeelmodus"
 # PKC Settings - Artwork
 msgctxt "#30512"
 msgid "Cache all artwork for a smooth Kodi experience"
-msgstr ""
+msgstr "Sla alle artwork op in de cache zodat Kodi sneller reageert"
 
 # PKC Settings - Artwork
 msgctxt "#30513"
@@ -479,7 +534,7 @@ msgstr "Beperk artwork cache threads (aanbevolen voor rpi)"
 # PKC Settings - Sync Options
 msgctxt "#30514"
 msgid "Show all Plex extras instead of immediately playing trailers"
-msgstr ""
+msgstr "Toon alle Plex extra's in plaats van meteen trailers af te spelen"
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
@@ -493,8 +548,8 @@ msgstr "Afspelen"
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "[COLOR yellow]Enter network credentials[/COLOR]"
-msgstr "[COLOR yellow]Geef netwerk authenticatie gegevens[/COLOR]"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr "Stel netwerk inloggegevens in voor directe paden en directe weergave"
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -521,6 +576,13 @@ msgstr "Terugspringen bij verder kijken (in seconden)"
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
 msgstr "Forceer transcoden h265/HEVC"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr ""
+"Toon ook de voortgang van de synchronisatie voor weergave status en "
+"gebruikersgegevens"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -555,7 +617,7 @@ msgstr "Serverberichten"
 # PKC Settings - Advanced
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
-msgstr ""
+msgstr "Genereer een nieuwe unieke Plex apparaat-id (b.v. om Kodi te klonen)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
@@ -571,6 +633,8 @@ msgstr "BIJ AANPASSINGEN KODI HERSTARTEN"
 msgctxt "#30538"
 msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
 msgstr ""
+"Handmatige volledige reset van de Kodi database noodzakelijk, zie "
+"\"Geavanceerd\""
 
 # PKC Settings - Artwork
 msgctxt "#30539"
@@ -595,7 +659,7 @@ msgstr "Kies altijd beste kwaliteit voor trailers"
 # PKC Settings - Artwork
 msgctxt "#30543"
 msgid "Prefer Kodi artwork for collections/sets"
-msgstr ""
+msgstr "Prefereer Kodi artwork voor verzamelingen/sets"
 
 msgctxt "#30544"
 msgid "Artwork"
@@ -632,8 +696,13 @@ msgid "Invalid username or password"
 msgstr "Ongeldige gebruikersnaam of wachtwoord"
 
 msgctxt "#33010"
-msgid "Failed to authenticate too many times. Reset in the settings."
-msgstr "Te vaak niet kunnen inloggen. Pas instellingen aan."
+msgid "User is unauthorized for server {0}"
+msgstr "Gebruiker is niet geautoriseerd voor server {0}"
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr ""
+"Plex.tv heeft ons geen geldige lijst van Plex gebruikers verstrekt, sorry."
 
 # Dialog before playback
 msgctxt "#33013"
@@ -689,7 +758,7 @@ msgstr "Ondertitel grootte"
 # PKC Settings - Sync
 msgctxt "#39003"
 msgid "Number of simultaneous download threads"
-msgstr ""
+msgstr "Aantal gelijktijdige download threads"
 
 # PKC Settings - Plex
 msgctxt "#39004"
@@ -762,18 +831,17 @@ msgstr "PKC plugin instellingen aanpassen? Kodi moet hierna herstart worden!"
 # PKC Settings - Advanced
 msgctxt "#39018"
 msgid "Repair the Kodi database (force update all content)"
-msgstr ""
+msgstr "Herstel de Kodi database (forceer update alle inhoud)"
 
 # PKC Settings - Advanced
 msgctxt "#39019"
 msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
-msgstr ""
+msgstr "Reset de Kodi database en reset optioneel PlexKodiConnect"
 
 # PKC Settings - Artwork
 msgctxt "#39020"
-msgid "[COLOR yellow]Cache all images to Kodi texture cache now[/COLOR]"
-msgstr ""
-"[COLOR yellow]Alle afbeeldingen van Kodi nu aan de cache toevoegen[/COLOR]"
+msgid "Cache all images to Kodi texture cache now"
+msgstr "Cache nu alle plaatjes in Kodi texture cache"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -857,6 +925,11 @@ msgstr ""
 "paden smb://NAS/mystuff"
 
 # PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
+msgstr "Pas speciale tekens aan in pad (b.v. spatie naar %20)"
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Oorspronkelijke Plex film pad om te vervangen:"
@@ -932,8 +1005,8 @@ msgstr "Niets werkt? Probeer een volledige reset!"
 
 # PKC Settings - Connection
 msgctxt "#39050"
-msgid "[COLOR yellow]Choose Plex Server from a list[/COLOR]"
-msgstr "[COLOR yellow]Kies Plex Server uit lijst[/COLOR]"
+msgid "Choose Plex Server from a list"
+msgstr "Kies Plex server van een lijst"
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -1028,8 +1101,8 @@ msgstr "Huidige Plex Media Server:"
 
 # PKC Settings - Connection
 msgctxt "#39068"
-msgid "[COLOR yellow]Manually enter Plex Media Server address[/COLOR]"
-msgstr "[COLOR yellow]Handmatig Plex Media Server adres invoeren[/COLOR]"
+msgid "Manually enter Plex Media Server address"
+msgstr "Voer handmatig het Plex Media Server adres in"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1090,6 +1163,28 @@ msgstr ""
 "Plex Companion kon de GDM poort niet gebruiken. Wijzig deze in de PKC "
 "instellingen."
 
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+"Gebruik add-on paden (standaard, eenvoudig) of directe paden? Kies add-on "
+"paden als u niet zeker bent. PKC werkt niet als je instellingen voor directe"
+" paden verkeerd zijn!"
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr "Add-on paden"
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr "Directe paden"
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Log-out Plex Home gebruiker "
@@ -1097,10 +1192,6 @@ msgstr "Log-out Plex Home gebruiker "
 msgctxt "#39201"
 msgid "Settings"
 msgstr "Instellingen"
-
-msgctxt "#39203"
-msgid "Refresh Plex playlists/nodes"
-msgstr "Vernieuwen van Plex afspeellijsten/nodes"
 
 msgctxt "#39204"
 msgid "Perform manual library sync"
@@ -1129,8 +1220,8 @@ msgstr "PKC reset niet gelukt. Herstart Kodi."
 
 # PKC Settings - Plex
 msgctxt "#39209"
-msgid "[COLOR yellow]Toggle plex.tv login (sign in or sign out)[/COLOR]"
-msgstr "[COLOR yellow]Verander plex.tv login (aanmelden of afmelden)[/COLOR]"
+msgid "Toggle plex.tv login (sign in or sign out)"
+msgstr "Pas plex.tv login aan (aanmelden of afmelden)"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1175,8 +1266,8 @@ msgid "plex.tv toggle successful"
 msgstr "plex.tv aanpassing succesvol"
 
 msgctxt "#39222"
-msgid "[COLOR yellow]Look for missing fanart on FanartTV now[/COLOR]"
-msgstr "[COLOR yellow]Nu zoeken naar missende artwork op FanartTV[/COLOR]"
+msgid "Look for missing fanart on FanartTV now"
+msgstr "Zoek nu naar missende fanart op FanartTV"
 
 msgctxt "#39223"
 msgid ""
@@ -1209,6 +1300,12 @@ msgstr "Ingelogd op plek.tv"
 msgctxt "#39228"
 msgid "Plex user:"
 msgstr "Plex gebruiker:"
+
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr "Aanmelden met plex.tv mislukt voor gebruiker"
 
 msgctxt "#39250"
 msgid ""
@@ -1278,11 +1375,11 @@ msgstr ""
 
 msgctxt "#39403"
 msgid ""
-"Cancelling the database syncing process. Current Kodi version is "
-"unsupported. Please verify your logs for more info."
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
 msgstr ""
-"Database synchroniseer proces geannuleerd. Huidige Kodi versie wordt niet "
-"ondersteund. Controleer uw logbestanden voor meer info."
+"De huidige Kodi versie wordt niet ondersteund door PKC. Raadpleeg het Plex "
+"forum."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"
@@ -1291,10 +1388,6 @@ msgstr "Plex afspeellijsten/nodes vernieuwd"
 msgctxt "#39406"
 msgid "Plex playlists/nodes refresh failed"
 msgstr "Plex afspeellijsten/nodes vernieuwen mislukt"
-
-msgctxt "#39407"
-msgid "Full library sync finished"
-msgstr "Volledige bibliotheek synchronisatie voltooid"
 
 msgctxt "#39408"
 msgid ""
