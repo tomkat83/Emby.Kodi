@@ -306,6 +306,36 @@ msgctxt "#30198"
 msgid "Search"
 msgstr ""
 
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid "In the following window, enter the server's hostname (or IP) where your Plex media resides. Mind the case!"
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid "In the following window, enter the network protocol you would like to use. This is likely 'smb'."
+msgstr ""
+
+# For setting up direct paths and adding network credentials - input window protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr ""
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr ""
+
 # Video node naming for random e.g. movies
 msgctxt "#30227"
 msgid "Random"
@@ -490,7 +520,7 @@ msgstr ""
 
 # PKC Settings - Connection
 msgctxt "#30517"
-msgid "Enter network credentials"
+msgid "Set network credentials for Direct Paths and direct play"
 msgstr ""
 
 # PKC Settings - Playback
