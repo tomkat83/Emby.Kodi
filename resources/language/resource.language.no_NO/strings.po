@@ -326,12 +326,14 @@ msgid ""
 "In the following window, enter the server's hostname (or IP) where your Plex"
 " media resides. Mind the case!"
 msgstr ""
+"Legg inn vertsnavn (eller IP) til Plex Media tjener i følgende vindu. Case-"
+"sensitivt!"
 
 # For setting up direct paths and adding network credentials - input window
 # for hostname
 msgctxt "#30201"
 msgid "Enter server hostname (or IP)"
-msgstr ""
+msgstr "Legg til vertsnavn (eller IP)"
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30202"
@@ -339,22 +341,24 @@ msgid ""
 "In the following window, enter the network protocol you would like to use. "
 "This is likely 'smb'."
 msgstr ""
+"Legg inn nettverksprotokollen du ønsker å bruke i følgende vindu (f.eks "
+"smb)."
 
 # For setting up direct paths and adding network credentials - input window
 # protocol
 msgctxt "#30203"
 msgid "Enter network protocol"
-msgstr ""
+msgstr "Legg inn nettverksprotokoll"
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30204"
 msgid "The hostname or IP '{0}' that you entered is not valid."
-msgstr ""
+msgstr "Vertsnavn eller IP '{0}' som du la inn er ikke gyldig."
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30205"
 msgid "The protocol '{0}' that you entered is not supported."
-msgstr ""
+msgstr "Protokollen '{0}' du la inn støttes ikke."
 
 # Video node naming for random e.g. movies
 msgctxt "#30227"
@@ -548,7 +552,7 @@ msgstr "Avspilling"
 # PKC Settings - Connection
 msgctxt "#30517"
 msgid "Set network credentials for Direct Paths and direct play"
-msgstr ""
+msgstr "Legg inn nettverkslegitimasjon for direkte sti og avspilling"
 
 # PKC Settings - Playback
 msgctxt "#30518"
