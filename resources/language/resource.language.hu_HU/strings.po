@@ -1,6 +1,6 @@
 #  XBMC Media Center language file
 # Translators:
-# Croneter None <croneter@gmail.com>, 2018
+# Croneter None <croneter@gmail.com>, 2019
 # 
 msgid ""
 msgstr ""
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2018\n"
+"Last-Translator: Croneter None <croneter@gmail.com>, 2019\n"
 "Language-Team: Hungarian (Hungary) (https://www.transifex.com/croneter/teams/73837/hu_HU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -97,7 +97,7 @@ msgstr "Kapcsolat"
 # Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
 msgid "Fanart download already running"
-msgstr ""
+msgstr "Már fut a művészképek letöltése"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -159,7 +159,7 @@ msgstr "Kodi lejátszási lista előtag szinkronizálásra kijelöléshez"
 # PKC settings artwork options: status info
 msgctxt "#30028"
 msgid "PKC-only image caching completed"
-msgstr ""
+msgstr "PKC képek gyorsítótárazása befejeződött"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -322,12 +322,15 @@ msgid ""
 "In the following window, enter the server's hostname (or IP) where your Plex"
 " media resides. Mind the case!"
 msgstr ""
+"A következő ablakban adja meg a szerver kiszolgálónevét (vagy IP címét) "
+"amelyen a Plex médiatartalmak megtalálhatók. Figyeljen a kis- és "
+"nagybetűkre!"
 
 # For setting up direct paths and adding network credentials - input window
 # for hostname
 msgctxt "#30201"
 msgid "Enter server hostname (or IP)"
-msgstr ""
+msgstr "Adja meg a szerver kiszolgálónevét (vagy IP címét)"
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30202"
@@ -335,22 +338,24 @@ msgid ""
 "In the following window, enter the network protocol you would like to use. "
 "This is likely 'smb'."
 msgstr ""
+"A következő ablakban adja meg a használni kívánt hálózati protokollt. Ez "
+"valószínűleg az 'smb'."
 
 # For setting up direct paths and adding network credentials - input window
 # protocol
 msgctxt "#30203"
 msgid "Enter network protocol"
-msgstr ""
+msgstr "Adja meg a hálózati protokollt"
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30204"
 msgid "The hostname or IP '{0}' that you entered is not valid."
-msgstr ""
+msgstr "A megadott kiszolgálónév vagy IP cím '{0}' helytelen."
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30205"
 msgid "The protocol '{0}' that you entered is not supported."
-msgstr ""
+msgstr "A megadott hálózati protokoll ('{0}') nem támogatott."
 
 # Video node naming for random e.g. movies
 msgctxt "#30227"
@@ -469,6 +474,8 @@ msgid ""
 "Could not change the Kodi settings file {0}. PKC might not work correctly. "
 "Error: {1}"
 msgstr ""
+"A {0} Kodi beállításfájl megváltoztatása sikertelen. Lehet, hogy a PKC nem "
+"fog megfelelően működni.Hiba: {1}"
 
 # PKC Settings - Connection
 msgctxt "#30500"
@@ -483,7 +490,7 @@ msgstr "Kliens SSL tanúsítvány"
 # PKC Settings - Artwork
 msgctxt "#30502"
 msgid "Sync Plex artwork from the PMS (recommended)"
-msgstr ""
+msgstr "Plex művészképek szinkronizálása a szerverről (ajánlott)"
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -545,6 +552,8 @@ msgstr "Lejátszás"
 msgctxt "#30517"
 msgid "Set network credentials for Direct Paths and direct play"
 msgstr ""
+"Hálózati hozzáférési adatok megadása a közvetlen útvonalakhoz és közvetlen "
+"lejátszáshoz"
 
 # PKC Settings - Playback
 msgctxt "#30518"
@@ -575,6 +584,8 @@ msgstr "h265/HEVC transzkódolás kényszerítése"
 msgctxt "#30523"
 msgid "Also show sync progress for playstate and user data"
 msgstr ""
+"Szinkronizálási folyamat állapotának mutatása a lejátszási- és felhasználói "
+"adatok esetén is"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -689,11 +700,11 @@ msgstr "Hibás felhasználónév vagy jelszó"
 
 msgctxt "#33010"
 msgid "User is unauthorized for server {0}"
-msgstr ""
+msgstr "A felhasználó nem jogosult a {0} szerverhez való hozzáférésre"
 
 msgctxt "#33011"
 msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
-msgstr ""
+msgstr "A Plex.tv sajnos nem adta meg a jogosult Plex felhasználók listáját"
 
 # Dialog before playback
 msgctxt "#33013"
@@ -838,7 +849,7 @@ msgstr ""
 # PKC Settings - Artwork
 msgctxt "#39020"
 msgid "Cache all images to Kodi texture cache now"
-msgstr ""
+msgstr "Minden kép gyorsítótárazása a Kodi gyorsítótárába most"
 
 # Appended to a listed PMS if it is in the same LAN network as PKC
 msgctxt "#39022"
@@ -925,6 +936,7 @@ msgstr ""
 msgctxt "#39036"
 msgid "Escape special characters in path (e.g. space to %20)"
 msgstr ""
+"A speciális karakterek feloldása az elérési útban (pl. szóköz helyett %20)"
 
 # PKC Settings - Customize Paths
 msgctxt "#39037"
@@ -1002,7 +1014,7 @@ msgstr "Semmi sem működik? Próbálja meg a teljes visszaállítást!"
 # PKC Settings - Connection
 msgctxt "#39050"
 msgid "Choose Plex Server from a list"
-msgstr ""
+msgstr "Válasszon Plex szervert a listából"
 
 # PKC Settings - Sync
 msgctxt "#39051"
@@ -1100,7 +1112,7 @@ msgstr "Az Ön jelenlegi Plex médiaszervere:"
 # PKC Settings - Connection
 msgctxt "#39068"
 msgid "Manually enter Plex Media Server address"
-msgstr ""
+msgstr "Plex médiaszerver címének kézi megadása"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1170,20 +1182,24 @@ msgid ""
 "Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
 "you're unsure. PKC will not work if your Direct Paths setup is wrong!"
 msgstr ""
+"Bővítmény elérési utakat (alapértelmezett, egyszerű) vagy közvetlen elérési "
+"utakat kíván használni? Ha nem biztos benne, válassza a bővítmény elérési "
+"utakat. A PKC nem fog működni, ha a közvetlen elérési utak rosszul vannak "
+"beállítva!"
 
 # Button text for choosing PKC mode
 msgctxt "#39081"
 msgid "Add-on Paths"
-msgstr ""
+msgstr "Bővítmény elérési utak"
 
 # Button text for choosing PKC mode
 msgctxt "#39082"
 msgid "Direct Paths"
-msgstr ""
+msgstr "Közvetlen elérési utak"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
-msgstr "Kijelentkezés az otthoni Plex felhasználó fiókból"
+msgstr "Kijelentkezés az otthoni Plex felhasználó fiókból: "
 
 msgctxt "#39201"
 msgid "Settings"
@@ -1219,7 +1235,7 @@ msgstr "A PKC visszaállítása sikertelen. Kérem indítsa újra a Kodi-t."
 # PKC Settings - Plex
 msgctxt "#39209"
 msgid "Toggle plex.tv login (sign in or sign out)"
-msgstr ""
+msgstr "Plex.tv bejelentkezés átkapcsolása (be- vagy kijelentkezés)"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
@@ -1265,7 +1281,7 @@ msgstr "plex.tv átkapcsolás sikeres"
 
 msgctxt "#39222"
 msgid "Look for missing fanart on FanartTV now"
-msgstr ""
+msgstr "Hiányzó művészképek keresése a FanArtTV-n most"
 
 msgctxt "#39223"
 msgid ""
@@ -1303,7 +1319,7 @@ msgstr "Plex felhasználó:"
 # appended at the end of the string
 msgctxt "#39229"
 msgid "Login failed with plex.tv for user"
-msgstr ""
+msgstr "Sikertelen bejelentkezés a plex.tv-re a következő felhasználóval"
 
 msgctxt "#39250"
 msgid ""
@@ -1379,6 +1395,8 @@ msgid ""
 "The current Kodi version is not supported by PKC. Please consult the Plex "
 "forum."
 msgstr ""
+"A PKC nem támogatja a jelenlegi Kodi verziót. Kérjen tanácsot a Plex "
+"fórumon."
 
 msgctxt "#39405"
 msgid "Plex playlists/nodes refreshed"

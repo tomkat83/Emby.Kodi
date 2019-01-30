@@ -1288,12 +1288,12 @@ msgstr "Alleen ontbrekende"
 # Message in the PKC settings if user has not logged in to plex.tv
 msgctxt "#39226"
 msgid "Not logged in to plex.tv"
-msgstr "Niet ingelogd op plek.tv"
+msgstr "Niet ingelogd op plex.tv"
 
 # Message in the PKC settings if user is logged in to plex.tv
 msgctxt "#39227"
 msgid "Logged in to plex.tv"
-msgstr "Ingelogd op plek.tv"
+msgstr "Ingelogd op plex.tv"
 
 # Message in the PKC settings to display the plex.tv username. Leave the colon
 # :
