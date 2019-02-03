@@ -493,6 +493,13 @@ msgctxt "#30502"
 msgid "Sync Plex artwork from the PMS (recommended)"
 msgstr "Plex Bilder vom Plex Medienserver synchronisieren (empfohlen)"
 
+# Message shown if SSL HTTPS certificate fails
+msgctxt "#30503"
+msgid "SSL certificate failed to validate. Please check {0} for solutions."
+msgstr ""
+"SSL-Zertifikat konnte nicht validiert werden. Bitte besuche {0} für "
+"Lösungsvorschläge."
+
 # PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
@@ -1193,6 +1200,16 @@ msgctxt "#39082"
 msgid "Direct Paths"
 msgstr "Direct Paths"
 
+# Dialog for manually entering PMS
+msgctxt "#39083"
+msgid "Enter PMS IP or URL"
+msgstr "PMS IP oder URL eingeben"
+
+# Dialog for manually entering PMS
+msgctxt "#39084"
+msgid "Enter PMS port"
+msgstr "PMS Port eingeben"
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Plex Home Benutzer abmelden: "
@@ -1254,11 +1271,11 @@ msgstr "Plex Media Server IP oder URL eingeben. Zum Beispiel:"
 
 msgctxt "#39217"
 msgid ""
-"Does your Plex Media Server support SSL connections? (https instead of "
-"http)?"
+"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
+"work!"
 msgstr ""
-"Unterstützt der Plex Media Server sichere SSL Verbindungen (https anstelle "
-"von http)?"
+"HTTPS (SSL) Verbindungen nutzen? Dies funktioniert u.U. nicht mit Kodi 18 "
+"oder späteren Versionen!"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1308,17 +1325,26 @@ msgctxt "#39227"
 msgid "Logged in to plex.tv"
 msgstr "Eingeloggt bei plex.tv"
 
-# Message in the PKC settings to display the plex.tv username. Leave the colon
-# :
+# Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
-msgid "Plex user:"
-msgstr "Plex Benutzer:"
+msgid "Plex admin user"
+msgstr "Plex Admin Benutzer"
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
 msgctxt "#39229"
 msgid "Login failed with plex.tv for user"
 msgstr "Login für plex.tv fehlgeschlagen für Benutzer"
+
+# Message in the PKC settings to display the plex.tv username
+msgctxt "#39230"
+msgid "Logged in Plex home user"
+msgstr "Eingeloggter Plex Home Benutzer"
+
+# Message in the PKC settings to change the logged in Plex home user
+msgctxt "#39231"
+msgid "Change logged in Plex home user"
+msgstr "Eingeloggten Plex Home Benutzer wechseln"
 
 msgctxt "#39250"
 msgid ""
