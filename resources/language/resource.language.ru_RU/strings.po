@@ -495,6 +495,11 @@ msgctxt "#30502"
 msgid "Sync Plex artwork from the PMS (recommended)"
 msgstr "Синхронизировать иллюстрации с Plex. (рекомендуется)"
 
+# Message shown if SSL HTTPS certificate fails
+msgctxt "#30503"
+msgid "SSL certificate failed to validate. Please check {0} for solutions."
+msgstr ""
+
 # PKC Settings, category name
 msgctxt "#30506"
 msgid "Sync Options"
@@ -1189,6 +1194,16 @@ msgctxt "#39082"
 msgid "Direct Paths"
 msgstr "Прямые пути"
 
+# Dialog for manually entering PMS
+msgctxt "#39083"
+msgid "Enter PMS IP or URL"
+msgstr ""
+
+# Dialog for manually entering PMS
+msgctxt "#39084"
+msgid "Enter PMS port"
+msgstr ""
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Выйти из Plex"
@@ -1247,9 +1262,9 @@ msgstr "Введите IP или URL Вашего Plex-сервера. Напр�
 
 msgctxt "#39217"
 msgid ""
-"Does your Plex Media Server support SSL connections? (https instead of "
-"http)?"
-msgstr "Ваш Plex-сервер поддерживает SSL соединение (https вместо http)?"
+"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
+"work!"
+msgstr ""
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1298,17 +1313,26 @@ msgctxt "#39227"
 msgid "Logged in to plex.tv"
 msgstr "Вы вошли в plex.tv"
 
-# Message in the PKC settings to display the plex.tv username. Leave the colon
-# :
+# Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
-msgid "Plex user:"
-msgstr "Пользователь Plex:"
+msgid "Plex admin user"
+msgstr ""
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
 msgctxt "#39229"
 msgid "Login failed with plex.tv for user"
 msgstr "Вход в plex.tv неудачен"
+
+# Message in the PKC settings to display the plex.tv username
+msgctxt "#39230"
+msgid "Logged in Plex home user"
+msgstr ""
+
+# Message in the PKC settings to change the logged in Plex home user
+msgctxt "#39231"
+msgid "Change logged in Plex home user"
+msgstr ""
 
 msgctxt "#39250"
 msgid ""

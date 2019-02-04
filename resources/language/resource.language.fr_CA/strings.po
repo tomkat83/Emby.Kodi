@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
-# Elixir59, 2019
 # Croneter None <croneter@gmail.com>, 2019
+# Elixir59, 2019
 # 
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2019\n"
+"Last-Translator: Elixir59, 2019\n"
 "Language-Team: French (Canada) (https://www.transifex.com/croneter/teams/73837/fr_CA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -494,6 +494,13 @@ msgstr "Certificat SSL"
 msgctxt "#30502"
 msgid "Sync Plex artwork from the PMS (recommended)"
 msgstr "Synchroniser les illustrations de Plex depuis le PMS (recommandé)"
+
+# Message shown if SSL HTTPS certificate fails
+msgctxt "#30503"
+msgid "SSL certificate failed to validate. Please check {0} for solutions."
+msgstr ""
+"Le certificat SSL n'a pas pu être validé. Merci de visiter {0} pour des "
+"solutions."
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -1204,6 +1211,16 @@ msgctxt "#39082"
 msgid "Direct Paths"
 msgstr "Chemins Directs"
 
+# Dialog for manually entering PMS
+msgctxt "#39083"
+msgid "Enter PMS IP or URL"
+msgstr "Entrez l'IP ou l'URL de PMS"
+
+# Dialog for manually entering PMS
+msgctxt "#39084"
+msgid "Enter PMS port"
+msgstr "Entrez le port de PMS"
+
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
 msgstr "Log-out Plex Home User "
@@ -1263,11 +1280,11 @@ msgstr "Enter your Plex Media Server's IP or URL, Examples are:"
 
 msgctxt "#39217"
 msgid ""
-"Does your Plex Media Server support SSL connections? (https instead of "
-"http)?"
+"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
+"work!"
 msgstr ""
-"Does your Plex Media Server support SSL connections? (https instead of "
-"http)?"
+"Utiliser des connexions HTTPS (SSL) ? Avec Kodi 18 ou après, HTTPS ne "
+"marchera probablement pas !"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1316,17 +1333,26 @@ msgctxt "#39227"
 msgid "Logged in to plex.tv"
 msgstr "Connecté à plex.tv"
 
-# Message in the PKC settings to display the plex.tv username. Leave the colon
-# :
+# Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
-msgid "Plex user:"
-msgstr "Utilisateur Plex :"
+msgid "Plex admin user"
+msgstr "Utilisateur Plex administrateur"
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
 msgctxt "#39229"
 msgid "Login failed with plex.tv for user"
 msgstr "Echec de la connexion avec plex.tv pour l'utilisateur"
+
+# Message in the PKC settings to display the plex.tv username
+msgctxt "#39230"
+msgid "Logged in Plex home user"
+msgstr "Utilisateur Plex Home connecté"
+
+# Message in the PKC settings to change the logged in Plex home user
+msgctxt "#39231"
+msgid "Change logged in Plex home user"
+msgstr "Changer l'utilisateur Plex Home connecté"
 
 msgctxt "#39250"
 msgid ""
