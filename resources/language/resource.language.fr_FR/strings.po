@@ -601,6 +601,11 @@ msgstr ""
 "Afficher également la progression de la synchronisation pour l'état de "
 "lecture et les données utilisateur"
 
+# PKC Settings - Sync Options
+msgctxt "#30524"
+msgid "Select Plex libraries to sync"
+msgstr ""
+
 # PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
@@ -1272,10 +1277,11 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr "Regarder plus tard"
 
-# String attached at the end to get something like "PMS Name is offline"
+# Error message pop-up if {0} cannot be contacted. {0} will be replaced by
+# e.g. the PMS' name
 msgctxt "#39213"
-msgid "is offline"
-msgstr "est actuellement hors ligne"
+msgid "{0} offline"
+msgstr ""
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
