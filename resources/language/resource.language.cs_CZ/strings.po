@@ -590,7 +590,7 @@ msgstr ""
 # PKC Settings - Sync Options
 msgctxt "#30524"
 msgid "Select Plex libraries to sync"
-msgstr ""
+msgstr "Zvolte knihovny Plexu k synchronizaci"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -1249,7 +1249,7 @@ msgstr "Shlédnout později"
 # e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
-msgstr ""
+msgstr "{0} je offline"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
