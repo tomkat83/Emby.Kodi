@@ -7,7 +7,6 @@ from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import BaseHTTPServer
 import httplib
-import urlparse
 import socket
 import Queue
 
@@ -121,7 +120,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             params = {}
         if '?' in path:
             path = path.split('?', 1)[1]
-        params = dict(urlparse.parse_qsl(path))
+        params = dict(utils.parse_qsl(path))
 
         if params.get('transcode'):
             params['transcode'] = params['transcode'].lower() == 'true'

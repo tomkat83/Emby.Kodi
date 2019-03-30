@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-import urllib
 
 import xbmc
 import xbmcgui
@@ -146,7 +145,7 @@ class PlayStrm(object):
                 args['server_id'] = self.server_id
             if self.transcode:
                 args['transcode'] = True
-            url = '%s?%s' % (url, urllib.urlencode(args))
+            url = utils.extend_url(url, args).encode('utf-8')
             listitem.setPath(url)
             self.kodi_playlist.add(url=url,
                                    listitem=listitem,
