@@ -178,26 +178,19 @@ class KodiMonitor(xbmc.Monitor):
         backgroundthread.BGThreader.addTasksToFront([task])
 
     def _playlist_onadd(self, data):
-        """
-        Called if an item is added to a Kodi playlist. Example data dict:
-        {
-            u'item': {
-                u'type': u'movie',
-                u'id': 2},
-            u'playlistid': 1,
-            u'position': 0
-        }
-        Will NOT be called if playback initiated by Kodi widgets
-        """
-        if 'id' not in data['item']:
-            return
-        old = app.PLAYSTATE.old_player_states[data['playlistid']]
-        if (not app.SYNC.direct_paths and
-                data['position'] == 0 and data['playlistid'] == 1 and
-                not PQ.PLAYQUEUES[data['playlistid']].items and
-                data['item']['type'] == old['kodi_type'] and
-                data['item']['id'] == old['kodi_id']):
-            self.hack_replay = data['item']
+        '''
+        Detect widget playback. Widget for some reason, use audio playlists.
+        '''
+        if data['position'] == 0:
+            if data['playlistid'] == 0:
+                utils.window('plex.playlist.audio', value='true')
+            else:
+                utils.window('plex.playlist.audio', clear=True)
+            self.playlistid = data['playlistid']
+        if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')) + 1:
+            LOG.info('Playlist ready')
+            utils.window('plex.playlist.ready', value='true')
+            utils.window('plex.playlist.start', clear=True)
 
     def _playlist_onremove(self, data):
         """
@@ -448,23 +441,6 @@ def _playback_cleanup(ended=False):
     # As all playback has halted, reset the players that have been active
     app.PLAYSTATE.active_players = set()
     LOG.info('Finished PKC playback cleanup')
-
-    def Playlist_OnAdd(self, server, data, *args, **kwargs):
-        '''
-        Detect widget playback. Widget for some reason, use audio playlists.
-        '''
-        LOG.debug('Playlist_OnAdd: %s, %s', server, data)
-        if data['position'] == 0:
-            if data['playlistid'] == 0:
-                utils.window('plex.playlist.audio', value='true')
-            else:
-                utils.window('plex.playlist.audio', clear=True)
-            self.playlistid = data['playlistid']
-        if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')) + 1:
-
-            LOG.info("--[ playlist ready ]")
-            utils.window('plex.playlist.ready', value='true')
-            utils.window('plex.playlist.start', clear=True)
 
 
 def _record_playstate(status, ended):
