@@ -73,12 +73,11 @@ class Movie(ItemBase):
         if do_indirect:
             # Set plugin path and media flags using real filename
             path = 'http://127.0.0.1:%s/plex/kodi/movies/' % v.WEBSERVICE_PORT
-            filename = '{0}/file.strm?kodi_id={1}&kodi_type={2}&plex_id={0}&plex_type={3}&name={4}'
+            filename = '{0}/file.strm?kodi_id={1}&kodi_type={2}&plex_id={0}&plex_type={3}'
             filename = filename.format(plex_id,
                                        kodi_id,
                                        v.KODI_TYPE_MOVIE,
-                                       v.PLEX_TYPE_MOVIE,
-                                       api.file_name(force_first_media=True))
+                                       v.PLEX_TYPE_MOVIE)
             playurl = filename
             kodi_pathid = self.kodidb.get_path(path)
 
