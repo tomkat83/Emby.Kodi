@@ -49,6 +49,20 @@ class WebService(backgroundthread.KillableThread):
         except Exception:
             utils.ERROR()
 
+    def suspend(self):
+        """
+        Called when thread needs to suspend - let's not do anything and keep
+        webservice up
+        """
+        self.suspend_reached = True
+
+    def resume(self):
+        """
+        Called when thread needs to resume - let's not do anything and keep
+        webservice up
+        """
+        self.suspend_reached = False
+
     def run(self):
         ''' Called to start the webservice.
         '''
