@@ -431,7 +431,7 @@ def _playback_cleanup(ended=False):
             DU().downloadUrl(
                 '{server}/video/:/transcode/universal/stop',
                 parameters={'session': v.PKC_MACHINE_IDENTIFIER})
-        if playerid == 1:
+        if status['plex_type'] in v.PLEX_VIDEOTYPES:
             # Bookmarks might not be pickup up correctly, so let's do them
             # manually. Applies to addon paths, but direct paths might have
             # started playback via PMS
