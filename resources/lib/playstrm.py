@@ -3,11 +3,12 @@ from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 
 import xbmc
-import xbmcgui
 
 from .plex_api import API
-from . import plex_function as PF, utils, json_rpc, variables as v, \
-    widgets
+from .playutils import PlayUtils
+from .windows.resume import resume_dialog
+from . import app, plex_functions as PF, utils, json_rpc, variables as v, \
+    widgets, playlist_func as PL, playqueue as PQ
 
 
 LOG = getLogger('PLEX.playstrm')
@@ -51,11 +52,13 @@ class PlayStrm(object):
         self.transcode = params.get('transcode')
         if self.transcode is None:
             self.transcode = utils.settings('playFromTranscode.bool') if utils.settings('playFromStream.bool') else None
-        if utils.window('plex.playlist.audio.bool'):
-            LOG.info('Audio playlist detected')
-            self.kodi_playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        if utils.window('plex.playlist.audio'):
+            LOG.debug('Audio playlist detected')
+            self.playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
         else:
-            self.kodi_playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            LOG.debug('Video playlist detected')
+            self.playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
+        self.kodi_playlist = self.playqueue.kodi_pl
 
     def __repr__(self):
         return ("{{"
@@ -97,6 +100,7 @@ class PlayStrm(object):
         else:
             self.xml[0].set('pkc_db_item', None)
         self.api = API(self.xml[0])
+        self.playqueue_item = PL.playlist_item_from_xml(self.xml[0])
 
     def start_playback(self, index=0):
         LOG.debug('Starting playback at %s', index)
@@ -111,7 +115,7 @@ class PlayStrm(object):
         else:
             self.start_index = max(self.kodi_playlist.getposition(), 0)
         self.index = self.start_index
-        listitem = xbmcgui.ListItem()
+        listitem = widgets.get_listitem(self.xml[0])
         self._set_playlist(listitem)
         LOG.info('Initiating play for %s', self)
         if not delayed:
@@ -159,24 +163,41 @@ class PlayStrm(object):
         action set in Kodi for accurate resume behavior.
         '''
         seektime = self._resume()
+        trailers = False
         if (not seektime and self.plex_type == v.PLEX_TYPE_MOVIE and
                 utils.settings('enableCinema') == 'true'):
-            self._set_intros()
-
-        play = playutils.PlayUtilsStrm(self.xml, self.transcode, self.server_id, self.info['Server'])
-        source = play.select_source(play.get_sources())
-
-        if not source:
-            raise PlayStrmException('Playback selection cancelled')
-
-        play.set_external_subs(source, listitem)
-        self.set_listitem(self.xml, listitem, self.kodi_id, seektime)
-        listitem.setPath(self.xml['PlaybackInfo']['Path'])
-        playutils.set_properties(self.xml, self.xml['PlaybackInfo']['Method'], self.server_id)
-
-        self.kodi_playlist.add(url=self.xml['PlaybackInfo']['Path'], listitem=listitem, index=self.index)
+            if utils.settings('askCinema') == "true":
+                # "Play trailers?"
+                trailers = utils.yesno_dialog(utils.lang(29999),
+                                              utils.lang(33016)) or False
+            else:
+                trailers = True
+        LOG.debug('Playing trailers: %s', trailers)
+        xml = PF.init_plex_playqueue(self.plex_id,
+                                     self.xml.get('librarySectionUUID'),
+                                     mediatype=self.plex_type,
+                                     trailers=trailers)
+        if xml is None:
+            LOG.error('Could not get playqueue for UUID %s for %s',
+                      self.xml.get('librarySectionUUID'), self)
+            # "Play error"
+            utils.dialog('notification',
+                         utils.lang(29999),
+                         utils.lang(30128),
+                         icon='{error}')
+            app.PLAYSTATE.context_menu_play = False
+            app.PLAYSTATE.force_transcode = False
+            app.PLAYSTATE.resume_playback = False
+            return
+        PL.get_playlist_details_from_xml(self.playqueue, xml)
+        # See that we add trailers, if they exist in the xml return
+        self._set_intros(xml)
+        listitem.setSubtitles(self.api.cache_external_subs())
+        play = PlayUtils(self.api, self.playqueue_item)
+        url = play.getPlayUrl().encode('utf-8')
+        listitem.setPath(url)
+        self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
         self.index += 1
-
         if self.xml.get('PartCount'):
             self._set_additional_parts()
 
@@ -203,52 +224,41 @@ class PlayStrm(object):
             utils.window('plex.autoplay.bool', value='true')
         return seektime
 
-    def _set_intros(self):
+    def _set_intros(self, xml):
         '''
         if we have any play them when the movie/show is not being resumed.
         '''
-        if self.info['Intros']['Items']:
-            enabled = True
-
-            if utils.settings('askCinema') == 'true':
-
-                resp = dialog('yesno', heading='{emby}', line1=_(33016))
-                if not resp:
-
-                    enabled = False
-                    LOG.info('Skip trailers.')
-
-            if enabled:
-                for intro in self.info['Intros']['Items']:
-
-                    listitem = xbmcgui.ListItem()
-                    LOG.info('[ intro/%s/%s ] %s', intro['plex_id'], self.index, intro['Name'])
-
-                    play = playutils.PlayUtilsStrm(intro, False, self.server_id, self.info['Server'])
-                    source = play.select_source(play.get_sources())
-                    self.set_listitem(intro, listitem, intro=True)
-                    listitem.setPath(intro['PlaybackInfo']['Path'])
-                    playutils.set_properties(intro, intro['PlaybackInfo']['Method'], self.server_id)
-
-                    self.kodi_playlist.add(url=intro['PlaybackInfo']['Path'], listitem=listitem, index=self.index)
-                    self.index += 1
-
-                    utils.window('plex.skip.%s' % intro['plex_id'], value='true')
+        if not len(xml) > 1:
+            LOG.debug('No trailers returned from the PMS')
+            return
+        for intro in xml:
+            if utils.cast(int, xml.get('ratingKey')) == self.plex_id:
+                # The main item we're looking at - skip!
+                continue
+            api = API(intro)
+            listitem = widgets.get_listitem(intro)
+            listitem.setSubtitles(api.cache_external_subs())
+            playqueue_item = PL.playlist_item_from_xml(intro)
+            play = PlayUtils(api, playqueue_item)
+            url = play.getPlayUrl().encode('utf-8')
+            listitem.setPath(url)
+            self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
+            self.index += 1
+            utils.window('plex.skip.%s' % api.plex_id(), value='true')
 
     def _set_additional_parts(self):
         ''' Create listitems and add them to the stack of playlist.
         '''
-        for part in self.info['AdditionalParts']['Items']:
-
-            listitem = xbmcgui.ListItem()
-            LOG.info('[ part/%s/%s ] %s', part['plex_id'], self.index, part['Name'])
-
-            play = playutils.PlayUtilsStrm(part, self.transcode, self.server_id, self.info['Server'])
-            source = play.select_source(play.get_sources())
-            play.set_external_subs(source, listitem)
-            self.set_listitem(part, listitem)
-            listitem.setPath(part['PlaybackInfo']['Path'])
-            playutils.set_properties(part, part['PlaybackInfo']['Method'], self.server_id)
-
-            self.kodi_playlist.add(url=part['PlaybackInfo']['Path'], listitem=listitem, index=self.index)
+        for part, _ in enumerate(self.xml[0][0]):
+            if part == 0:
+                # The first part that we've already added
+                continue
+            self.api.set_part_number(part)
+            listitem = widgets.get_listitem(self.xml[0])
+            listitem.setSubtitles(self.api.cache_external_subs())
+            playqueue_item = PL.playlist_item_from_xml(self.xml[0])
+            play = PlayUtils(self.api, playqueue_item)
+            url = play.getPlayUrl().encode('utf-8')
+            listitem.setPath(url)
+            self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
             self.index += 1

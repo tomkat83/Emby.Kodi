@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="3301" type="dialog">
+	<defaultcontrol always="true">100</defaultcontrol>
+	<controls>
+		<control type="group">
+			<control type="image">
+				<top>0</top>
+				<bottom>0</bottom>
+				<left>0</left>
+				<right>0</right>
+				<texture colordiffuse="CC000000">white.png</texture>
+				<aspectratio>stretch</aspectratio>
+				<animation effect="fade" end="100" time="200">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+			</control>
+			<control type="group">
+				<animation effect="slide" time="0" end="0,-15" condition="true">Conditional</animation>
+				<animation type="WindowOpen" reversible="false">
+					<effect type="zoom" start="80" end="100" center="960,540" delay="160" tween="circle" easin="out" time="240" />
+					<effect type="fade" delay="160" end="100" time="240" />
+				</animation>
+				<animation type="WindowClose" reversible="false">
+					<effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="circle" easin="out" time="240" />
+					<effect type="fade" start="100" end="0" time="240" />
+				</animation>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>20%</width>
+				<height>90%</height>
+				<control type="grouplist" id="100">
+					<orientation>vertical</orientation>
+					<left>0</left>
+					<right>0</right>
+					<height>auto</height>
+					<align>center</align>
+					<itemgap>0</itemgap>
+					<onright>close</onright>
+					<onleft>close</onleft>
+					<usecontrolcoords>true</usecontrolcoords>
+					<control type="group">
+						<height>30</height>
+						<control type="image">
+							<left>20</left>
+							<width>100%</width>
+							<height>25</height>
+							<texture>logo-white.png</texture>
+							<aspectratio align="left">keep</aspectratio>
+						</control>
+						<control type="image">
+							<right>20</right>
+							<width>100%</width>
+							<height>25</height>
+							<aspectratio align="right">keep</aspectratio>
+							<texture diffuse="user_image.png">$INFO[Window(Home).Property(EmbyUserImage)]</texture>
+							<visible>!String.IsEmpty(Window(Home).Property(EmbyUserImage))</visible>
+						</control>
+						<control type="image">
+							<right>20</right>
+							<width>100%</width>
+							<height>25</height>
+							<aspectratio align="right">keep</aspectratio>
+							<texture diffuse="user_image.png">userflyoutdefault.png</texture>
+							<visible>String.IsEmpty(Window(Home).Property(EmbyUserImage))</visible>
+						</control>
+					</control>
+					<control type="image">
+						<width>100%</width>
+						<height>10</height>
+						<texture border="5" colordiffuse="ff222326">dialogs/menu_top.png</texture>
+					</control>
+					<control type="button" id="3010">
+						<width>100%</width>
+						<height>65</height>
+						<align>left</align>
+						<aligny>center</aligny>
+						<textoffsetx>20</textoffsetx>
+						<font>font13</font>
+						<textcolor>ffe1e1e1</textcolor>
+						<focusedcolor>ffe1e1e1</focusedcolor>
+						<shadowcolor>66000000</shadowcolor>
+						<disabledcolor>FF404040</disabledcolor>
+						<texturefocus border="10" colordiffuse="ff303034">dialogs/menu_back.png</texturefocus>
+						<texturenofocus border="10"  colordiffuse="ff222326">dialogs/menu_back.png</texturenofocus>
+						<alttexturefocus border="10"  colordiffuse="ff303034">dialogs/menu_back.png</alttexturefocus>
+						<alttexturenofocus border="10"  colordiffuse="ff222326">dialogs/menu_back.png</alttexturenofocus>
+					</control>
+					<control type="button" id="3011">
+						<width>100%</width>
+						<height>65</height>
+						<align>left</align>
+						<aligny>center</aligny>
+						<textoffsetx>20</textoffsetx>
+						<font>font13</font>
+						<textcolor>ffe1e1e1</textcolor>
+						<focusedcolor>ffe1e1e1</focusedcolor>
+						<shadowcolor>66000000</shadowcolor>
+						<disabledcolor>FF404040</disabledcolor>
+						<texturefocus border="10" colordiffuse="ff303034">dialogs/menu_back.png</texturefocus>
+						<texturenofocus border="10"  colordiffuse="ff222326">dialogs/menu_back.png</texturenofocus>
+						<alttexturefocus border="10"  colordiffuse="ff303034">dialogs/menu_back.png</alttexturefocus>
+						<alttexturenofocus border="10"  colordiffuse="ff222326">dialogs/menu_back.png</alttexturenofocus>
+					</control>
+					<control type="image">
+						<width>100%</width>
+						<height>10</height>
+						<texture border="5" colordiffuse="ff222326">dialogs/menu_bottom.png</texture>
+					</control>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

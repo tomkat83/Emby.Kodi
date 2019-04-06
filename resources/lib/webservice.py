@@ -33,7 +33,7 @@ class WebService(backgroundthread.KillableThread):
             s.connect(('127.0.0.1', v.WEBSERVICE_PORT))
             s.sendall('')
         except Exception as error:
-            LOG.error(error)
+            LOG.error('is_alive error: %s', error)
             if 'Errno 61' in str(error):
                 alive = False
         s.close()
@@ -47,12 +47,12 @@ class WebService(backgroundthread.KillableThread):
             conn.request('QUIT', '/')
             conn.getresponse()
         except Exception:
-            pass
+            utils.ERROR()
 
     def run(self):
         ''' Called to start the webservice.
         '''
-        LOG.info('----===## Starting Webserver on port %s ##===----',
+        LOG.info('----===## Starting WebService on port %s ##===----',
                  v.WEBSERVICE_PORT)
         app.APP.register_thread(self)
         try:
@@ -60,11 +60,12 @@ class WebService(backgroundthread.KillableThread):
                                 RequestHandler)
             server.serve_forever()
         except Exception as error:
+            LOG.error('Error encountered: %s', error)
             if '10053' not in error:  # ignore host diconnected errors
                 utils.ERROR()
         finally:
             app.APP.deregister_thread(self)
-            LOG.info('##===---- Webserver stopped ----===##')
+            LOG.info('##===---- WebService stopped ----===##')
 
 
 class HttpServer(BaseHTTPServer.HTTPServer):
@@ -75,7 +76,7 @@ class HttpServer(BaseHTTPServer.HTTPServer):
         self.pending = []
         self.threads = []
         self.queue = Queue.Queue()
-        super(HttpServer, self).__init__(*args, **kwargs)
+        BaseHTTPServer.HTTPServer.__init__(self, *args, **kwargs)
 
     def serve_forever(self):
 
@@ -86,8 +87,9 @@ class HttpServer(BaseHTTPServer.HTTPServer):
 
 
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    ''' Http request handler. Do not use LOG here,
-        it will hang requests in Kodi > show information dialog.
+    '''
+    Http request handler. Do not use LOG here, it will hang requests in Kodi >
+    show information dialog.
     '''
     timeout = 0.5
 
@@ -101,8 +103,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         '''
         try:
             BaseHTTPServer.BaseHTTPRequestHandler.handle(self)
-        except Exception:
-            pass
+        except Exception as error:
+            xbmc.log('Plex.WebService handle error: %s' % error, xbmc.LOGWARNING)
 
     def do_QUIT(self):
         ''' send 200 OK response, and set server.stop to True
@@ -142,6 +144,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def handle_request(self, headers_only=False):
         '''Send headers and reponse
         '''
+        xbmc.log('Plex.WebService handle_request called. path: %s ]' % self.path, xbmc.LOGWARNING)
         try:
             if b'extrafanart' in self.path or b'extrathumbs' in self.path:
                 raise Exception('unsupported artwork request')
@@ -161,7 +164,6 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         except Exception as error:
             self.send_error(500,
                             b'PLEX.webservice: Exception occurred: %s' % error)
-        xbmc.log('<[ webservice/%s/%s ]' % (str(id(self)), int(not headers_only)), xbmc.LOGWARNING)
 
     def strm(self):
         ''' Return a dummy video and and queue real items.
@@ -268,7 +270,7 @@ class QueuePlay(backgroundthread.KillableThread):
                     params = self.server.queue.get(timeout=0.01)
                 except Queue.Empty:
                     count = 20
-                    while not utils.window('plex.playlist.ready.bool'):
+                    while not utils.window('plex.playlist.ready'):
                         xbmc.sleep(50)
                         if not count:
                             LOG.info('Playback aborted')
@@ -280,14 +282,14 @@ class QueuePlay(backgroundthread.KillableThread):
                         xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
                         play.start_playback()
                     else:
-                        utils.window('plex.playlist.play.bool', True)
+                        utils.window('plex.playlist.play', value='true')
                         xbmc.sleep(1000)
                         play.remove_from_playlist(start_position)
                     break
                 play = PlayStrm(params, params.get('ServerId'))
 
                 if start_position is None:
-                    start_position = max(play.info['KodiPlaylist'].getposition(), 0)
+                    start_position = max(play.kodi_playlist.getposition(), 0)
                     position = start_position + 1
                 if play_folder:
                     position = play.play_folder(position)
@@ -300,13 +302,13 @@ class QueuePlay(backgroundthread.KillableThread):
                         xbmc.executebuiltin('Activateutils.window(busydialognocancel)')
             except Exception:
                 utils.ERROR()
-                play.info['KodiPlaylist'].clear()
+                play.kodi_playlist.clear()
                 xbmc.Player().stop()
                 self.server.queue.queue.clear()
                 if play_folder:
                     xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
                 else:
-                    utils.window('plex.playlist.aborted.bool', True)
+                    utils.window('plex.playlist.aborted', value='true')
                 break
             self.server.queue.task_done()
 

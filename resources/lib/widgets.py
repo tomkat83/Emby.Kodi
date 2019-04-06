@@ -39,7 +39,7 @@ def get_listitem(xml_element):
     """
     item = generate_item(xml_element)
     prepare_listitem(item)
-    return create_listitem(item)
+    return create_listitem(item, as_tuple=False)
 
 
 def process_method_on_list(method_to_run, items):

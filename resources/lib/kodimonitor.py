@@ -449,6 +449,23 @@ def _playback_cleanup(ended=False):
     app.PLAYSTATE.active_players = set()
     LOG.info('Finished PKC playback cleanup')
 
+    def Playlist_OnAdd(self, server, data, *args, **kwargs):
+        '''
+        Detect widget playback. Widget for some reason, use audio playlists.
+        '''
+        LOG.debug('Playlist_OnAdd: %s, %s', server, data)
+        if data['position'] == 0:
+            if data['playlistid'] == 0:
+                utils.window('plex.playlist.audio', value='true')
+            else:
+                utils.window('plex.playlist.audio', clear=True)
+            self.playlistid = data['playlistid']
+        if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')) + 1:
+
+            LOG.info("--[ playlist ready ]")
+            utils.window('plex.playlist.ready', value='true')
+            utils.window('plex.playlist.start', clear=True)
+
 
 def _record_playstate(status, ended):
     if not status['plex_id']:

@@ -5,11 +5,11 @@ from logging import getLogger
 from sqlite3 import IntegrityError
 
 from . import common
-from .. import path_ops, timing, variables as v, app
+from .. import path_ops, timing, variables as v
 
 LOG = getLogger('PLEX.kodi_db.video')
 
-MOVIE_PATH = 'plugin://%s.movies/' % v.ADDON_ID
+MOVIE_PATH = 'http://127.0.0.1:%s/plex/kodi/movies/' % v.WEBSERVICE_PORT
 SHOW_PATH = 'plugin://%s.tvshows/' % v.ADDON_ID
 
 
