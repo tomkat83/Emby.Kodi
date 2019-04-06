@@ -46,8 +46,8 @@ class WebService(backgroundthread.KillableThread):
             conn = httplib.HTTPConnection('127.0.0.1:%d' % v.WEBSERVICE_PORT)
             conn.request('QUIT', '/')
             conn.getresponse()
-        except Exception:
-            utils.ERROR()
+        except Exception as error:
+            xbmc.log('Plex.WebService abort error: %s' % error, xbmc.LOGWARNING)
 
     def suspend(self):
         """
@@ -182,6 +182,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def strm(self):
         ''' Return a dummy video and and queue real items.
         '''
+        xbmc.log('PLEX.webserver: starting strm', xbmc.LOGWARNING)
         self.send_response(200)
         self.send_header(b'Content-type', b'text/html')
         self.end_headers()
@@ -209,7 +210,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             return
 
         path = 'plugin://plugin.video.plexkodiconnect?mode=playstrm&plex_id=%s' % params['plex_id']
-        self.wfile.write(bytes(path))
+        xbmc.log('PLEX.webserver: sending %s' % path, xbmc.LOGWARNING)
+        self.wfile.write(bytes(path.encode('utf-8')))
         if params['plex_id'] not in self.server.pending:
             xbmc.log('PLEX.webserver: %s: path: %s params: %s'
                      % (str(id(self)), str(self.path), str(params)),
