@@ -330,7 +330,7 @@ class QueuePlay(backgroundthread.KillableThread):
 
         utils.window('plex.playlist.ready', clear=True)
         utils.window('plex.playlist.start', clear=True)
-        utils.window('plex.playlist.audio', clear=True)
+        app.PLAYSTATE.audioplaylist = None
         self.server.threads.remove(self)
         self.server.pending = []
         LOG.info('##===---- QueuePlay Stopped ----===##')

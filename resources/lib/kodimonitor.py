@@ -184,9 +184,9 @@ class KodiMonitor(xbmc.Monitor):
         '''
         if data['position'] == 0:
             if data['playlistid'] == 0:
-                utils.window('plex.playlist.audio', value='true')
+                app.PLAYSTATE.audioplaylist = True
             else:
-                utils.window('plex.playlist.audio', clear=True)
+                app.PLAYSTATE.audioplaylist = False
             self.playlistid = data['playlistid']
         if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')) + 1:
             LOG.info('Playlist ready')

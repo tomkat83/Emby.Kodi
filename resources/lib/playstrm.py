@@ -52,7 +52,7 @@ class PlayStrm(object):
         self.transcode = params.get('transcode')
         if self.transcode is None:
             self.transcode = utils.settings('playFromTranscode.bool') if utils.settings('playFromStream.bool') else None
-        if utils.window('plex.playlist.audio'):
+        if app.PLAYSTATE.audioplaylist:
             LOG.debug('Audio playlist detected')
             self.playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
         else:
