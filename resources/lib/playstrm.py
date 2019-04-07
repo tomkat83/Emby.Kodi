@@ -115,8 +115,7 @@ class PlayStrm(object):
         else:
             self.start_index = max(self.kodi_playlist.getposition(), 0)
         self.index = self.start_index
-        listitem = widgets.get_listitem(self.xml[0])
-        self._set_playlist(listitem)
+        self._set_playlist()
         LOG.info('Initiating play for %s', self)
         if not delayed:
             self.start_playback(self.start_index)
@@ -134,7 +133,7 @@ class PlayStrm(object):
         if self.kodi_id and self.kodi_type:
             self.add_to_playlist(self.kodi_id, self.kodi_type, self.index)
         else:
-            listitem = widgets.get_listitem(self.xml[0])
+            listitem = widgets.get_listitem(self.xml[0], resume=True)
             url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
             args = {
                 'mode': 'play',
@@ -156,7 +155,7 @@ class PlayStrm(object):
                                    index=self.index)
         return self.index
 
-    def _set_playlist(self, listitem):
+    def _set_playlist(self):
         '''
         Verify seektime, set intros, set main item and set additional parts.
         Detect the seektime for video type content. Verify the default video
@@ -192,6 +191,10 @@ class PlayStrm(object):
         PL.get_playlist_details_from_xml(self.playqueue, xml)
         # See that we add trailers, if they exist in the xml return
         self._set_intros(xml)
+        if seektime:
+            listitem = widgets.get_listitem(self.xml[0], resume=True)
+        else:
+            listitem = widgets.get_listitem(self.xml[0], resume=False)
         listitem.setSubtitles(self.api.cache_external_subs())
         play = PlayUtils(self.api, self.playqueue_item)
         url = play.getPlayUrl().encode('utf-8')
@@ -233,7 +236,7 @@ class PlayStrm(object):
                 # The main item we're looking at - skip!
                 continue
             api = API(intro)
-            listitem = widgets.get_listitem(intro)
+            listitem = widgets.get_listitem(intro, resume=False)
             listitem.setSubtitles(api.cache_external_subs())
             playqueue_item = PL.playlist_item_from_xml(intro)
             play = PlayUtils(api, playqueue_item)
@@ -251,7 +254,7 @@ class PlayStrm(object):
                 # The first part that we've already added
                 continue
             self.api.set_part_number(part)
-            listitem = widgets.get_listitem(self.xml[0])
+            listitem = widgets.get_listitem(self.xml[0], resume=False)
             listitem.setSubtitles(self.api.cache_external_subs())
             playqueue_item = PL.playlist_item_from_xml(self.xml[0])
             play = PlayUtils(self.api, playqueue_item)

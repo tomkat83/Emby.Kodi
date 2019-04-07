@@ -33,11 +33,14 @@ APPEND_SXXEXX = None
 KEY = None
 
 
-def get_listitem(xml_element):
+def get_listitem(xml_element, resume=True):
     """
-    Returns a valid xbmcgui.ListItem() for xml_element
+    Returns a valid xbmcgui.ListItem() for xml_element. Pass in resume=False
+    to NOT set a resume point for this listitem
     """
     item = generate_item(xml_element)
+    if not resume and 'resume' in item:
+        del item['resume']
     prepare_listitem(item)
     return create_listitem(item, as_tuple=False)
 
