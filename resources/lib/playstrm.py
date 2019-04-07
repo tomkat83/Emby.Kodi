@@ -74,16 +74,17 @@ class PlayStrm(object):
                 "}}").format(self=self).encode('utf-8')
     __str__ = __repr__
 
-    def add_to_playlist(self, kodi_id, kodi_type, index=None, playlistid=None):
-        playlistid = playlistid or self.kodi_playlist.getPlayListId()
+    def playlist_add_json(self):
+        playlistid = self.kodi_playlist.getPlayListId()
         LOG.debug('Adding kodi_id %s, kodi_type %s to playlist %s at index %s',
-                  kodi_id, kodi_type, playlistid, index)
-        if index is None:
-            json_rpc.playlist_add(playlistid, {'%sid' % kodi_type: kodi_id})
+                  self.kodi_id, self.kodi_type, playlistid, self.index)
+        if self.index is None:
+            json_rpc.playlist_add(playlistid,
+                                  {'%sid' % self.kodi_type: self.kodi_id})
         else:
             json_rpc.playlist_insert({'playlistid': playlistid,
-                                      'position': index,
-                                      'item': {'%sid' % kodi_type: kodi_id}})
+                                      'position': self.index,
+                                      'item': {'%sid' % self.kodi_type: self.kodi_id}})
 
     def remove_from_playlist(self, index):
         LOG.debug('Removing playlist item number %s from %s', index, self)
@@ -131,7 +132,7 @@ class PlayStrm(object):
         self.index = self.start_index + 1
         LOG.info('Play folder plex_id %s, index: %s', self.plex_id, self.index)
         if self.kodi_id and self.kodi_type:
-            self.add_to_playlist(self.kodi_id, self.kodi_type, self.index)
+            self.playlist_add_json()
         else:
             listitem = widgets.get_listitem(self.xml[0], resume=True)
             url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
