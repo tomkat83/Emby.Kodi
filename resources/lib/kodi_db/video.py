@@ -178,11 +178,13 @@ class KodiVideoDB(common.KodiDBBase):
         'plugin://plugin.video.plexkodiconnect'
         These entries should be deleted as they're created falsely by Kodi.
         """
-        return (x[0] for x in self.cursor.execute('''
-            SELECT idFile FROM files
-            WHERE dateAdded IS NULL
-            AND strFilename LIKE \'plugin://plugin.video.plexkodiconnect%\'
-            '''))
+        return (x[0] for x in self.cursor.execute("""
+            SELECT files.idFile
+            FROM files
+            LEFT JOIN path ON path.idPath = files.idPath
+            WHERE files.dateAdded IS NULL
+            AND path.strPath LIKE \'%plex.direct%\'
+            """))
 
     def show_id_from_path(self, path):
         """
