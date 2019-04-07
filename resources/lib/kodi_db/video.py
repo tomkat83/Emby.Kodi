@@ -10,7 +10,7 @@ from .. import path_ops, timing, variables as v
 LOG = getLogger('PLEX.kodi_db.video')
 
 MOVIE_PATH = 'http://127.0.0.1:%s/plex/kodi/movies/' % v.WEBSERVICE_PORT
-SHOW_PATH = 'plugin://%s.tvshows/' % v.ADDON_ID
+SHOW_PATH = 'http://127.0.0.1:%s/plex/kodi/shows/' % v.WEBSERVICE_PORT
 
 
 class KodiVideoDB(common.KodiDBBase):
