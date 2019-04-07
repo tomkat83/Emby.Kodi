@@ -206,9 +206,8 @@ class PlayStrm(object):
         Resume item if available. Returns bool or raise an PlayStrmException if
         resume was cancelled by user.
         '''
-        seektime = utils.window('plex.resume')
-        utils.window('plex.resume', clear=True)
-        seektime = seektime == 'true' if seektime else None
+        seektime = app.PLAYSTATE.resume_playback
+        app.PLAYSTATE.resume_playback = None
         auto_play = utils.window('plex.autoplay.bool')
         if auto_play:
             seektime = False

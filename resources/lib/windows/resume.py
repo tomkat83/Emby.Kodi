@@ -10,7 +10,7 @@ import xbmcaddon
 from logging import getLogger
 
 
-LOG = getLogger('PLEX.resume')
+LOG = getLogger('PLEX.windows.resume')
 
 XML_PATH = (xbmcaddon.Addon('plugin.video.plexkodiconnect').getAddonInfo('path'),
             "default",
