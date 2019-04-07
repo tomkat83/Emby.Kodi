@@ -435,7 +435,7 @@ def _playback_cleanup(ended=False):
                 '{server}/video/:/transcode/universal/stop',
                 parameters={'session': v.PKC_MACHINE_IDENTIFIER})
         if status['plex_type'] in v.PLEX_VIDEOTYPES:
-            # Bookmarks might not be pickup up correctly, so let's do them
+            # Bookmarks are not be pickup up correctly, so let's do them
             # manually. Applies to addon paths, but direct paths might have
             # started playback via PMS
             _record_playstate(status, ended)
@@ -503,13 +503,23 @@ def _record_playstate(status, ended):
                               totaltime,
                               playcount,
                               last_played)
+    # We might need to reconsider cleaning the file/path table in the future
+    # _clean_file_table()
+    # Update the current view to show e.g. an up-to-date progress bar and use
+    # the latest resume point info
+    if xbmc.getCondVisibility('Container.Content(musicvideos)'):
+        # Prevent cursor from moving
+        xbmc.executebuiltin('Container.Refresh')
+    else:
+        # Update widgets
+        xbmc.executebuiltin('UpdateLibrary(video)')
+        if xbmc.getCondVisibility('Window.IsMedia'):
+            xbmc.executebuiltin('Container.Refresh')
     # Hack to force "in progress" widget to appear if it wasn't visible before
     if (app.APP.force_reload_skin and
             xbmc.getCondVisibility('Window.IsVisible(Home.xml)')):
         LOG.debug('Refreshing skin to update widgets')
         xbmc.executebuiltin('ReloadSkin()')
-    task = backgroundthread.FunctionAsTask(_clean_file_table, None)
-    backgroundthread.BGThreader.addTasksToFront([task])
 
 
 def _clean_file_table():
@@ -520,7 +530,7 @@ def _clean_file_table():
     This function tries for at most 5 seconds to clean the file table.
     """
     LOG.debug('Start cleaning Kodi files table')
-    app.APP.monitor.waitForAbort(1)
+    # app.APP.monitor.waitForAbort(1)
     try:
         with kodi_db.KodiVideoDB() as kodidb:
             file_ids = list(kodidb.obsolete_file_ids())

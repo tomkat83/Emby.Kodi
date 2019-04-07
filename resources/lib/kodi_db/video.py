@@ -174,16 +174,16 @@ class KodiVideoDB(common.KodiDBBase):
     def obsolete_file_ids(self):
         """
         Returns a generator for idFile of all Kodi file ids that do not have a
-        dateAdded set (dateAdded NULL) and the filename start with
-        'plugin://plugin.video.plexkodiconnect'
-        These entries should be deleted as they're created falsely by Kodi.
+        dateAdded set (dateAdded NULL) and the associated path entry has
+        a field noUpdate of NULL as well as dateAdded of NULL
         """
         return (x[0] for x in self.cursor.execute("""
             SELECT files.idFile
             FROM files
             LEFT JOIN path ON path.idPath = files.idPath
             WHERE files.dateAdded IS NULL
-            AND path.strPath LIKE \'%plex.direct%\'
+            AND path.noUpdate IS NULL
+            AND path.dateAdded IS NULL
             """))
 
     def show_id_from_path(self, path):
