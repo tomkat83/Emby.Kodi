@@ -208,19 +208,17 @@ class PlayStrm(object):
         '''
         seektime = app.PLAYSTATE.resume_playback
         app.PLAYSTATE.resume_playback = None
-        auto_play = utils.window('plex.autoplay.bool')
-        if auto_play:
+        if app.PLAYSTATE.autoplay:
             seektime = False
             LOG.info('Skip resume for autoplay')
         elif seektime is None:
             resume = self.api.resume_point()
             if resume:
                 seektime = resume_dialog(resume)
-                LOG.info('Resume: %s', seektime)
+                LOG.info('User chose resume: %s', seektime)
                 if seektime is None:
                     raise PlayStrmException('User backed out of resume dialog.')
-            # Todo: Probably need to have a look here
-            utils.window('plex.autoplay.bool', value='true')
+            app.PLAYSTATE.autoplay = True
         return seektime
 
     def _set_intros(self, xml):

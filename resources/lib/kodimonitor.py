@@ -32,6 +32,7 @@ class KodiMonitor(xbmc.Monitor):
     def __init__(self):
         self._already_slept = False
         self.hack_replay = None
+        self.playlistid = None
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
@@ -202,14 +203,16 @@ class KodiMonitor(xbmc.Monitor):
         """
         pass
 
-    @staticmethod
-    def _playlist_onclear(data):
+    def _playlist_onclear(self, data):
         """
         Called if a Kodi playlist is cleared. Example data dict:
         {
             u'playlistid': 1,
         }
         """
+        if self.playlistid == data['playlistid']:
+            LOG.debug('Resetting autoplay')
+            app.PLAYSTATE.autoplay = False
         playqueue = PQ.PLAYQUEUES[data['playlistid']]
         if not playqueue.is_pkc_clear():
             playqueue.pkc_edit = True

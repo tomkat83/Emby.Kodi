@@ -57,6 +57,8 @@ class PlayState(object):
         # from the beginning?
         # Do set to None if NO resume dialog is displayed! True/False otherwise
         self.resume_playback = None
+        # Don't ask user whether to resume but immediatly resume
+        self.autoplay = False
         # Was the playback initiated by the user using the Kodi context menu?
         self.context_menu_play = False
         # Set by context menu - shall we force-transcode the next playing item?
