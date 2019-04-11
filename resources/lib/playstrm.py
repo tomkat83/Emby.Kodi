@@ -31,6 +31,7 @@ class PlayStrm(object):
         LOG.debug('Starting PlayStrm with server_id %s, params: %s',
                   server_id, params)
         self.xml = None
+        self.playqueue_item = None
         self.api = None
         self.start_index = None
         self.index = None
@@ -41,10 +42,10 @@ class PlayStrm(object):
             self.synched = False
         else:
             self.synched = True
-        self._get_xml()
-        self.name = self.api.title()
         self.kodi_id = utils.cast(int, params.get('kodi_id'))
         self.kodi_type = params.get('kodi_type')
+        self._get_xml()
+        self.name = self.api.title()
         if ((self.kodi_id is None or self.kodi_type is None) and
                 self.xml[0].get('pkc_db_item')):
             self.kodi_id = self.xml[0].get('pkc_db_item')['kodi_id']
@@ -86,6 +87,12 @@ class PlayStrm(object):
                                       'position': self.index,
                                       'item': {'%sid' % self.kodi_type: self.kodi_id}})
 
+    def playlist_add(self, url, listitem):
+        self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
+        self.playqueue_item.file = url.decode('utf-8')
+        self.playqueue.items.insert(self.index, self.playqueue_item)
+        self.index += 1
+
     def remove_from_playlist(self, index):
         LOG.debug('Removing playlist item number %s from %s', index, self)
         json_rpc.playlist_remove(self.kodi_playlist.getPlayListId(),
@@ -101,7 +108,9 @@ class PlayStrm(object):
         else:
             self.xml[0].set('pkc_db_item', None)
         self.api = API(self.xml[0])
-        self.playqueue_item = PL.playlist_item_from_xml(self.xml[0])
+        self.playqueue_item = PL.playlist_item_from_xml(self.xml[0],
+                                                        kodi_id=self.kodi_id,
+                                                        kodi_type=self.kodi_type)
 
     def start_playback(self, index=0):
         LOG.debug('Starting playback at %s', index)
@@ -133,6 +142,7 @@ class PlayStrm(object):
         LOG.info('Play folder plex_id %s, index: %s', self.plex_id, self.index)
         if self.kodi_id and self.kodi_type:
             self.playlist_add_json()
+            self.index += 1
         else:
             listitem = widgets.get_listitem(self.xml[0], resume=True)
             url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
@@ -151,10 +161,8 @@ class PlayStrm(object):
                 args['transcode'] = True
             url = utils.extend_url(url, args).encode('utf-8')
             listitem.setPath(url)
-            self.kodi_playlist.add(url=url,
-                                   listitem=listitem,
-                                   index=self.index)
-        return self.index
+            self.playlist_add(url, listitem)
+        return self.index - 1
 
     def _set_playlist(self):
         '''
@@ -200,8 +208,7 @@ class PlayStrm(object):
         play = PlayUtils(self.api, self.playqueue_item)
         url = play.getPlayUrl().encode('utf-8')
         listitem.setPath(url)
-        self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
-        self.index += 1
+        self.playlist_add(url, listitem)
         if self.xml.get('PartCount'):
             self._set_additional_parts()
 
@@ -238,14 +245,11 @@ class PlayStrm(object):
                 continue
             api = API(intro)
             listitem = widgets.get_listitem(intro, resume=False)
-            listitem.setSubtitles(api.cache_external_subs())
-            playqueue_item = PL.playlist_item_from_xml(intro)
-            play = PlayUtils(api, playqueue_item)
+            self.playqueue_item = PL.playlist_item_from_xml(intro)
+            play = PlayUtils(api, self.playqueue_item)
             url = play.getPlayUrl().encode('utf-8')
             listitem.setPath(url)
-            self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
-            self.index += 1
-            utils.window('plex.skip.%s' % api.plex_id(), value='true')
+            self.playlist_add(url, listitem)
 
     def _set_additional_parts(self):
         ''' Create listitems and add them to the stack of playlist.
@@ -255,11 +259,14 @@ class PlayStrm(object):
                 # The first part that we've already added
                 continue
             self.api.set_part_number(part)
+            self.playqueue_item = PL.playlist_item_from_xml(self.xml[0],
+                                                            kodi_id=self.kodi_id,
+                                                            kodi_type=self.kodi_type)
+            self.playqueue_item.part = part
             listitem = widgets.get_listitem(self.xml[0], resume=False)
             listitem.setSubtitles(self.api.cache_external_subs())
             playqueue_item = PL.playlist_item_from_xml(self.xml[0])
             play = PlayUtils(self.api, playqueue_item)
             url = play.getPlayUrl().encode('utf-8')
             listitem.setPath(url)
-            self.kodi_playlist.add(url=url, listitem=listitem, index=self.index)
-            self.index += 1
+            self.playlist_add(url, listitem)
