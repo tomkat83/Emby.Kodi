@@ -531,6 +531,7 @@ class Service(object):
                     continue
             elif not self.startup_completed:
                 self.startup_completed = True
+                LOG.debug('Starting service threads')
                 self.webservice.start()
                 self.ws.start()
                 self.sync.start()
@@ -538,6 +539,7 @@ class Service(object):
                 self.playqueue.start()
                 if utils.settings('enable_alexa') == 'true':
                     self.alexa.start()
+                LOG.debug('Service threads started')
 
             xbmc.sleep(100)
 
