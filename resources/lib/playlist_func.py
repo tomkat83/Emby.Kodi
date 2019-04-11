@@ -423,15 +423,9 @@ def playlist_item_from_xml(xml_video_element, kodi_id=None, kodi_type=None):
     # item.id will only be set if you passed in an xml_video_element from e.g.
     # a playQueue
     item.id = api.item_id()
-    if kodi_id is not None:
+    if kodi_id is not None and kodi_type is not None:
         item.kodi_id = kodi_id
         item.kodi_type = kodi_type
-    elif item.plex_id is not None and item.plex_type != v.PLEX_TYPE_CLIP:
-        with PlexDB(lock=False) as plexdb:
-            db_element = plexdb.item_by_id(item.plex_id)
-        if db_element:
-            item.kodi_id = db_element['kodi_id']
-            item.kodi_type = db_element['kodi_type']
     item.guid = api.guid_html_escaped()
     item.playcount = api.viewcount()
     item.offset = api.resume_point()
