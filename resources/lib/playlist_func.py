@@ -76,23 +76,23 @@ class Playqueue_Object(object):
         self.kodi_playlist_playback = False
 
     def __repr__(self):
-        answ = ("{{"
+        return ("{{"
                 "'playlistid': {self.playlistid}, "
                 "'id': {self.id}, "
                 "'version': {self.version}, "
                 "'type': '{self.type}', "
+                "'items': {items}, "
                 "'selectedItemID': {self.selectedItemID}, "
                 "'selectedItemOffset': {self.selectedItemOffset}, "
                 "'shuffled': {self.shuffled}, "
                 "'repeat': {self.repeat}, "
                 "'kodi_playlist_playback': {self.kodi_playlist_playback}, "
-                "'pkc_edit': {self.pkc_edit}, ".format(self=self))
-        answ = answ.encode('utf-8')
-        # Since list.__repr__ will return string, not unicode
-        return answ + b"'items': {self.items}}}".format(self=self)
-
-    def __str__(self):
-        return self.__repr__()
+                "'pkc_edit': {self.pkc_edit}, "
+                "}}").format(**{
+                    'items': [x.plex_id for x in self.items or []],
+                    'self': self
+                }).encode('utf-8')
+    __str__ = __repr__
 
     def is_pkc_clear(self):
         """
