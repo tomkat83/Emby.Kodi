@@ -158,7 +158,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def handle_request(self, headers_only=False):
         '''Send headers and reponse
         '''
-        xbmc.log('Plex.WebService handle_request called. path: %s ]' % self.path, xbmc.LOGWARNING)
+        xbmc.log('Plex.WebService handle_request called. headers %s, path: %s'
+                 % (headers_only, self.path), xbmc.LOGWARNING)
         try:
             if b'extrafanart' in self.path or b'extrathumbs' in self.path:
                 raise Exception('unsupported artwork request')
@@ -170,10 +171,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
             elif b'file.strm' not in self.path:
                 self.images()
-            elif b'file.strm' in self.path:
-                self.strm()
             else:
-                xbmc.log(str(self.path), xbmc.LOGWARNING)
+                self.strm()
 
         except Exception as error:
             self.send_error(500,
