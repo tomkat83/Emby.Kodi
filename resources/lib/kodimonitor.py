@@ -381,7 +381,6 @@ class KodiMonitor(xbmc.Monitor):
         """
         # Some init
         self._already_slept = False
-        self.playlistid = None
         self.playerid = None
         # Get the type of media we're playing
         try:
