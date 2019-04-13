@@ -149,6 +149,11 @@ class Playlist_Item(object):
     offset = None      [int] the item's view offset UPON START in Plex time
     part = 0           [int] part number if Plex video consists of mult. parts
     force_transcode    [bool] defaults to False
+
+    Playlist_items compare as equal, if they
+    - have the same plex_id
+    - OR: have the same kodi_id AND kodi_type
+    - OR: have the same file
     """
     def __init__(self):
         self._id = None
@@ -167,6 +172,21 @@ class Playlist_Item(object):
         # If Plex video consists of several parts; part number
         self._part = 0
         self.force_transcode = False
+
+    def __eq__(self, item):
+        if self.plex_id is not None and item.plex_id is not None:
+            return self.plex_id == item.plex_id
+        elif (self.kodi_id is not None and item.kodi_id is not None and
+              self.kodi_type and item.kodi_type):
+            return (self.kodi_id == item.kodi_id and
+                    self.kodi_type == item.kodi_type)
+        elif self.file and item.file:
+            return self.file == item.file
+        raise RuntimeError('playlist items not fully defined: %s, %s' %
+                           (self, item))
+
+    def __ne__(self, item):
+        return not self == item
 
     @property
     def plex_id(self):
