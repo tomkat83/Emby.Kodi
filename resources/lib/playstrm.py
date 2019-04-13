@@ -202,17 +202,19 @@ class PlayStrm(object):
         PL.get_playlist_details_from_xml(self.playqueue, xml)
         # See that we add trailers, if they exist in the xml return
         self._add_intros(xml)
+        # Add the main item
         if seektime:
             listitem = widgets.get_listitem(self.xml[0], resume=True)
         else:
             listitem = widgets.get_listitem(self.xml[0], resume=False)
         listitem.setSubtitles(self.api.cache_external_subs())
+        self.playqueue_item = PL.playlist_item_from_xml(self.xml[0])
         play = PlayUtils(self.api, self.playqueue_item)
         url = play.getPlayUrl().encode('utf-8')
         listitem.setPath(url)
         self.playlist_add(url, listitem)
-        if self.xml.get('PartCount'):
-            self._add_additional_parts()
+        # Add additional file parts, if any exist
+        self._add_additional_parts()
 
     def _resume(self):
         '''
