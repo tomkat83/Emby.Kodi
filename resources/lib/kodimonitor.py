@@ -25,6 +25,13 @@ STRINGS = (utils.lang(12021).encode('utf-8'),
            utils.lang(12023).encode('utf-8'))
 
 
+class MonitorError(Exception):
+    """
+    Exception we raise for all errors associated with xbmc.Monitor
+    """
+    pass
+
+
 class KodiMonitor(xbmc.Monitor):
     """
     PKC implementation of the Kodi Monitor class. Invoke only once.
@@ -32,11 +39,14 @@ class KodiMonitor(xbmc.Monitor):
     def __init__(self):
         self._already_slept = False
         self.hack_replay = None
+        # Info to the currently playing item
+        self.playerid = None
         self.playlistid = None
-        xbmc.Monitor.__init__(self)
+        self.playqueue = None
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
             app.PLAYSTATE.old_player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
+        xbmc.Monitor.__init__(self)
         LOG.info("Kodi monitor started.")
 
     def onScanStarted(self, library):
@@ -74,7 +84,7 @@ class KodiMonitor(xbmc.Monitor):
 
         if method == "Player.OnPlay":
             with app.APP.lock_playqueues:
-                self.PlayBackStart(data)
+                self.on_play(data)
         elif method == "Player.OnStop":
             # Should refresh our video nodes, e.g. on deck
             # xbmc.executebuiltin('ReloadSkin()')
@@ -279,7 +289,88 @@ class KodiMonitor(xbmc.Monitor):
                 json_item.get('type'),
                 json_item.get('file'))
 
-    def PlayBackStart(self, data):
+    def _get_playerid(self, data):
+        """
+        Sets self.playerid with an int 0, 1 [or 2] or raises MonitorError
+            0: usually video
+            1: usually audio
+        """
+        try:
+            self.playerid = data['player']['playerid']
+        except (TypeError, KeyError):
+            LOG.info('Aborting playback report - data invalid for updates: %s',
+                     data)
+            raise MonitorError()
+        if self.playerid == -1:
+            # Kodi might return -1 for "last player"
+            try:
+                self.playerid = js.get_player_ids()[0]
+            except IndexError:
+                LOG.error('Coud not get playerid for data: %s', data)
+                raise MonitorError()
+
+    def _check_playing_item(self, data):
+        """
+        Returns a PF.Playlist_Item() for the currently playing item
+        Raises MonitorError or IndexError if we need to init the PKC playqueue
+        """
+        info = js.get_player_props(self.playerid)
+        LOG.debug('Current info for player %s: %s', self.playerid, info)
+        position = info['position'] if info['position'] != -1 else 0
+        kodi_playlist = js.playlist_get_items(self.playerid)
+        LOG.debug('Current Kodi playlist: %s', kodi_playlist)
+        kodi_item = PL.playlist_item_from_kodi(kodi_playlist[position])
+        if (position == 1 and
+                len(kodi_playlist) == len(self.playqueue.items) + 1 and
+                kodi_playlist[0].get('type') == 'unknown' and
+                kodi_playlist[0].get('file') and
+                kodi_playlist[0].get('file').startswith('http://127.0.0.1')):
+            if kodi_item == self.playqueue.items[0]:
+                # Delete the very first item that we used to start playback:
+                # {
+                #     u'title': u'',
+                #     u'type': u'unknown',
+                #     u'file': u'http://127.0.0.1:57578/plex/kodi/....',
+                #     u'label': u''
+                # }
+                LOG.debug('Deleting the very first playqueue item')
+                js.playlist_remove(self.playqueue.playlistid, 0)
+                position = 0
+            else:
+                LOG.debug('Different item in PKC playlist: %s vs. %s',
+                          self.playqueue.items[0], kodi_item)
+                raise MonitorError()
+        elif kodi_item != self.playqueue.items[position]:
+            LOG.debug('Different playqueue items: %s vs. %s ',
+                      kodi_item, self.playqueue.items[position])
+            raise MonitorError()
+        # Return the PKC playqueue item - contains more info
+        return self.playqueue.items[position]
+
+    def _load_playerstate(self, item):
+        """
+        Pass in a PF.Playlist_Item(). Will then set the currently playing
+        state with app.PLAYSTATE.player_states[self.playerid]
+        """
+        if self.playqueue.id:
+            container_key = '/playQueues/%s' % self.playqueue.id
+        else:
+            container_key = '/library/metadata/%s' % item.plex_id
+        status = app.PLAYSTATE.player_states[self.playerid]
+        # Remember that this player has been active
+        app.PLAYSTATE.active_players.add(self.playerid)
+        status.update(js.get_player_props(self.playerid))
+        status['container_key'] = container_key
+        status['file'] = item.file
+        status['kodi_id'] = item.kodi_id
+        status['kodi_type'] = item.kodi_type
+        status['plex_id'] = item.plex_id
+        status['plex_type'] = item.plex_type
+        status['playmethod'] = item.playmethod
+        status['playcount'] = item.playcount
+        LOG.debug('Set the player state: %s', status)
+
+    def on_play(self, data):
         """
         Called whenever playback is started. Example data:
         {
@@ -288,87 +379,26 @@ class KodiMonitor(xbmc.Monitor):
         }
         Unfortunately when using Widgets, Kodi doesn't tell us shit
         """
+        # Some init
         self._already_slept = False
+        self.playlistid = None
+        self.playerid = None
         # Get the type of media we're playing
         try:
-            playerid = data['player']['playerid']
-        except (TypeError, KeyError):
-            LOG.info('Aborting playback report - item invalid for updates %s',
-                     data)
+            self._get_playerid(data)
+        except MonitorError:
             return
-        kodi_id = data['item'].get('id') if 'item' in data else None
-        kodi_type = data['item'].get('type') if 'item' in data else None
-        path = data['item'].get('file') if 'item' in data else None
-        if playerid == -1:
-            # Kodi might return -1 for "last player"
-            # Getting the playerid is really a PITA
-            try:
-                playerid = js.get_player_ids()[0]
-            except IndexError:
-                # E.g. Kodi 18 doesn't tell us anything useful
-                if kodi_type in v.KODI_VIDEOTYPES:
-                    playlist_type = v.KODI_TYPE_VIDEO_PLAYLIST
-                elif kodi_type in v.KODI_AUDIOTYPES:
-                    playlist_type = v.KODI_TYPE_AUDIO_PLAYLIST
-                else:
-                    LOG.error('Unexpected type %s, data %s', kodi_type, data)
-                    return
-                playerid = js.get_playlist_id(playlist_type)
-                if not playerid:
-                    LOG.error('Coud not get playerid for data %s', data)
-                    return
-        playqueue = PQ.PLAYQUEUES[playerid]
-        info = js.get_player_props(playerid)
-        if playqueue.kodi_playlist_playback:
-            # Kodi will tell us the wrong position - of the playlist, not the
-            # playqueue, when user starts playing from a playlist :-(
-            pos = 0
-            LOG.debug('Detected playback from a Kodi playlist')
-        else:
-            pos = info['position'] if info['position'] != -1 else 0
-            LOG.debug('Detected position %s for %s', pos, playqueue)
-        status = app.PLAYSTATE.player_states[playerid]
+        self.playqueue = PQ.PLAYQUEUES[self.playerid]
+        LOG.debug('Current PKC playqueue: %s', self.playqueue)
+        item = None
         try:
-            item = playqueue.items[pos]
-            LOG.debug('PKC playqueue item is: %s', item)
-        except IndexError:
-            # PKC playqueue not yet initialized
-            LOG.debug('Position %s not in PKC playqueue yet', pos)
-            initialize = True
-        else:
-            if not kodi_id:
-                kodi_id, kodi_type, path = self._json_item(playerid)
-            if kodi_id and item.kodi_id:
-                if item.kodi_id != kodi_id or item.kodi_type != kodi_type:
-                    LOG.debug('Detected different Kodi id')
-                    initialize = True
-                else:
-                    initialize = False
-            else:
-                # E.g. clips set-up previously with no Kodi DB entry
-                if not path:
-                    kodi_id, kodi_type, path = self._json_item(playerid)
-                if path == '':
-                    LOG.debug('Detected empty path: aborting playback report')
-                    return
-                if item.file != path:
-                    # Clips will get a new path
-                    LOG.debug('Detected different path')
-                    try:
-                        tmp_plex_id = int(utils.REGEX_PLEX_ID.findall(path)[0])
-                    except IndexError:
-                        LOG.debug('No Plex id in path, need to init playqueue')
-                        initialize = True
-                    else:
-                        if tmp_plex_id == item.plex_id:
-                            LOG.debug('Detected different path for the same id')
-                            initialize = False
-                        else:
-                            LOG.debug('Different Plex id, need to init playqueue')
-                            initialize = True
-                else:
-                    initialize = False
-        if initialize:
+            item = self._check_playing_item(data)
+        except (MonitorError, IndexError):
+            LOG.debug('Detected that we need to initialize the PKC playqueue')
+
+        if not item:
+            # Initialize the PKC playqueue
+            # Yet TODO
             LOG.debug('Need to initialize Plex and PKC playqueue')
             if not kodi_id or not kodi_type:
                 kodi_id, kodi_type, path = self._json_item(playerid)
@@ -388,29 +418,7 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/playQueues/%s' % container_key
             elif plex_id is not None:
                 container_key = '/library/metadata/%s' % plex_id
-        else:
-            LOG.debug('No need to initialize playqueues')
-            kodi_id = item.kodi_id
-            kodi_type = item.kodi_type
-            plex_id = item.plex_id
-            plex_type = item.plex_type
-            if playqueue.id:
-                container_key = '/playQueues/%s' % playqueue.id
-            else:
-                container_key = '/library/metadata/%s' % plex_id
-        # Remember that this player has been active
-        app.PLAYSTATE.active_players.add(playerid)
-        status.update(info)
-        LOG.debug('Set the Plex container_key to: %s', container_key)
-        status['container_key'] = container_key
-        status['file'] = path
-        status['kodi_id'] = kodi_id
-        status['kodi_type'] = kodi_type
-        status['plex_id'] = plex_id
-        status['plex_type'] = plex_type
-        status['playmethod'] = item.playmethod
-        status['playcount'] = item.playcount
-        LOG.debug('Set the player state: %s', status)
+        self._load_playerstate(item)
 
 
 def _playback_cleanup(ended=False):
