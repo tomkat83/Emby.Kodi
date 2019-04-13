@@ -299,7 +299,7 @@ class QueuePlay(backgroundthread.KillableThread):
                         play.start_playback()
                     else:
                         utils.window('plex.playlist.play', value='true')
-                        xbmc.sleep(1000)
+                        # xbmc.sleep(1000)
                         play.remove_from_playlist(start_position)
                     break
                 play = PlayStrm(params, params.get('ServerId'))
