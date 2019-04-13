@@ -203,8 +203,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 path += '&transcode=true'
             if params.get('kodi_id'):
                 path += '&kodi_id=%s' % params['kodi_id']
-            if params.get('Name'):
-                path += '&filename=%s' % params['Name']
+            if params.get('kodi_type'):
+                path += '&kodi_type=%s' % params['kodi_type']
             self.wfile.write(bytes(path))
             return
 
