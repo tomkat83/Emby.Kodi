@@ -120,6 +120,8 @@ class PlayStrm(object):
         '''
         Create and add listitems to the Kodi playlist.
         '''
+        LOG.debug('play called with start_position %s, delayed %s',
+                  start_position, delayed)
         if start_position is not None:
             self.start_index = start_position
         else:
@@ -244,6 +246,7 @@ class PlayStrm(object):
                 # The main item we're looking at - skip!
                 continue
             api = API(intro)
+            LOG.debug('Adding trailer: %s', api.title())
             listitem = widgets.get_listitem(intro, resume=False)
             self.playqueue_item = PL.playlist_item_from_xml(intro)
             play = PlayUtils(api, self.playqueue_item)
@@ -259,6 +262,7 @@ class PlayStrm(object):
                 # The first part that we've already added
                 continue
             self.api.set_part_number(part)
+            LOG.debug('Adding addional part %s', part)
             self.playqueue_item = PL.playlist_item_from_xml(self.xml[0],
                                                             kodi_id=self.kodi_id,
                                                             kodi_type=self.kodi_type)
