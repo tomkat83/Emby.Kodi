@@ -159,7 +159,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         '''Send headers and reponse
         '''
         xbmc.log('Plex.WebService handle_request called. headers %s, path: %s'
-                 % (headers_only, self.path), xbmc.LOGWARNING)
+                 % (headers_only, self.path), xbmc.LOGDEBUG)
         try:
             if b'extrafanart' in self.path or b'extrathumbs' in self.path:
                 raise Exception('unsupported artwork request')
@@ -181,7 +181,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def strm(self):
         ''' Return a dummy video and and queue real items.
         '''
-        xbmc.log('PLEX.webserver: starting strm', xbmc.LOGWARNING)
+        xbmc.log('PLEX.webservice: starting strm', xbmc.LOGDEBUG)
         self.send_response(200)
         self.send_header(b'Content-type', b'text/html')
         self.end_headers()
@@ -209,12 +209,11 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             return
 
         path = 'plugin://plugin.video.plexkodiconnect?mode=playstrm&plex_id=%s' % params['plex_id']
-        xbmc.log('PLEX.webserver: sending %s' % path, xbmc.LOGWARNING)
+        xbmc.log('PLEX.webservice: sending %s' % path, xbmc.LOGDEBUG)
         self.wfile.write(bytes(path.encode('utf-8')))
         if params['plex_id'] not in self.server.pending:
-            xbmc.log('PLEX.webserver: %s: path: %s params: %s'
-                     % (str(id(self)), str(self.path), str(params)),
-                     xbmc.LOGWARNING)
+            xbmc.log('PLEX.webservice: path %s params %s' % (self.path, params),
+                     xbmc.LOGDEBUG)
 
             self.server.pending.append(params['plex_id'])
             self.server.queue.put(params)
