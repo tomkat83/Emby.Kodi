@@ -201,7 +201,7 @@ class PlayStrm(object):
             return
         PL.get_playlist_details_from_xml(self.playqueue, xml)
         # See that we add trailers, if they exist in the xml return
-        self._set_intros(xml)
+        self._add_intros(xml)
         if seektime:
             listitem = widgets.get_listitem(self.xml[0], resume=True)
         else:
@@ -212,7 +212,7 @@ class PlayStrm(object):
         listitem.setPath(url)
         self.playlist_add(url, listitem)
         if self.xml.get('PartCount'):
-            self._set_additional_parts()
+            self._add_additional_parts()
 
     def _resume(self):
         '''
@@ -234,7 +234,7 @@ class PlayStrm(object):
             app.PLAYSTATE.autoplay = True
         return seektime
 
-    def _set_intros(self, xml):
+    def _add_intros(self, xml):
         '''
         if we have any play them when the movie/show is not being resumed.
         '''
@@ -242,10 +242,10 @@ class PlayStrm(object):
             LOG.debug('No trailers returned from the PMS')
             return
         for intro in xml:
-            if utils.cast(int, xml.get('ratingKey')) == self.plex_id:
-                # The main item we're looking at - skip!
-                continue
             api = API(intro)
+            if not api.plex_type() == v.PLEX_TYPE_CLIP:
+                # E.g. the main item we're looking at - skip!
+                continue
             LOG.debug('Adding trailer: %s', api.title())
             listitem = widgets.get_listitem(intro, resume=False)
             self.playqueue_item = PL.playlist_item_from_xml(intro)
@@ -254,7 +254,7 @@ class PlayStrm(object):
             listitem.setPath(url)
             self.playlist_add(url, listitem)
 
-    def _set_additional_parts(self):
+    def _add_additional_parts(self):
         ''' Create listitems and add them to the stack of playlist.
         '''
         for part, _ in enumerate(self.xml[0][0]):
