@@ -64,7 +64,5 @@ class PlayState(object):
         self.audioplaylist = None
         # Was the playback initiated by the user using the Kodi context menu?
         self.context_menu_play = False
-        # Set by context menu - shall we force-transcode the next playing item?
-        self.force_transcode = False
         # Which Kodi player is/has been active? (either int 1, 2 or 3)
         self.active_players = set()

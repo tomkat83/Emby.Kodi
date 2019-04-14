@@ -108,9 +108,12 @@ class PlayStrm(object):
         else:
             self.xml[0].set('pkc_db_item', None)
         self.api = API(self.xml[0])
-        self.playqueue_item = PL.playlist_item_from_xml(self.xml[0],
-                                                        kodi_id=self.kodi_id,
-                                                        kodi_type=self.kodi_type)
+
+    def set_playqueue_item(self, xml, kodi_id, kodi_type):
+        self.playqueue_item = PL.playlist_item_from_xml(xml,
+                                                        kodi_id=kodi_id,
+                                                        kodi_type=kodi_type)
+        self.playqueue_item.force_transcode = self.transcode
 
     def start_playback(self, index=0):
         LOG.debug('Starting playback at %s', index)
@@ -196,7 +199,6 @@ class PlayStrm(object):
                          utils.lang(30128),
                          icon='{error}')
             app.PLAYSTATE.context_menu_play = False
-            app.PLAYSTATE.force_transcode = False
             app.PLAYSTATE.resume_playback = False
             return
         PL.get_playlist_details_from_xml(self.playqueue, xml)
@@ -208,7 +210,7 @@ class PlayStrm(object):
         else:
             listitem = widgets.get_listitem(self.xml[0], resume=False)
         listitem.setSubtitles(self.api.cache_external_subs())
-        self.playqueue_item = PL.playlist_item_from_xml(self.xml[0])
+        self.set_playqueue_item(self.xml[0], self.kodi_id, self.kodi_type)
         play = PlayUtils(self.api, self.playqueue_item)
         url = play.getPlayUrl().encode('utf-8')
         listitem.setPath(url)
@@ -250,7 +252,7 @@ class PlayStrm(object):
                 continue
             LOG.debug('Adding trailer: %s', api.title())
             listitem = widgets.get_listitem(intro, resume=False)
-            self.playqueue_item = PL.playlist_item_from_xml(intro)
+            self.set_playqueue_item(intro, None, None)
             play = PlayUtils(api, self.playqueue_item)
             url = play.getPlayUrl().encode('utf-8')
             listitem.setPath(url)
@@ -265,9 +267,7 @@ class PlayStrm(object):
                 continue
             self.api.set_part_number(part)
             LOG.debug('Adding addional part %s', part)
-            self.playqueue_item = PL.playlist_item_from_xml(self.xml[0],
-                                                            kodi_id=self.kodi_id,
-                                                            kodi_type=self.kodi_type)
+            self.set_playqueue_item(self.xml[0], self.kodi_id, self.kodi_type)
             self.playqueue_item.part = part
             listitem = widgets.get_listitem(self.xml[0], resume=False)
             listitem.setSubtitles(self.api.cache_external_subs())
