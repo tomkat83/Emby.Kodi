@@ -133,12 +133,14 @@ class API(object):
             # Set plugin path and media flags using real filename
             if self.plex_type() == v.PLEX_TYPE_EPISODE:
                 # need to include the plex show id in the path
-                path = ('plugin://plugin.video.plexkodiconnect.tvshows/%s/'
-                        % self.grandparent_id())
-            else:
-                path = 'plugin://%s/' % v.ADDON_TYPE[self.plex_type()]
-            path = ('%s?plex_id=%s&plex_type=%s&mode=play&filename=%s'
-                    % (path, self.plex_id(), self.plex_type(), filename))
+                path = ('http://127.0.0.1:%s/plex/kodi/shows/%s'
+                        % (v.WEBSERVICE_PORT, self.grandparent_id()))
+            elif self.plex_type() in (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_CLIP):
+                path = 'http://127.0.0.1:%s/plex/kodi/movies' % v.WEBSERVICE_PORT
+            elif self.plex_type() == v.PLEX_TYPE_SONG:
+                path = 'http://127.0.0.1:%s/plex/kodi/music' % v.WEBSERVICE_PORT
+            path = '{0}/{1}/file.strm?plex_id={1}&plex_type={2}'.format(
+                path, self.plex_id(), self.plex_type())
         else:
             # Direct paths is set the Kodi way
             path = self.validate_playurl(filename,
@@ -810,8 +812,8 @@ class API(object):
                 elif not url:
                     url = extra.get('ratingKey')
         if url:
-            url = ('plugin://%s.movies/?plex_id=%s&plex_type=%s&mode=play'
-                   % (v.ADDON_ID, url, v.PLEX_TYPE_CLIP))
+            url = 'http://127.0.0.1:{0}/plex/kodi/movies/{1}/file.strm?plex_id={1}&plex_type={2}'.format(
+                v.WEBSERVICE_PORT, url, v.PLEX_TYPE_CLIP)
         return url
 
     def mediastreams(self):
