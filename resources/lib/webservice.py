@@ -118,6 +118,10 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         try:
             BaseHTTPServer.BaseHTTPRequestHandler.handle(self)
         except Exception as error:
+            if '10054' in error:
+                # Silence "[Errno 10054] An existing connection was forcibly
+                # closed by the remote host"
+                return
             xbmc.log('Plex.WebService handle error: %s' % error, xbmc.LOGWARNING)
 
     def do_QUIT(self):
