@@ -368,7 +368,7 @@ class KodiMonitor(xbmc.Monitor):
         status['plex_type'] = item.plex_type
         status['playmethod'] = item.playmethod
         status['playcount'] = item.playcount
-        LOG.debug('Set the player state: %s', status)
+        LOG.debug('Set player state for player %s: %s', self.playerid, status)
 
     def on_play(self, data):
         """
