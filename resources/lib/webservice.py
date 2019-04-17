@@ -72,6 +72,7 @@ class WebService(backgroundthread.KillableThread):
         try:
             server = HttpServer(('127.0.0.1', v.WEBSERVICE_PORT),
                                 RequestHandler)
+            LOG.info('Serving http on %s', server.socket.getsockname())
             server.serve_forever()
         except Exception as error:
             LOG.error('Error encountered: %s', error)
