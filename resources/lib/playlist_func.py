@@ -703,8 +703,13 @@ def move_playlist_item(playlist, before_pos, after_pos):
                playlist.items[before_pos].id,
                playlist.items[after_pos - 1].id)
     # We need to increment the playlistVersion
-    _get_playListVersion_from_xml(
-        playlist, DU().downloadUrl(url, action_type="PUT"))
+    xml = DU().downloadUrl(url, action_type="PUT")
+    try:
+        xml[0].attrib
+    except (TypeError, IndexError, AttributeError):
+        LOG.error('Could not move playlist item')
+        return
+    _get_playListVersion_from_xml(playlist, xml)
     # Move our item's position in our internal playlist
     playlist.items.insert(after_pos, playlist.items.pop(before_pos))
     LOG.debug('Done moving for %s', playlist)
