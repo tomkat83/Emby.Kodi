@@ -152,7 +152,6 @@ class PlayStrm(object):
             listitem = widgets.get_listitem(self.xml[0], resume=True)
             url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
             args = {
-                'mode': 'play',
                 'plex_id': self.plex_id,
                 'plex_type': self.api.plex_type()
             }
