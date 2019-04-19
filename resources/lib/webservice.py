@@ -286,7 +286,7 @@ class QueuePlay(backgroundthread.KillableThread):
 
             try:
                 try:
-                    params = self.server.queue.get(timeout=0.01)
+                    params = self.server.queue.get(timeout=0.1)
                 except Queue.Empty:
                     count = 20
                     while not utils.window('plex.playlist.ready'):
