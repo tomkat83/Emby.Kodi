@@ -162,7 +162,7 @@ class PlayStrm(object):
             if self.server_id:
                 args['server_id'] = self.server_id
             if self.transcode:
-                args['transcode'] = True
+                args['transcode'] = 'true'
             url = utils.extend_url(url, args).encode('utf-8')
             listitem.setPath(url)
             self.playlist_add(url, listitem)
