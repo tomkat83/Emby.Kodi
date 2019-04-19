@@ -134,7 +134,7 @@ class PlayStrm(object):
         LOG.info('Initiating play for %s', self)
         if not delayed:
             self.start_playback(self.start_index)
-        return self.start_index
+        return self.index
 
     def play_folder(self, position=None):
         '''
