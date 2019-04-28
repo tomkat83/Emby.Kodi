@@ -14,13 +14,13 @@ LOG = getLogger('PLEX.playutils')
 
 class PlayUtils():
 
-    def __init__(self, api, playqueue_item):
+    def __init__(self, api, playlistitem):
         """
         init with api (PlexAPI wrapper of the PMS xml element) and
-        playqueue_item (Playlist_Item())
+        playlistitem [PlaylistItem()]
         """
         self.api = api
-        self.item = playqueue_item
+        self.item = playlistitem
 
     def getPlayUrl(self):
         """

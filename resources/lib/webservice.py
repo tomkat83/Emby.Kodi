@@ -13,8 +13,8 @@ import Queue
 import xbmc
 import xbmcvfs
 
-from . import backgroundthread, utils, variables as v, app
-from .playstrm import PlayStrm
+from . import backgroundthread, utils, variables as v, app, playqueue as PQ
+from . import playlist_func as PL, json_rpc as js
 
 
 LOG = getLogger('PLEX.webservice')
@@ -270,58 +270,110 @@ class QueuePlay(backgroundthread.KillableThread):
 
     def __init__(self, server):
         self.server = server
+        self.plex_id = None
+        self.plex_type = None
+        self.kodi_id = None
+        self.kodi_type = None
+        self.synched = None
+        self.force_transcode = None
         super(QueuePlay, self).__init__()
 
+    def load_params(self, params):
+        self.plex_id = utils.cast(int, params['plex_id'])
+        self.plex_type = params.get('plex_type')
+        self.kodi_id = utils.cast(int, params.get('kodi_id'))
+        self.kodi_type = params.get('kodi_type')
+        if params.get('synched') and params['synched'].lower() == 'false':
+            self.synched = False
+        else:
+            self.synched = True
+        if params.get('transcode') and params['transcode'].lower() == 'true':
+            self.force_transcode = True
+        else:
+            self.force_transcode = False
+
     def run(self):
-        LOG.info('##===---- Starting QueuePlay ----===##')
+        LOG.debug('##===---- Starting QueuePlay ----===##')
+        if app.PLAYSTATE.audioplaylist:
+            LOG.debug('Audio playlist detected')
+            playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
+        else:
+            LOG.debug('Video playlist detected')
+            playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
+        abort = False
         play_folder = False
-        play = None
-        start_position = None
-        position = None
-
-        # Let Kodi catch up
+        # Position to start playback from (!!)
+        # Do NOT use kodi_pl.getposition() as that appears to be buggy
+        start_position = max(js.get_position(playqueue.playlistid), 0)
+        # Position to add next element to queue - we're doing this at the end
+        # of our playqueue
+        position = playqueue.kodi_pl.size()
+        LOG.debug('start %s, position %s for current playqueue: %s',
+                  start_position, position, playqueue)
+        # Make sure we got at least 2 items in the queue - ugly
+        # TODO: find a better solution
         xbmc.sleep(200)
-
         while True:
-
             try:
                 try:
                     params = self.server.queue.get(timeout=0.1)
                 except Queue.Empty:
-                    count = 20
+                    count = 50
                     while not utils.window('plex.playlist.ready'):
                         xbmc.sleep(50)
                         if not count:
                             LOG.info('Playback aborted')
-                            raise Exception('PlaybackAborted')
+                            raise Exception('Playback aborted')
                         count -= 1
-                    LOG.info('Starting playback at position: %s', start_position)
                     if play_folder:
                         LOG.info('Start playing folder')
                         xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
-                        play.start_playback()
+                        playqueue.start_playback(start_position)
                     else:
+                        # TODO - do we need to do anything here?
+                        # Originally, 1st failable item should have been removed
                         utils.window('plex.playlist.play', value='true')
-                        # xbmc.sleep(1000)
-                        play.remove_from_playlist(start_position)
+                        # playqueue.kodi_remove_item(start_position)
                     break
-                play = PlayStrm(params, params.get('ServerId'))
-
-                if start_position is None:
-                    start_position = max(play.kodi_playlist.getposition(), 0)
-                    position = start_position + 1
+                self.load_params(params)
                 if play_folder:
-                    position = play.play_folder(position)
+                    # position = play.play_folder(position)
+                    item = PL.PlaylistItem(plex_id=self.plex_id,
+                                           plex_type=self.plex_type,
+                                           kodi_id=self.kodi_id,
+                                           kodi_type=self.kodi_type)
+                    item.force_transcode = self.force_transcode
+                    playqueue.add_item(item, position)
+                    position += 1
                 else:
                     if self.server.pending.count(params['plex_id']) != len(self.server.pending):
+                        LOG.debug('Folder playback detected')
                         play_folder = True
                     utils.window('plex.playlist.start', str(start_position))
-                    position = play.play(position)
+                    playqueue.init(self.plex_id,
+                                   plex_type=self.plex_type,
+                                   position=position,
+                                   synched=self.synched,
+                                   force_transcode=self.force_transcode)
+                    # Do NOT start playback here - because Kodi already started
+                    # it!
+                    # playqueue.start_playback(position)
+                    position = playqueue.index
                     if play_folder:
                         xbmc.executebuiltin('Activateutils.window(busydialognocancel)')
+            except PL.PlaylistError as error:
+                abort = True
+                LOG.warn('Not playing due to the following: %s', error)
             except Exception:
+                abort = True
                 utils.ERROR()
-                play.kodi_playlist.clear()
+            try:
+                self.server.queue.task_done()
+            except ValueError:
+                # "task_done() called too many times"
+                pass
+            if abort:
+                playqueue.clear()
                 xbmc.Player().stop()
                 self.server.queue.queue.clear()
                 if play_folder:
@@ -329,11 +381,10 @@ class QueuePlay(backgroundthread.KillableThread):
                 else:
                     utils.window('plex.playlist.aborted', value='true')
                 break
-            self.server.queue.task_done()
 
         utils.window('plex.playlist.ready', clear=True)
         utils.window('plex.playlist.start', clear=True)
         app.PLAYSTATE.audioplaylist = None
         self.server.threads.remove(self)
         self.server.pending = []
-        LOG.info('##===---- QueuePlay Stopped ----===##')
+        LOG.debug('##===---- QueuePlay Stopped ----===##')

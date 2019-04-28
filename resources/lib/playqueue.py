@@ -18,7 +18,7 @@ LOG = getLogger('PLEX.playqueue')
 
 PLUGIN = 'plugin://%s' % v.ADDON_ID
 
-# Our PKC playqueues (3 instances of Playqueue_Object())
+# Our PKC playqueues (3 instances PlayQueue())
 PLAYQUEUES = []
 ###############################################################################
 
@@ -38,7 +38,7 @@ def init_playqueues():
             for queue in js.get_playlists():
                 if queue['playlistid'] != i:
                     continue
-                playqueue = PL.Playqueue_Object()
+                playqueue = PL.PlayQueue()
                 playqueue.playlistid = i
                 playqueue.type = queue['type']
                 # Initialize each Kodi playlist
@@ -206,6 +206,8 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
             with app.APP.lock_playqueues:
                 for playqueue in PLAYQUEUES:
                     kodi_pl = js.playlist_get_items(playqueue.playlistid)
+                    playqueue.old_kodi_pl = list(kodi_pl)
+                    continue
                     if playqueue.old_kodi_pl != kodi_pl:
                         if playqueue.id is None and (not app.SYNC.direct_paths or
                                                      app.PLAYSTATE.context_menu_play):
@@ -215,5 +217,4 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
                         else:
                             # compare old and new playqueue
                             self._compare_playqueues(playqueue, kodi_pl)
-                        playqueue.old_kodi_pl = list(kodi_pl)
             app.APP.monitor.waitForAbort(0.2)

@@ -219,16 +219,20 @@ class KodiMonitor(xbmc.Monitor):
         {
             u'playlistid': 1,
         }
+        Let's NOT use this as Kodi's responses when e.g. playing an entire
+        folder are NOT threadsafe: Playlist.OnAdd might be added first, then
+        Playlist.OnClear might be received LATER
         """
         if self.playlistid == data['playlistid']:
             LOG.debug('Resetting autoplay')
             app.PLAYSTATE.autoplay = False
-        playqueue = PQ.PLAYQUEUES[data['playlistid']]
-        if not playqueue.is_pkc_clear():
-            playqueue.pkc_edit = True
-            playqueue.clear(kodi=False)
-        else:
-            LOG.debug('Detected PKC clear - ignoring')
+        return
+        # playqueue = PQ.PLAYQUEUES[data['playlistid']]
+        # if not playqueue.is_pkc_clear():
+        #     playqueue.pkc_edit = True
+        #     playqueue.clear(kodi=False)
+        # else:
+        #     LOG.debug('Detected PKC clear - ignoring')
 
     @staticmethod
     def _get_ids(kodi_id, kodi_type, path):
@@ -311,7 +315,7 @@ class KodiMonitor(xbmc.Monitor):
 
     def _check_playing_item(self, data):
         """
-        Returns a PF.Playlist_Item() for the currently playing item
+        Returns a PF.PlaylistItem() for the currently playing item
         Raises MonitorError or IndexError if we need to init the PKC playqueue
         """
         info = js.get_player_props(self.playerid)
@@ -320,26 +324,13 @@ class KodiMonitor(xbmc.Monitor):
         kodi_playlist = js.playlist_get_items(self.playerid)
         LOG.debug('Current Kodi playlist: %s', kodi_playlist)
         kodi_item = PL.playlist_item_from_kodi(kodi_playlist[position])
-        if (position == 1 and
-                len(kodi_playlist) == len(self.playqueue.items) + 1 and
-                kodi_playlist[0].get('type') == 'unknown' and
-                kodi_playlist[0].get('file') and
-                kodi_playlist[0].get('file').startswith('http://127.0.0.1')):
-            if kodi_item == self.playqueue.items[0]:
-                # Delete the very first item that we used to start playback:
-                # {
-                #     u'title': u'',
-                #     u'type': u'unknown',
-                #     u'file': u'http://127.0.0.1:57578/plex/kodi/....',
-                #     u'label': u''
-                # }
-                LOG.debug('Deleting the very first playqueue item')
-                js.playlist_remove(self.playqueue.playlistid, 0)
-                position = 0
-            else:
-                LOG.debug('Different item in PKC playlist: %s vs. %s',
-                          self.playqueue.items[0], kodi_item)
-                raise MonitorError()
+        if isinstance(self.playqueue.items[0], PL.PlaylistItemDummy):
+            # Get rid of the very first element in the queue that Kodi marked
+            # as unplayed (the one to init the queue)
+            LOG.debug('Deleting the very first playqueue item')
+            js.playlist_remove(self.playqueue.playlistid, 0)
+            del self.playqueue.items[0]
+            position = 0
         elif kodi_item != self.playqueue.items[position]:
             LOG.debug('Different playqueue items: %s vs. %s ',
                       kodi_item, self.playqueue.items[position])
@@ -349,7 +340,7 @@ class KodiMonitor(xbmc.Monitor):
 
     def _load_playerstate(self, item):
         """
-        Pass in a PF.Playlist_Item(). Will then set the currently playing
+        Pass in a PF.PlaylistItem(). Will then set the currently playing
         state with app.PLAYSTATE.player_states[self.playerid]
         """
         if self.playqueue.id:
@@ -431,6 +422,7 @@ def _playback_cleanup(ended=False):
     # We might have saved a transient token from a user flinging media via
     # Companion (if we could not use the playqueue to store the token)
     app.CONN.plex_transient_token = None
+    LOG.debug('Playstate is: %s', app.PLAYSTATE.player_states)
     for playerid in app.PLAYSTATE.active_players:
         status = app.PLAYSTATE.player_states[playerid]
         # Remember the last played item later
@@ -498,6 +490,9 @@ def _record_playstate(status, ended):
         playcount += 1
         time = 0
     with kodi_db.KodiVideoDB() as kodidb:
+        LOG.error('Setting file_id %s, time %s, totaltime %s, playcount %s, '
+                  'last_played %s',
+                  db_item['kodi_fileid'], time, totaltime, playcount, last_played)
         kodidb.set_resume(db_item['kodi_fileid'],
                           time,
                           totaltime,

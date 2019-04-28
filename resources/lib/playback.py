@@ -464,7 +464,7 @@ def process_indirect(key, offset, resolve=True):
     playqueue = PQ.get_playqueue_from_type(
         v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
     playqueue.clear()
-    item = PL.Playlist_Item()
+    item = PL.PlaylistItem()
     item.xml = xml[0]
     item.offset = offset
     item.plex_type = v.PLEX_TYPE_CLIP

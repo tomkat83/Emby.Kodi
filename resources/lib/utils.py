@@ -69,6 +69,16 @@ def getGlobalProperty(key):
         'Window(10000).Property(plugin.video.plexkodiconnect.{0})'.format(key))
 
 
+def dump_xml(xml):
+    tree = etree.ElementTree(xml)
+    i = 0
+    while path_ops.exists(path_ops.path.join(v.ADDON_PROFILE, 'xml%s.xml' % i)):
+        i += 1
+    tree.write(path_ops.path.join(v.ADDON_PROFILE, 'xml%s.xml' % i),
+               encoding='utf-8')
+    LOG.debug('Dumped to xml: %s', 'xml%s.xml' % i)
+
+
 def reboot_kodi(message=None):
     """
     Displays an OK prompt with 'Kodi will now restart to apply the changes'
