@@ -184,7 +184,7 @@ class KodiMonitor(xbmc.Monitor):
 
     def _playlist_onadd(self, data):
         '''
-        Detect widget playback. Widget for some reason, use audio playlists.
+        Called when a new item is added to a Kodi playqueue
         '''
         if 'item' in data and data['item'].get('type') == v.KODI_TYPE_SHOW:
             # Hitting the "browse" button on tv show info dialog
@@ -195,16 +195,9 @@ class KodiMonitor(xbmc.Monitor):
             return
 
         if data['position'] == 0:
-            if data['playlistid'] == 0:
-                app.PLAYSTATE.audioplaylist = True
-                LOG.error('app.PLAYSTATE.audioplaylist set to True')
-            else:
-                app.PLAYSTATE.audioplaylist = False
-                LOG.error('app.PLAYSTATE.audioplaylist set to False')
             self.playlistid = data['playlistid']
-        LOG.debug('plex.playlist.start: %s', utils.window('plex.playlist.start'))
         if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')):
-            LOG.info('Playlist ready')
+            LOG.debug('Playlist ready')
             utils.window('plex.playlist.ready', value='true')
             utils.window('plex.playlist.start', clear=True)
 

@@ -59,9 +59,6 @@ class PlayState(object):
         self.resume_playback = None
         # Don't ask user whether to resume but immediatly resume
         self.autoplay = False
-        # Are we using the Kodi audio playlist (=True, e.g. for videos when
-        # starting from a widget!) or video playlist (=False)?
-        self.audioplaylist = None
         # Was the playback initiated by the user using the Kodi context menu?
         self.context_menu_play = False
         # Which Kodi player is/has been active? (either int 1, 2 or 3)

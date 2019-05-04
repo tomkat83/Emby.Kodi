@@ -328,17 +328,8 @@ class QueuePlay(backgroundthread.KillableThread):
         LOG.debug('##===---- Starting QueuePlay ----===##')
         abort = False
         play_folder = False
-        i = 0
-        while app.PLAYSTATE.audioplaylist is None:
-            # Needed particulary for widget-playback
-            # We need to wait until kodimonitor notification OnAdd is triggered
-            # in order to detect the playlist type (video vs. audio) and thus
-            # e.g. determine whether playback has been init. from widgets
-            xbmc.sleep(50)
-            i += 1
-            if i > 100:
-                raise Exception('Kodi OnAdd not received - cancelling')
-        if app.PLAYSTATE.audioplaylist and self.plex_type in v.PLEX_VIDEOTYPES:
+        if (self.plex_type in v.PLEX_VIDEOTYPES and
+                xbmc.getCondVisibility('Window.IsVisible(Home.xml)')):
             # Video launched from a widget - which starts a Kodi AUDIO playlist
             # We will empty everything and start with a fresh VIDEO playlist
             LOG.debug('Widget video playback detected; relaunching')
@@ -393,7 +384,6 @@ class QueuePlay(backgroundthread.KillableThread):
                     elif video_widget_playback:
                         LOG.info('Start widget video playback')
                         utils.window('plex.playlist.play', value='true')
-                        xbmc.sleep(2000)
                         LOG.info('Current PKC queue: %s', playqueue)
                         LOG.info('current Kodi queue: %s', js.playlist_get_items(playqueue.playlistid))
                         playqueue.start_playback()
@@ -453,7 +443,6 @@ class QueuePlay(backgroundthread.KillableThread):
 
         utils.window('plex.playlist.ready', clear=True)
         utils.window('plex.playlist.start', clear=True)
-        app.PLAYSTATE.audioplaylist = None
         self.server.threads.remove(self)
         self.server.pending = []
         LOG.debug('##===---- QueuePlay Stopped ----===##')
