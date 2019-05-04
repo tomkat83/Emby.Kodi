@@ -101,12 +101,6 @@ class KodiMonitor(xbmc.Monitor):
                 with app.APP.lock_playqueues:
                     _playback_cleanup()
         elif method == 'Playlist.OnAdd':
-            if 'item' in data and data['item'].get('type') == v.KODI_TYPE_SHOW:
-                # Hitting the "browse" button on tv show info dialog
-                # Hence show the tv show directly
-                xbmc.executebuiltin("Dialog.Close(all, true)")
-                js.activate_window('videos',
-                                   'videodb://tvshows/titles/%s/' % data['item']['id'])
             with app.APP.lock_playqueues:
                 self._playlist_onadd(data)
         elif method == 'Playlist.OnRemove':
@@ -192,6 +186,14 @@ class KodiMonitor(xbmc.Monitor):
         '''
         Detect widget playback. Widget for some reason, use audio playlists.
         '''
+        if 'item' in data and data['item'].get('type') == v.KODI_TYPE_SHOW:
+            # Hitting the "browse" button on tv show info dialog
+            # Hence show the tv show directly
+            xbmc.executebuiltin("Dialog.Close(all, true)")
+            js.activate_window('videos',
+                               'videodb://tvshows/titles/%s/' % data['item']['id'])
+            return
+
         if data['position'] == 0:
             if data['playlistid'] == 0:
                 app.PLAYSTATE.audioplaylist = True
