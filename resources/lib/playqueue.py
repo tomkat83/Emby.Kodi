@@ -64,8 +64,31 @@ def get_playqueue_from_type(kodi_playlist_type):
         if playqueue.type == kodi_playlist_type:
             break
     else:
-        raise ValueError('Wrong playlist type passed in: %s',
-                         kodi_playlist_type)
+        raise ValueError('Wrong playlist type passed in: %s'
+                         % kodi_playlist_type)
+    return playqueue
+
+
+def playqueue_from_plextype(plex_type):
+    if plex_type in v.PLEX_VIDEOTYPES:
+        plex_type = v.PLEX_TYPE_VIDEO_PLAYLIST
+    elif plex_type in v.PLEX_AUDIOTYPES:
+        plex_type = v.PLEX_TYPE_AUDIO_PLAYLIST
+    else:
+        plex_type = v.PLEX_TYPE_VIDEO_PLAYLIST
+    for playqueue in PLAYQUEUES:
+        if playqueue.type == plex_type:
+            break
+    return playqueue
+
+
+def playqueue_from_id(kodi_playlist_id):
+    for playqueue in PLAYQUEUES:
+        if playqueue.playlistid == kodi_playlist_id:
+            break
+    else:
+        raise ValueError('Wrong playlist id passed in: %s of type %s'
+                         % (kodi_playlist_id, type(kodi_playlist_id)))
     return playqueue
 
 
