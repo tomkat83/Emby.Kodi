@@ -497,6 +497,8 @@ class Service(object):
                 continue
 
             if self.webservice is not None and not self.webservice.is_alive():
+                # TODO: Emby completely restarts Emby for Kodi at this point
+                # Check if this is really necessary
                 LOG.info('Restarting webservice')
                 self.webservice.abort()
                 self.webservice = webservice.WebService()

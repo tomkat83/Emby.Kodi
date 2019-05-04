@@ -195,10 +195,13 @@ class KodiMonitor(xbmc.Monitor):
         if data['position'] == 0:
             if data['playlistid'] == 0:
                 app.PLAYSTATE.audioplaylist = True
+                LOG.error('app.PLAYSTATE.audioplaylist set to True')
             else:
                 app.PLAYSTATE.audioplaylist = False
+                LOG.error('app.PLAYSTATE.audioplaylist set to False')
             self.playlistid = data['playlistid']
-        if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')) + 1:
+        LOG.debug('plex.playlist.start: %s', utils.window('plex.playlist.start'))
+        if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')):
             LOG.info('Playlist ready')
             utils.window('plex.playlist.ready', value='true')
             utils.window('plex.playlist.start', clear=True)
@@ -226,7 +229,6 @@ class KodiMonitor(xbmc.Monitor):
         if self.playlistid == data['playlistid']:
             LOG.debug('Resetting autoplay')
             app.PLAYSTATE.autoplay = False
-        return
         # playqueue = PQ.PLAYQUEUES[data['playlistid']]
         # if not playqueue.is_pkc_clear():
         #     playqueue.pkc_edit = True

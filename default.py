@@ -42,6 +42,7 @@ class Main():
         if mode == 'playstrm':
             while not utils.window('plex.playlist.play'):
                 xbmc.sleep(50)
+                LOG.error('waiting')
                 if utils.window('plex.playlist.aborted'):
                     LOG.info("playback aborted")
                     break
@@ -51,7 +52,6 @@ class Main():
                                           False,
                                           xbmcgui.ListItem())
             utils.window('plex.playlist.play', clear=True)
-            utils.window('plex.playlist.ready', clear=True)
             utils.window('plex.playlist.aborted', clear=True)
 
         elif mode == 'play':

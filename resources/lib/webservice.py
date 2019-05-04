@@ -13,6 +13,7 @@ import Queue
 import xbmc
 import xbmcvfs
 
+from .plex_db import PlexDB
 from . import backgroundthread, utils, variables as v, app, playqueue as PQ
 from . import playlist_func as PL, json_rpc as js
 
@@ -138,15 +139,23 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         try:
             path = self.path[1:].decode('utf-8')
         except IndexError:
+            path = ''
             params = {}
         if '?' in path:
             path = path.split('?', 1)[1]
         params = dict(utils.parse_qsl(path))
 
-        if params.get('transcode'):
-            params['transcode'] = params['transcode'].lower() == 'true'
-        if params.get('server') and params['server'].lower() == 'none':
-            params['server'] = None
+        if 'plex_type' not in params:
+            LOG.debug('Need to look-up plex_type')
+            with PlexDB(lock=False) as plexdb:
+                db_item = plexdb.item_by_id(params['plex_id'])
+            if db_item:
+                params['plex_type'] = db_item['plex_type']
+            else:
+                LOG.debug('No plex_type found, using Kodi player id')
+                players = js.get_players()
+                params['plex_type'] = v.PLEX_TYPE_CLIP if 'video' in players \
+                    else v.PLEX_TYPE_SONG
 
         return params
 
@@ -223,7 +232,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.server.pending.append(params['plex_id'])
             self.server.queue.put(params)
             if not len(self.server.threads):
-                queue = QueuePlay(self.server)
+                queue = QueuePlay(self.server, params['plex_type'])
                 queue.start()
                 self.server.threads.append(queue)
 
@@ -268,21 +277,40 @@ class QueuePlay(backgroundthread.KillableThread):
         players with this method.
     '''
 
-    def __init__(self, server):
+    def __init__(self, server, plex_type):
         self.server = server
+        self.plex_type = plex_type
         self.plex_id = None
-        self.plex_type = None
         self.kodi_id = None
         self.kodi_type = None
         self.synched = None
         self.force_transcode = None
         super(QueuePlay, self).__init__()
 
+    def __unicode__(self):
+        return ("{{"
+                "'plex_id': {self.plex_id}, "
+                "'plex_type': '{self.plex_type}', "
+                "'kodi_id': {self.kodi_id}, "
+                "'kodi_type': '{self.kodi_type}', "
+                "'synched: '{self.synched}', "
+                "'force_transcode: '{self.force_transcode}', "
+                "}}").format(self=self)
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+    __repr__ = __str__
+
     def load_params(self, params):
         self.plex_id = utils.cast(int, params['plex_id'])
         self.plex_type = params.get('plex_type')
         self.kodi_id = utils.cast(int, params.get('kodi_id'))
         self.kodi_type = params.get('kodi_type')
+        # Some cleanup
+        if params.get('transcode'):
+            self.force_transcode = params['transcode'].lower() == 'true'
+        if params.get('server') and params['server'].lower() == 'none':
+            self.server = None
         if params.get('synched') and params['synched'].lower() == 'false':
             self.synched = False
         else:
@@ -293,31 +321,64 @@ class QueuePlay(backgroundthread.KillableThread):
             self.force_transcode = False
 
     def run(self):
+        """
+        We cannot use js.get_players() to reliably get the active player
+        Use Kodimonitor's OnNotification and OnAdd
+        """
         LOG.debug('##===---- Starting QueuePlay ----===##')
-        if app.PLAYSTATE.audioplaylist:
-            LOG.debug('Audio playlist detected')
-            playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
-        else:
-            LOG.debug('Video playlist detected')
-            playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
         abort = False
         play_folder = False
+        i = 0
+        while app.PLAYSTATE.audioplaylist is None:
+            # Needed particulary for widget-playback
+            # We need to wait until kodimonitor notification OnAdd is triggered
+            # in order to detect the playlist type (video vs. audio) and thus
+            # e.g. determine whether playback has been init. from widgets
+            xbmc.sleep(50)
+            i += 1
+            if i > 100:
+                raise Exception('Kodi OnAdd not received - cancelling')
+        if app.PLAYSTATE.audioplaylist and self.plex_type in v.PLEX_VIDEOTYPES:
+            # Video launched from a widget - which starts a Kodi AUDIO playlist
+            # We will empty everything and start with a fresh VIDEO playlist
+            LOG.debug('Widget video playback detected; relaunching')
+            video_widget_playback = True
+            playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
+            playqueue.clear()
+            playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
+            playqueue.clear()
+            utils.window('plex.playlist.ready', value='true')
+        else:
+            video_widget_playback = False
+            if self.plex_type in v.PLEX_VIDEOTYPES:
+                LOG.debug('Video playback detected')
+                playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
+            else:
+                LOG.debug('Audio playback detected')
+                playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
+
         # Position to start playback from (!!)
         # Do NOT use kodi_pl.getposition() as that appears to be buggy
-        start_position = max(js.get_position(playqueue.playlistid), 0)
+        try:
+            start_position = max(js.get_position(playqueue.playlistid), 0)
+        except KeyError:
+            # Widgets: Since we've emptied the entire playlist, we won't get a
+            # position
+            start_position = 0
         # Position to add next element to queue - we're doing this at the end
-        # of our playqueue
+        # of our current playqueue
         position = playqueue.kodi_pl.size()
-        LOG.debug('start %s, position %s for current playqueue: %s',
+        LOG.debug('start_position %s, position %s for current playqueue: %s',
                   start_position, position, playqueue)
-        # Make sure we got at least 2 items in the queue - ugly
-        # TODO: find a better solution
-        xbmc.sleep(200)
         while True:
             try:
                 try:
-                    params = self.server.queue.get(timeout=0.1)
+                    params = self.server.queue.get(block=False)
                 except Queue.Empty:
+                    LOG.debug('Wrapping up')
+                    if xbmc.getCondVisibility('VideoPlayer.Content(livetv)'):
+                        # avoid issues with ongoing Live TV playback
+                        xbmc.Player().stop()
                     count = 50
                     while not utils.window('plex.playlist.ready'):
                         xbmc.sleep(50)
@@ -329,11 +390,18 @@ class QueuePlay(backgroundthread.KillableThread):
                         LOG.info('Start playing folder')
                         xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
                         playqueue.start_playback(start_position)
-                    else:
-                        # TODO - do we need to do anything here?
-                        # Originally, 1st failable item should have been removed
+                    elif video_widget_playback:
+                        LOG.info('Start widget video playback')
                         utils.window('plex.playlist.play', value='true')
-                        # playqueue.kodi_remove_item(start_position)
+                        xbmc.sleep(2000)
+                        LOG.info('Current PKC queue: %s', playqueue)
+                        LOG.info('current Kodi queue: %s', js.playlist_get_items(playqueue.playlistid))
+                        playqueue.start_playback()
+                    else:
+                        LOG.info('Start normal playback')
+                        # Release default.py
+                        utils.window('plex.playlist.play', value='true')
+                    LOG.debug('Done wrapping up')
                     break
                 self.load_params(params)
                 if play_folder:
@@ -349,7 +417,8 @@ class QueuePlay(backgroundthread.KillableThread):
                     if self.server.pending.count(params['plex_id']) != len(self.server.pending):
                         LOG.debug('Folder playback detected')
                         play_folder = True
-                    utils.window('plex.playlist.start', str(start_position))
+                    # Set to start_position + 1 because first item will fail
+                    utils.window('plex.playlist.start', str(start_position + 1))
                     playqueue.init(self.plex_id,
                                    plex_type=self.plex_type,
                                    position=position,

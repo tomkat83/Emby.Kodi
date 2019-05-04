@@ -148,15 +148,10 @@ class PlayQueue(object):
         """
         LOG.error('Current Kodi playlist: %s',
                   js.playlist_get_items(self.playlistid))
-        if position is not None:
-            self.index = position
-        else:
-            # Do NOT use kodi_pl.getposition() as that appears to be buggy
-            self.index = max(js.get_position(self.playlistid), 0)
         LOG.debug('Initializing with plex_id %s, plex_type %s, position %s, '
                   'synched %s, force_transcode %s, index %s', plex_id,
                   plex_type, position, synched, force_transcode, self.index)
-        LOG.error('Actual start: %s', js.get_position(self.playlistid))
+        self.index = position
         if self.kodi_pl.size() != len(self.items):
             # The original item that Kodi put into the playlist, e.g.
             # {
