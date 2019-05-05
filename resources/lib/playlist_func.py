@@ -556,6 +556,7 @@ class PlaylistItem(object):
         self.name = api.title()
         self.plex_id = api.plex_id()
         self.plex_type = api.plex_type()
+        self.kodi_type = v.KODITYPE_FROM_PLEXTYPE[self.plex_type]
         self.id = api.item_id()
         self.guid = api.guid_html_escaped()
         self.playcount = api.viewcount()
