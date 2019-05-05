@@ -403,17 +403,10 @@ class PlayQueue(object):
 
         Will also change self.items
         """
-        if before > len(self.items):
-            raise PlaylistError('Original position %s larger than current '
-                                'playlist length %s',
-                                before, len(self.items))
-        elif after > len(self.items):
-            raise PlaylistError('Desired position %s larger than current '
-                                'playlist length %s',
-                                after, len(self.items))
-        elif after == before:
-            raise PlaylistError('Desired position and original position are '
-                                'identical: %s', after)
+        if before > len(self.items) or after > len(self.items) or after == before:
+            raise PlaylistError('Illegal original position %s and/or desired '
+                                'position %s for playlist length %s' %
+                                (before, after, len(self.items)))
         LOG.debug('Moving item from %s to %s on the Plex side for %s',
                   before, after, self)
         if after == 0:
@@ -421,6 +414,12 @@ class PlayQueue(object):
                   (self.kind,
                    self.id,
                    self.items[before].id)
+        elif after > before:
+            url = "{server}/%ss/%s/items/%s/move?after=%s" % \
+                  (self.kind,
+                   self.id,
+                   self.items[before].id,
+                   self.items[after].id)
         else:
             url = "{server}/%ss/%s/items/%s/move?after=%s" % \
                   (self.kind,
