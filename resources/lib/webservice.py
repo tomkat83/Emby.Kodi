@@ -283,8 +283,8 @@ class QueuePlay(backgroundthread.KillableThread):
         self.plex_id = None
         self.kodi_id = None
         self.kodi_type = None
-        self.synched = None
-        self.force_transcode = None
+        self.synched = True
+        self.force_transcode = False
         super(QueuePlay, self).__init__()
 
     def __unicode__(self):
@@ -311,23 +311,10 @@ class QueuePlay(backgroundthread.KillableThread):
             self.force_transcode = params['transcode'].lower() == 'true'
         if params.get('server') and params['server'].lower() == 'none':
             self.server = None
-        if params.get('synched') and params['synched'].lower() == 'false':
-            self.synched = False
-        else:
-            self.synched = True
-        if params.get('transcode') and params['transcode'].lower() == 'true':
-            self.force_transcode = True
-        else:
-            self.force_transcode = False
+        if params.get('synched'):
+            self.synched = not params['synched'].lower() == 'false'
 
-    def run(self):
-        """
-        We cannot use js.get_players() to reliably get the active player
-        Use Kodimonitor's OnNotification and OnAdd
-        """
-        LOG.debug('##===---- Starting QueuePlay ----===##')
-        abort = False
-        play_folder = False
+    def _get_playqueue(self):
         if (self.plex_type in v.PLEX_VIDEOTYPES and
                 xbmc.getCondVisibility('Window.IsVisible(Home.xml)')):
             # Video launched from a widget - which starts a Kodi AUDIO playlist
@@ -353,7 +340,17 @@ class QueuePlay(backgroundthread.KillableThread):
                 LOG.debug('Audio playback detected')
                 playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
             playqueue.clear(kodi=False)
+        return playqueue, video_widget_playback
 
+    def run(self):
+        """
+        We cannot use js.get_players() to reliably get the active player
+        Use Kodimonitor's OnNotification and OnAdd
+        """
+        LOG.debug('##===---- Starting QueuePlay ----===##')
+        abort = False
+        play_folder = False
+        playqueue, video_widget_playback = self._get_playqueue()
         # Position to start playback from (!!)
         # Do NOT use kodi_pl.getposition() as that appears to be buggy
         try:
