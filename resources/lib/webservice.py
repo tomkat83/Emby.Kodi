@@ -334,11 +334,16 @@ class QueuePlay(backgroundthread.KillableThread):
             # We will empty everything and start with a fresh VIDEO playlist
             LOG.debug('Widget video playback detected; relaunching')
             video_widget_playback = True
+            # Release default.py
+            utils.window('plex.playlist.ready', value='true')
             playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
             playqueue.clear()
             playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
             playqueue.clear()
-            utils.window('plex.playlist.ready', value='true')
+            # Wait for Kodi to catch up - xbmcplugin.setResolvedUrl() needs to
+            # have run its course and thus the original item needs to have
+            # failed before we start playback anew
+            xbmc.sleep(200)
         else:
             video_widget_playback = False
             if self.plex_type in v.PLEX_VIDEOTYPES:
