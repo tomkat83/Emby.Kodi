@@ -502,7 +502,7 @@ class PlaylistItem(object):
         if (lookup_kodi and (kodi_id is None or kodi_type is None) and
                 self.plex_type != v.PLEX_TYPE_CLIP):
             with PlexDB(lock=False) as plexdb:
-                db_item = plexdb.item_by_id(plex_id, plex_type)
+                db_item = plexdb.item_by_id(self.plex_id, self.plex_type)
             if db_item is not None:
                 self.kodi_id = db_item['kodi_id']
                 self.kodi_type = db_item['kodi_type']
