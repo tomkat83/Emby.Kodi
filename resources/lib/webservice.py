@@ -223,12 +223,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             return
 
         path = 'plugin://plugin.video.plexkodiconnect?mode=playstrm&plex_id=%s' % params['plex_id']
-        xbmc.log('PLEX.webservice: sending %s' % path, xbmc.LOGDEBUG)
         self.wfile.write(bytes(path.encode('utf-8')))
         if params['plex_id'] not in self.server.pending:
-            xbmc.log('PLEX.webservice: path %s params %s' % (self.path, params),
-                     xbmc.LOGDEBUG)
-
             self.server.pending.append(params['plex_id'])
             self.server.queue.put(params)
             if not len(self.server.threads):
@@ -367,7 +363,9 @@ class QueuePlay(backgroundthread.KillableThread):
         while True:
             try:
                 try:
-                    params = self.server.queue.get(block=False)
+                    # We cannot know when Kodi will send the last item, e.g.
+                    # when playing an entire folder
+                    params = self.server.queue.get(timeout=0.01)
                 except Queue.Empty:
                     LOG.debug('Wrapping up')
                     if xbmc.getCondVisibility('VideoPlayer.Content(livetv)'):
@@ -435,8 +433,8 @@ class QueuePlay(backgroundthread.KillableThread):
                 # "task_done() called too many times"
                 pass
             if abort:
-                playqueue.clear()
                 xbmc.Player().stop()
+                playqueue.clear()
                 self.server.queue.queue.clear()
                 if play_folder:
                     xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
