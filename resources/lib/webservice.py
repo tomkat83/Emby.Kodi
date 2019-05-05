@@ -347,6 +347,7 @@ class QueuePlay(backgroundthread.KillableThread):
             else:
                 LOG.debug('Audio playback detected')
                 playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
+            playqueue.clear(kodi=False)
 
         # Position to start playback from (!!)
         # Do NOT use kodi_pl.getposition() as that appears to be buggy
