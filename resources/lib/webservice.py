@@ -13,16 +13,16 @@ import Queue
 import xbmc
 import xbmcvfs
 
+from .plex_api import API
 from .plex_db import PlexDB
 from . import backgroundthread, utils, variables as v, app, playqueue as PQ
-from . import playlist_func as PL, json_rpc as js
+from . import playlist_func as PL, json_rpc as js, plex_functions as PF
 
 
 LOG = getLogger('PLEX.webservice')
 
 
 class WebService(backgroundthread.KillableThread):
-
     ''' Run a webservice to trigger playback.
     '''
     def is_alive(self):
@@ -48,7 +48,7 @@ class WebService(backgroundthread.KillableThread):
             conn.request('QUIT', '/')
             conn.getresponse()
         except Exception as error:
-            xbmc.log('Plex.WebService abort error: %s' % error, xbmc.LOGWARNING)
+            xbmc.log('PLEX.webservice abort error: %s' % error, xbmc.LOGWARNING)
 
     def suspend(self):
         """
@@ -124,7 +124,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 # Silence "[Errno 10054] An existing connection was forcibly
                 # closed by the remote host"
                 return
-            xbmc.log('Plex.WebService handle error: %s' % error, xbmc.LOGWARNING)
+            xbmc.log('PLEX.webservice handle error: %s' % error, xbmc.LOGWARNING)
 
     def do_QUIT(self):
         ''' send 200 OK response, and set server.stop to True
@@ -144,7 +144,12 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if '?' in path:
             path = path.split('?', 1)[1]
         params = dict(utils.parse_qsl(path))
+        if 'plex_id' not in params:
+            LOG.error('No plex_id received for path %s', path)
+            return
 
+        if 'plex_type' in params and params['plex_type'].lower() == 'none':
+            del params['plex_type']
         if 'plex_type' not in params:
             LOG.debug('Need to look-up plex_type')
             with PlexDB(lock=False) as plexdb:
@@ -154,9 +159,20 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             else:
                 LOG.debug('No plex_type found, using Kodi player id')
                 players = js.get_players()
-                params['plex_type'] = v.PLEX_TYPE_CLIP if 'video' in players \
-                    else v.PLEX_TYPE_SONG
-
+                if players:
+                    params['plex_type'] = v.PLEX_TYPE_CLIP if 'video' in players \
+                        else v.PLEX_TYPE_SONG
+                    LOG.debug('Using the following plex_type: %s',
+                              params['plex_type'])
+                else:
+                    xml = PF.GetPlexMetadata(params['plex_id'])
+                    if xml in (None, 401):
+                        LOG.error('Could not get metadata for %s', params)
+                        return
+                    api = API(xml[0])
+                    params['plex_type'] = api.plex_type()
+                    LOG.debug('Got metadata, using plex_type %s',
+                              params['plex_type'])
         return params
 
     def do_HEAD(self):
@@ -172,7 +188,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def handle_request(self, headers_only=False):
         '''Send headers and reponse
         '''
-        xbmc.log('Plex.WebService handle_request called. headers %s, path: %s'
+        xbmc.log('PLEX.webservice handle_request called. headers %s, path: %s'
                  % (headers_only, self.path), xbmc.LOGDEBUG)
         try:
             if b'extrafanart' in self.path or b'extrathumbs' in self.path:
@@ -311,11 +327,13 @@ class QueuePlay(backgroundthread.KillableThread):
             self.synched = not params['synched'].lower() == 'false'
 
     def _get_playqueue(self):
-        if (self.plex_type in v.PLEX_VIDEOTYPES and
-                xbmc.getCondVisibility('Window.IsVisible(Home.xml)')):
+        playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
+        if ((self.plex_type in v.PLEX_VIDEOTYPES and
+             not app.PLAYSTATE.initiated_by_plex and
+             xbmc.getCondVisibility('Window.IsVisible(Home.xml)'))):
             # Video launched from a widget - which starts a Kodi AUDIO playlist
             # We will empty everything and start with a fresh VIDEO playlist
-            LOG.debug('Widget video playback detected; relaunching')
+            LOG.debug('Widget video playback detected')
             video_widget_playback = True
             # Release default.py
             utils.window('plex.playlist.ready', value='true')
@@ -335,14 +353,9 @@ class QueuePlay(backgroundthread.KillableThread):
             else:
                 LOG.debug('Audio playback detected')
                 playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
-            playqueue.clear(kodi=False)
         return playqueue, video_widget_playback
 
     def run(self):
-        """
-        We cannot use js.get_players() to reliably get the active player
-        Use Kodimonitor's OnNotification and OnAdd
-        """
         LOG.debug('##===---- Starting QueuePlay ----===##')
         abort = False
         play_folder = False
@@ -358,6 +371,8 @@ class QueuePlay(backgroundthread.KillableThread):
         # Position to add next element to queue - we're doing this at the end
         # of our current playqueue
         position = playqueue.kodi_pl.size()
+        # Set to start_position + 1 because first item will fail
+        utils.window('plex.playlist.start', str(start_position + 1))
         LOG.debug('start_position %s, position %s for current playqueue: %s',
                   start_position, position, playqueue)
         while True:
@@ -370,7 +385,7 @@ class QueuePlay(backgroundthread.KillableThread):
                     LOG.debug('Wrapping up')
                     if xbmc.getCondVisibility('VideoPlayer.Content(livetv)'):
                         # avoid issues with ongoing Live TV playback
-                        xbmc.Player().stop()
+                        app.APP.player.stop()
                     count = 50
                     while not utils.window('plex.playlist.ready'):
                         xbmc.sleep(50)
@@ -392,48 +407,47 @@ class QueuePlay(backgroundthread.KillableThread):
                         LOG.info('Start normal playback')
                         # Release default.py
                         utils.window('plex.playlist.play', value='true')
+                        # Remove the playlist element we just added with the
+                        # right path
+                        xbmc.sleep(1000)
+                        playqueue.kodi_remove_item(start_position)
+                        del playqueue.items[start_position]
                     LOG.debug('Done wrapping up')
                     break
                 self.load_params(params)
                 if play_folder:
-                    # position = play.play_folder(position)
-                    item = PL.PlaylistItem(plex_id=self.plex_id,
-                                           plex_type=self.plex_type,
-                                           kodi_id=self.kodi_id,
-                                           kodi_type=self.kodi_type)
-                    item.force_transcode = self.force_transcode
-                    playqueue.add_item(item, position)
+                    playlistitem = PL.PlaylistItem(plex_id=self.plex_id,
+                                                   plex_type=self.plex_type,
+                                                   kodi_id=self.kodi_id,
+                                                   kodi_type=self.kodi_type)
+                    playlistitem.force_transcode = self.force_transcode
+                    playqueue.add_item(playlistitem, position)
                     position += 1
                 else:
                     if self.server.pending.count(params['plex_id']) != len(self.server.pending):
+                        # E.g. when selecting "play" for an entire video genre
                         LOG.debug('Folder playback detected')
                         play_folder = True
-                    # Set to start_position + 1 because first item will fail
-                    utils.window('plex.playlist.start', str(start_position + 1))
-                    playqueue.init(self.plex_id,
+                        xbmc.executebuiltin('Activateutils.window(busydialognocancel)')
+                    playqueue.play(self.plex_id,
                                    plex_type=self.plex_type,
+                                   startpos=start_position,
                                    position=position,
                                    synched=self.synched,
                                    force_transcode=self.force_transcode)
                     # Do NOT start playback here - because Kodi already started
                     # it!
-                    # playqueue.start_playback(position)
                     position = playqueue.index
-                    if play_folder:
-                        xbmc.executebuiltin('Activateutils.window(busydialognocancel)')
-            except PL.PlaylistError as error:
-                abort = True
-                LOG.warn('Not playing due to the following: %s', error)
             except Exception:
                 abort = True
-                utils.ERROR()
+                utils.ERROR(notify=True)
             try:
                 self.server.queue.task_done()
             except ValueError:
-                # "task_done() called too many times"
+                # "task_done() called too many times" when aborting
                 pass
             if abort:
-                xbmc.Player().stop()
+                app.APP.player.stop()
                 playqueue.clear()
                 self.server.queue.queue.clear()
                 if play_folder:
@@ -444,6 +458,7 @@ class QueuePlay(backgroundthread.KillableThread):
 
         utils.window('plex.playlist.ready', clear=True)
         utils.window('plex.playlist.start', clear=True)
+        app.PLAYSTATE.initiated_by_plex = False
         self.server.threads.remove(self)
         self.server.pending = []
         LOG.debug('##===---- QueuePlay Stopped ----===##')

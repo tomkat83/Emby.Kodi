@@ -5,8 +5,7 @@ Collection of functions associated with Kodi and Plex playlists and playqueues
 """
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-
-import xbmc
+import threading
 
 from .plex_api import API
 from .plex_db import PlexDB
@@ -139,20 +138,59 @@ class PlayQueue(object):
         self.force_transcode = None
         LOG.debug('Playlist cleared: %s', self)
 
-    def init(self, plex_id, plex_type=None, position=None, synched=True,
-             force_transcode=None):
+    def play(self, plex_id, plex_type=None, startpos=None, position=None,
+             synched=True, force_transcode=None):
         """
         Initializes the playQueue with e.g. trailers and additional file parts
         Pass synched=False if you're sure that this item has not been synched
         to Kodi
+
+        Or resolves webservice paths to actual paths
         """
-        LOG.error('Current Kodi playlist: %s',
-                  js.playlist_get_items(self.playlistid))
-        LOG.debug('Initializing with plex_id %s, plex_type %s, position %s, '
-                  'synched %s, force_transcode %s, index %s', plex_id,
-                  plex_type, position, synched, force_transcode, self.index)
+        LOG.debug('Play called with plex_id %s, plex_type %s, position %s, '
+                  'synched %s, force_transcode %s, startpos %s', plex_id,
+                  plex_type, position, synched, force_transcode, startpos)
+        resolve = False
+        try:
+            if plex_id == self.items[startpos].plex_id:
+                resolve = True
+        except IndexError:
+            pass
+        if resolve:
+            LOG.info('Resolving playback')
+            self._resolve(plex_id, startpos)
+        else:
+            LOG.info('Initializing playback')
+            self.init(plex_id,
+                      plex_type,
+                      startpos,
+                      position,
+                      synched,
+                      force_transcode)
+
+    def _resolve(self, plex_id, startpos):
+        """
+        The Plex playqueue has already been initialized. We resolve the path
+        from original webservice http://127.0.0.1 to the "correct" Plex one
+        """
+        self.index = startpos + 1
+        xml = PF.GetPlexMetadata(plex_id)
+        if xml in (None, 401):
+            raise PlaylistError('Could not get Plex metadata %s for %s',
+                                plex_id, self.items[startpos])
+        api = API(xml[0])
+        resume = self._resume_playback(None, xml[0])
+        self._kodi_add_xml(xml[0], api, resume)
+        # Add additional file parts, if any exist
+        self._add_additional_parts(xml)
+
+    def init(self, plex_id, plex_type=None, startpos=None, position=None,
+             synched=True, force_transcode=None):
+        """
+        Initializes the Plex and PKC playqueue for playback
+        """
         self.index = position
-        if self.kodi_pl.size() != len(self.items):
+        while len(self.items) < self.kodi_pl.size():
             # The original item that Kodi put into the playlist, e.g.
             # {
             #     u'title': u'',
@@ -161,13 +199,10 @@ class PlayQueue(object):
             #     u'label': u''
             # }
             # We CANNOT delete that item right now - so let's add a dummy
-            # on the PKC side
-            LOG.debug('Detected Kodi playlist size %s to be off for PKC: %s',
-                      self.kodi_pl.size(), len(self.items))
-            while len(self.items) < self.kodi_pl.size():
-                LOG.debug('Adding a dummy item to our playqueue')
-                playlistitem = PlaylistItemDummy()
-                self.items.insert(0, playlistitem)
+            # on the PKC side to keep all indicees lined up.
+            # The failing item will be deleted in webservice.py
+            LOG.debug('Adding a dummy item to our playqueue')
+            self.items.insert(0, PlaylistItemDummy())
         self.force_transcode = force_transcode
         if synched:
             with PlexDB(lock=False) as plexdb:
@@ -316,7 +351,11 @@ class PlayQueue(object):
             raise PlaylistError('Position %s too large for playlist length %s'
                                 % (pos, len(self.items)))
         LOG.debug('Adding item to Kodi playlist at position %s: %s', pos, item)
-        if item.kodi_id is not None and item.kodi_type is not None:
+        if listitem:
+            self.kodi_pl.add(url=listitem.getPath(),
+                             listitem=listitem,
+                             index=pos)
+        elif item.kodi_id is not None and item.kodi_type is not None:
             # This method ensures we have full Kodi metadata, potentially
             # with more artwork, for example, than Plex provides
             if pos == len(self.items):
@@ -330,24 +369,24 @@ class PlayQueue(object):
                 raise PlaylistError('Kodi did not add item to playlist: %s',
                                     answ)
         else:
-            if not listitem:
-                if item.xml is None:
-                    LOG.debug('Need to get metadata for item %s', item)
-                    item.xml = PF.GetPlexMetadata(item.plex_id)
-                    if item.xml in (None, 401):
-                        raise PlaylistError('Could not get metadata for %s', item)
-                listitem = widgets.get_listitem(item.xml, resume=True)
-                url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
-                args = {
-                    'plex_id': self.plex_id,
-                    'plex_type': self.plex_type
-                }
-                if item.force_transcode:
-                    args['transcode'] = 'true'
-                url = utils.extend_url(url, args)
-                item.file = url
-                listitem.setPath(url.encode('utf-8'))
-            self.kodi_pl.add(url=listitem.getPath(),
+            if item.xml is None:
+                LOG.debug('Need to get metadata for item %s', item)
+                item.xml = PF.GetPlexMetadata(item.plex_id)
+                if item.xml in (None, 401):
+                    raise PlaylistError('Could not get metadata for %s', item)
+            api = API(item.xml[0])
+            listitem = widgets.get_listitem(item.xml, resume=True)
+            url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
+            args = {
+                'plex_id': item.plex_id,
+                'plex_type': api.plex_type()
+            }
+            if item.force_transcode:
+                args['transcode'] = 'true'
+            url = utils.extend_url(url, args)
+            item.file = url
+            listitem.setPath(url.encode('utf-8'))
+            self.kodi_pl.add(url=url.encode('utf-8'),
                              listitem=listitem,
                              index=pos)
 
@@ -372,9 +411,6 @@ class PlayQueue(object):
         except (TypeError, AttributeError, KeyError, IndexError):
             raise PlaylistError('Could not add item %s to playlist %s'
                                 % (item, self))
-        if len(xml) != len(self.items) + 1:
-            raise PlaylistError('Could not add item %s to playlist %s - wrong'
-                                ' length received' % (item, self))
         for actual_pos, xml_video_element in enumerate(xml):
             api = API(xml_video_element)
             if api.plex_id() == item.plex_id:
@@ -395,7 +431,7 @@ class PlayQueue(object):
         LOG.debug('Removing position %s on the Kodi side for %s', pos, self)
         answ = js.playlist_remove(self.playlistid, pos)
         if 'error' in answ:
-            raise PlaylistError('Could not remove item: %s' % answ)
+            raise PlaylistError('Could not remove item: %s' % answ['error'])
 
     def plex_move_item(self, before, after):
         """
@@ -436,9 +472,71 @@ class PlayQueue(object):
         self.items.insert(after, self.items.pop(before))
         LOG.debug('Done moving items for %s', self)
 
-    def start_playback(self, pos=0):
-        LOG.info('Starting playback at %s for %s', pos, self)
-        xbmc.Player().play(self.kodi_pl, startpos=pos, windowed=False)
+    def init_from_xml(self, xml, offset=None, start_plex_id=None, repeat=None,
+                      transient_token=None):
+        """
+        Play all items contained in the xml passed in. Called by Plex Companion.
+        Either supply the ratingKey of the starting Plex element. Or set
+        playqueue.selectedItemID
+
+            offset [float]: will seek to position offset after playback start
+            start_plex_id [int]: the plex_id of the element that should be
+                played
+            repeat [int]: 0: don't repear
+                          1: repeat item
+                          2: repeat everything
+            transient_token [unicode]: temporary token received from the PMS
+
+        Will stop current playback and start playback at the end
+        """
+        LOG.debug("init_from_xml called with offset %s, start_plex_id %s",
+                  offset, start_plex_id)
+        app.APP.player.stop()
+        self.clear()
+        self.update_details_from_xml(xml)
+        self.repeat = 0 if not repeat else repeat
+        self.plex_transient_token = transient_token
+        for pos, xml_video_element in enumerate(xml):
+            playlistitem = PlaylistItem(xml_video_element=xml_video_element)
+            self.kodi_add_item(playlistitem, pos)
+            self.items.append(playlistitem)
+        # Where do we start playback?
+        if start_plex_id is not None:
+            for startpos, item in enumerate(self.items):
+                if item.plex_id == start_plex_id:
+                    break
+            else:
+                startpos = 0
+        else:
+            for startpos, item in enumerate(self.items):
+                if item.id == self.selectedItemID:
+                    break
+            else:
+                startpos = 0
+        self.start_playback(pos=startpos, offset=offset)
+
+    def start_playback(self, pos=0, offset=0):
+        """
+        Seek immediately after kicking off playback is not reliable.
+        Threaded, since we need to return BEFORE seeking
+        """
+        LOG.info('Starting playback at %s offset %s for %s', pos, offset, self)
+        thread = threading.Thread(target=self._threaded_playback,
+                                  args=(self.kodi_pl, pos, offset))
+        thread.start()
+
+    @staticmethod
+    def _threaded_playback(kodi_playlist, pos, offset):
+        app.APP.player.play(kodi_playlist, startpos=pos, windowed=False)
+        if offset:
+            i = 0
+            while not app.APP.is_playing:
+                app.APP.monitor.waitForAbort(0.1)
+                i += 1
+                if i > 50:
+                    LOG.warn('Could not seek to %s', offset)
+                    return
+            js.seek_to(offset)
 
 
 class PlaylistItem(object):
@@ -1069,7 +1167,7 @@ def move_playlist_item(playlist, before_pos, after_pos):
     LOG.debug('Done moving for %s', playlist)
 
 
-def get_PMS_playlist(playlist, playlist_id=None):
+def get_PMS_playlist(playlist=None, playlist_id=None):
     """
     Fetches the PMS playlist/playqueue as an XML. Pass in playlist_id if we
     need to fetch a new playlist
@@ -1077,7 +1175,7 @@ def get_PMS_playlist(playlist, playlist_id=None):
     Returns None if something went wrong
     """
     playlist_id = playlist_id if playlist_id else playlist.id
-    if playlist.kind == 'playList':
+    if playlist and playlist.kind == 'playList':
         xml = DU().downloadUrl("{server}/playlists/%s/items" % playlist_id)
     else:
         xml = DU().downloadUrl("{server}/playQueues/%s" % playlist_id)

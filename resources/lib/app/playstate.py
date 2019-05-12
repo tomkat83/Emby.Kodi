@@ -63,3 +63,6 @@ class PlayState(object):
         self.context_menu_play = False
         # Which Kodi player is/has been active? (either int 1, 2 or 3)
         self.active_players = set()
+        # Have we initiated playback via Plex Companion or Alexa - so from the
+        # Plex side of things?
+        self.initiated_by_plex = False

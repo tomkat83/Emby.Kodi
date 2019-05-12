@@ -322,12 +322,10 @@ class KodiMonitor(xbmc.Monitor):
         LOG.debug('Current Kodi playlist: %s', kodi_playlist)
         kodi_item = PL.playlist_item_from_kodi(kodi_playlist[position])
         if isinstance(self.playqueue.items[0], PL.PlaylistItemDummy):
-            # Get rid of the very first element in the queue that Kodi marked
-            # as unplayed (the one to init the queue)
-            LOG.debug('Deleting the very first playqueue item')
-            js.playlist_remove(self.playqueue.playlistid, 0)
-            del self.playqueue.items[0]
-            position = 0
+            # This dummy item will be deleted by webservice soon - it won't
+            # play
+            LOG.debug('Dummy item detected')
+            position = 1
         elif kodi_item != self.playqueue.items[position]:
             LOG.debug('Different playqueue items: %s vs. %s ',
                       kodi_item, self.playqueue.items[position])
@@ -487,9 +485,6 @@ def _record_playstate(status, ended):
         playcount += 1
         time = 0
     with kodi_db.KodiVideoDB() as kodidb:
-        LOG.error('Setting file_id %s, time %s, totaltime %s, playcount %s, '
-                  'last_played %s',
-                  db_item['kodi_fileid'], time, totaltime, playcount, last_played)
         kodidb.set_resume(db_item['kodi_fileid'],
                           time,
                           totaltime,
