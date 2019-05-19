@@ -180,7 +180,10 @@ class PlayQueue(object):
                                 plex_id, self.items[startpos])
         api = API(xml[0])
         resume = self._resume_playback(None, xml[0])
-        self._kodi_add_xml(xml[0], api, resume)
+        self._kodi_add_xml(xml[0],
+                           api,
+                           resume,
+                           playlistitem=self.items[startpos])
         # Add additional file parts, if any exist
         self._add_additional_parts(xml)
 
@@ -303,8 +306,9 @@ class PlayQueue(object):
             LOG.debug('Adding addional part for %s: %s', api.title(), part)
             self._kodi_add_xml(xml[0], api)
 
-    def _kodi_add_xml(self, xml, api, resume=False):
-        playlistitem = PlaylistItem(xml_video_element=xml)
+    def _kodi_add_xml(self, xml, api, resume=False, playlistitem=None):
+        if not playlistitem:
+            playlistitem = PlaylistItem(xml_video_element=xml)
         playlistitem.part = api.part
         playlistitem.force_transcode = self.force_transcode
         listitem = widgets.get_listitem(xml, resume=True)
