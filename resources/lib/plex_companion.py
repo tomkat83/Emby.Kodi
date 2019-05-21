@@ -103,16 +103,15 @@ class PlexCompanion(backgroundthread.KillableThread):
                 raise PL.PlaylistError()
             playqueue = PQ.get_playqueue_from_type(
                 v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
-            if data.get('offset') not in ('0', None):
-                offset = float(data['offset']) / 1000.0
-            else:
-                offset = None
+            offset = utils.cast(float, data.get('offset')) or None
+            if offset:
+                offset = offset / 1000.0
             playqueue.init_from_xml(xml,
                                     offset=offset,
                                     transient_token=data.get('token'))
         else:
             app.CONN.plex_transient_token = data.get('token')
-            if data.get('offset') not in (None, '0'):
+            if utils.cast(float, data.get('offset')):
                 app.PLAYSTATE.resume_playback = True
             path = ('http://127.0.0.1:%s/plex/play/file.strm?plex_id=%s'
                     % (v.WEBSERVICE_PORT, api.plex_id()))
@@ -155,7 +154,7 @@ class PlexCompanion(backgroundthread.KillableThread):
         update_playqueue_from_PMS(playqueue,
                                   playqueue_id=container_key,
                                   repeat=query.get('repeat'),
-                                  offset=data.get('offset'),
+                                  offset=utils.cast(float, data.get('offset')) or None,
                                   transient_token=data.get('token'))
 
     @staticmethod
