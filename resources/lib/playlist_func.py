@@ -173,19 +173,29 @@ class PlayQueue(object):
         The Plex playqueue has already been initialized. We resolve the path
         from original webservice http://127.0.0.1 to the "correct" Plex one
         """
+        playlistitem = self.items[startpos]
+        # Add an additional item with the resolved path after the current one
         self.index = startpos + 1
         xml = PF.GetPlexMetadata(plex_id)
         if xml in (None, 401):
             raise PlaylistError('Could not get Plex metadata %s for %s',
                                 plex_id, self.items[startpos])
         api = API(xml[0])
-        resume = self._resume_playback(None, xml[0])
+        if playlistitem.resume is None:
+            # Potentially ask user to resume
+            resume = self._resume_playback(None, xml[0])
+        else:
+            # Do NOT ask user
+            resume = playlistitem.resume
+        # Use the original playlistitem to retain all info!
         self._kodi_add_xml(xml[0],
                            api,
                            resume,
-                           playlistitem=self.items[startpos])
+                           playlistitem=playlistitem)
         # Add additional file parts, if any exist
         self._add_additional_parts(xml)
+        # Note: the CURRENT playlistitem will be deleted through webservice.py
+        # once the path resolution has completed
 
     def init(self, plex_id, plex_type=None, startpos=None, position=None,
              synched=True, force_transcode=None):
@@ -517,6 +527,9 @@ class PlayQueue(object):
                     break
             else:
                 startpos = 0
+        # Set resume for the item we should play - do NOT ask user since we
+        # initiated from the other Companion client
+        self.items[startpos].resume = True if offset else False
         self.start_playback(pos=startpos, offset=offset)
 
     def start_playback(self, pos=0, offset=0):
@@ -593,6 +606,11 @@ class PlaylistItem(object):
         self.offset = None
         self.part = 0
         self.force_transcode = False
+        # Shall we ask user to resume this item?
+        #   None: ask user to resume
+        #   False: do NOT resume, don't ask user
+        #   True: do resume, don't ask user
+        self.resume = None
         if grab_xml and plex_id is not None and xml_video_element is None:
             xml_video_element = PF.GetPlexMetadata(plex_id)
             try:
