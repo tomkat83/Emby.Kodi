@@ -14,7 +14,7 @@ import xbmcgui
 from .plex_db import PlexDB
 from . import kodi_db
 from .downloadutils import DownloadUtils as DU
-from . import utils, timing, plex_functions as PF, playback
+from . import utils, timing, plex_functions as PF
 from . import json_rpc as js, playqueue as PQ, playlist_func as PL
 from . import backgroundthread, app, variables as v
 
@@ -38,7 +38,6 @@ class KodiMonitor(xbmc.Monitor):
     """
     def __init__(self):
         self._already_slept = False
-        self.hack_replay = None
         # Info to the currently playing item
         self.playerid = None
         self.playlistid = None
@@ -78,23 +77,11 @@ class KodiMonitor(xbmc.Monitor):
             data = loads(data, 'utf-8')
             LOG.debug("Method: %s Data: %s", method, data)
 
-        # Hack
-        if not method == 'Player.OnStop':
-            self.hack_replay = None
-
         if method == "Player.OnPlay":
             with app.APP.lock_playqueues:
                 self.on_play(data)
         elif method == "Player.OnStop":
-            # Should refresh our video nodes, e.g. on deck
-            # xbmc.executebuiltin('ReloadSkin()')
-            if (self.hack_replay and not data.get('end') and
-                    self.hack_replay == data['item']):
-                # Hack for add-on paths
-                self.hack_replay = None
-                with app.APP.lock_playqueues:
-                    self._hack_addon_paths_replay_video()
-            elif data.get('end'):
+            if data.get('end'):
                 with app.APP.lock_playqueues:
                     _playback_cleanup(ended=True)
             else:
@@ -148,39 +135,6 @@ class KodiMonitor(xbmc.Monitor):
         elif method == "System.OnQuit":
             LOG.info('Kodi OnQuit detected - shutting down')
             app.APP.stop_pkc = True
-
-    @staticmethod
-    def _hack_addon_paths_replay_video():
-        """
-        Hack we need for RESUMABLE items because Kodi lost the path of the
-        last played item that is now being replayed (see playback.py's
-        Player().play()) Also see playqueue.py _compare_playqueues()
-
-        Needed if user re-starts the same video from the library using addon
-        paths. (Video is only added to playqueue, then immediately stoppen.
-        There is no playback initialized by Kodi.) Log excerpts:
-          Method: Playlist.OnAdd Data:
-              {u'item': {u'type': u'movie', u'id': 4},
-               u'playlistid': 1,
-               u'position': 0}
-          Now we would hack!
-          Method: Player.OnStop Data:
-              {u'item': {u'type': u'movie', u'id': 4},
-               u'end': False}
-        (within the same micro-second!)
-        """
-        LOG.info('Detected re-start of playback of last item')
-        old = app.PLAYSTATE.old_player_states[1]
-        kwargs = {
-            'plex_id': old['plex_id'],
-            'plex_type': old['plex_type'],
-            'path': old['file'],
-            'resolve': False
-        }
-        task = backgroundthread.FunctionAsTask(playback.playback_triage,
-                                               None,
-                                               **kwargs)
-        backgroundthread.BGThreader.addTasksToFront([task])
 
     def _playlist_onadd(self, data):
         '''
