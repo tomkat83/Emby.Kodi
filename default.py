@@ -39,7 +39,22 @@ class Main():
         mode = params.get('mode', '')
         itemid = params.get('id', '')
 
-        if mode == 'play':
+        if mode == 'playstrm':
+            while not utils.window('plex.playlist.play'):
+                xbmc.sleep(25)
+                LOG.error('waiting')
+                if utils.window('plex.playlist.aborted'):
+                    LOG.info("playback aborted")
+                    break
+            else:
+                LOG.info("Playback started")
+                xbmcplugin.setResolvedUrl(int(argv[1]),
+                                          False,
+                                          xbmcgui.ListItem())
+            utils.window('plex.playlist.play', clear=True)
+            utils.window('plex.playlist.aborted', clear=True)
+
+        elif mode == 'play':
             self.play()
 
         elif mode == 'plex_node':

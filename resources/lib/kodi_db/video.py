@@ -5,12 +5,12 @@ from logging import getLogger
 from sqlite3 import IntegrityError
 
 from . import common
-from .. import path_ops, timing, variables as v, app
+from .. import path_ops, timing, variables as v
 
 LOG = getLogger('PLEX.kodi_db.video')
 
-MOVIE_PATH = 'plugin://%s.movies/' % v.ADDON_ID
-SHOW_PATH = 'plugin://%s.tvshows/' % v.ADDON_ID
+MOVIE_PATH = 'http://127.0.0.1:%s/plex/kodi/movies/' % v.WEBSERVICE_PORT
+SHOW_PATH = 'http://127.0.0.1:%s/plex/kodi/shows/' % v.WEBSERVICE_PORT
 
 
 class KodiVideoDB(common.KodiDBBase):
@@ -174,15 +174,17 @@ class KodiVideoDB(common.KodiDBBase):
     def obsolete_file_ids(self):
         """
         Returns a generator for idFile of all Kodi file ids that do not have a
-        dateAdded set (dateAdded NULL) and the filename start with
-        'plugin://plugin.video.plexkodiconnect'
-        These entries should be deleted as they're created falsely by Kodi.
+        dateAdded set (dateAdded NULL) and the associated path entry has
+        a field noUpdate of NULL as well as dateAdded of NULL
         """
-        return (x[0] for x in self.cursor.execute('''
-            SELECT idFile FROM files
-            WHERE dateAdded IS NULL
-            AND strFilename LIKE \'plugin://plugin.video.plexkodiconnect%\'
-            '''))
+        return (x[0] for x in self.cursor.execute("""
+            SELECT files.idFile
+            FROM files
+            LEFT JOIN path ON path.idPath = files.idPath
+            WHERE files.dateAdded IS NULL
+            AND path.noUpdate IS NULL
+            AND path.dateAdded IS NULL
+            """))
 
     def show_id_from_path(self, path):
         """

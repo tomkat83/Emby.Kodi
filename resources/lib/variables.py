@@ -92,6 +92,9 @@ DEVICENAME = DEVICENAME.replace(' ', "")
 
 COMPANION_PORT = int(_ADDON.getSetting('companionPort'))
 
+# Port for the PKC webservice
+WEBSERVICE_PORT = 57578
+
 # Unique ID for this Plex client; also see clientinfo.py
 PKC_MACHINE_IDENTIFIER = None
 

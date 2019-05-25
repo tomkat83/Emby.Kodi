@@ -53,12 +53,16 @@ class PlayState(object):
         }
         self.played_info = {}
 
-        # Set by SpecialMonitor - did user choose to resume playback or start from the
-        # beginning?
-        self.resume_playback = False
+        # Set by SpecialMonitor - did user choose to resume playback or start
+        # from the beginning?
+        # Do set to None if NO resume dialog is displayed! True/False otherwise
+        self.resume_playback = None
+        # Don't ask user whether to resume but immediatly resume
+        self.autoplay = False
         # Was the playback initiated by the user using the Kodi context menu?
         self.context_menu_play = False
-        # Set by context menu - shall we force-transcode the next playing item?
-        self.force_transcode = False
         # Which Kodi player is/has been active? (either int 1, 2 or 3)
         self.active_players = set()
+        # Have we initiated playback via Plex Companion or Alexa - so from the
+        # Plex side of things?
+        self.initiated_by_plex = False

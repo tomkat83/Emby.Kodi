@@ -7,7 +7,7 @@ import xbmcgui
 
 from .plex_api import API
 from .plex_db import PlexDB
-from . import context, plex_functions as PF, playqueue as PQ
+from . import context, plex_functions as PF
 from . import utils, variables as v, app
 
 ###############################################################################
@@ -112,8 +112,7 @@ class ContextMenu(object):
         """
         selected = self._selected_option
         if selected == OPTIONS['Transcode']:
-            app.PLAYSTATE.force_transcode = True
-            self._PMS_play()
+            self._PMS_play(transcode=True)
         elif selected == OPTIONS['PMS_Play']:
             self._PMS_play()
         elif selected == OPTIONS['Extras']:
@@ -139,17 +138,21 @@ class ContextMenu(object):
             if PF.delete_item_from_pms(self.plex_id) is False:
                 utils.dialog("ok", heading="{plex}", line1=utils.lang(30414))
 
-    def _PMS_play(self):
+    def _PMS_play(self, transcode=False):
         """
         For using direct paths: Initiates playback using the PMS
         """
-        playqueue = PQ.get_playqueue_from_type(
-            v.KODI_PLAYLIST_TYPE_FROM_KODI_TYPE[self.kodi_type])
-        playqueue.clear()
-        app.PLAYSTATE.context_menu_play = True
-        handle = self.api.path(force_first_media=False, force_addon=True)
-        handle = 'RunPlugin(%s)' % handle
-        xbmc.executebuiltin(handle.encode('utf-8'))
+        path = ('http://127.0.0.1:%s/plex/play/file.strm?plex_id=%s'
+                % (v.WEBSERVICE_PORT, self.plex_id))
+        if self.plex_type:
+            path += '&plex_type=%s' % self.plex_type
+        if self.kodi_id:
+            path += '&kodi_id=%s' % self.kodi_id
+        if self.kodi_type:
+            path += '&kodi_type=%s' % self.kodi_type
+        if transcode:
+            path += '&transcode=true'
+        xbmc.executebuiltin(('PlayMedia(%s)' % path).encode('utf-8'))
 
     def _extras(self):
         """

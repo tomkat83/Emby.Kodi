@@ -29,9 +29,20 @@ PLEX_TYPE = None
 SECTION_ID = None
 APPEND_SHOW_TITLE = None
 APPEND_SXXEXX = None
-SYNCHED = True
 # Need to chain the PMS keys
 KEY = None
+
+
+def get_listitem(xml_element, resume=True):
+    """
+    Returns a valid xbmcgui.ListItem() for xml_element. Pass in resume=False
+    to NOT set a resume point for this listitem
+    """
+    item = generate_item(xml_element)
+    if not resume and 'resume' in item:
+        del item['resume']
+    prepare_listitem(item)
+    return create_listitem(item, as_tuple=False)
 
 
 def process_method_on_list(method_to_run, items):
@@ -246,8 +257,6 @@ def attach_kodi_ids(xml):
     """
     Attaches the kodi db_item to the xml's children, attribute 'pkc_db_item'
     """
-    if not SYNCHED:
-        return
     with PlexDB(lock=False) as plexdb:
         for child in xml:
             api = API(child)

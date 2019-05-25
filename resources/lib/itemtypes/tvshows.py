@@ -180,7 +180,8 @@ class Show(TvShowMixin, ItemBase):
                                              scraper='metadata.local')
         else:
             # Set plugin path
-            toplevelpath = "plugin://%s.tvshows/" % v.ADDON_ID
+            toplevelpath = ('http://127.0.0.1:%s/plex/kodi/shows/'
+                            % v.WEBSERVICE_PORT)
             path = "%s%s/" % (toplevelpath, plex_id)
             # Do NOT set a parent id because addon-path cannot be "stacked"
             toppathid = None
@@ -448,22 +449,25 @@ class Episode(TvShowMixin, ItemBase):
         if do_indirect:
             # Set plugin path - do NOT use "intermediate" paths for the show
             # as with direct paths!
-            filename = api.file_name(force_first_media=True)
-            path = 'plugin://%s.tvshows/%s/' % (v.ADDON_ID, show_id)
-            filename = ('%s?plex_id=%s&plex_type=%s&mode=play&filename=%s'
-                        % (path, plex_id, v.PLEX_TYPE_EPISODE, filename))
+            # Set plugin path and media flags using real filename
+            path = ('http://127.0.0.1:%s/plex/kodi/shows/%s/'
+                    % (v.WEBSERVICE_PORT, show_id))
+            filename = '{0}/file.strm?kodi_id={1}&kodi_type={2}&plex_id={0}&plex_type={3}'
+            filename = filename.format(plex_id,
+                                       kodi_id,
+                                       v.KODI_TYPE_EPISODE,
+                                       v.PLEX_TYPE_EPISODE)
             playurl = filename
             # Root path tvshows/ already saved in Kodi DB
-            kodi_pathid = self.kodidb.add_path(path)
-            if not app.SYNC.direct_paths:
-                # need to set a 2nd file entry for a path without plex show id
-                # This fixes e.g. context menu and widgets working as they
-                # should
-                # A dirty hack, really
-                path_2 = 'plugin://%s.tvshows/' % v.ADDON_ID
-                # filename_2 is exactly the same as filename
-                # so WITH plex show id!
-                kodi_pathid_2 = self.kodidb.add_path(path_2)
+            kodi_pathid = self.kodidb.get_path(path)
+            # HACK
+            # need to set a 2nd file entry for a path without plex show id
+            # This fixes e.g. context menu and widgets working as they
+            # should
+            path_2 = 'http://127.0.0.1:%s/plex/kodi/shows/' % v.WEBSERVICE_PORT
+            # filename_2 is exactly the same as filename
+            # so WITH plex show id!
+            kodi_pathid_2 = self.kodidb.add_path(path_2)
 
         # UPDATE THE EPISODE #####
         if update_item:

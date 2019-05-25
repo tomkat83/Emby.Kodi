@@ -10,6 +10,7 @@ from . import initialsetup
 from . import kodimonitor
 from . import sync, library_sync
 from . import websocket_client
+from . import webservice
 from . import plex_companion
 from . import plex_functions as PF, playqueue as PQ
 from . import playback_starter
@@ -433,6 +434,7 @@ class Service(object):
         self.setup.setup()
 
         # Initialize important threads
+        self.webservice = webservice.WebService()
         self.ws = websocket_client.PMS_Websocket()
         self.alexa = websocket_client.Alexa_Websocket()
         self.sync = sync.Sync()
@@ -494,6 +496,14 @@ class Service(object):
                 xbmc.sleep(100)
                 continue
 
+            if self.webservice is not None and not self.webservice.is_alive():
+                # TODO: Emby completely restarts Emby for Kodi at this point
+                # Check if this is really necessary
+                LOG.info('Restarting webservice')
+                self.webservice.abort()
+                self.webservice = webservice.WebService()
+                self.webservice.start()
+
             # Before proceeding, need to make sure:
             # 1. Server is online
             # 2. User is set
@@ -523,12 +533,15 @@ class Service(object):
                     continue
             elif not self.startup_completed:
                 self.startup_completed = True
+                LOG.debug('Starting service threads')
+                self.webservice.start()
                 self.ws.start()
                 self.sync.start()
                 self.plexcompanion.start()
                 self.playqueue.start()
                 if utils.settings('enable_alexa') == 'true':
                     self.alexa.start()
+                LOG.debug('Service threads started')
 
             xbmc.sleep(100)
 

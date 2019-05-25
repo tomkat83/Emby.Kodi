@@ -61,7 +61,8 @@ def get_playlist(path=None, kodi_hash=None, plex_id=None):
 
 def _m3u_iterator(text):
     """
-    Yields e.g. plugin://plugin.video.plexkodiconnect.movies/?plex_id=xxx
+    Yields e.g.
+    http://127.0.0.1:<port>/plex/kodi/movies/file.strm?plex_id=...
     """
     lines = iter(text.split('\n'))
     for line in lines:

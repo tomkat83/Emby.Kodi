@@ -217,7 +217,8 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None,
         # Need to chain keys for navigation
         widgets.KEY = key
     # Process all items to show
-    widgets.attach_kodi_ids(xml)
+    if synched:
+        widgets.attach_kodi_ids(xml)
     all_items = widgets.process_method_on_list(widgets.generate_item, xml)
     all_items = widgets.process_method_on_list(widgets.prepare_listitem,
                                                all_items)

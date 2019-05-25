@@ -20,7 +20,7 @@ class Playlists(object):
 
     def delete_playlist(self, playlist):
         """
-        Removes the entry for playlist [Playqueue_Object] from the Plex
+        Removes the entry for playlist [PlayQueue] from the Plex
         playlists table.
         Be sure to either set playlist.id or playlist.kodi_path
         """

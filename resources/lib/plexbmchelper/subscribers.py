@@ -159,18 +159,17 @@ class SubscriptionMgr(object):
             v.PLEX_PLAYLIST_TYPE_AUDIO: None,
             v.PLEX_PLAYLIST_TYPE_PHOTO: None
         }
-        for typus in timelines:
-            if players.get(v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[typus]) is None:
+        for plex_type in timelines:
+            kodi_type = v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[plex_type]
+            if players.get(kodi_type) is None:
                 timeline = {
-                    'controllable': CONTROLLABLE[typus],
-                    'type': typus,
+                    'controllable': CONTROLLABLE[plex_type],
+                    'type': plex_type,
                     'state': 'stopped'
                 }
             else:
-                timeline = self._timeline_dict(players[
-                        v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[typus]],
-                    typus)
-            timelines[typus] = self._dict_to_xml(timeline)
+                timeline = self._timeline_dict(players[kodi_type], plex_type)
+            timelines[plex_type] = self._dict_to_xml(timeline)
         timelines.update({'command_id': '{command_id}',
                          'location': self.location})
         return answ.format(**timelines)
@@ -302,7 +301,7 @@ class SubscriptionMgr(object):
         playqueue = PQ.PLAYQUEUES[playerid]
         info = app.PLAYSTATE.player_states[playerid]
         position = self._get_correct_position(info, playqueue)
-        if info[STREAM_DETAILS[stream_type]] == -1:
+        if info[STREAM_DETAILS[stream_type]] in (-1, None):
             kodi_stream_index = -1
         else:
             kodi_stream_index = info[STREAM_DETAILS[stream_type]]['index']
