@@ -14,9 +14,8 @@ import xbmcgui
 from .plex_db import PlexDB
 from . import kodi_db
 from .downloadutils import DownloadUtils as DU
-from . import utils, timing, plex_functions as PF
-from . import json_rpc as js, playqueue as PQ, playlist_func as PL
-from . import backgroundthread, app, variables as v
+from . import utils, timing, plex_functions as PF, json_rpc as js
+from . import playqueue as PQ, backgroundthread, app, variables as v
 
 LOG = getLogger('PLEX.kodimonitor')
 
@@ -256,8 +255,8 @@ class KodiMonitor(xbmc.Monitor):
         position = info['position'] if info['position'] != -1 else 0
         kodi_playlist = js.playlist_get_items(self.playerid)
         LOG.debug('Current Kodi playlist: %s', kodi_playlist)
-        playlistitem = PL.PlaylistItem(kodi_item=kodi_playlist[position])
-        if isinstance(self.playqueue.items[0], PL.PlaylistItemDummy):
+        playlistitem = PQ.PlaylistItem(kodi_item=kodi_playlist[position])
+        if isinstance(self.playqueue.items[0], PQ.PlaylistItemDummy):
             # This dummy item will be deleted by webservice soon - it won't
             # play
             LOG.debug('Dummy item detected')
@@ -328,8 +327,10 @@ class KodiMonitor(xbmc.Monitor):
                 LOG.debug('No Plex id obtained - aborting playback report')
                 app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
                 return
-            item = PL.init_plex_playqueue(playqueue, plex_id=plex_id)
-            item.file = path
+            playlistitem = PQ.PlaylistItem(plex_id=plex_id,
+                                           grab_xml=True)
+            playlistitem.file = path
+            self.playqueue.init(playlistitem)
             # Set the Plex container key (e.g. using the Plex playqueue)
             container_key = None
             if info['playlistid'] != -1:

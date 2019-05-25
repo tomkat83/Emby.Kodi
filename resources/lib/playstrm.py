@@ -2,8 +2,7 @@
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 
-from . import app, utils, json_rpc, variables as v, playlist_func as PL, \
-    playqueue as PQ
+from . import app, utils, json_rpc, variables as v, playqueue as PQ
 
 
 LOG = getLogger('PLEX.playstrm')
@@ -82,7 +81,7 @@ class PlayStrm(object):
         start_position = position or max(self.playqueue.kodi_pl.size(), 0)
         index = start_position + 1
         LOG.info('Play folder plex_id %s, index: %s', self.plex_id, index)
-        item = PL.PlaylistItem(plex_id=self.plex_id,
+        item = PQ.PlaylistItem(plex_id=self.plex_id,
                                plex_type=self.plex_type,
                                kodi_id=self.kodi_id,
                                kodi_type=self.kodi_type)

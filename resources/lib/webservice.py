@@ -16,7 +16,7 @@ import xbmcvfs
 from .plex_api import API
 from .plex_db import PlexDB
 from . import backgroundthread, utils, variables as v, app, playqueue as PQ
-from . import playlist_func as PL, json_rpc as js, plex_functions as PF
+from . import json_rpc as js, plex_functions as PF
 
 
 LOG = getLogger('PLEX.webservice')
@@ -416,7 +416,7 @@ class QueuePlay(backgroundthread.KillableThread):
                     break
                 self.load_params(params)
                 if play_folder:
-                    playlistitem = PL.PlaylistItem(plex_id=self.plex_id,
+                    playlistitem = PQ.PlaylistItem(plex_id=self.plex_id,
                                                    plex_type=self.plex_type,
                                                    kodi_id=self.kodi_id,
                                                    kodi_type=self.kodi_type)

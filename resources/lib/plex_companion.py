@@ -14,7 +14,6 @@ from .plexbmchelper import listener, plexgdm, subscribers, httppersist
 from .plex_api import API
 from . import utils
 from . import plex_functions as PF
-from . import playlist_func as PL
 from . import json_rpc as js
 from . import playqueue as PQ
 from . import variables as v
@@ -48,10 +47,10 @@ def update_playqueue_from_PMS(playqueue,
     if transient_token is None:
         transient_token = playqueue.plex_transient_token
     with app.APP.lock_playqueues:
-        xml = PL.get_PMS_playlist(playlist_id=playqueue_id)
+        xml = PQ.get_PMS_playlist(playlist_id=playqueue_id)
         if xml is None:
             LOG.error('Could now download playqueue %s', playqueue_id)
-            raise PL.PlaylistError()
+            raise PQ.PlaylistError()
         app.PLAYSTATE.initiated_by_plex = True
         playqueue.init_from_xml(xml,
                                 offset=offset,
@@ -82,7 +81,7 @@ class PlexCompanion(backgroundthread.KillableThread):
             xml[0].attrib
         except (AttributeError, IndexError, TypeError):
             LOG.error('Could not download Plex metadata for: %s', data)
-            raise PL.PlaylistError()
+            raise PQ.PlaylistError()
         api = API(xml[0])
         if api.plex_type() == v.PLEX_TYPE_ALBUM:
             LOG.debug('Plex music album detected')
@@ -91,7 +90,7 @@ class PlexCompanion(backgroundthread.KillableThread):
                 xml[0].attrib
             except (TypeError, IndexError, AttributeError):
                 LOG.error('Could not download the album xml for %s', data)
-                raise PL.PlaylistError()
+                raise PQ.PlaylistError()
             playqueue = PQ.get_playqueue_from_type('audio')
             playqueue.init_from_xml(xml,
                                     transient_token=data.get('token'))
@@ -100,7 +99,7 @@ class PlexCompanion(backgroundthread.KillableThread):
             xml = PF.DownloadChunks('{server}/playQueues/%s' % container_key)
             if xml is None:
                 LOG.error('Could not get playqueue for %s', data)
-                raise PL.PlaylistError()
+                raise PQ.PlaylistError()
             playqueue = PQ.get_playqueue_from_type(
                 v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
             offset = utils.cast(float, data.get('offset')) or None
@@ -147,7 +146,7 @@ class PlexCompanion(backgroundthread.KillableThread):
                 xml[0].attrib
             except (AttributeError, IndexError, TypeError):
                 LOG.error('Could not download Plex metadata')
-                raise PL.PlaylistError()
+                raise PQ.PlaylistError()
             api = API(xml[0])
             playqueue = PQ.get_playqueue_from_type(
                 v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
@@ -187,12 +186,12 @@ class PlexCompanion(backgroundthread.KillableThread):
         """
         example data: {'playQueueID': '8475', 'commandID': '11'}
         """
-        xml = PL.get_pms_playqueue(data['playQueueID'])
+        xml = PQ.get_pms_playqueue(data['playQueueID'])
         if xml is None:
             return
         if len(xml) == 0:
             LOG.debug('Empty playqueue received - clearing playqueue')
-            plex_type = PL.get_plextype_from_xml(xml)
+            plex_type = PQ.get_plextype_from_xml(xml)
             if plex_type is None:
                 return
             playqueue = PQ.get_playqueue_from_type(
@@ -235,7 +234,7 @@ class PlexCompanion(backgroundthread.KillableThread):
                     self._process_refresh(data)
             elif task['action'] == 'setStreams':
                 self._process_streams(data)
-        except PL.PlaylistError:
+        except PQ.PlaylistError:
             LOG.error('Could not process companion data: %s', data)
             # "Play Error"
             utils.dialog('notification',

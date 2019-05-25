@@ -5,7 +5,7 @@ from logging import getLogger
 
 from .plex_api import API
 from . import utils, context_entry, transfer, backgroundthread, variables as v
-from . import app, plex_functions as PF, playqueue as PQ, playlist_func as PL
+from . import app, plex_functions as PF, playqueue as PQ
 
 ###############################################################################
 
@@ -81,7 +81,7 @@ def process_indirect(key, offset, resolve=True):
     playqueue = PQ.get_playqueue_from_type(
         v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type()])
     playqueue.clear()
-    item = PL.PlaylistItem(xml_video_element=xml[0])
+    item = PQ.PlaylistItem(xml_video_element=xml[0])
     item.offset = offset
     item.playmethod = 'DirectStream'
 
