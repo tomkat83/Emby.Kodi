@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
-from logging import getLogger
 
 from ..plex_db import PlexDB
 from ..plex_api import API
 from .. import plex_functions as PF, utils, kodi_db, variables as v, app
 
-LOG = getLogger('PLEX.playqueue')
-
-# Our PKC playqueues (3 instances PlayQueue())
+# Our PKC playqueues (3 instances of PlayQueue())
 PLAYQUEUES = []
 
 
@@ -189,7 +186,6 @@ class PlaylistItem(object):
             self.plex_id = utils.cast(int, query.get('plex_id'))
             self.plex_type = query.get('itemType')
         self.set_uri()
-        LOG.debug('Made playlist item from Kodi: %s', self)
 
     def set_uri(self):
         if self.plex_id is None and self.file is not None:
@@ -216,14 +212,12 @@ class PlaylistItem(object):
                 self.file.startswith('http')):
             self.kodi_id, _ = kodi_db.kodiid_from_filename(self.file,
                                                            v.KODI_TYPE_SONG)
-            LOG.debug('Detected song. Research results: %s', self)
             return
         # Need more info since we don't have kodi_id nor type. Use file path.
         if (self.file.startswith('plugin') or
                 (self.file.startswith('http') and not
                  self.file.startswith('http://127.0.0.1:%s' % v.WEBSERVICE_PORT))):
             return
-        LOG.debug('Starting research for Kodi id since we didnt get one')
         # Try the VIDEO DB first - will find both movies and episodes
         self.kodi_id, self.kodi_type = kodi_db.kodiid_from_filename(self.file,
                                                                     db_type='video')
@@ -232,7 +226,6 @@ class PlaylistItem(object):
             self.kodi_id, self.kodi_type = kodi_db.kodiid_from_filename(self.file,
                                                                         db_type='music')
         self.kodi_type = None if self.kodi_id is None else self.kodi_type
-        LOG.debug('Research results for guessing Kodi id: %s', self)
 
     def plex_stream_index(self, kodi_stream_index, stream_type):
         """
