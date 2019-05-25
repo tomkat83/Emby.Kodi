@@ -250,24 +250,6 @@ class KodiMonitor(xbmc.Monitor):
                 plex_type = db_item['plex_type']
         return plex_id, plex_type
 
-    @staticmethod
-    def _add_remaining_items_to_playlist(playqueue):
-        """
-        Adds all but the very first item of the Kodi playlist to the Plex
-        playqueue
-        """
-        items = js.playlist_get_items(playqueue.playlistid)
-        if not items:
-            LOG.error('Could not retrieve Kodi playlist items')
-            return
-        # Remove first item
-        items.pop(0)
-        try:
-            for i, item in enumerate(items):
-                PL.add_item_to_plex_playqueue(playqueue, i + 1, kodi_item=item)
-        except PL.PlaylistError:
-            LOG.info('Could not build Plex playlist for: %s', items)
-
     def _json_item(self, playerid):
         """
         Uses JSON RPC to get the playing item's info and returns the tuple
@@ -320,15 +302,15 @@ class KodiMonitor(xbmc.Monitor):
         position = info['position'] if info['position'] != -1 else 0
         kodi_playlist = js.playlist_get_items(self.playerid)
         LOG.debug('Current Kodi playlist: %s', kodi_playlist)
-        kodi_item = PL.playlist_item_from_kodi(kodi_playlist[position])
+        playlistitem = PL.PlaylistItem(kodi_item=kodi_playlist[position])
         if isinstance(self.playqueue.items[0], PL.PlaylistItemDummy):
             # This dummy item will be deleted by webservice soon - it won't
             # play
             LOG.debug('Dummy item detected')
             position = 1
-        elif kodi_item != self.playqueue.items[position]:
+        elif playlistitem != self.playqueue.items[position]:
             LOG.debug('Different playqueue items: %s vs. %s ',
-                      kodi_item, self.playqueue.items[position])
+                      playlistitem, self.playqueue.items[position])
             raise MonitorError()
         # Return the PKC playqueue item - contains more info
         return self.playqueue.items[position]

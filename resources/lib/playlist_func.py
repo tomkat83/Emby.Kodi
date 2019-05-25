@@ -582,7 +582,7 @@ class PlaylistItem(object):
     - OR: have the same file
     """
     def __init__(self, plex_id=None, plex_type=None, xml_video_element=None,
-                 kodi_id=None, kodi_type=None, grab_xml=False,
+                 kodi_id=None, kodi_type=None, kodi_item=None, grab_xml=False,
                  lookup_kodi=True):
         """
         Pass grab_xml=True in order to get Plex metadata from the PMS while
@@ -595,9 +595,14 @@ class PlaylistItem(object):
         self.plex_id = plex_id
         self.plex_type = plex_type
         self.plex_uuid = None
-        self.kodi_id = kodi_id
-        self.kodi_type = kodi_type
-        self.file = None
+        if kodi_item:
+            self.kodi_id = kodi_item['id']
+            self.kodi_type = kodi_item['type']
+            self.file = kodi_item.get('file')
+        else:
+            self.kodi_id = kodi_id
+            self.kodi_type = kodi_type
+            self.file = None
         self.uri = None
         self.guid = None
         self.xml = None
@@ -619,7 +624,7 @@ class PlaylistItem(object):
                 xml_video_element = None
         if xml_video_element is not None:
             self.from_xml(xml_video_element)
-        if (lookup_kodi and (kodi_id is None or kodi_type is None) and
+        if (lookup_kodi and (self.kodi_id is None or self.kodi_type is None) and
                 self.plex_type != v.PLEX_TYPE_CLIP):
             with PlexDB(lock=False) as plexdb:
                 db_item = plexdb.item_by_id(self.plex_id, self.plex_type)
