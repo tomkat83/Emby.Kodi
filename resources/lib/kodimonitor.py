@@ -149,7 +149,7 @@ class KodiMonitor(xbmc.Monitor):
             self.playlistid = data['playlistid']
         if utils.window('plex.playlist.start') and data['position'] == int(utils.window('plex.playlist.start')):
             LOG.debug('Playlist ready')
-            utils.window('plex.playlist.ready', value='true')
+            app.PLAYSTATE.playlist_ready = True
             utils.window('plex.playlist.start', clear=True)
 
     def _playlist_onremove(self, data):

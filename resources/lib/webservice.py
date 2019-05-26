@@ -324,7 +324,7 @@ class QueuePlay(backgroundthread.KillableThread):
             # Release default.py
             utils.window('plex.playlist.play', value='true')
             # The playlist will be ready anyway
-            utils.window('plex.playlist.ready', value='true')
+            app.PLAYSTATE.playlist_ready = True
             playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
             playqueue.clear()
             playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_VIDEO)
@@ -349,7 +349,7 @@ class QueuePlay(backgroundthread.KillableThread):
             try:
                 self._run()
             finally:
-                utils.window('plex.playlist.ready', clear=True)
+                app.PLAYSTATE.playlist_ready = False
                 utils.window('plex.playlist.start', clear=True)
                 app.PLAYSTATE.initiated_by_plex = False
                 self.server.threads.remove(self)
@@ -387,7 +387,7 @@ class QueuePlay(backgroundthread.KillableThread):
                         # avoid issues with ongoing Live TV playback
                         app.APP.player.stop()
                     count = 50
-                    while not utils.window('plex.playlist.ready'):
+                    while not app.PLAYSTATE.playlist_ready:
                         xbmc.sleep(50)
                         if not count:
                             LOG.info('Playback aborted')
