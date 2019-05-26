@@ -404,11 +404,12 @@ class QueuePlay(backgroundthread.KillableThread):
                         LOG.info('Start normal playback')
                         # Release default.py
                         utils.window('plex.playlist.play', value='true')
-                        # Remove the playlist element we just added with the
-                        # right path
-                        xbmc.sleep(1000)
-                        playqueue.kodi_remove_item(start_position)
-                        del playqueue.items[start_position]
+                        if not app.PLAYSTATE.initiated_by_plex:
+                            # Remove the playlist element we just added with the
+                            # right path
+                            xbmc.sleep(1000)
+                            playqueue.kodi_remove_item(start_position)
+                            del playqueue.items[start_position]
                     LOG.debug('Done wrapping up')
                     break
                 self.load_params(params)
