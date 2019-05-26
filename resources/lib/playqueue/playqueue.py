@@ -289,7 +289,7 @@ class PlayQueue(object):
     def _resume_playback(db_item=None, xml=None):
         '''
         Pass in either db_item or xml
-        Resume item if available. Returns bool or raise an PlayStrmException if
+        Resume item if available. Returns bool or raise a PlayqueueError if
         resume was cancelled by user.
         '''
         resume = app.PLAYSTATE.resume_playback
@@ -325,7 +325,7 @@ class PlayQueue(object):
                 break
             api = API(intro)
             LOG.debug('Adding trailer: %s', api.title())
-            self._kodi_add_xml(intro, api)
+            self._kodi_add_xml(intro, api, resume=False)
 
     def _add_additional_parts(self, xml):
         ''' Create listitems and add them to the stack of playlist.
@@ -337,14 +337,20 @@ class PlayQueue(object):
                 continue
             api.set_part_number(part)
             LOG.debug('Adding addional part for %s: %s', api.title(), part)
-            self._kodi_add_xml(xml[0], api)
+            self._kodi_add_xml(xml[0], api, resume=False)
 
-    def _kodi_add_xml(self, xml, api, resume=False, playlistitem=None):
+    def _kodi_add_xml(self, xml, api, resume, playlistitem=None):
+        """
+        Be careful what you pass as resume:
+            False: do not resume, do not subsequently ask user
+            True: do resume, do not subsequently ask user
+        """
         if not playlistitem:
             playlistitem = PlaylistItem(xml_video_element=xml)
         playlistitem.part = api.part
         playlistitem.force_transcode = self.force_transcode
-        listitem = widgets.get_listitem(xml, resume=True)
+        playlistitem.resume = resume
+        listitem = widgets.get_listitem(xml, resume=resume)
         listitem.setSubtitles(api.cache_external_subs())
         play = PlayUtils(api, playlistitem)
         url = play.getPlayUrl()
@@ -466,6 +472,7 @@ class PlayQueue(object):
         Only manipulates the Kodi playlist. Won't change self.items
         """
         LOG.debug('Removing position %s on the Kodi side for %s', pos, self)
+        LOG.error('Current Kodi playlist: %s', js.playlist_get_items(self.playlistid))
         answ = js.playlist_remove(self.playlistid, pos)
         if 'error' in answ:
             raise PlayqueueError('Could not remove item: %s' % answ['error'])
