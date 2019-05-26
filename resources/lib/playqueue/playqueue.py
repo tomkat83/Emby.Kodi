@@ -201,7 +201,7 @@ class PlayQueue(object):
         xml = PF.GetPlexMetadata(plex_id)
         if xml in (None, 401):
             raise PlayqueueError('Could not get Plex metadata %s for %s',
-                                plex_id, self.items[startpos])
+                                 plex_id, self.items[startpos])
         api = API(xml[0])
         if playlistitem.resume is None:
             # Potentially ask user to resume
@@ -383,10 +383,10 @@ class PlayQueue(object):
         """
         if not isinstance(item, PlaylistItem):
             raise PlayqueueError('Wrong item %s of type %s received'
-                                % (item, type(item)))
+                                 % (item, type(item)))
         if pos > len(self.items):
             raise PlayqueueError('Position %s too large for playlist length %s'
-                                % (pos, len(self.items)))
+                                 % (pos, len(self.items)))
         LOG.debug('Adding item to Kodi playlist at position %s: %s', pos, item)
         if listitem:
             self.kodi_pl.add(url=listitem.getPath(),
@@ -404,7 +404,7 @@ class PlayQueue(object):
                                            'item': {'%sid' % item.kodi_type: item.kodi_id}})
             if 'error' in answ:
                 raise PlayqueueError('Kodi did not add item to playlist: %s',
-                                    answ)
+                                     answ)
         else:
             if item.xml is None:
                 LOG.debug('Need to get metadata for item %s', item)
@@ -435,10 +435,10 @@ class PlayQueue(object):
         """
         if not isinstance(item, PlaylistItem) or not item.uri:
             raise PlayqueueError('Wrong item %s of type %s received'
-                                % (item, type(item)))
+                                 % (item, type(item)))
         if pos > len(self.items):
             raise PlayqueueError('Position %s too large for playlist length %s'
-                                % (pos, len(self.items)))
+                                 % (pos, len(self.items)))
         LOG.debug('Adding item to Plex playlist at position %s: %s', pos, item)
         url = '{server}/%ss/%s?uri=%s' % (self.kind, self.id, item.uri)
         # Will usually put the new item at the end of the Plex playlist
@@ -447,7 +447,7 @@ class PlayQueue(object):
             xml[0].attrib
         except (TypeError, AttributeError, KeyError, IndexError):
             raise PlayqueueError('Could not add item %s to playlist %s'
-                                % (item, self))
+                                 % (item, self))
         for actual_pos, xml_video_element in enumerate(xml):
             api = API(xml_video_element)
             if api.plex_id() == item.plex_id:
@@ -497,8 +497,8 @@ class PlayQueue(object):
         """
         if before > len(self.items) or after > len(self.items) or after == before:
             raise PlayqueueError('Illegal original position %s and/or desired '
-                                'position %s for playlist length %s' %
-                                (before, after, len(self.items)))
+                                 'position %s for playlist length %s' %
+                                 (before, after, len(self.items)))
         LOG.debug('Moving item from %s to %s on the Plex side for %s',
                   before, after, self)
         if after == 0:
@@ -523,7 +523,7 @@ class PlayQueue(object):
             xml[0].attrib
         except (TypeError, IndexError, AttributeError):
             raise PlayqueueError('Could not move playlist item from %s to %s '
-                                'for %s' % (before, after, self))
+                                 'for %s' % (before, after, self))
         self.update_details_from_xml(xml)
         self.items.insert(after, self.items.pop(before))
         LOG.debug('Done moving items for %s', self)

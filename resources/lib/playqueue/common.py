@@ -12,7 +12,7 @@ PLAYQUEUES = []
 
 class PlayqueueError(Exception):
     """
-    Exception for our playlist constructs
+    Exception for our playqueue constructs
     """
     pass
 
@@ -60,7 +60,7 @@ class PlaylistItem(object):
         self.kodi_type = kodi_type
         self.file = None
         if kodi_item:
-            self.kodi_id = kodi_item.get('id')
+            self.kodi_id = utils.cast(int, kodi_item.get('id'))
             self.kodi_type = kodi_item.get('type')
             self.file = kodi_item.get('file')
         self.uri = None
@@ -76,15 +76,9 @@ class PlaylistItem(object):
         #   False: do NOT resume, don't ask user
         #   True: do resume, don't ask user
         self.resume = None
-        if (self.plex_id is None and
-                (self.kodi_id is not None and self.kodi_type is not None)):
-            with PlexDB(lock=False) as plexdb:
-                db_item = plexdb.item_by_kodi_id(self.kodi_id, self.kodi_type)
-            if db_item:
-                self.plex_id = db_item['plex_id']
-                self.plex_type = db_item['plex_type']
-                self.plex_uuid = db_item['section_uuid']
-        if grab_xml and plex_id is not None and xml_video_element is None:
+        if self.plex_id is None:
+            self._from_plex_db()
+        if grab_xml and self.plex_id is not None and xml_video_element is None:
             xml_video_element = PF.GetPlexMetadata(plex_id)
             try:
                 xml_video_element = xml_video_element[0]
@@ -99,11 +93,13 @@ class PlaylistItem(object):
             if db_item is not None:
                 self.kodi_id = db_item['kodi_id']
                 self.kodi_type = db_item['kodi_type']
+                self.plex_type = db_item['plex_type']
                 self.plex_uuid = db_item['section_uuid']
         if (lookup_kodi and (self.kodi_id is None or self.kodi_type is None) and
                 self.plex_type != v.PLEX_TYPE_CLIP):
             self._guess_id_from_file()
-        self.set_uri()
+            self._from_plex_db()
+        self._set_uri()
 
     def __eq__(self, other):
         if self.plex_id is not None and other.plex_id is not None:
@@ -142,6 +138,20 @@ class PlaylistItem(object):
         return unicode(self).encode('utf-8')
     __repr__ = __str__
 
+    def _from_plex_db(self):
+        """
+        Uses self.kodi_id and self.kodi_type to look up the item in the Plex
+        DB. Thus potentially sets self.plex_id, plex_type, plex_uuid
+        """
+        if self.kodi_id is None or not self.kodi_type:
+            return
+        with PlexDB(lock=False) as plexdb:
+            db_item = plexdb.item_by_kodi_id(self.kodi_id, self.kodi_type)
+        if db_item:
+            self.plex_id = db_item['plex_id']
+            self.plex_type = db_item['plex_type']
+            self.plex_uuid = db_item['section_uuid']
+
     def from_xml(self, xml_video_element):
         """
         xml_video_element: etree xml piece 1 level underneath <MediaContainer>
@@ -157,7 +167,9 @@ class PlaylistItem(object):
         self.playcount = api.viewcount()
         self.offset = api.resume_point()
         self.xml = xml_video_element
-        self.set_uri()
+        if self.kodi_id is None or not self.kodi_type:
+            self._from_plex_db()
+        self._set_uri()
 
     def from_kodi(self, playlist_item):
         """
@@ -167,17 +179,12 @@ class PlaylistItem(object):
         If kodi_id & kodi_type are provided, plex_id and plex_type will be
         looked up (if not already set)
         """
-        self.kodi_id = playlist_item.get('id')
+        self.kodi_id = utils.cast(int, playlist_item.get('id'))
         self.kodi_type = playlist_item.get('type')
         self.file = playlist_item.get('file')
         if self.plex_id is None and self.kodi_id is not None and self.kodi_type:
-            with PlexDB(lock=False) as plexdb:
-                db_item = plexdb.item_by_kodi_id(self.kodi_id, self.kodi_type)
-            if db_item:
-                self.plex_id = db_item['plex_id']
-                self.plex_type = db_item['plex_type']
-                self.plex_uuid = db_item['section_uuid']
-        if self.plex_id is None and self.file is not None:
+            self._from_plex_db()
+        if self.plex_id is None and self.file:
             try:
                 query = self.file.split('?', 1)[1]
             except IndexError:
@@ -185,14 +192,13 @@ class PlaylistItem(object):
             query = dict(utils.parse_qsl(query))
             self.plex_id = utils.cast(int, query.get('plex_id'))
             self.plex_type = query.get('itemType')
-        self.set_uri()
+        self._set_uri()
 
-    def set_uri(self):
+    def _set_uri(self):
         if self.plex_id is None and self.file is not None:
             self.uri = ('library://whatever/item/%s'
                         % utils.quote(self.file, safe=''))
         elif self.plex_id is not None and self.plex_uuid is not None:
-            # TO BE VERIFIED - PLEX DOESN'T LIKE PLAYLIST ADDS IN THIS MANNER
             self.uri = ('library://%s/item/library%%2Fmetadata%%2F%s' %
                         (self.plex_uuid, self.plex_id))
         elif self.plex_id is not None:
@@ -203,6 +209,8 @@ class PlaylistItem(object):
 
     def _guess_id_from_file(self):
         """
+        If self.file is set, will try to guess kodi_id and kodi_type from the
+        filename and path using the Kodi video and music databases
         """
         if not self.file:
             return
@@ -219,12 +227,12 @@ class PlaylistItem(object):
                  self.file.startswith('http://127.0.0.1:%s' % v.WEBSERVICE_PORT))):
             return
         # Try the VIDEO DB first - will find both movies and episodes
-        self.kodi_id, self.kodi_type = kodi_db.kodiid_from_filename(self.file,
-                                                                    db_type='video')
+        self.kodi_id, self.kodi_type = kodi_db.kodiid_from_filename(
+            self.file, db_type='video')
         if self.kodi_id is None:
             # No movie or episode found - try MUSIC DB now for songs
-            self.kodi_id, self.kodi_type = kodi_db.kodiid_from_filename(self.file,
-                                                                        db_type='music')
+            self.kodi_id, self.kodi_type = kodi_db.kodiid_from_filename(
+                self.file, db_type='music')
         self.kodi_type = None if self.kodi_id is None else self.kodi_type
 
     def plex_stream_index(self, kodi_stream_index, stream_type):
@@ -289,6 +297,6 @@ class PlaylistItemDummy(PlaylistItem):
     """
     def __init__(self, *args, **kwargs):
         super(PlaylistItemDummy, self).__init__(*args, **kwargs)
-        self.name = 'dummy item'
+        self.name = 'PKC Dummy playqueue item'
         self.id = 0
         self.plex_id = 0
