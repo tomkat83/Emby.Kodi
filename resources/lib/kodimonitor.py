@@ -87,13 +87,11 @@ class KodiMonitor(xbmc.Monitor):
                 with app.APP.lock_playqueues:
                     _playback_cleanup()
         elif method == 'Playlist.OnAdd':
-            with app.APP.lock_playqueues:
-                self._playlist_onadd(data)
+            self._playlist_onadd(data)
         elif method == 'Playlist.OnRemove':
             self._playlist_onremove(data)
         elif method == 'Playlist.OnClear':
-            with app.APP.lock_playqueues:
-                self._playlist_onclear(data)
+            self._playlist_onclear(data)
         elif method == "VideoLibrary.OnUpdate":
             # Manually marking as watched/unwatched
             playcount = data.get('playcount')

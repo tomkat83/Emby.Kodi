@@ -322,6 +322,8 @@ class QueuePlay(backgroundthread.KillableThread):
             LOG.debug('Widget video playback detected')
             video_widget_playback = True
             # Release default.py
+            utils.window('plex.playlist.play', value='true')
+            # The playlist will be ready anyway
             utils.window('plex.playlist.ready', value='true')
             playqueue = PQ.get_playqueue_from_type(v.KODI_TYPE_AUDIO)
             playqueue.clear()
@@ -397,7 +399,6 @@ class QueuePlay(backgroundthread.KillableThread):
                         playqueue.start_playback(start_position)
                     elif video_widget_playback:
                         LOG.info('Start widget video playback')
-                        utils.window('plex.playlist.play', value='true')
                         playqueue.start_playback()
                     else:
                         LOG.info('Start normal playback')
