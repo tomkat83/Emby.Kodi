@@ -72,3 +72,6 @@ class PlayState(object):
         # signal only when the currently playing item that called the
         # webservice has successfully been processed
         self.playlist_ready = False
+        # Flag for Kodimonitor to check when the correct item has been
+        # processed and the Playlist.OnAdd signal has been received
+        self.playlist_start_pos = None

@@ -350,7 +350,7 @@ class QueuePlay(backgroundthread.KillableThread):
                 self._run()
             finally:
                 app.PLAYSTATE.playlist_ready = False
-                utils.window('plex.playlist.start', clear=True)
+                app.PLAYSTATE.playlist_start_pos = None
                 app.PLAYSTATE.initiated_by_plex = False
                 self.server.threads.remove(self)
                 self.server.pending = []
@@ -372,7 +372,7 @@ class QueuePlay(backgroundthread.KillableThread):
         # of our current playqueue
         position = playqueue.kodi_pl.size()
         # Set to start_position + 1 because first item will fail
-        utils.window('plex.playlist.start', str(start_position + 1))
+        app.PLAYSTATE.playlist_start_pos = start_position + 1
         LOG.debug('start_position %s, position %s for current playqueue: %s',
                   start_position, position, playqueue)
         while True:
