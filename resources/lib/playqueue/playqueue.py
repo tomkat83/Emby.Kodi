@@ -472,7 +472,6 @@ class PlayQueue(object):
         Only manipulates the Kodi playlist. Won't change self.items
         """
         LOG.debug('Removing position %s on the Kodi side for %s', pos, self)
-        LOG.error('Current Kodi playlist: %s', js.playlist_get_items(self.playlistid))
         answ = js.playlist_remove(self.playlistid, pos)
         if 'error' in answ:
             raise PlayqueueError('Could not remove item: %s' % answ['error'])
