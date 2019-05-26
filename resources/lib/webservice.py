@@ -299,20 +299,6 @@ class QueuePlay(backgroundthread.KillableThread):
         self.force_transcode = False
         super(QueuePlay, self).__init__()
 
-    def __unicode__(self):
-        return ("{{"
-                "'plex_id': {self.plex_id}, "
-                "'plex_type': '{self.plex_type}', "
-                "'kodi_id': {self.kodi_id}, "
-                "'kodi_type': '{self.kodi_type}', "
-                "'synched: '{self.synched}', "
-                "'force_transcode: '{self.force_transcode}', "
-                "}}").format(self=self)
-
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-    __repr__ = __str__
-
     def load_params(self, params):
         self.plex_id = utils.cast(int, params['plex_id'])
         self.plex_type = params.get('plex_type')
@@ -400,8 +386,6 @@ class QueuePlay(backgroundthread.KillableThread):
                     elif video_widget_playback:
                         LOG.info('Start widget video playback')
                         utils.window('plex.playlist.play', value='true')
-                        LOG.info('Current PKC queue: %s', playqueue)
-                        LOG.info('current Kodi queue: %s', js.playlist_get_items(playqueue.playlistid))
                         playqueue.start_playback()
                     else:
                         LOG.info('Start normal playback')
