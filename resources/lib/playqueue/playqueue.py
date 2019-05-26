@@ -344,7 +344,8 @@ class PlayQueue(object):
             playlistitem = PlaylistItem(xml_video_element=xml)
         playlistitem.part = api.part
         playlistitem.force_transcode = self.force_transcode
-        listitem = widgets.get_listitem(xml, resume=True)
+        playlistitem.resume = resume
+        listitem = widgets.get_listitem(xml, resume=resume)
         listitem.setSubtitles(api.cache_external_subs())
         play = PlayUtils(api, playlistitem)
         url = play.getPlayUrl()
