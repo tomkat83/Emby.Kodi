@@ -5,7 +5,7 @@ Monitors the Kodi playqueue and adjusts the Plex playqueue accordingly
 """
 from __future__ import absolute_import, division, unicode_literals
 
-from .common import PlaylistItem, PlaylistItemDummy, PlaylistError, PLAYQUEUES
+from .common import PlaylistItem, PlaylistItemDummy, PlayqueueError, PLAYQUEUES
 from .playqueue import PlayQueue
 from .monitor import PlayqueueMonitor
 from .functions import init_playqueues, get_playqueue_from_type, \

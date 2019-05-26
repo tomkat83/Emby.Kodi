@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Monitors the Kodi playqueue and adjusts the Plex playqueue accordingly
-"""
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import threading
 
-from .common import PlaylistItem, PlaylistItemDummy, PlaylistError
+from .common import PlaylistItem, PlaylistItemDummy, PlayqueueError
 
 from ..downloadutils import DownloadUtils as DU
 from ..plex_api import API
@@ -157,7 +154,7 @@ class PlayQueue(object):
             playlistitem.from_xml(xml[0])
         except (KeyError, IndexError, TypeError):
             LOG.error('Could not init Plex playlist with %s', playlistitem)
-            raise PlaylistError()
+            raise PlayqueueError()
         self.items.append(playlistitem)
         LOG.debug('Initialized the playqueue on the Plex side: %s', self)
 
@@ -203,7 +200,7 @@ class PlayQueue(object):
         self.index = startpos + 1
         xml = PF.GetPlexMetadata(plex_id)
         if xml in (None, 401):
-            raise PlaylistError('Could not get Plex metadata %s for %s',
+            raise PlayqueueError('Could not get Plex metadata %s for %s',
                                 plex_id, self.items[startpos])
         api = API(xml[0])
         if playlistitem.resume is None:
@@ -255,7 +252,7 @@ class PlayQueue(object):
         else:
             xml = PF.GetPlexMetadata(plex_id)
             if xml in (None, 401):
-                raise PlaylistError('Could not get Plex metadata %s', plex_id)
+                raise PlayqueueError('Could not get Plex metadata %s', plex_id)
             section_uuid = xml.get('librarySectionUUID')
             api = API(xml[0])
             plex_type = api.plex_type()
@@ -277,7 +274,7 @@ class PlayQueue(object):
         if xml is None:
             LOG.error('Could not get playqueue for plex_id %s UUID %s for %s',
                       plex_id, section_uuid, self)
-            raise PlaylistError('Could not get playqueue')
+            raise PlayqueueError('Could not get playqueue')
         # See that we add trailers, if they exist in the xml return
         self._add_intros(xml)
         # Add the main item after the trailers
@@ -311,7 +308,7 @@ class PlayQueue(object):
                 resume = resume_dialog(resume)
                 LOG.info('User chose resume: %s', resume)
                 if resume is None:
-                    raise PlaylistError('User backed out of resume dialog')
+                    raise PlayqueueError('User backed out of resume dialog')
             app.PLAYSTATE.autoplay = True
         return resume
 
@@ -374,7 +371,7 @@ class PlayQueue(object):
         """
         Adds a PlaylistItem to both Kodi and Plex at position pos [int]
         Also changes self.items
-        Raises PlaylistError
+        Raises PlayqueueError
         """
         self.kodi_add_item(item, pos, listitem)
         self.plex_add_item(item, pos)
@@ -382,13 +379,13 @@ class PlayQueue(object):
     def kodi_add_item(self, item, pos, listitem=None):
         """
         Adds a PlaylistItem to Kodi only. Will not change self.items
-        Raises PlaylistError
+        Raises PlayqueueError
         """
         if not isinstance(item, PlaylistItem):
-            raise PlaylistError('Wrong item %s of type %s received'
+            raise PlayqueueError('Wrong item %s of type %s received'
                                 % (item, type(item)))
         if pos > len(self.items):
-            raise PlaylistError('Position %s too large for playlist length %s'
+            raise PlayqueueError('Position %s too large for playlist length %s'
                                 % (pos, len(self.items)))
         LOG.debug('Adding item to Kodi playlist at position %s: %s', pos, item)
         if listitem:
@@ -406,14 +403,14 @@ class PlayQueue(object):
                                            'position': pos,
                                            'item': {'%sid' % item.kodi_type: item.kodi_id}})
             if 'error' in answ:
-                raise PlaylistError('Kodi did not add item to playlist: %s',
+                raise PlayqueueError('Kodi did not add item to playlist: %s',
                                     answ)
         else:
             if item.xml is None:
                 LOG.debug('Need to get metadata for item %s', item)
                 item.xml = PF.GetPlexMetadata(item.plex_id)
                 if item.xml in (None, 401):
-                    raise PlaylistError('Could not get metadata for %s', item)
+                    raise PlayqueueError('Could not get metadata for %s', item)
             api = API(item.xml[0])
             listitem = widgets.get_listitem(item.xml, resume=True)
             url = 'http://127.0.0.1:%s/plex/play/file.strm' % v.WEBSERVICE_PORT
@@ -434,13 +431,13 @@ class PlayQueue(object):
         """
         Adds a new PlaylistItem to the playlist at position pos [int] only on
         the Plex side of things. Also changes self.items
-        Raises PlaylistError
+        Raises PlayqueueError
         """
         if not isinstance(item, PlaylistItem) or not item.uri:
-            raise PlaylistError('Wrong item %s of type %s received'
+            raise PlayqueueError('Wrong item %s of type %s received'
                                 % (item, type(item)))
         if pos > len(self.items):
-            raise PlaylistError('Position %s too large for playlist length %s'
+            raise PlayqueueError('Position %s too large for playlist length %s'
                                 % (pos, len(self.items)))
         LOG.debug('Adding item to Plex playlist at position %s: %s', pos, item)
         url = '{server}/%ss/%s?uri=%s' % (self.kind, self.id, item.uri)
@@ -449,14 +446,14 @@ class PlayQueue(object):
         try:
             xml[0].attrib
         except (TypeError, AttributeError, KeyError, IndexError):
-            raise PlaylistError('Could not add item %s to playlist %s'
+            raise PlayqueueError('Could not add item %s to playlist %s'
                                 % (item, self))
         for actual_pos, xml_video_element in enumerate(xml):
             api = API(xml_video_element)
             if api.plex_id() == item.plex_id:
                 break
         else:
-            raise PlaylistError('Something went wrong - Plex id not found')
+            raise PlayqueueError('Something went wrong - Plex id not found')
         item.from_xml(xml[actual_pos])
         self.items.insert(actual_pos, item)
         self.update_details_from_xml(xml)
@@ -471,7 +468,7 @@ class PlayQueue(object):
         LOG.debug('Removing position %s on the Kodi side for %s', pos, self)
         answ = js.playlist_remove(self.playlistid, pos)
         if 'error' in answ:
-            raise PlaylistError('Could not remove item: %s' % answ['error'])
+            raise PlayqueueError('Could not remove item: %s' % answ['error'])
 
     def plex_remove_item(self, pos):
         """
@@ -490,7 +487,7 @@ class PlayQueue(object):
         except IndexError:
             LOG.error('Could not delete item at position %s on the Plex side',
                       pos)
-            raise PlaylistError()
+            raise PlayqueueError()
 
     def plex_move_item(self, before, after):
         """
@@ -499,7 +496,7 @@ class PlayQueue(object):
         Will also change self.items
         """
         if before > len(self.items) or after > len(self.items) or after == before:
-            raise PlaylistError('Illegal original position %s and/or desired '
+            raise PlayqueueError('Illegal original position %s and/or desired '
                                 'position %s for playlist length %s' %
                                 (before, after, len(self.items)))
         LOG.debug('Moving item from %s to %s on the Plex side for %s',
@@ -525,7 +522,7 @@ class PlayQueue(object):
         try:
             xml[0].attrib
         except (TypeError, IndexError, AttributeError):
-            raise PlaylistError('Could not move playlist item from %s to %s '
+            raise PlayqueueError('Could not move playlist item from %s to %s '
                                 'for %s' % (before, after, self))
         self.update_details_from_xml(xml)
         self.items.insert(after, self.items.pop(before))

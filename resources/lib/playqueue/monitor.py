@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import copy
 
-from .common import PlaylistError, PlaylistItem, PLAYQUEUES
+from .common import PlayqueueError, PlaylistItem, PLAYQUEUES
 from .. import backgroundthread, json_rpc as js, utils, app
 
 
@@ -68,7 +68,7 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
                               i + j, i)
                     try:
                         playqueue.plex_move_item(i + j, i)
-                    except PlaylistError:
+                    except PlayqueueError:
                         LOG.error('Could not modify playqueue positions')
                         LOG.error('This is likely caused by mixing audio and '
                                   'video tracks in the Kodi playqueue')
@@ -83,7 +83,7 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
                         playqueue.init(playlistitem)
                     else:
                         playqueue.plex_add_item(playlistitem, i)
-                except PlaylistError:
+                except PlayqueueError:
                     LOG.warn('Couldnt add new item to Plex: %s', playlistitem)
                 except IndexError:
                     # This is really a hack - happens when using Addon Paths
@@ -103,7 +103,7 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
             LOG.debug('Detected deletion of playqueue element at pos %s', i)
             try:
                 playqueue.plex_remove_item(i)
-            except PlaylistError:
+            except PlayqueueError:
                 LOG.error('Could not delete PMS element from position %s', i)
                 LOG.error('This is likely caused by mixing audio and '
                           'video tracks in the Kodi playqueue')

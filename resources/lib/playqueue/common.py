@@ -10,7 +10,7 @@ from .. import plex_functions as PF, utils, kodi_db, variables as v, app
 PLAYQUEUES = []
 
 
-class PlaylistError(Exception):
+class PlayqueueError(Exception):
     """
     Exception for our playlist constructs
     """
