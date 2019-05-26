@@ -342,7 +342,19 @@ class QueuePlay(backgroundthread.KillableThread):
         return playqueue, video_widget_playback
 
     def run(self):
-        LOG.debug('##===---- Starting QueuePlay ----===##')
+        with app.APP.lock_playqueues:
+            LOG.debug('##===---- Starting QueuePlay ----===##')
+            try:
+                self._run()
+            finally:
+                utils.window('plex.playlist.ready', clear=True)
+                utils.window('plex.playlist.start', clear=True)
+                app.PLAYSTATE.initiated_by_plex = False
+                self.server.threads.remove(self)
+                self.server.pending = []
+                LOG.debug('##===---- QueuePlay Stopped ----===##')
+
+    def _run(self):
         abort = False
         play_folder = False
         playqueue, video_widget_playback = self._get_playqueue()
@@ -439,10 +451,3 @@ class QueuePlay(backgroundthread.KillableThread):
                 else:
                     utils.window('plex.playlist.aborted', value='true')
                 break
-
-        utils.window('plex.playlist.ready', clear=True)
-        utils.window('plex.playlist.start', clear=True)
-        app.PLAYSTATE.initiated_by_plex = False
-        self.server.threads.remove(self)
-        self.server.pending = []
-        LOG.debug('##===---- QueuePlay Stopped ----===##')
