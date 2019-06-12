@@ -1065,11 +1065,6 @@ msgid "Customize Paths"
 msgstr "Pfade ändern"
 
 # PKC Settings - Appearance Tweaks
-msgctxt "#39058"
-msgid "Extend Plex TV Series \"On Deck\" view to all shows"
-msgstr "Standard Plex Ansicht \"Aktuell\" auf alle TV Shows erweitern"
-
-# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "\"Zuletzt hinzugefügt\": Serien- an Episoden-Titel anfügen"
@@ -1108,12 +1103,8 @@ msgstr "Kodi Skin nach Playback-Stop neu laden"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
-msgid ""
-"Recently Added: Also show already watched movies (Refresh Plex "
-"playlist/nodes!)"
-msgstr ""
-"\"Zuletzt hinzugefügt\": gesehene Filme anzeigen (Plex Playlisten und Nodes "
-"zurücksetzen!)"
+msgid "Recently Added: Also show already watched movies"
+msgstr "\"Zuletzt hinzugefügt\": gesehene Filme anzeigen"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1214,6 +1205,11 @@ msgstr "PMS IP oder URL eingeben"
 msgctxt "#39084"
 msgid "Enter PMS port"
 msgstr "PMS Port eingeben"
+
+# PKC settings - Appearance Tweaks
+msgctxt "#39085"
+msgid "Reload Kodi node files to apply all the settings below"
+msgstr "Kodi neu laden um Einstellungen unten zu übernehmen"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1588,8 +1584,8 @@ msgstr "Sync"
 
 # Shown during sync process
 msgctxt "#39715"
-msgid "items"
-msgstr "Einträge"
+msgid "Synching playlists"
+msgstr "Synchronisiere Wiedergabelisten"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

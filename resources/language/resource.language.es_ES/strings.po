@@ -1066,11 +1066,6 @@ msgid "Customize Paths"
 msgstr "Personalizar rutas"
 
 # PKC Settings - Appearance Tweaks
-msgctxt "#39058"
-msgid "Extend Plex TV Series \"On Deck\" view to all shows"
-msgstr "Extender vista de series \"On Deck\" de Plex a todoas las series"
-
-# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "Añadidos Recientemente: Agregar título de serie al episodio"
@@ -1110,12 +1105,8 @@ msgstr "Refrescar el skin de Kodi al detener la reproducción"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
-msgid ""
-"Recently Added: Also show already watched movies (Refresh Plex "
-"playlist/nodes!)"
+msgid "Recently Added: Also show already watched movies"
 msgstr ""
-"Añadidos Recientemente: También mostrar películas ya vistas (¡Actualize las "
-"listas de reproducción/nodos Plex!)"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1218,6 +1209,11 @@ msgstr ""
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
+msgstr ""
+
+# PKC settings - Appearance Tweaks
+msgctxt "#39085"
+msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
 
 msgctxt "#39200"
@@ -1584,8 +1580,8 @@ msgstr "Sincronizar"
 
 # Shown during sync process
 msgctxt "#39715"
-msgid "items"
-msgstr "objetos"
+msgid "Synching playlists"
+msgstr ""
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

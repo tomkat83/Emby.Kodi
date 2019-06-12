@@ -1059,11 +1059,6 @@ msgid "Customize Paths"
 msgstr "Изменить пути"
 
 # PKC Settings - Appearance Tweaks
-msgctxt "#39058"
-msgid "Extend Plex TV Series \"On Deck\" view to all shows"
-msgstr "В \"Текущем\" показывать все сериалы"
-
-# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "Недавно добавлено: Показывать название эпизода"
@@ -1102,12 +1097,8 @@ msgstr "Принудительное обновление обложки Kodi п
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
-msgid ""
-"Recently Added: Also show already watched movies (Refresh Plex "
-"playlist/nodes!)"
+msgid "Recently Added: Also show already watched movies"
 msgstr ""
-"Недавно добавлено: также показывать просмотренные фильмы (обновите "
-"плейлисты/списки Plex)"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1207,6 +1198,11 @@ msgstr ""
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
+msgstr ""
+
+# PKC settings - Appearance Tweaks
+msgctxt "#39085"
+msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
 
 msgctxt "#39200"
@@ -1571,8 +1567,8 @@ msgstr "Синхронизация"
 
 # Shown during sync process
 msgctxt "#39715"
-msgid "items"
-msgstr "элементов"
+msgid "Synching playlists"
+msgstr ""
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

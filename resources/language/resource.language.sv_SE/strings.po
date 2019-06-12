@@ -1035,11 +1035,6 @@ msgid "Customize Paths"
 msgstr ""
 
 # PKC Settings - Appearance Tweaks
-msgctxt "#39058"
-msgid "Extend Plex TV Series \"On Deck\" view to all shows"
-msgstr ""
-
-# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr ""
@@ -1078,9 +1073,7 @@ msgstr ""
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
-msgid ""
-"Recently Added: Also show already watched movies (Refresh Plex "
-"playlist/nodes!)"
+msgid "Recently Added: Also show already watched movies"
 msgstr ""
 
 # PKC Settings - Connection
@@ -1174,6 +1167,11 @@ msgstr ""
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
+msgstr ""
+
+# PKC settings - Appearance Tweaks
+msgctxt "#39085"
+msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
 
 msgctxt "#39200"
@@ -1511,7 +1509,7 @@ msgstr "Synka"
 
 # Shown during sync process
 msgctxt "#39715"
-msgid "items"
+msgid "Synching playlists"
 msgstr ""
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is

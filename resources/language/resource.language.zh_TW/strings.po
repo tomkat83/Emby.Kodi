@@ -1011,11 +1011,6 @@ msgid "Customize Paths"
 msgstr "自訂路徑"
 
 # PKC Settings - Appearance Tweaks
-msgctxt "#39058"
-msgid "Extend Plex TV Series \"On Deck\" view to all shows"
-msgstr "延伸plex電視節目系列\"上架\"視圖，到所有節目"
-
-# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr "最近添加︰ 追加顯示集標題"
@@ -1054,10 +1049,8 @@ msgstr ""
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
-msgid ""
-"Recently Added: Also show already watched movies (Refresh Plex "
-"playlist/nodes!)"
-msgstr "最近添加︰ 也顯示已觀看的電影 (刷新Plex播放清單/節點！)"
+msgid "Recently Added: Also show already watched movies"
+msgstr ""
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1150,6 +1143,11 @@ msgstr ""
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
+msgstr ""
+
+# PKC settings - Appearance Tweaks
+msgctxt "#39085"
+msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
 
 msgctxt "#39200"
@@ -1485,7 +1483,7 @@ msgstr ""
 
 # Shown during sync process
 msgctxt "#39715"
-msgid "items"
+msgid "Synching playlists"
 msgstr ""
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
