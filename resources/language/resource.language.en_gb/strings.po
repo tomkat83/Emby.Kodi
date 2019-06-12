@@ -1398,7 +1398,7 @@ msgstr ""
 
 # Shown during sync process
 msgctxt "#39715"
-msgid "items"
+msgid "Synching playlists"
 msgstr ""
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is screwed up; formated the wrong way). Do NOT replace {0} and {1}!
