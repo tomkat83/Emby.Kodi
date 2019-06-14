@@ -1101,8 +1101,8 @@ msgstr "如果您使用多個同類的Plex資料庫，例如\"兒童電影\"和\
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
-msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
-msgstr "PMS 中顯示在小工具集 (例如\"上架\") 品項的數目"
+msgid "Maximum number of videos to show in widgets"
+msgstr ""
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1376,6 +1376,10 @@ msgstr "上架"
 msgctxt "#39501"
 msgid "Collections"
 msgstr "收藏"
+
+msgctxt "#39502"
+msgid "PKC On Deck (faster)"
+msgstr ""
 
 msgctxt "#39600"
 msgid ""

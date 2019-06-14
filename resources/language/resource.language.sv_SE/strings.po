@@ -1125,7 +1125,7 @@ msgstr ""
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
-msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
+msgid "Maximum number of videos to show in widgets"
 msgstr ""
 
 # PKC Settings - Plex
@@ -1399,6 +1399,10 @@ msgstr ""
 
 msgctxt "#39501"
 msgid "Collections"
+msgstr ""
+
+msgctxt "#39502"
+msgid "PKC On Deck (faster)"
 msgstr ""
 
 msgctxt "#39600"

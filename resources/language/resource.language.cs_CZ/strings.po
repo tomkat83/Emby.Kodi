@@ -1142,8 +1142,8 @@ msgstr ""
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
-msgid "Number of PMS items to show in widgets (e.g. \"On Deck\")"
-msgstr "Počet položek pro zobrazení ve widgetech (např. \"Aktuální\")"
+msgid "Maximum number of videos to show in widgets"
+msgstr ""
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1438,6 +1438,10 @@ msgstr "Aktuální"
 msgctxt "#39501"
 msgid "Collections"
 msgstr "Kolekce"
+
+msgctxt "#39502"
+msgid "PKC On Deck (faster)"
+msgstr ""
 
 msgctxt "#39600"
 msgid ""
