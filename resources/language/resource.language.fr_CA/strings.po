@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
-# Croneter None <croneter@gmail.com>, 2019
 # Elixir59, 2019
+# Croneter None <croneter@gmail.com>, 2019
 # 
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Elixir59, 2019\n"
+"Last-Translator: Croneter None <croneter@gmail.com>, 2019\n"
 "Language-Team: French (Canada) (https://www.transifex.com/croneter/teams/73837/fr_CA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,8 +42,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
-"Attention, les paramètres de Kodi sont réglés pour joueur automatiquement la"
-" vidéo suivante. Cette option va casser PlexKodiConnect. Désactiver ?"
+"Avertissement : Le paramètre Kodi \"Lecture automatique de la vidéo "
+"suivante\" est activé. Cela pourrait casser PKC. Désactiver ?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -601,7 +601,7 @@ msgstr ""
 # PKC Settings - Sync Options
 msgctxt "#30524"
 msgid "Select Plex libraries to sync"
-msgstr ""
+msgstr "Sélectionner les bibliothèques Plex à synchroniser"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -1115,7 +1115,7 @@ msgstr "Forcer le rafraîchissement du skin de Kodi va arrêter le playback."
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Récemment ajouté : Montrer aussi les films déjà visionnés"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1170,7 +1170,7 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Maximum number of videos to show in widgets"
-msgstr ""
+msgstr "Nombre maximum de vidéos à afficher dans les widgets"
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1221,6 +1221,7 @@ msgstr "Entrez le port de PMS"
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
+"Recharger les fichiers de Kodi pour appliquer tous les paramètres ci-dessous"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1274,7 +1275,7 @@ msgstr "Regarder plus tard"
 # e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
-msgstr ""
+msgstr "{0} hors-ligne"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1475,7 +1476,7 @@ msgstr "Sagas"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr ""
+msgstr "PKC On Deck (faster)"
 
 msgctxt "#39600"
 msgid ""
@@ -1596,7 +1597,7 @@ msgstr "Synchro"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Synchronisation des listes de lecture"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

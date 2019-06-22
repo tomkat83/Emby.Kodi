@@ -1088,7 +1088,7 @@ msgstr "Vynutit obnovení vzhledu Kodi po skončení přehrávání"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Naposledy přidané: Zobrazovat také shlédnuté filmy"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1143,7 +1143,7 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Maximum number of videos to show in widgets"
-msgstr ""
+msgstr "Maximální počet videí zobrazovaných ve widgetech"
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1193,7 +1193,7 @@ msgstr "Zadejte port PMS"
 # PKC settings - Appearance Tweaks
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
-msgstr ""
+msgstr "Znovu načíst Kodi pro aplikování nastavení níže"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1441,7 +1441,7 @@ msgstr "Kolekce"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr ""
+msgstr "PKC Aktuální (rychlejší)"
 
 msgctxt "#39600"
 msgid ""
@@ -1560,7 +1560,7 @@ msgstr "Synchronizuji"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Synchronizuji playlisty"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

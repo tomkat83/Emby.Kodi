@@ -499,6 +499,7 @@ msgstr "Sincronizza le locandine Plex da PMS (raccomandato)"
 msgctxt "#30503"
 msgid "SSL certificate failed to validate. Please check {0} for solutions."
 msgstr ""
+"Certificato SSL non valido. Per favore controlla su {0} per risolvere."
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -596,7 +597,7 @@ msgstr "Mostra l'avanzamento dello stato di lettura e dei dati utente"
 # PKC Settings - Sync Options
 msgctxt "#30524"
 msgid "Select Plex libraries to sync"
-msgstr ""
+msgstr "Seleziona le librerie Plex da sincronizzazare"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -1110,7 +1111,7 @@ msgstr "Forza aggiornamento della skin Kodi dopo lo stop di un contenuto"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Aggiunti di recente: Mostra anche film già visti"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1164,7 +1165,7 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Maximum number of videos to show in widgets"
-msgstr ""
+msgstr "Numero massimo di video da mostrare nei widget"
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1205,17 +1206,19 @@ msgstr "Percorsi Diretti"
 # Dialog for manually entering PMS
 msgctxt "#39083"
 msgid "Enter PMS IP or URL"
-msgstr ""
+msgstr "Inserisci l'URL o l'IP del PMS"
 
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
-msgstr ""
+msgstr "Inserisci la porta del PMS"
 
 # PKC settings - Appearance Tweaks
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
+"Ricarica i nodi di file di  Kodi per applicare tutte le impostazioni di "
+"sotto"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1271,7 +1274,7 @@ msgstr "Guarda più tardi"
 # e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
-msgstr ""
+msgstr "{0} offline"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1282,6 +1285,8 @@ msgid ""
 "Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
 "work!"
 msgstr ""
+"Usare le connessioni HTTPS (SSL)? Con Kodi 18 o successivo, HTTPS potrebbe "
+"non funzionare!"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1333,7 +1338,7 @@ msgstr "Autenticazione concessa su plex.tv"
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
 msgid "Plex admin user"
-msgstr ""
+msgstr "Utente di amministrazione Plex"
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
@@ -1344,12 +1349,12 @@ msgstr "Autenticazione dell'utente fallita su plex.tv "
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39230"
 msgid "Logged in Plex home user"
-msgstr ""
+msgstr "Utente plex autenticato"
 
 # Message in the PKC settings to change the logged in Plex home user
 msgctxt "#39231"
 msgid "Change logged in Plex home user"
-msgstr ""
+msgstr "Cambia utente Plex"
 
 msgctxt "#39250"
 msgid ""
@@ -1471,7 +1476,7 @@ msgstr "Collezioni"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr ""
+msgstr "PKC On Desk (più veloce)"
 
 msgctxt "#39600"
 msgid ""
@@ -1592,7 +1597,7 @@ msgstr "Sync"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Sincronizzazione delle playlist"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

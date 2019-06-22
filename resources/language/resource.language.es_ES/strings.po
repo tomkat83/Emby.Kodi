@@ -500,6 +500,7 @@ msgstr "Sincronizar el arte de Plex desde PMS (recomendado)"
 msgctxt "#30503"
 msgid "SSL certificate failed to validate. Please check {0} for solutions."
 msgstr ""
+"Fallo al validar el certificado SSL. Consulte {0} para ver soluciones."
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -597,7 +598,7 @@ msgstr ""
 # PKC Settings - Sync Options
 msgctxt "#30524"
 msgid "Select Plex libraries to sync"
-msgstr ""
+msgstr "Seleccionar librerias de Plex para sincronizar"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -920,7 +921,7 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
-"Kodi no puede localizer el archive %s. Por favoer verificar sus ajustes de "
+"Kodi no puede localizer el archivo %s. Por favor verificar sus ajustes de "
 "PKC. ¿Detener la sincronización?"
 
 # Pop-up on initial sync
@@ -1106,7 +1107,7 @@ msgstr "Refrescar el skin de Kodi al detener la reproducción"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Recién Añadido: Mostrar tambien películas ya vistas"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1161,7 +1162,7 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Maximum number of videos to show in widgets"
-msgstr ""
+msgstr "Número máximo de videos a mostrar en los widgets"
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1203,17 +1204,17 @@ msgstr "Direct Paths"
 # Dialog for manually entering PMS
 msgctxt "#39083"
 msgid "Enter PMS IP or URL"
-msgstr ""
+msgstr "Introduzca la URL o IP del PMS"
 
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
-msgstr ""
+msgstr "Introduzca el puerto del PMS"
 
 # PKC settings - Appearance Tweaks
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
-msgstr ""
+msgstr "Recargar Kodi para aplicar todos los ajustes."
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1267,7 +1268,7 @@ msgstr "Ver Luego"
 # e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
-msgstr ""
+msgstr "{0} fuera de linea"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1278,6 +1279,8 @@ msgid ""
 "Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
 "work!"
 msgstr ""
+"¿Usar conexiones HTTPS (SSL)? Con Kodi 18 o posterior, HTTPS puede no "
+"funcionar"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1329,7 +1332,7 @@ msgstr "Conectado a plex.tv"
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
 msgid "Plex admin user"
-msgstr ""
+msgstr "Administrador de Plex"
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
@@ -1340,12 +1343,12 @@ msgstr "Inicio de session con plex.tv falló para el usuario"
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39230"
 msgid "Logged in Plex home user"
-msgstr ""
+msgstr "Usuario de Plex home registrado"
 
 # Message in the PKC settings to change the logged in Plex home user
 msgctxt "#39231"
 msgid "Change logged in Plex home user"
-msgstr ""
+msgstr "Cambiar usuario de Plex"
 
 msgctxt "#39250"
 msgid ""
@@ -1421,7 +1424,7 @@ msgid ""
 "The current Kodi version is not supported by PKC. Please consult the Plex "
 "forum."
 msgstr ""
-"La version actual de Kodi no está soportada por PKC.  Por favor consultar el"
+"La versión actual de Kodi no está soportada por PKC.  Por favor consultar el"
 " fórum de Plex."
 
 msgctxt "#39405"
@@ -1465,7 +1468,7 @@ msgstr "Sagas"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr ""
+msgstr "On Deck de PKC (más rápido)"
 
 msgctxt "#39600"
 msgid ""
@@ -1584,7 +1587,7 @@ msgstr "Sincronizar"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Sincronizando listas"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!
@@ -1608,8 +1611,8 @@ msgid ""
 "Do you want to replace your custom user ratings with an indicator of how "
 "many versions of a media item you posses?"
 msgstr ""
-"¿Quiere reemplazar su valoración personalizada con cuántas versione posee de"
-" un elemento de medios?"
+"¿Quiere reemplazar su valoración personalizada por cuántas versiones posee "
+"de un elemento de medios?"
 
 # In PKC Settings under Sync
 msgctxt "#39719"

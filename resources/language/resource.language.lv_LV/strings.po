@@ -320,12 +320,14 @@ msgid ""
 "In the following window, enter the server's hostname (or IP) where your Plex"
 " media resides. Mind the case!"
 msgstr ""
+"Sekojošajā logā ievadi servera, kur atrodas tavs Plex, vārdu (vai IP). Ņem "
+"vērā lielos mazos burtus!"
 
 # For setting up direct paths and adding network credentials - input window
 # for hostname
 msgctxt "#30201"
 msgid "Enter server hostname (or IP)"
-msgstr ""
+msgstr "Ievadi servera vārdu (vai IP)"
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30202"
@@ -333,22 +335,24 @@ msgid ""
 "In the following window, enter the network protocol you would like to use. "
 "This is likely 'smb'."
 msgstr ""
+"Sekojošajā logā ievadi tīkla protokolu, kuru vēlies izmanot. Visdrīzāk tas "
+"ir 'smb'."
 
 # For setting up direct paths and adding network credentials - input window
 # protocol
 msgctxt "#30203"
 msgid "Enter network protocol"
-msgstr ""
+msgstr "Ievadi tīkla protokolu"
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30204"
 msgid "The hostname or IP '{0}' that you entered is not valid."
-msgstr ""
+msgstr "Servera vārds vai IP '{0}', kuru ievadīji, nav pareizs."
 
 # For setting up direct paths and adding network credentials
 msgctxt "#30205"
 msgid "The protocol '{0}' that you entered is not supported."
-msgstr ""
+msgstr "Protokols '{0}', kuru ievadīji nav atbalstīts."
 
 # Video node naming for random e.g. movies
 msgctxt "#30227"
@@ -468,6 +472,8 @@ msgid ""
 "Could not change the Kodi settings file {0}. PKC might not work correctly. "
 "Error: {1}"
 msgstr ""
+"Nevar izmainīt Kodi iestatījumu failu {0}. PKC var nestrādāt pareizi. Kļūda:"
+" {1}"
 
 # PKC Settings - Connection
 msgctxt "#30500"
@@ -482,12 +488,12 @@ msgstr "Klienta SSL sertifikāts"
 # PKC Settings - Artwork
 msgctxt "#30502"
 msgid "Sync Plex artwork from the PMS (recommended)"
-msgstr ""
+msgstr "Sinhronizēt Plex attēlus no PMS (ieteikts)"
 
 # Message shown if SSL HTTPS certificate fails
 msgctxt "#30503"
 msgid "SSL certificate failed to validate. Please check {0} for solutions."
-msgstr ""
+msgstr "Neizdevās pārbaudīt SSL sertifikātu. Lūdzu skaties {0} risinājumus."
 
 # PKC Settings, category name
 msgctxt "#30506"

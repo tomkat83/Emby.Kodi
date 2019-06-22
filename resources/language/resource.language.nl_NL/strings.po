@@ -2,8 +2,9 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
 # Michiel van Baak <michiel@vanbaak.info>, 2019
-# Panja Nul <panja0@protonmail.com>, 2019
+# Panja0 <panja0@protonmail.com>, 2019
 # Nick Corthals <corthals.nick@gmail.com>, 2019
+# Rick van Soest <r.vansoest@gmail.com>, 2019
 # 
 msgid ""
 msgstr ""
@@ -11,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Nick Corthals <corthals.nick@gmail.com>, 2019\n"
+"Last-Translator: Rick van Soest <r.vansoest@gmail.com>, 2019\n"
 "Language-Team: Dutch (Netherlands) (https://www.transifex.com/croneter/teams/73837/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1095,7 +1096,7 @@ msgstr "Forceer Kodi thema reset bij afspelen stoppen"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Pas toegevoegd: Toon tevens de reeds bekeken films."
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1150,7 +1151,7 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Maximum number of videos to show in widgets"
-msgstr ""
+msgstr "Maximale aantal video's getoond in widgets"
 
 # PKC Settings - Plex
 msgctxt "#39078"
@@ -1202,6 +1203,8 @@ msgstr "Kies PMS poort"
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
+"Herlaad de Kodi node bestanden om alles onderstaande instellingen door te "
+"voeren"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1448,7 +1451,7 @@ msgstr "Verzamelingen"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr ""
+msgstr "PKC On Deck (sneller)"
 
 msgctxt "#39600"
 msgid ""
@@ -1568,7 +1571,7 @@ msgstr "Sync"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Afspeellijsten synchroniseren"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

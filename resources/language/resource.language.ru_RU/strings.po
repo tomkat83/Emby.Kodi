@@ -126,7 +126,7 @@ msgstr "Поиск FanartTV завершен"
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr "Синхронизация плейлистов Plex (перезагрузка Kodi!)"
+msgstr "Синхронизация плейлистов Plex (перезапустите Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
@@ -499,6 +499,7 @@ msgstr "Синхронизировать иллюстрации с Plex. (рек
 msgctxt "#30503"
 msgid "SSL certificate failed to validate. Please check {0} for solutions."
 msgstr ""
+"Ошибка проверки SSL сертификата. Пожалуйста просмотрите {0} для решения"
 
 # PKC Settings, category name
 msgctxt "#30506"
@@ -598,7 +599,7 @@ msgstr ""
 # PKC Settings - Sync Options
 msgctxt "#30524"
 msgid "Select Plex libraries to sync"
-msgstr ""
+msgstr "Выбор библиотек Plex для синхронизации"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -644,7 +645,7 @@ msgstr "Пользователь должен входить при каждом
 # PKC Settings warning
 msgctxt "#30537"
 msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
-msgstr "ПЕРЕЗАПУСТИТЕ KODI, ЕСЛИ ВНОСИЛИ КАКИЕ-ТО ИЗМЕНЕНИЯ"
+msgstr "ПЕРЕЗАПУСТИТЕ KODI, ЕСЛИ ВНОСИЛИ ИЗМЕНЕНИЯ"
 
 # PKC Settings warning
 msgctxt "#30538"
@@ -1098,7 +1099,7 @@ msgstr "Принудительное обновление обложки Kodi п
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Недавно добавлено: также показывать просмотренные фильмы"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1153,12 +1154,12 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39077"
 msgid "Maximum number of videos to show in widgets"
-msgstr ""
+msgstr "Максимальное количество видео для отображения в виджетах"
 
 # PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
-msgstr "Порт обновления Plex Companion (меняйте только если необходимо)"
+msgstr "Порт обновления Plex Companion (если необходимо)"
 
 # Error message
 msgctxt "#39079"
@@ -1193,17 +1194,17 @@ msgstr "Прямые пути"
 # Dialog for manually entering PMS
 msgctxt "#39083"
 msgid "Enter PMS IP or URL"
-msgstr ""
+msgstr "Введите IP или адрес PMS"
 
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
-msgstr ""
+msgstr "Введите порт PMS"
 
 # PKC settings - Appearance Tweaks
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
-msgstr ""
+msgstr "Перезаписать узлы БД Kodi, чтобы применить следующие настройки"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1256,7 +1257,7 @@ msgstr "Смотреть позже"
 # e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
-msgstr ""
+msgstr "{0} недоступен"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
@@ -1267,6 +1268,8 @@ msgid ""
 "Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
 "work!"
 msgstr ""
+"Использовать HTTPS (SSL)? В Kodi 18 или позднем HTTPS скорее всего не будет "
+"работать!"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1318,7 +1321,7 @@ msgstr "Вы вошли в plex.tv"
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
 msgid "Plex admin user"
-msgstr ""
+msgstr "Администратор Plex"
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
@@ -1329,12 +1332,12 @@ msgstr "Вход в plex.tv неудачен"
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39230"
 msgid "Logged in Plex home user"
-msgstr ""
+msgstr "Учетная запись Plex home"
 
 # Message in the PKC settings to change the logged in Plex home user
 msgctxt "#39231"
 msgid "Change logged in Plex home user"
-msgstr ""
+msgstr "Изменить учетную запись Plex home"
 
 msgctxt "#39250"
 msgid ""
@@ -1453,7 +1456,7 @@ msgstr "Коллекции"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr ""
+msgstr "PKC \"Текущие\" (быстрее)"
 
 msgctxt "#39600"
 msgid ""
@@ -1572,7 +1575,7 @@ msgstr "Синхронизация"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Синхронизация плейлистов"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!

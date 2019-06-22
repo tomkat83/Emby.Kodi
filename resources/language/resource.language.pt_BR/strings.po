@@ -1,6 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
+# Daniel Leite <danieldefreitasleite@gmail.com>, 2019
 # 
 msgid ""
 msgstr ""
@@ -8,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2017\n"
+"Last-Translator: Daniel Leite <danieldefreitasleite@gmail.com>, 2019\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/croneter/teams/73837/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr "Endereço do servidor (IP)"
 
 msgctxt "#30001"
 msgid "Searching for PMS"
-msgstr ""
+msgstr "Buscando PMS"
 
 msgctxt "#30002"
 msgid "Preferred playback method"
@@ -41,6 +42,8 @@ msgid ""
 "Warning: Kodi setting \"Play next video automatically\" is enabled. This "
 "could break PKC. Deactivate?"
 msgstr ""
+"Atenção: Configuração \"Iniciar próximo vídeo automaticamente\" está ativada"
+" no Kodi. Isto pode travar o PKC. Desativar?"
 
 msgctxt "#30005"
 msgid "Username: "
@@ -49,32 +52,34 @@ msgstr "Utilizador: "
 # Sync notification displayed if there is still artwork to be cached to Kodi
 msgctxt "#30006"
 msgid "Caching %s Plex images"
-msgstr ""
+msgstr "Armazenando %s imagens Plex"
 
 # Sync notification displayed if syncing of major artwork is done
 msgctxt "#30007"
 msgid "Plex image caching done"
-msgstr ""
+msgstr "Armazenamento de imagens Plex finalizado"
 
 # PKC settings artwork: Enable notifications for artwork image sync
 msgctxt "#30008"
 msgid "Enable notifications for image caching"
-msgstr ""
+msgstr "Ativar notificações para armazenamento de imagens"
 
 # PKC settings artwork: Enable image caching during Kodi playback
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
+"Ativar armazenamento de imagens durante reprodução de media no Kodi "
+"(necessário reiniciar o Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
 msgid "Approximate progress"
-msgstr ""
+msgstr "Progresso aproximado"
 
 # PKC settings - Artwork
 msgctxt "#30011"
 msgid "Artwork left to cache:"
-msgstr ""
+msgstr "Artwork pendente de armazenamento: "
 
 # Button text
 msgctxt "#30012"
@@ -93,7 +98,7 @@ msgstr "Ligação"
 # Pop-up notification if user tried to manually initiate fanart download
 msgctxt "#30015"
 msgid "Fanart download already running"
-msgstr ""
+msgstr "Download de Fanart já em andamento"
 
 msgctxt "#30016"
 msgid "Device Name"
@@ -107,22 +112,22 @@ msgstr "Não autorizado para o PMS"
 # Sync notification displayed for the number of fanart.tv lookups left
 msgctxt "#30018"
 msgid "Checking FanartTV for %s items"
-msgstr ""
+msgstr "Verificando em FanartTV %s item(s)"
 
 # PKC settings artwork options: status info
 msgctxt "#30019"
 msgid "FanartTV lookup completed"
-msgstr ""
+msgstr "Verificação em FanartTV finalizado"
 
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr ""
+msgstr "Sincronizar playlists do Plex (necessário reiniciar o Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
 msgid "Only sync specific Plex playlists to Kodi"
-msgstr ""
+msgstr "Sincronizar somente playlists especificas do Plex para o Kodi"
 
 # PKC settings category
 msgctxt "#30022"
@@ -132,7 +137,7 @@ msgstr "Avançado"
 # PKC settings sync options
 msgctxt "#30023"
 msgid "Only sync specific Kodi playlists to Plex"
-msgstr ""
+msgstr "Sincronizar somente playlists especificas do Kodi para o Plex"
 
 msgctxt "#30024"
 msgid "Username"
@@ -145,17 +150,17 @@ msgstr "Exibir mensagem se o PMS ficar offline"
 # PKC settings sync options
 msgctxt "#30026"
 msgid "Prefix in Plex playlist name to trigger sync"
-msgstr ""
+msgstr "Prefixo do nome da playlist do Plex para ativar a sincronização"
 
 # PKC settings sync options
 msgctxt "#30027"
 msgid "Prefix in Kodi playlist name to trigger sync"
-msgstr ""
+msgstr "Prefixo do nome da playlist do Kodi para ativar a sincronização"
 
 # PKC settings artwork options: status info
 msgctxt "#30028"
 msgid "PKC-only image caching completed"
-msgstr ""
+msgstr "Armazenamento PKC somente imagens finalizado"
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -168,7 +173,7 @@ msgstr "Eu possuo este Servidor Plex Media"
 # Kodi context menu entry for movie and episode information screen
 msgctxt "#30032"
 msgid "Information"
-msgstr ""
+msgstr "Informação"
 
 msgctxt "#30042"
 msgid "Refresh"
