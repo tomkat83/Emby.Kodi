@@ -25,7 +25,8 @@ languages = [
     'ru_RU',
     'uk_UA',
     'lv_LV',
-    'sv_SE'
+    'sv_SE',
+    'lt_LT'
 ]
 
 os.system("cd ..")
