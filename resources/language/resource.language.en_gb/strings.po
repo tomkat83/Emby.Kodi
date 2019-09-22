@@ -668,6 +668,16 @@ msgctxt "#33003"
 msgid "Server is online"
 msgstr ""
 
+# Plex notification when we need to transcode
+msgctxt "#33004"
+msgid "PMS enforced transcoding"
+msgstr ""
+
+# Plex notification when we need to use direct streaming (instead of transcoding)
+msgctxt "#33005"
+msgid "PMS enforced direct streaming"
+msgstr ""
+
 # Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
@@ -963,7 +973,7 @@ msgstr ""
 
 # PKC Settings - Customize paths
 msgctxt "#39056"
-msgid "Used by Sync and when attempting to Direct Play"
+msgid "Used by sync and when attempting Direct Paths. Restart Kodi on changes!"
 msgstr ""
 
 # PKC Settings, category name
