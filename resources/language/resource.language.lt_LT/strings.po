@@ -1,0 +1,1630 @@
+#  XBMC Media Center language file
+# Translators:
+# tigriso1 <tigriso1@outlook.com>, 2019
+# Egidijus Mz <sixpilot80@yahoo.com>, 2019
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: PlexKodiConnect\n"
+"Report-Msgid-Bugs-To: croneter@gmail.com\n"
+"POT-Creation-Date: 2017-04-15 13:13+0000\n"
+"PO-Revision-Date: 2017-04-30 08:30+0000\n"
+"Last-Translator: Egidijus Mz <sixpilot80@yahoo.com>, 2019\n"
+"Language-Team: Lithuanian (Lithuania) (https://www.transifex.com/croneter/teams/73837/lt_LT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: lt_LT\n"
+"Plural-Forms: nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);\n"
+
+# Add-on settings
+msgctxt "#29999"
+msgid "PlexKodiConnect"
+msgstr "PlexKodiConnect"
+
+msgctxt "#30000"
+msgid "Server Address (IP)"
+msgstr "Serverio adresas (IP)"
+
+msgctxt "#30001"
+msgid "Searching for PMS"
+msgstr "Ieškoma „Plex Medija Serverio“"
+
+msgctxt "#30002"
+msgid "Preferred playback method"
+msgstr "Pageidaujamas atkūrimo metodas"
+
+# Warning displayed if Kodi setting is enabled. Be sure to escape the quotes
+# again! The exact wording can be found in the Kodi settings, player settings,
+# videos
+msgctxt "#30003"
+msgid ""
+"Warning: Kodi setting \"Play next video automatically\" is enabled. This "
+"could break PKC. Deactivate?"
+msgstr ""
+"Įspėjimas: „Kodi“ nustatymas „Leisti kitą vaizdo įrašą automatiškai“ yra "
+"įjungtas. Tai gali pažeisti „PKC“. Išjungti?"
+
+msgctxt "#30005"
+msgid "Username: "
+msgstr "Vartotojo vardas:"
+
+# Sync notification displayed if there is still artwork to be cached to Kodi
+msgctxt "#30006"
+msgid "Caching %s Plex images"
+msgstr "Podėliavimas %s „Plex“ atvaizdžiai"
+
+# Sync notification displayed if syncing of major artwork is done
+msgctxt "#30007"
+msgid "Plex image caching done"
+msgstr "„Plex“ atvaizdžio podėliavimas atliktas"
+
+# PKC settings artwork: Enable notifications for artwork image sync
+msgctxt "#30008"
+msgid "Enable notifications for image caching"
+msgstr "Įgalinkite įspėjimus apie atvaizdžio podėliavimą"
+
+# PKC settings artwork: Enable image caching during Kodi playback
+msgctxt "#30009"
+msgid "Enable image caching during Kodi playback (restart Kodi!)"
+msgstr ""
+"Įgalinkite atvaizdžių podėliavimą „Kodi“ atkūrimo metu (paleisti „Kodi“ iš "
+"naujo!)"
+
+# PKC settings - Artwork
+msgctxt "#30010"
+msgid "Approximate progress"
+msgstr "Apytikslė eiga"
+
+# PKC settings - Artwork
+msgctxt "#30011"
+msgid "Artwork left to cache:"
+msgstr "Iliustracija liko podėlyje:"
+
+# Button text
+msgctxt "#30012"
+msgid "OK"
+msgstr "Gerai"
+
+msgctxt "#30013"
+msgid "Never show"
+msgstr "Niekada nerodyti"
+
+# PKC settings category
+msgctxt "#30014"
+msgid "Connection"
+msgstr "Sujungimas"
+
+# Pop-up notification if user tried to manually initiate fanart download
+msgctxt "#30015"
+msgid "Fanart download already running"
+msgstr "Gerbėjų iliustracijų atsiuntimas jau veikia"
+
+msgctxt "#30016"
+msgid "Device Name"
+msgstr "Įrenginio pavadinimas"
+
+# Error message
+msgctxt "#30017"
+msgid "Unauthorized for PMS"
+msgstr "Neleistina „Plex Medija Serveriui“"
+
+# Sync notification displayed for the number of fanart.tv lookups left
+msgctxt "#30018"
+msgid "Checking FanartTV for %s items"
+msgstr "„FanartTV“ patikrinimas %s elementų"
+
+# PKC settings artwork options: status info
+msgctxt "#30019"
+msgid "FanartTV lookup completed"
+msgstr "„FanartTV“ peržiūra baigta"
+
+# PKC settings sync options
+msgctxt "#30020"
+msgid "Sync Plex playlists (reboot Kodi!)"
+msgstr "Sinchronizuoti „Plex“ grojaraščius (perkrauti „Kodi“!)"
+
+# PKC settings sync options
+msgctxt "#30021"
+msgid "Only sync specific Plex playlists to Kodi"
+msgstr "Sinchronizuokite tik konkrečius „Plex“ grojaraščius į „Kodi“"
+
+# PKC settings category
+msgctxt "#30022"
+msgid "Advanced"
+msgstr "Pažengęs"
+
+# PKC settings sync options
+msgctxt "#30023"
+msgid "Only sync specific Kodi playlists to Plex"
+msgstr "Sinchronizuokite tik konkrečius „Kodi“ grojaraščius į „Plex“"
+
+msgctxt "#30024"
+msgid "Username"
+msgstr "Vartotojo vardas"
+
+msgctxt "#30025"
+msgid "Display message if PMS goes offline"
+msgstr "Rodyti pranešimą, jei PMS atsijungęs"
+
+# PKC settings sync options
+msgctxt "#30026"
+msgid "Prefix in Plex playlist name to trigger sync"
+msgstr ""
+"„Plex“ grojaraščio pavadinimo priešdėlis, kad būtų galima sinchronizuoti"
+
+# PKC settings sync options
+msgctxt "#30027"
+msgid "Prefix in Kodi playlist name to trigger sync"
+msgstr ""
+"„Kodi“ grojaraščio pavadinimo priešdėlis, kad būtų galima sinchronizuoti"
+
+# PKC settings artwork options: status info
+msgctxt "#30028"
+msgid "PKC-only image caching completed"
+msgstr "„PKC“-baigtas tik  atvaizdžių podėliavimas"
+
+msgctxt "#30030"
+msgid "Port Number"
+msgstr "Prievado numeris"
+
+msgctxt "#30031"
+msgid "I own this Plex Media Server"
+msgstr "Aš šio „Plex Medija Serverio“ savininkas"
+
+# Kodi context menu entry for movie and episode information screen
+msgctxt "#30032"
+msgid "Information"
+msgstr "Informacija"
+
+msgctxt "#30042"
+msgid "Refresh"
+msgstr "Atnaujinti"
+
+msgctxt "#30043"
+msgid "Delete"
+msgstr "Šalinti"
+
+# Notification displayed if there is a LOT to be deleted
+msgctxt "#30052"
+msgid "Deleting"
+msgstr "Ištrinti"
+
+msgctxt "#30069"
+msgid "None"
+msgstr "Joks"
+
+msgctxt "#30093"
+msgid "Mark Watched"
+msgstr "Pažymėti žiūrėtą"
+
+msgctxt "#30094"
+msgid "Mark Unwatched"
+msgstr "Pažymėti nežiūrėtą"
+
+msgctxt "#30095"
+msgid "Add to Favorites"
+msgstr "Pridėti prie mėgstamiausių"
+
+msgctxt "#30096"
+msgid "Remove from Favorites"
+msgstr "Pašalinti iš mėgstamiausių"
+
+msgctxt "#30114"
+msgid "Offer delete after playback"
+msgstr "Pasiūlyti ištrinti po atkūrimo"
+
+msgctxt "#30115"
+msgid "For Episodes"
+msgstr "Epizodams"
+
+msgctxt "#30116"
+msgid "For Movies"
+msgstr "Filmams"
+
+msgctxt "#30125"
+msgid "Done"
+msgstr "Atlikta"
+
+# Error popup message text
+msgctxt "#30128"
+msgid "Play Error"
+msgstr "Rodyti klaidą"
+
+msgctxt "#30132"
+msgid "Warning"
+msgstr "Dėmesio!"
+
+msgctxt "#30135"
+msgid "Error"
+msgstr "Klaida"
+
+msgctxt "#30138"
+msgid "Search"
+msgstr "Paieška"
+
+msgctxt "#30139"
+msgid "Enable Theme Music (Requires Restart)"
+msgstr "Įgalinti teminę muziką (reikia paleisti iš naujo)"
+
+msgctxt "#30143"
+msgid "Always transcode if video bitrate is above"
+msgstr "Visada perkoduoti, jei vaizdo pralaidumas yra didesnis"
+
+msgctxt "#30157"
+msgid "Enable Enhanced Images (eg CoverArt)"
+msgstr "Įgalinti patobulintus atvaizdžius (pvz., viršelio iliustracija)"
+
+msgctxt "#30158"
+msgid "Metadata"
+msgstr "Metaduomenys"
+
+msgctxt "#30160"
+msgid "Video Quality if Transcoding necessary"
+msgstr "Vaizdo kokybė, jei reikalingas perkodavimas"
+
+msgctxt "#30165"
+msgid "Direct Play"
+msgstr "Tiesioginis atkūrimas"
+
+msgctxt "#30166"
+msgid "Transcoding"
+msgstr "Perkodavimas"
+
+msgctxt "#30170"
+msgid "Recently Added TV Shows"
+msgstr "Vėliausiai pridėta TV laida"
+
+msgctxt "#30171"
+msgid "In Progress TV Shows"
+msgstr "TV laidos procese"
+
+msgctxt "#30173"
+msgid "Channels"
+msgstr "Kanalai"
+
+msgctxt "#30174"
+msgid "Recently Added"
+msgstr "Vėliausiai pridėta"
+
+msgctxt "#30177"
+msgid "In Progress Movies"
+msgstr "Filmai procese"
+
+msgctxt "#30178"
+msgid "In Progress Episodes"
+msgstr "Epizodai procese"
+
+msgctxt "#30179"
+msgid "Next Episodes"
+msgstr "Kiti epizodai"
+
+msgctxt "#30180"
+msgid "Favorite Movies"
+msgstr "Mėgstamiausi filmai"
+
+msgctxt "#30181"
+msgid "Favorite Shows"
+msgstr "Mėgstamiausios laidos"
+
+msgctxt "#30182"
+msgid "Favorite Episodes"
+msgstr "Mėgstamiausi epizodai"
+
+msgctxt "#30189"
+msgid "Unwatched Movies"
+msgstr "Neperžiūrėti filmai"
+
+msgctxt "#30198"
+msgid "Search"
+msgstr "Paieška"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30200"
+msgid ""
+"In the following window, enter the server's hostname (or IP) where your Plex"
+" media resides. Mind the case!"
+msgstr ""
+"Tolesniame lange įveskite serverio pavadinimą (arba IP), kuriame yra jūsų "
+"„Plex“ laikmena. Atminkite tai!"
+
+# For setting up direct paths and adding network credentials - input window
+# for hostname
+msgctxt "#30201"
+msgid "Enter server hostname (or IP)"
+msgstr "Įveskite serverio pavadinimą (arba IP)"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30202"
+msgid ""
+"In the following window, enter the network protocol you would like to use. "
+"This is likely 'smb'."
+msgstr ""
+"Tolesniame lange įveskite tinklo protokolą, kurį norite naudoti. Tikėtina "
+"tai yra 'smb'."
+
+# For setting up direct paths and adding network credentials - input window
+# protocol
+msgctxt "#30203"
+msgid "Enter network protocol"
+msgstr "Įveskite tinklo protokolą"
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30204"
+msgid "The hostname or IP '{0}' that you entered is not valid."
+msgstr "Jūsų įvestas serverio vardas ar IP protokolas '{0}' negalioja."
+
+# For setting up direct paths and adding network credentials
+msgctxt "#30205"
+msgid "The protocol '{0}' that you entered is not supported."
+msgstr "Įvestas protokolas '{0}' nepalaikomas."
+
+# Video node naming for random e.g. movies
+msgctxt "#30227"
+msgid "Random"
+msgstr "Atsitiktinis"
+
+# Video node naming for e.g. movies
+msgctxt "#30230"
+msgid "Recommended"
+msgstr "Rekomenduojama"
+
+msgctxt "#30235"
+msgid "Extras"
+msgstr "Priedai"
+
+msgctxt "#30243"
+msgid "Enable HTTPS"
+msgstr "Įgalinti HTTPS"
+
+msgctxt "#30251"
+msgid "Recently added Home Videos"
+msgstr "Vėliausiai pridėti vaizdo įrašai"
+
+msgctxt "#30252"
+msgid "Recently added Photos"
+msgstr "Vėliausiai pridėtos nuotraukos"
+
+msgctxt "#30253"
+msgid "Favorite Home Videos"
+msgstr "Mėgstamiausi vaizdo įrašai"
+
+msgctxt "#30254"
+msgid "Favorite Photos"
+msgstr "Mėgstamiausios nuotraukos"
+
+msgctxt "#30255"
+msgid "Favorite Albums"
+msgstr "Mėgstamiausi albumai"
+
+msgctxt "#30256"
+msgid "Recently added Music videos"
+msgstr "Vėliausiai pridėti muzikiniai vaizdo įrašai"
+
+msgctxt "#30257"
+msgid "In progress Music videos"
+msgstr "Muzikos vaizdo įrašai procese"
+
+msgctxt "#30258"
+msgid "Unwatched Music videos"
+msgstr "Neperžiūrėti muzikos vaizdo įrašai"
+
+# PKC settings sub category under appearance tweaks
+msgctxt "#30302"
+msgid "Movies"
+msgstr "Filmai"
+
+# contextmenu entry
+msgctxt "#30401"
+msgid "Plex options"
+msgstr "„Plex“ parinktys"
+
+# contextmenu entry
+msgctxt "#30405"
+msgid "Add to Plex favorites"
+msgstr "Pridėti prie „Plex“ mėgstamiausių"
+
+# contextmenu entry
+msgctxt "#30406"
+msgid "Remove from Plex favorites"
+msgstr "Pašalinti iš „Plex“ mėgstamiausių"
+
+# contextmenu entry
+msgctxt "#30407"
+msgid "Set custom song rating"
+msgstr "Nustatykite individualų dainų reitingą"
+
+# contextmenu entry
+msgctxt "#30408"
+msgid "Plex addon settings"
+msgstr "„Plex“ priedų nustatymai"
+
+# contextmenu entry
+msgctxt "#30409"
+msgid "Delete item from server"
+msgstr "Ištrinkite elementą iš serverio"
+
+# contextmenu entry
+msgctxt "#30410"
+msgid "Refresh this item"
+msgstr "Atnaujinkite šį elementą"
+
+# contextmenu entry
+msgctxt "#30412"
+msgid "Force transcode"
+msgstr "Priverstinis perkodavimas"
+
+# Error dialog text
+msgctxt "#30414"
+msgid ""
+"Could not delete the Plex item. Is item deletion enabled on the Plex Media "
+"Server?"
+msgstr ""
+"Nepavyko ištrinti „Plex“ elemento. Ar „Plex Medija Serveryje“ įgalintas "
+"elemento ištrynimas?"
+
+# contextmenu entry
+msgctxt "#30415"
+msgid "Start playback via PMS"
+msgstr "Pradėkite atkūrimą per „Plex Mediją Serverį“"
+
+msgctxt "#30416"
+msgid "Settings for the Plex Server"
+msgstr "„Plex“ serverio nustatymai"
+
+msgctxt "#30417"
+msgid ""
+"Could not change the Kodi settings file {0}. PKC might not work correctly. "
+"Error: {1}"
+msgstr ""
+"Nepavyko pakeisti „Kodi“ nustatymų failo {0}. „PKC“ gali neveikti tinkamai. "
+"Klaida: {1}"
+
+# PKC Settings - Connection
+msgctxt "#30500"
+msgid "Verify Host SSL Certificate (more secure)"
+msgstr "Patvirtinti SSL sertifikato prieglobą (saugesnis)"
+
+# PKC Settings - Connection
+msgctxt "#30501"
+msgid "Client SSL certificate"
+msgstr "Kliento SSL sertifikatas"
+
+# PKC Settings - Artwork
+msgctxt "#30502"
+msgid "Sync Plex artwork from the PMS (recommended)"
+msgstr "Sinchronizuokite „Plex“ iliustracijas iš „PMS“ (rekomenduojama)"
+
+# Message shown if SSL HTTPS certificate fails
+msgctxt "#30503"
+msgid "SSL certificate failed to validate. Please check {0} for solutions."
+msgstr "SSL sertifikatas nepatvirtintas. Patikrinkite {0}, kad išspręsti."
+
+# PKC Settings, category name
+msgctxt "#30506"
+msgid "Sync Options"
+msgstr "Sinchronizavimo parinktys"
+
+# PKC Settings - Sync Options
+msgctxt "#30507"
+msgid "Show syncing progress"
+msgstr "Rodyti sinchronizavimo eigą"
+
+# PKC Settings - Sync Options
+msgctxt "#30508"
+msgid "Sync empty TV Shows"
+msgstr "Sinchronizuoti tuščias TV laidas"
+
+# PKC Settings - Sync Options
+msgctxt "#30509"
+msgid "Enable Music Library"
+msgstr "Įgalinti muzikos biblioteką"
+
+msgctxt "#30510"
+msgid "Direct stream music library"
+msgstr "Tiesiogiai srautu perduoti muzikos biblioteką"
+
+# PKC Settings - Sync Options
+msgctxt "#30511"
+msgid "Playback Mode"
+msgstr "Atkūrimo režimas"
+
+# PKC Settings - Artwork
+msgctxt "#30512"
+msgid "Cache all artwork for a smooth Kodi experience"
+msgstr "Sklandžiai „Kodi“ patirčiai, podėliaukite visas iliustracijas"
+
+# PKC Settings - Artwork
+msgctxt "#30513"
+msgid "Limit artwork cache threads (recommended for rpi)"
+msgstr "Riboti iliustracijų podėlio gijas (rekomenduojama rpi)"
+
+# PKC Settings - Sync Options
+msgctxt "#30514"
+msgid "Show all Plex extras instead of immediately playing trailers"
+msgstr "Rodyti visus „Plex“ priedus užuot nedelsiant atkurti treilerius"
+
+# PKC Settings - Sync Options
+msgctxt "#30515"
+msgid "Maximum items to request from the server at once"
+msgstr "Maksimalus elementų skaičius, kurio prašote iš serverio vienu metu"
+
+# PKC Settings, category name
+msgctxt "#30516"
+msgid "Playback"
+msgstr "Atkūrimas"
+
+# PKC Settings - Connection
+msgctxt "#30517"
+msgid "Set network credentials for Direct Paths and direct play"
+msgstr "Nustatykite tiesioginius kelius ir tiesioginį atkūrimą"
+
+# PKC Settings - Playback
+msgctxt "#30518"
+msgid "Enable Plex Trailers (Plexpass is needed)"
+msgstr "Įgalinti „Plex“ treilerius (reikia „Plexpass“)"
+
+# PKC Settings - Playback
+msgctxt "#30519"
+msgid "Ask to play trailers"
+msgstr "Paprašykite rodyti treilerius"
+
+# PKC Settings - Plex
+msgctxt "#30520"
+msgid "Skip PMS delete confirmation (use at your own risk)"
+msgstr "Praleisti „PMS“ pašalinimo patvirtinimą (naudokite savo pačių riziką)"
+
+# PKC Settings - Playback
+msgctxt "#30521"
+msgid "Jump back on resume (in seconds)"
+msgstr "Grįžti atgal į tęsinį (sekundėmis)"
+
+# PKC Settings - Playback
+msgctxt "#30522"
+msgid "Force transcode h265/HEVC"
+msgstr "Priverstinis perkodavimas h265/HEVC"
+
+# PKC Settings - Sync Options
+msgctxt "#30523"
+msgid "Also show sync progress for playstate and user data"
+msgstr ""
+"Taip pat rodyti sinchronizavimo eigą, skirtą „PlayState“ ir vartotojo "
+"duomenys"
+
+# PKC Settings - Sync Options
+msgctxt "#30524"
+msgid "Select Plex libraries to sync"
+msgstr "Pasirinkti sinchronizuojamas „Plex“ bibliotekas"
+
+# PKC Settings - Playback
+msgctxt "#30527"
+msgid "Ignore specials in next episodes"
+msgstr "Nepaisyti specialių laidų sekančiuose epizoduose"
+
+msgctxt "#30528"
+msgid "Permanent users to add to the session"
+msgstr "Nuolatiniai naudotojai gali prisidėti prie sesijos"
+
+# PKC Settings - Advanced
+msgctxt "#30529"
+msgid "Startup delay (in seconds)"
+msgstr "Paleidimo atidėjimas (sekundėmis)"
+
+msgctxt "#30531"
+msgid "Enable new content notification"
+msgstr "Įgalinti naują turinio pranešimą"
+
+msgctxt "#30532"
+msgid "Duration of the video library pop up (in seconds)"
+msgstr "Vaizdo įrašų bibliotekos atsidarymo trukmė (sekundėmis)"
+
+msgctxt "#30533"
+msgid "Duration of the music library pop up (in seconds)"
+msgstr "Muzikos bibliotekos atsidarymo trukmė (sekundėmis)"
+
+msgctxt "#30534"
+msgid "Server messages"
+msgstr "Serverio pranešimai"
+
+# PKC Settings - Advanced
+msgctxt "#30535"
+msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
+msgstr "Sukurti naują unikalų „Plex“ įrenginio ID (pvz., klonuotas „Kodi“)"
+
+# PKC Settings - Connection
+msgctxt "#30536"
+msgid "Users must log in every time Kodi restarts"
+msgstr ""
+"Vartotojai turi prisijungti kiekvieną kartą, kai „Kodi“ paleidžiamas iš "
+"naujo"
+
+# PKC Settings warning
+msgctxt "#30537"
+msgid "RESTART KODI IF YOU MAKE ANY CHANGES"
+msgstr "PERKRAUTI „KODI“, JEI PADARYTI BET KOKIE PAKEITIMAI"
+
+# PKC Settings warning
+msgctxt "#30538"
+msgid "Manual complete reset of Kodi database necessary, see \"Advanced\""
+msgstr "Būtinas rankinis „Kodi“ duomenų bazės atstatymas, žr. „Išplėstinė“"
+
+# PKC Settings - Artwork
+msgctxt "#30539"
+msgid "Download additional art from FanArtTV"
+msgstr "Atsisiųskite papildomų iliustracijų iš „FanArtTV“"
+
+# PKC Settings - Artwork
+msgctxt "#30540"
+msgid "Download movie set/collection art from FanArtTV"
+msgstr "Atsisiųskite filmų komplekto / rinkinio iliustraciją iš „FanArtTV“"
+
+# PKC Settings - Playback
+msgctxt "#30541"
+msgid "Don't ask to pick a certain stream/quality"
+msgstr "Neprašykite pasirinkti tam tikro srauto / kokybės"
+
+# PKC Settings - Playback
+msgctxt "#30542"
+msgid "Always pick best quality for trailers"
+msgstr "Visada pasirinkti geriausią treilerių kokybę"
+
+# PKC Settings - Artwork
+msgctxt "#30543"
+msgid "Prefer Kodi artwork for collections/sets"
+msgstr "Pageidaujama „Kodi“ iliustracija rinkiniams / komplektams"
+
+msgctxt "#30544"
+msgid "Artwork"
+msgstr "Iliustracija"
+
+# PKC Settings - Playback
+msgctxt "#30545"
+msgid "Force transcode pictures"
+msgstr "Priverstinai perkoduoti nuotraukas"
+
+# Welcome to Plex notification
+msgctxt "#33000"
+msgid "Welcome"
+msgstr "Sveiki"
+
+# Error message
+msgctxt "#33001"
+msgid "Error connecting"
+msgstr "Prisijungimo klaida"
+
+# Error message
+msgctxt "#33002"
+msgid "Server is unreachable"
+msgstr "Serveris nepasiekiamas"
+
+# Plex notification
+msgctxt "#33003"
+msgid "Server is online"
+msgstr "Serveris prisijungęs"
+
+# Plex notification when we need to transcode
+msgctxt "#33004"
+msgid "PMS enforced transcoding"
+msgstr ""
+
+# Plex notification when we need to use direct streaming (instead of
+# transcoding)
+msgctxt "#33005"
+msgid "PMS enforced direct streaming"
+msgstr ""
+
+# Error notification
+msgctxt "#33009"
+msgid "Invalid username or password"
+msgstr "Neteisingas prisijungimo vardas arba slaptažodis"
+
+msgctxt "#33010"
+msgid "User is unauthorized for server {0}"
+msgstr "Neautorizuotas vartotojas serveriui {0}"
+
+msgctxt "#33011"
+msgid "Plex.tv did not provide us a valid list of Plex users, sorry."
+msgstr ""
+"„Plex.tv“ nepateikė mums galiojančio „Plex“ naudotojų sąrašo, atsiprašome."
+
+# Dialog before playback
+msgctxt "#33013"
+msgid "Choose the audio stream"
+msgstr "Pasirinkti garso srauto perdavimą"
+
+# Dialog before playback
+msgctxt "#33014"
+msgid "Choose the subtitles stream"
+msgstr "Pasirinkti subtitrų srauto perdavimą"
+
+# Dialog before playback
+msgctxt "#33016"
+msgid "Play trailers?"
+msgstr "Atkurti treilerius?"
+
+# Error message
+msgctxt "#33032"
+msgid ""
+"Failed to generate a new device Id. See your logs for more information."
+msgstr ""
+"Nepavyko sukurti naujo įrenginio ID. Daugiau informacijos rasite žurnaluose."
+
+# Pop-up informing about Kodi restart
+msgctxt "#33033"
+msgid "Kodi will now restart to apply the changes."
+msgstr "Dabar „Kodi“ persikraus, kad pradėtų taikyti pakeitimus."
+
+# Confirmation dialog before item gets deleted from the PMS
+msgctxt "#33041"
+msgid ""
+"Delete file(s) from Plex Server? This will also delete the file(s) from "
+"disk!"
+msgstr ""
+"Ištrinti failą (-us) iš „Plex“ serverio? Tai taip pat ištrins failą (-us) iš"
+" disko!"
+
+# PKC Settings - Playback
+msgctxt "#39000"
+msgid "- Number of trailers to play before a movie"
+msgstr "- Treilerių, kuriuos reikia leisti prieš filmą, skaičius"
+
+# PKC Settings - Playback
+msgctxt "#39001"
+msgid "Boost audio when transcoding"
+msgstr "Padidinti garsą perkoduojant"
+
+# PKC Settings - Playback
+msgctxt "#39002"
+msgid "Burnt-in subtitle size"
+msgstr "Įrašytas subtitrų dydis"
+
+# PKC Settings - Sync
+msgctxt "#39003"
+msgid "Number of simultaneous download threads"
+msgstr "Vienu metų atsiunčiamų gijų skaičius"
+
+# PKC Settings - Plex
+msgctxt "#39004"
+msgid "Enable Plex Companion (restart Kodi!)"
+msgstr "Įgalinti „Plex Companion“ (paleisti iš naujo „Kodi“!)"
+
+# PKC Settings - Plex
+msgctxt "#39005"
+msgid "Plex Companion Port (change only if needed)"
+msgstr "„Plex Companion“ prievadas (keisti tik jei reikia)"
+
+# PKC Settings - Plex
+msgctxt "#39008"
+msgid "Plex Companion: Allows flinging media to Kodi through Plex"
+msgstr "„Plex Companion“: leidžia perkelti medijas į „Kodi“ per „Plex“"
+
+# Error message
+msgctxt "#39009"
+msgid "Could not login to plex.tv. Please try signing in again."
+msgstr "Nepavyko prisijungti prie „plex.tv“. Bandykite dar kartą prisijungti."
+
+# Error message
+msgctxt "#39010"
+msgid "Problems connecting to plex.tv. Network or internet issue?"
+msgstr ""
+"Problemos, susijusios su prisijungimu prie „plex.tv“. Tinklo ar interneto "
+"problema?"
+
+# Error message
+msgctxt "#39011"
+msgid "Could not find any Plex server in the network. Aborting..."
+msgstr "Nepavyko rasti tinkle jokio „Plex“ serverio. Atšaukiama..."
+
+# Dialog text for choosing PMS
+msgctxt "#39012"
+msgid "Choose your Plex server"
+msgstr "Pasirinkite savo „Plex“ serverį"
+
+# Error message
+msgctxt "#39013"
+msgid "Not yet authorized for Plex server "
+msgstr "Dar neautorizuotas „Plex“ serveriui"
+
+# Error message
+msgctxt "#39014"
+msgid "Please sign in to plex.tv."
+msgstr "Prisijunkite prie „plex.tv“."
+
+# Error message
+msgctxt "#39015"
+msgid "Problems connecting to server. Pick another server?"
+msgstr "Iškilo sunkumų jungiantis prie serverio. Pasirinkite kitą serverį?"
+
+# Pop-up on initial sync
+msgctxt "#39016"
+msgid ""
+"Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
+" with direct paths for large music libraries. Kodi might crash otherwise)"
+msgstr ""
+"Išjungti „Plex“ muzikos biblioteką? (Didelėms muzikos bibliotekoms YPAČ "
+"rekomenduojama naudoti „Plex“ muziką tik nurodant tiesioginį kelią. "
+"Priešingu atveju, „Kodi“ gali sugesti)"
+
+# Pop-up on initial sync
+msgctxt "#39017"
+msgid ""
+"Would you now like to go to the plugin's settings to fine-tune PKC? You will"
+" need to RESTART Kodi!"
+msgstr ""
+"Ar norėtumėte pereiti prie papildinių nustatymų, kad suderinti „PKC“? Jums "
+"reikės iš naujo paleisti „Kodi“!"
+
+# PKC Settings - Advanced
+msgctxt "#39018"
+msgid "Repair the Kodi database (force update all content)"
+msgstr ""
+"Pataisykite „Kodi“ duomenų bazę (priverstinai atnaujinkite visą turinį)"
+
+# PKC Settings - Advanced
+msgctxt "#39019"
+msgid "Reset the Kodi database and optionally reset PlexKodiConnect"
+msgstr ""
+"Atkurkite „Kodi“ duomenų bazę ir pasirinktinai iš naujo nustatykite "
+"„PlexKodiConnect“"
+
+# PKC Settings - Artwork
+msgctxt "#39020"
+msgid "Cache all images to Kodi texture cache now"
+msgstr "Visų atvaizdžių podėliavimas į „Kodi“ podėlio tekstūrą tiesiog dabar."
+
+# Appended to a listed PMS if it is in the same LAN network as PKC
+msgctxt "#39022"
+msgid "local"
+msgstr "vidinis"
+
+# Error message
+msgctxt "#39023"
+msgid "Failed to authenticate. Did you login to plex.tv?"
+msgstr "Nepavyko patvirtinti. Ar prisijungėte prie „plex.tv“?"
+
+# PKC Settings - Plex
+msgctxt "#39025"
+msgid "Automatically log into plex.tv on startup"
+msgstr "Paleidžiant automatiškai prisijungti prie „plex.tv“"
+
+# PKC Settings - Sync
+msgctxt "#39026"
+msgid "Enable constant background sync"
+msgstr "Įgalinti nuolatinį fono sinchronizavimą"
+
+# Pop-up on initial sync
+msgctxt "#39028"
+msgid ""
+"CAUTION! If you choose \"Native\" mode , you might loose access to certain "
+"Plex features such as: Plex trailers and transcoding options. ALL Plex "
+"shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or "
+"\\\\myNAS/mymovie.mkv)!"
+msgstr ""
+"ATSARGIAI! Jei pasirinksite „Vietinis“ režimą, galite prarasti prieigą prie "
+"tam tikrų „Plex“ funkcijų, tokių kaip: „Plex“ anonso ir perkodavimo "
+"parinktys. VISI „Plex“ bendri ištekliai turi naudoti tiesioginius kelius "
+"(pvz., smb://myNAS/mymovie.mkv ar \\\\myNAS/mymovie.mkv)!"
+
+# Pop-up on initial sync
+msgctxt "#39029"
+msgid "Network credentials"
+msgstr "Tinklo įgaliojimai"
+
+# Pop-up on initial sync
+msgctxt "#39030"
+msgid ""
+"Add network credentials to allow Kodi access to your content? Note: Skipping"
+" this step may generate a message during the initial scan of your content if"
+" Kodi can't locate your content."
+msgstr ""
+"Pridėti tinklo įgaliojimų, kad „Kodi“ galėtų naudotis jūsų turiniu? Pastaba:"
+" Šio žingsnio praleidimas gali sukelti pranešimą pradinio turinio nuskaitymo"
+" metu, jei „Kodi“ negalės rasti jūsų turinio."
+
+# Error message displayed when verifying Direct Path sync paths passed by Plex
+msgctxt "#39031"
+msgid ""
+"Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
+"syncing?"
+msgstr ""
+"„Kodi“ negali rasti failo %s. Patikrinkite „PKC“ nustatymus. Sustabdyti "
+"sinchronizavimą?"
+
+# Pop-up on initial sync
+msgctxt "#39033"
+msgid ""
+"Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
+" paths, smb://myNas/mymovie.mkv? (recommended)"
+msgstr ""
+"Automatiškai transformuokite „Plex“ UNC bibliotekos kelius "
+"\\\\myNas\\mymovie.mkv į smb kelius, smb://myNas/mymovie.mkv? "
+"(Rekomenduojama)"
+
+# PKC Settings - Customize Paths
+msgctxt "#39034"
+msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
+msgstr "„Plex“ UNC kelius \\\\myNas pakeiskite smb://myNas"
+
+# PKC Settings - Customize Paths
+msgctxt "#39035"
+msgid ""
+"Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
+"paths smb://NAS/mystuff"
+msgstr ""
+"Pakeisti „Plex“ kelią /volume1/media arba \\\\myserver\\media su "
+"pasirinktiniais SMB keliais smb://NAS/mystuff"
+
+# PKC Settings - Customize Paths
+msgctxt "#39036"
+msgid "Escape special characters in path (e.g. space to %20)"
+msgstr "Kaita specialių simbolių kelyje (pvz., tarpas %20)"
+
+# PKC Settings - Customize Paths
+msgctxt "#39037"
+msgid "Original Plex MOVIE path to replace:"
+msgstr "Originalus „Plex“ FILMAS kelias, skirtas pakeisti:"
+
+# PKC Settings - Customize Paths
+msgctxt "#39038"
+msgid "Replace Plex MOVIE with:"
+msgstr "„Plex“ FILMAS pakeiskite:"
+
+# PKC Settings - Customize Paths
+msgctxt "#39039"
+msgid "Original Plex TV SHOWS path to replace:"
+msgstr "Originalus „Plex“ TV LAIDOS kelias, skirtas pakeisti:"
+
+# PKC Settings - Customize Paths
+msgctxt "#39040"
+msgid "Replace Plex TV SHOWS with:"
+msgstr "„Plex“ TV LAIDOS pakeisti:"
+
+# PKC Settings - Customize Paths
+msgctxt "#39041"
+msgid "Original Plex MUSIC path to replace:"
+msgstr "Originalus „Plex“ MUZIKA kelias, skirtas pakeisti:"
+
+# PKC Settings - Customize Paths
+msgctxt "#39042"
+msgid "Replace Plex MUSIC with:"
+msgstr "„Plex“ MUZIKA pakeisti:"
+
+# Pop-up on initial sync
+msgctxt "#39043"
+msgid ""
+"Go a step further and completely replace all original Plex library paths "
+"(/volume1/media) with custom SMB paths (smb://NAS/MyStuff)?"
+msgstr ""
+"Eikite toliau ir visiškai pakeiskite visus originalius „Plex“ bibliotekos "
+"kelius (/volume1/media) pasirinktiniais SMB keliais (smb://NAS/MyStuff)?"
+
+# Pop-up on initial sync
+msgctxt "#39044"
+msgid ""
+"Please enter your custom smb paths in the settings under \"Sync Options\" "
+"and then restart Kodi"
+msgstr ""
+"Įveskite pasirinktinius SMB kelius nustatymuose, esančiuose „Sinchronizavimo"
+" parinktys“, ir tada iš naujo paleiskite „Kodi“"
+
+# PKC Settings - Customize Paths
+msgctxt "#39045"
+msgid "Original Plex PHOTO path to replace:"
+msgstr "Originalus „Plex“ FOTO kelias, skirtas pakeisti:"
+
+# PKC Settings - Customize Paths
+msgctxt "#39046"
+msgid "Replace Plex PHOTO with:"
+msgstr "„Plex“ FOTO pakeisti:"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39047"
+msgid "On Deck: Append show title to episode"
+msgstr "Paruošta: Pridėkite šou pavadinimą epizodui"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39048"
+msgid "On Deck: Append season- and episode-number SxxExx"
+msgstr "Paruošta: Pridėkite sezono- ir epizodo- numerį SxxExx"
+
+# PKC Settings - Advanced
+msgctxt "#39049"
+msgid "Nothing works? Try a full reset!"
+msgstr "Niekas neveikia? Išbandykite pilną atstatymą!"
+
+# PKC Settings - Connection
+msgctxt "#39050"
+msgid "Choose Plex Server from a list"
+msgstr "Pasirinkite „Plex“ serverį iš sąrašo"
+
+# PKC Settings - Sync
+msgctxt "#39051"
+msgid "Wait before sync new/changed PMS item [s]"
+msgstr ""
+"Palaukite, kol bus sinchronizuotas naujas/pakeistas „PMS“ elementas [ai]"
+
+# PKC Settings - Sync
+msgctxt "#39052"
+msgid "Background Sync"
+msgstr "Fono sinchronizavimas"
+
+# PKC Settings - Sync
+msgctxt "#39053"
+msgid "Do a full library sync every x minutes"
+msgstr "Ar sinchronizuojama visa biblioteka kas x minutes"
+
+# Appended to a listed PMS if it is in the same LAN network as PKC
+msgctxt "#39054"
+msgid "remote"
+msgstr "nuotolinis"
+
+# Notification pop-up
+msgctxt "#39055"
+msgid "Searching for Plex Server"
+msgstr "Ieškomas „Plex“ serveris"
+
+# PKC Settings - Customize paths
+msgctxt "#39056"
+msgid ""
+"Used by sync and when attempting Direct Paths. Restart Kodi on changes!"
+msgstr ""
+
+# PKC Settings, category name
+msgctxt "#39057"
+msgid "Customize Paths"
+msgstr "Tinkinti kelius"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39059"
+msgid "Recently Added: Append show title to episode"
+msgstr "Neseniai pridėta: Pridėkite laidos pavadinimą prie epizodo"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39060"
+msgid "Recently Added: Append season- and episode-number SxxExx"
+msgstr "Neseniai pridėta: Pridėkite sezono- ir epizodo- numerį SxxExx"
+
+# Pop-up during initial sync
+msgctxt "#39061"
+msgid ""
+"Would you like to download additional artwork from FanArtTV in the "
+"background?"
+msgstr "Ar norite parsisiųsti papildomas iliustracijas iš „FanArtTV“ fone?"
+
+# PKC Settings - Sync
+msgctxt "#39062"
+msgid "Sync when screensaver is deactivated"
+msgstr "Sinchronizavimas, kai ekrano užsklanda yra išjungta"
+
+# PKC Settings - Playback
+msgctxt "#39063"
+msgid "Force Transcode Hi10P"
+msgstr "Priverstinai perkoduoti Hi10P"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39064"
+msgid "Recently Added: Also show already watched episodes"
+msgstr "Neseniai pridėta: Taip pat rodyti jau žiūrėtus epizodus"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39065"
+msgid "Force-refresh Kodi skin on stopping playback"
+msgstr "„Kodi“ apipavidalinimo naujinimas, kai sustabdomas atkūrimas"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39066"
+msgid "Recently Added: Also show already watched movies"
+msgstr "Neseniai pridėta: Taip pat rodyti jau žiūrėtus filmus"
+
+# PKC Settings - Connection
+msgctxt "#39067"
+msgid "Your current Plex Media Server:"
+msgstr "Dabartinis „Plex Medija Serveris“:"
+
+# PKC Settings - Connection
+msgctxt "#39068"
+msgid "Manually enter Plex Media Server address"
+msgstr "Rankiniu būdu įveskite „Plex Medija Serverio“ adresą"
+
+# PKC Settings - Connection
+msgctxt "#39069"
+msgid "Current address:"
+msgstr "Dabartinis adresas:"
+
+# PKC Settings - Connection
+msgctxt "#39070"
+msgid "Current port:"
+msgstr "Dabartinis prievadas:"
+
+# PKC Settings - Connection
+msgctxt "#39071"
+msgid "Current plex.tv status:"
+msgstr "Dabartinė „plex.tv“ būsena:"
+
+# PKC Settings, category name
+msgctxt "#39073"
+msgid "Appearance Tweaks"
+msgstr "Išvaizdos modifikacijos"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39074"
+msgid "TV Shows"
+msgstr "TV Laidos"
+
+# PKC Settings - Playback
+msgctxt "#39075"
+msgid "Always use default Plex subtitle if possible"
+msgstr "Jei įmanoma, visada naudokite numatytuosius „Plex“ subtitrus"
+
+# Pop-up during initial sync
+msgctxt "#39076"
+msgid ""
+"If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
+"\"Parents Movies\", be sure to check the Wiki: https://goo.gl/JFtQV9"
+msgstr ""
+"Jei naudojate keletą vienos rūšies „Plex“ bibliotekų, pvz. „Vaikų filmai“ ir"
+" „Tėvų filmai“ patikrinkite „Wiki“: https://goo.gl/JFtQV9"
+
+# PKC Settings - Appearance Tweaks
+msgctxt "#39077"
+msgid "Maximum number of videos to show in widgets"
+msgstr "Maksimalus vaizdo įrašų skaičius, rodomas valdikliuose"
+
+# PKC Settings - Plex
+msgctxt "#39078"
+msgid "Plex Companion Update Port (change only if needed)"
+msgstr "„Plex Companion Update“ prievadas (pakeisti tik jei reikia)"
+
+# Error message
+msgctxt "#39079"
+msgid ""
+"Plex Companion could not open the GDM port. Please change it in the PKC "
+"settings."
+msgstr ""
+"„Plex Companion“ negalėjo atidaryti GDM prievado. Pakeiskite jį „PKC“ "
+"nustatymuose."
+
+# Pop-up on initial sync.
+# Check that next translations for Add-on Paths and Direct Paths are
+# identical!
+msgctxt "#39080"
+msgid ""
+"Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
+"you're unsure. PKC will not work if your Direct Paths setup is wrong!"
+msgstr ""
+"Naudoti papildomus kelius (numatytuosius, paprastus) arba tiesioginius "
+"kelius? Jei nesate tikri, pasirinkite papildomus kelius. „PKC“ neveiks, jei "
+"tiesioginio kelio sąranka bus neteisinga!"
+
+# Button text for choosing PKC mode
+msgctxt "#39081"
+msgid "Add-on Paths"
+msgstr "Plėtinio keliai"
+
+# Button text for choosing PKC mode
+msgctxt "#39082"
+msgid "Direct Paths"
+msgstr "Tiesioginiai keliai"
+
+# Dialog for manually entering PMS
+msgctxt "#39083"
+msgid "Enter PMS IP or URL"
+msgstr "Įveskite „PMS“ IP protokolą arba URL adresą"
+
+# Dialog for manually entering PMS
+msgctxt "#39084"
+msgid "Enter PMS port"
+msgstr "Įveskite „PMS“ prievadą"
+
+# PKC settings - Appearance Tweaks
+msgctxt "#39085"
+msgid "Reload Kodi node files to apply all the settings below"
+msgstr ""
+"Atnaujinkite „Kodi“ mazgų failus, kad galėtumėte taikyti visus toliau "
+"pateiktus nustatymus"
+
+msgctxt "#39200"
+msgid "Log-out Plex Home User "
+msgstr "Atjungti „Plex“ namų vartotoją"
+
+msgctxt "#39201"
+msgid "Settings"
+msgstr "Nustatymai"
+
+msgctxt "#39204"
+msgid "Perform manual library sync"
+msgstr "Atlikite rankinį bibliotekos sinchronizavimą"
+
+# Error message
+msgctxt "#39205"
+msgid "Unable to run the sync, the add-on is not connected to a Plex server."
+msgstr ""
+"Nepavyko paleisti sinchronizavimo, priedas nėra prijungtas prie „Plex“ "
+"serverio."
+
+msgctxt "#39206"
+msgid ""
+"Plex might lock your account if you fail to log in too many times. Proceed "
+"anyway?"
+msgstr ""
+"„Plex“ gali užblokuoti jūsų paskyrą, jei nepavyks prisijungti daug kartų. "
+"Bet kokiu atveju tęskite?"
+
+msgctxt "#39207"
+msgid "Resetting PMS connections, please wait"
+msgstr "„PMS“ ryšių atstatymas, palaukite"
+
+msgctxt "#39208"
+msgid "Failed to reset PKC. Try to restart Kodi."
+msgstr "Nepavyko atstatyti „PKC“. Pabandykite iš naujo paleisti „Kodi“."
+
+# PKC Settings - Plex
+msgctxt "#39209"
+msgid "Toggle plex.tv login (sign in or sign out)"
+msgstr "Perjungti „plex.tv“ prisijungimą (prisijunkite arba atsijunkite)"
+
+msgctxt "#39210"
+msgid "Not yet connected to Plex Server"
+msgstr "Dar nėra prijungtas prie „Plex“ serverio"
+
+msgctxt "#39211"
+msgid "Watch later"
+msgstr "Žiūrėkite vėliau"
+
+# Error message pop-up if {0} cannot be contacted. {0} will be replaced by
+# e.g. the PMS' name
+msgctxt "#39213"
+msgid "{0} offline"
+msgstr "{0} neprisijungęs"
+
+msgctxt "#39215"
+msgid "Enter your Plex Media Server's IP or URL, Examples are:"
+msgstr "Įveskite „Plex Medija Serverio“ IP arba URL adresą, pvz .:"
+
+msgctxt "#39217"
+msgid ""
+"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
+"work!"
+msgstr ""
+"Naudokite HTTPS (SSL) ryšius? Su „Kodi“ 18 ar naujesnėmis versijomis, HTTPS "
+"greičiausiai neveiks!"
+
+msgctxt "#39218"
+msgid "Error contacting PMS"
+msgstr "Klaida susisiekiant su „PMS“"
+
+msgctxt "#39219"
+msgid "Abort (Yes) or save address anyway (No)?"
+msgstr "Nutraukti (Taip) arba vis tiek išsaugokite adresą (Ne)?"
+
+# String attached at the end to get something like "PMS Name is offline"
+msgctxt "#39220"
+msgid "connected"
+msgstr "prijungtas"
+
+msgctxt "#39221"
+msgid "plex.tv toggle successful"
+msgstr "„plex.tv“ perjungta sėkmingai"
+
+msgctxt "#39222"
+msgid "Look for missing fanart on FanartTV now"
+msgstr "Trūkstamų iliustracijų dabar ieškokite ir „FanartTV“ "
+
+msgctxt "#39223"
+msgid ""
+"Only look for missing fanart or refresh all fanart? The scan will take quite"
+" a while and happen in the background."
+msgstr ""
+"Ieškoti tik trūkstamų gerbėjų iliustracijų arba atnaujinti visas gerbėjų "
+"iliustracijas? Nuskaitymas užtruks gana ilgai ir vyks foniniu režimu."
+
+msgctxt "#39224"
+msgid "Refresh all"
+msgstr "Atnaujinti visus"
+
+msgctxt "#39225"
+msgid "Missing only"
+msgstr "Tik trūkstamus"
+
+# Message in the PKC settings if user has not logged in to plex.tv
+msgctxt "#39226"
+msgid "Not logged in to plex.tv"
+msgstr "Neprisijungęs prie „plex.tv“"
+
+# Message in the PKC settings if user is logged in to plex.tv
+msgctxt "#39227"
+msgid "Logged in to plex.tv"
+msgstr "Prisijungęs prie „plex.tv“"
+
+# Message in the PKC settings to display the plex.tv username
+msgctxt "#39228"
+msgid "Plex admin user"
+msgstr "„Plex“ administratorius"
+
+# Error message if user could not log in; the actual user name will be
+# appended at the end of the string
+msgctxt "#39229"
+msgid "Login failed with plex.tv for user"
+msgstr "Nepavyko prisijungti prie „plex.tv“ naudotojui"
+
+# Message in the PKC settings to display the plex.tv username
+msgctxt "#39230"
+msgid "Logged in Plex home user"
+msgstr "Prisijungęs „Plex“ namų naudotojas"
+
+# Message in the PKC settings to change the logged in Plex home user
+msgctxt "#39231"
+msgid "Change logged in Plex home user"
+msgstr "Keisti prisijungimą „Plex“ namų naudotojui"
+
+msgctxt "#39250"
+msgid ""
+"Running the image cache process can take some time. It will happen in the "
+"background. Are you sure you want continue?"
+msgstr ""
+"Atvaizdžio podėliavimo proceso vykdymas gali užtrukti. Tai vyks foniniu "
+"režimu. Ar tikrai norite tęsti?"
+
+msgctxt "#39251"
+msgid "Reset all existing cache data first?"
+msgstr "Pirmiausia atstatyti visus esamus podėlio duomenis?"
+
+msgctxt "#39303"
+msgid "Problems trying to contact plex.tv. Try again later"
+msgstr "Problemos bandant susisiekti su „plex.tv“. Bandykite dar kartą vėliau"
+
+msgctxt "#39304"
+msgid "Go to https://plex.tv/pin and enter the code: "
+msgstr "Eikite į https://plex.tv/pin ir įveskite kodą:"
+
+msgctxt "#39305"
+msgid "Could not sign in to plex.tv. Try again later"
+msgstr "Nepavyko prisijungti prie „plex.tv“. Bandykite dar kartą vėliau"
+
+msgctxt "#39306"
+msgid ": Select User"
+msgstr ": Pasirinkite naudotoją"
+
+msgctxt "#39307"
+msgid "Enter PIN for user "
+msgstr "Įveskite PIN kodą naudotojui"
+
+msgctxt "#39308"
+msgid "Could not log in user "
+msgstr "Nepavyko prisijungti prie naudotojo"
+
+msgctxt "#39309"
+msgid "Please try again."
+msgstr "Bandykite dar kartą."
+
+msgctxt "#39310"
+msgid "unknown"
+msgstr "nežinomas"
+
+msgctxt "#39311"
+msgid "or press No to not sign in."
+msgstr "arba paspauskite „Ne“, jei norite neprisijungti."
+
+msgctxt "#39400"
+msgid ""
+"Library sync thread has crashed. You should restart Kodi now. Please report "
+"this on the forum"
+msgstr ""
+"Bibliotekos sinchronizavimo gija užstrigo. Dabar turėtumėte perleisti "
+"„Kodi“. Praneškite apie tai forume"
+
+msgctxt "#39401"
+msgid ""
+"Detected Kodi database needs to be recreated for this version. This might "
+"take a while. Proceed?"
+msgstr ""
+"Šiai versijai reikia atkurti aptiktą „Kodi“ duomenų bazę. Tai gali užtrukti."
+" Tęsti?"
+
+msgctxt "#39402"
+msgid " may not work correctly until the database is reset."
+msgstr "gali būti neveiksminga, iki bus iš naujo atkurta duomenų bazė."
+
+msgctxt "#39403"
+msgid ""
+"The current Kodi version is not supported by PKC. Please consult the Plex "
+"forum."
+msgstr ""
+"„PKC“ nepalaiko dabartinės „Kodi“ versijos. Prašome kreiptis į „Plex“ "
+"forumą."
+
+msgctxt "#39405"
+msgid "Plex playlists/nodes refreshed"
+msgstr "„Plex“ grojaraščiai/mazgai atnaujinti"
+
+msgctxt "#39406"
+msgid "Plex playlists/nodes refresh failed"
+msgstr "„Plex“ grojaraščiai/mazgų atnaujinti nepavyko"
+
+msgctxt "#39408"
+msgid ""
+"Sync had to skip some items because they could not be processed. Kodi may be"
+" instable now!! Please post your Kodi logs to the Plex forum."
+msgstr ""
+"Sinchronizuojant buvo praleisti kai kurie elementai, nes jie negalėjo būti "
+"apdoroti. „Kodi“ dabar gali būti nestabili!! Prašom paskelbkite savo „Kodi“ "
+"žurnalus „Plex“ forume."
+
+msgctxt "#39409"
+msgid ""
+"The Plex Server did not like you asking for so much data at once and "
+"returned ERRORS. Try lowering the number of sync download threads in the "
+"settings. Skipped some items for now."
+msgstr ""
+"„Plex“ serveriui nepatiko, kad tuo pačiu metu prašote tiek daug duomenų, ir "
+"grąžino KLAIDAS. Pabandykite sumažinti sinchronizuotų atsisiuntimo gijų "
+"skaičių nustatymuose. Dabar praleidote kai kuriuos elementus."
+
+msgctxt "#39410"
+msgid "ERROR in library sync"
+msgstr "KLAIDA sinchronizuojant biblioteką"
+
+msgctxt "#39500"
+msgid "On Deck"
+msgstr "Paruošta"
+
+msgctxt "#39501"
+msgid "Collections"
+msgstr "Kolekcijos"
+
+msgctxt "#39502"
+msgid "PKC On Deck (faster)"
+msgstr "„PKC“ Paruošta (greičiau)"
+
+msgctxt "#39600"
+msgid ""
+"Are you sure you want to reset your local Kodi database? A re-sync of the "
+"Plex data will take time afterwards."
+msgstr ""
+"Ar tikrai norite atkurti vietinę „Kodi“ duomenų bazę? Pakartotinis „Plex“ "
+"duomenų sinchronizavimas užims šiek tiek laiko."
+
+msgctxt "#39601"
+msgid "Could not stop the database from running. Please try again later."
+msgstr ""
+"Nepavyko sustabdyti duomenų bazės veikimo. Bandykite dar kartą vėliau."
+
+msgctxt "#39603"
+msgid ""
+"Reset all PlexKodiConnect Addon settings? (this is usually NOT recommended "
+"and unnecessary!)"
+msgstr ""
+"Atkurti visus „PlexKodiConnect“ plėtinio nustatymus? (paprastai "
+"nerekomenduojama ir nereikalinga!)"
+
+msgctxt "#39700"
+msgid "Amazon Alexa (Voice Recognition)"
+msgstr "„Amazon Alexa“ (balso atpažinimas)"
+
+msgctxt "#39701"
+msgid "Activate Alexa"
+msgstr "Aktyvinkite „Alexa“"
+
+msgctxt "#39702"
+msgid "Browse by folder"
+msgstr "Naršyti pagal aplanką"
+
+# For use with addon.xml (PKC metadata for Kodi, e.g. description)
+# Addon Summary
+msgctxt "#39703"
+msgid "Native Integration of Plex into Kodi"
+msgstr "Natūralioji „Plex“ integracija į „Kodi“"
+
+# For use with addon.xml (PKC metadata for Kodi, e.g. description)
+# Addon Description
+msgctxt "#39704"
+msgid ""
+"Connect Kodi to your Plex Media Server. This plugin assumes that you manage "
+"all your videos with Plex (and none with Kodi). You might lose data already "
+"stored in the Kodi video and music databases (as this plugin directly "
+"changes them). Use at your own risk!"
+msgstr ""
+"Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma "
+"prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė "
+"vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir "
+"muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai "
+"pakeičia). Naudokite savo pačių rizika!"
+
+# For use with addon.xml (PKC metadata for Kodi, e.g. description)
+# Addon Disclaimer
+msgctxt "#39705"
+msgid "Use at your own risk"
+msgstr "Naudokite savo pačių rizika"
+
+# If user gets prompted to choose between several subtitles. Leave the number
+# one at the beginning of the string!
+msgctxt "#39706"
+msgid "1 No subtitles"
+msgstr "1 Nėra subtitrų"
+
+# If user gets prompted to choose between several audio/subtitle tracks and
+# language is unknown
+msgctxt "#39707"
+msgid "unknown"
+msgstr "nežinomas"
+
+# If user gets prompted to choose between several subtitles and Plex adds the
+# "default" flag
+msgctxt "#39708"
+msgid "Default"
+msgstr "Numatytas"
+
+# If user gets prompted to choose between several subtitles and Plex adds the
+# "forced" flag
+msgctxt "#39709"
+msgid "Forced"
+msgstr "Priverstinis"
+
+# If user gets prompted to choose between several subtitles the subtitle
+# cannot be downloaded (has no 'key' attribute from the PMS), the subtitle
+# needs to be burned in
+msgctxt "#39710"
+msgid "burn-in"
+msgstr "Įrašyti į"
+
+# Dialog text if PKC detected a new Music library and Kodi needs to be
+# restarted
+msgctxt "#39711"
+msgid ""
+"New Plex music library detected. Sorry, but we need to restart Kodi now due "
+"to the changes made."
+msgstr ""
+"Aptikta nauja „Plex“ muzikos biblioteka. Apgailestaujame, tačiau dėl atliktų"
+" pakeitimų dabar turime iš naujo paleisti „Kodi“."
+
+# Shown during sync process
+msgctxt "#39712"
+msgid "downloaded"
+msgstr "atsisiųsta"
+
+# Shown during sync process
+msgctxt "#39713"
+msgid "processed"
+msgstr "apdorojama"
+
+# Shown during sync process
+msgctxt "#39714"
+msgid "Sync"
+msgstr "Sinchronizuoti"
+
+# Shown during sync process
+msgctxt "#39715"
+msgid "Synching playlists"
+msgstr "Grojaraščių sinchronizavimas"
+
+# Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
+# screwed up; formated the wrong way). Do NOT replace {0} and {1}!
+msgctxt "#39716"
+msgid ""
+"Kodi cannot parse {0}. PKC will not function correctly. Please visit {1} and"
+" correct your file!"
+msgstr ""
+"„Kodi“ negali analizuoti {0}. „PKC“ neveiks tinkamai. Apsilankykite {1} ir "
+"ištaisykite failą!"
+
+# Shown once on first installation to comply with the terms of use of
+# themoviedb.org
+msgctxt "#39717"
+msgid "PKC uses free additional artwork from www.themoviedb.org. Many thanks!"
+msgstr ""
+"„PKC“ naudoja nemokamą papildomą iliustraciją iš www.themoviedb.org. Didelis"
+" ačiū!"
+
+# Shown during very first PKC setup only
+msgctxt "#39718"
+msgid ""
+"Do you want to replace your custom user ratings with an indicator of how "
+"many versions of a media item you posses?"
+msgstr ""
+"Ar norite pakeisti pasirinktinius naudotojų reitingus rodikliu, kiek medijos"
+" elemento versijų turite?"
+
+# In PKC Settings under Sync
+msgctxt "#39719"
+msgid "Replace user ratings with number of media versions"
+msgstr "Pakeiskite naudotojų reitingus medijos versijų skaičiumi"
