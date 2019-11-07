@@ -258,6 +258,10 @@ msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Video Kvalitāte, ja nepieciešama Pārkodēšana"
 
+msgctxt "#30161"
+msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
+msgstr ""
+
 msgctxt "#30165"
 msgid "Direct Play"
 msgstr "Tiešā Atskaņošana"
@@ -1244,16 +1248,14 @@ msgstr "Skatīties vēlāk"
 # e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
-msgstr ""
+msgstr "{0} bezaistē"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
 msgstr ""
 
 msgctxt "#39217"
-msgid ""
-"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
-"work!"
+msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
 msgstr ""
 
 msgctxt "#39218"
@@ -1285,11 +1287,11 @@ msgstr ""
 
 msgctxt "#39224"
 msgid "Refresh all"
-msgstr ""
+msgstr "Atjaunot visu"
 
 msgctxt "#39225"
 msgid "Missing only"
-msgstr ""
+msgstr "Tikai trūkstošo"
 
 # Message in the PKC settings if user has not logged in to plex.tv
 msgctxt "#39226"
@@ -1358,11 +1360,11 @@ msgstr ""
 
 msgctxt "#39309"
 msgid "Please try again."
-msgstr ""
+msgstr "Lūdzu mēģini vēlreiz"
 
 msgctxt "#39310"
 msgid "unknown"
-msgstr ""
+msgstr "nezināms"
 
 msgctxt "#39311"
 msgid "or press No to not sign in."

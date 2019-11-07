@@ -3,9 +3,9 @@
 # Croneter None <croneter@gmail.com>, 2017
 # Алексей Коробцов <korobcoff@gmail.com>, 2017
 # Павел Хоменко, 2017
-# Vlad Anisimov <uniss@ua.fm>, 2018
 # Alex Freit <alex.nx@mail.ru>, 2019
 # Vladimir Supranenok <stark_v@mail.ru>, 2019
+# Vlad Anisimov <uniss@ua.fm>, 2019
 # 
 msgid ""
 msgstr ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Vladimir Supranenok <stark_v@mail.ru>, 2019\n"
+"Last-Translator: Vlad Anisimov <uniss@ua.fm>, 2019\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/croneter/teams/73837/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -264,6 +264,10 @@ msgstr "Метаданные"
 msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Качество при транскодинге"
+
+msgctxt "#30161"
+msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
+msgstr ""
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -710,13 +714,13 @@ msgstr "Сервер в сети"
 # Plex notification when we need to transcode
 msgctxt "#33004"
 msgid "PMS enforced transcoding"
-msgstr ""
+msgstr "PMS принудительное транскодирование"
 
 # Plex notification when we need to use direct streaming (instead of
 # transcoding)
 msgctxt "#33005"
 msgid "PMS enforced direct streaming"
-msgstr ""
+msgstr "PMS принудительное прямое вещание"
 
 # Error notification
 msgctxt "#33009"
@@ -1065,6 +1069,8 @@ msgctxt "#39056"
 msgid ""
 "Used by sync and when attempting Direct Paths. Restart Kodi on changes!"
 msgstr ""
+"Используется при синхронизации и прямом воспроизведении. Перезапустите Kodi "
+"для применения изменений!"
 
 # PKC Settings, category name
 msgctxt "#39057"
@@ -1276,12 +1282,8 @@ msgid "Enter your Plex Media Server's IP or URL, Examples are:"
 msgstr "Введите IP или URL Вашего Plex-сервера. Например:"
 
 msgctxt "#39217"
-msgid ""
-"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
-"work!"
+msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
 msgstr ""
-"Использовать HTTPS (SSL)? В Kodi 18 или позднем HTTPS скорее всего не будет "
-"работать!"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"

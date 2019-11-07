@@ -256,6 +256,10 @@ msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "轉碼影像品質"
 
+msgctxt "#30161"
+msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
+msgstr ""
+
 msgctxt "#30165"
 msgid "Direct Play"
 msgstr "直播"
@@ -1217,9 +1221,7 @@ msgid "Enter your Plex Media Server's IP or URL, Examples are:"
 msgstr "輸入您的Plex媒體伺服器的 IP 或 URL，例子︰"
 
 msgctxt "#39217"
-msgid ""
-"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
-"work!"
+msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
 msgstr ""
 
 msgctxt "#39218"

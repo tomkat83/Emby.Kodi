@@ -260,6 +260,10 @@ msgctxt "#30160"
 msgid "Video Quality if Transcoding necessary"
 msgstr "Kvalita videa při překódování"
 
+msgctxt "#30161"
+msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
+msgstr ""
+
 msgctxt "#30165"
 msgid "Direct Play"
 msgstr "Přímé přehrávání"
@@ -1264,11 +1268,8 @@ msgid "Enter your Plex Media Server's IP or URL, Examples are:"
 msgstr "Zadejte IP adresu nebo URL vašeho Plex Media Serveru. Např.:"
 
 msgctxt "#39217"
-msgid ""
-"Use HTTPS (SSL) connections? With Kodi 18 or later, HTTPS will likely not "
-"work!"
+msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
 msgstr ""
-"Použít připojení přes HTTPS (SSL)? V Kodi 18 nejspíš HTTPS nebude fungovat!"
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
