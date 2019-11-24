@@ -25,7 +25,7 @@ class fullsync_mixin(object):
         return False
 
     @suspend_reached.setter
-    def suspend_reached(self):
+    def suspend_reached(self, _):
         pass
 
     def resume(self):

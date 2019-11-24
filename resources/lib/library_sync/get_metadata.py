@@ -4,30 +4,13 @@ from logging import getLogger
 
 from . import common
 from ..plex_api import API
-from .. import plex_functions as PF, backgroundthread, utils, variables as v
+from .. import backgroundthread, plex_functions as PF, utils, variables as v
 
-
-LOG = getLogger("PLEX." + __name__)
-
+LOG = getLogger('PLEX.sync.get_metadata')
 LOCK = backgroundthread.threading.Lock()
-# List of tuples: (collection index [as in an item's metadata with "Collection
-# id"], collection plex id)
-COLLECTION_MATCH = None
-# Dict with entries of the form <collection index>: <collection xml>
-COLLECTION_XMLS = {}
 
 
-def reset_collections():
-    """
-    Collections seem unique to Plex sections
-    """
-    global LOCK, COLLECTION_MATCH, COLLECTION_XMLS
-    with LOCK:
-        COLLECTION_MATCH = None
-        COLLECTION_XMLS = {}
-
-
-class GetMetadataTask(common.fullsync_mixin, backgroundthread.Task):
+class GetMetadataThread(backgroundthread.KillableThread, common.fullsync_mixin):
     """
     Threaded download of Plex XML metadata for a certain library item.
     Fills the queue with the downloaded etree XML objects
@@ -36,34 +19,31 @@ class GetMetadataTask(common.fullsync_mixin, backgroundthread.Task):
         queue               Queue.Queue() object where this thread will store
                             the downloaded metadata XMLs as etree objects
     """
-    def __init__(self, queue, plex_id, plex_type, get_children=False,
-                 count=None):
-        self.queue = queue
-        self.plex_id = plex_id
-        self.plex_type = plex_type
-        self.get_children = get_children
-        self.count = count
-        super(GetMetadataTask, self).__init__()
+    def __init__(self, get_medata_queue, processing_queue):
+        self.get_medata_queue = get_medata_queue
+        self.processing_queue = processing_queue
+        super(GetMetadataThread, self).__init__()
 
     def _collections(self, item):
-        global COLLECTION_MATCH, COLLECTION_XMLS
         api = API(item['xml'][0])
-        if COLLECTION_MATCH is None:
-            COLLECTION_MATCH = PF.collections(api.library_section_id())
-            if COLLECTION_MATCH is None:
+        collection_match = item['section'].collection_match
+        collection_xmls = item['section'].collection_xmls
+        if collection_match is None:
+            collection_match = PF.collections(api.library_section_id())
+            if collection_match is None:
                 LOG.error('Could not download collections')
                 return
             # Extract what we need to know
-            COLLECTION_MATCH = \
+            collection_match = \
                 [(utils.cast(int, x.get('index')),
-                  utils.cast(int, x.get('ratingKey'))) for x in COLLECTION_MATCH]
+                  utils.cast(int, x.get('ratingKey'))) for x in collection_match]
         item['children'] = {}
         for plex_set_id, set_name in api.collections():
             if self.isCanceled():
                 return
-            if plex_set_id not in COLLECTION_XMLS:
+            if plex_set_id not in collection_xmls:
                 # Get Plex metadata for collections - a pain
-                for index, collection_plex_id in COLLECTION_MATCH:
+                for index, collection_plex_id in collection_match:
                     if index == plex_set_id:
                         collection_xml = PF.GetPlexMetadata(collection_plex_id)
                         try:
@@ -72,54 +52,71 @@ class GetMetadataTask(common.fullsync_mixin, backgroundthread.Task):
                             LOG.error('Could not get collection %s %s',
                                       collection_plex_id, set_name)
                             continue
-                        COLLECTION_XMLS[plex_set_id] = collection_xml
+                        collection_xmls[plex_set_id] = collection_xml
                         break
                 else:
                     LOG.error('Did not find Plex collection %s %s',
                               plex_set_id, set_name)
                     continue
-            item['children'][plex_set_id] = COLLECTION_XMLS[plex_set_id]
+            item['children'][plex_set_id] = collection_xmls[plex_set_id]
+
+    def _process_abort(self, section):
+        # Make sure other threads will also receive sentinel
+        self.get_medata_queue.put(None)
+        if section:
+            section.sync_successful = False
 
     def run(self):
-        """
-        Do the work
-        """
-        if self.isCanceled():
-            return
-        # Download Metadata
-        item = {
-            'xml': PF.GetPlexMetadata(self.plex_id),
-            'children': None
-        }
-        if item['xml'] is None:
-            # Did not receive a valid XML - skip that item for now
-            LOG.error("Could not get metadata for %s. Skipping that item "
-                      "for now", self.plex_id)
-            return
-        elif item['xml'] == 401:
-            LOG.error('HTTP 401 returned by PMS. Too much strain? '
-                      'Cancelling sync for now')
-            utils.window('plex_scancrashed', value='401')
-            return
-        if not self.isCanceled() and self.plex_type == v.PLEX_TYPE_MOVIE:
-            # Check for collections/sets
-            collections = False
-            for child in item['xml'][0]:
-                if child.tag == 'Collection':
-                    collections = True
-                    break
-            if collections:
-                global LOCK
-                with LOCK:
-                    self._collections(item)
-        if not self.isCanceled() and self.get_children:
-            children_xml = PF.GetAllPlexChildren(self.plex_id)
+        LOG.debug('Starting metadata thread')
+        while True:
+            item = self.get_medata_queue.get()
             try:
-                children_xml[0].attrib
-            except (TypeError, IndexError, AttributeError):
-                LOG.error('Could not get children for Plex id %s',
-                          self.plex_id)
-            else:
-                item['children'] = children_xml
-        if not self.isCanceled():
-            self.queue.put((self.count, item))
+                if item is None or self.isCanceled():
+                    self._process_abort(item[1] if item else None)
+                    break
+                count, plex_id, section = item
+                item = {
+                    'xml': PF.GetPlexMetadata(plex_id),  # This will block
+                    'children': None,
+                    'section': section
+                }
+                if item['xml'] is None:
+                    # Did not receive a valid XML - skip that item for now
+                    LOG.error("Could not get metadata for %s. Skipping item "
+                              "for now", plex_id)
+                    section.sync_successful = False
+                    continue
+                elif item['xml'] == 401:
+                    LOG.error('HTTP 401 returned by PMS. Too much strain? '
+                              'Cancelling sync for now')
+                    utils.window('plex_scancrashed', value='401')
+                    self._process_abort(section)
+                    break
+                if section.plex_type == v.PLEX_TYPE_MOVIE:
+                    # Check for collections/sets
+                    collections = False
+                    for child in item['xml'][0]:
+                        if child.tag == 'Collection':
+                            collections = True
+                            break
+                    if collections:
+                        with LOCK:
+                            self._collections(item)
+                if section.get_children:
+                    if self.isCanceled():
+                        self._process_abort(section)
+                        break
+                    children_xml = PF.GetAllPlexChildren(plex_id)  # Will block
+                    try:
+                        children_xml[0].attrib
+                    except (TypeError, IndexError, AttributeError):
+                        LOG.error('Could not get children for Plex id %s',
+                                  plex_id)
+                        section.sync_successful = False
+                        continue
+                    else:
+                        item['children'] = children_xml
+                self.processing_queue.put((count, item))
+            finally:
+                self.get_medata_queue.task_done()
+        LOG.debug('Stopping metadata thread')

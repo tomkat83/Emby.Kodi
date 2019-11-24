@@ -54,6 +54,8 @@ class Section(object):
         self.content = None  # unicode
         # Setting the section_type WILL re_set sync_to_kodi!
         self._section_type = None  # unicode
+        # E.g. "season" or "movie" (translated)
+        self.section_type_text = None
         # Do we sync all items of this section to the Kodi DB?
         # This will be set with section_type!!
         self.sync_to_kodi = None  # bool
@@ -77,13 +79,9 @@ class Section(object):
         self.order = None
         # Original PMS xml for this section, including children
         self.xml = None
-        # Attributes that will be initialized later by full_sync.py
-        self.iterator = None
-        self.context = None
-        self.get_children = None
         # A section_type encompasses possible several plex_types! E.g. shows
         # contain shows, seasons, episodes
-        self.plex_type = None
+        self._plex_type = None
         if xml_element is not None:
             self.from_xml(xml_element)
         elif section_db_element:
@@ -106,9 +104,14 @@ class Section(object):
                 self.section_type is not None)
 
     def __eq__(self, section):
+        """
+        Sections compare equal if their section_id, name and plex_type (first
+        prio) OR section_type (if there is no plex_type is set) compare equal
+        """
         return (self.section_id == section.section_id and
                 self.name == section.name and
-                self.section_type == section.section_type)
+                (self.plex_type == section.plex_type if self.plex_type else
+                 self.section_type == section.section_type))
 
     def __ne__(self, section):
         return not self == section
@@ -139,6 +142,15 @@ class Section(object):
             self.sync_to_kodi = False
         else:
             self.sync_to_kodi = True
+
+    @property
+    def plex_type(self):
+        return self._plex_type
+
+    @plex_type.setter
+    def plex_type(self, value):
+        self._plex_type = value
+        self.section_type_text = utils.lang(v.TRANSLATION_FROM_PLEXTYPE[value])
 
     @property
     def index(self):
@@ -429,6 +441,35 @@ class Section(object):
         self.remove_files_from_kodi()
         self.remove_window_vars()
         self.remove_from_plex()
+
+
+def _get_children(plex_type):
+    if plex_type == v.PLEX_TYPE_ALBUM:
+        return True
+    else:
+        return False
+
+
+def get_sync_section(section, plex_type):
+    section = copy.deepcopy(section)
+    section.plex_type = plex_type
+    section.context = itemtypes.ITEMTYPE_FROM_PLEXTYPE[plex_type]
+    section.get_children = _get_children(plex_type)
+    # Some more init stuff
+    # Has sync for this section been successful?
+    section.sync_successful = True
+    # List of tuples: (collection index [as in an item's metadata with
+    # "Collection id"], collection plex id)
+    section.collection_match = None
+    # Dict with entries of the form <collection index>: <collection xml>
+    section.collection_xmls = {}
+    # Keep count during sync
+    section.count = 0
+    # Total number of items that we need to sync
+    section.number_of_items = 0
+    # Iterator to get one sync item after the other
+    section.iterator = None
+    return section
 
 
 def force_full_sync():
