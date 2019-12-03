@@ -161,7 +161,7 @@ class plexgdm:
             except socket.error:
                 pass
             else:
-                if "M-SEARCH * HTTP/1." in data:
+                if b"M-SEARCH * HTTP/1." in data:
                     log.debug("Detected client discovery request from %s. "
                               " Replying" % str(addr))
                     try:
