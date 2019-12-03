@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 from ast import literal_eval
 from copy import deepcopy
@@ -326,7 +326,7 @@ def _pms_list_from_plex_tv(token):
         LOG.error('Could not get list of PMS from plex.tv')
         return []
 
-    from Queue import Queue
+    from queue import Queue
     queue = Queue()
     thread_queue = []
 

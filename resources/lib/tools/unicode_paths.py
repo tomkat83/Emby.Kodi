@@ -28,7 +28,7 @@ from . import platform
 
 try:
     # Python 2
-    str_cls = unicode
+    str_cls = str
     bytes_cls = str
 except NameError:
     # Python 3

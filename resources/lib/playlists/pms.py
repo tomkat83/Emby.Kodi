@@ -4,7 +4,7 @@
 Functions to communicate with the currently connected PMS in order to
 manipulate playlists
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 
 from .common import PlaylistError
@@ -108,7 +108,7 @@ def add_items(playlist, plex_ids):
         'smart': 0,
         'uri': ('server://%s/com.plexapp.plugins.library/library/metadata/%s'
                 % (app.CONN.machine_identifier,
-                   ','.join(unicode(x) for x in plex_ids)))
+                   ','.join(str(x) for x in plex_ids)))
     }
     xml = DU().downloadUrl(url='{server}/playlists/',
                            action_type='POST',

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 ###############################################################################
-from __future__ import absolute_import, division, unicode_literals
+
 import logging
 from sys import argv
-from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 
 import xbmc
 import xbmcgui
@@ -33,7 +33,7 @@ class Main():
         arguments = unicode_paths.decode(argv[2])
         path = unicode_paths.decode(argv[0])
         # Ensure unicode
-        for key, value in params.iteritems():
+        for key, value in params.items():
             params[key.decode('utf-8')] = params.pop(key)
             params[key] = value.decode('utf-8')
         mode = params.get('mode', '')

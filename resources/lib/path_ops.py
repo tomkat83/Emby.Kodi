@@ -14,7 +14,7 @@ WARNING: os.path won't really work with smb paths (possibly others). For
 xbmcvfs functions to work with smb paths, they need to be both in passwords.xml
 as well as sources.xml
 """
-from __future__ import absolute_import, division, unicode_literals
+
 import shutil
 import os
 from os import path  # allows to use path_ops.path.join, for example

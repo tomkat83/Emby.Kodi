@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 import os
 import sys
 import platform
@@ -20,7 +20,7 @@ def try_decode(string, encoding='utf-8'):
     fails with e.g. Android TV's Python, which does not accept arguments for
     string.encode()
     """
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         # already decoded
         return string
     try:

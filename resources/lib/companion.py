@@ -3,7 +3,7 @@
 """
 Processes Plex companion inputs from the plexbmchelper to Kodi commands
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 from xbmc import Player
 
@@ -28,7 +28,7 @@ def skip_to(params):
     LOG.debug('Skipping to playQueueItemID %s, plex_id %s',
               playqueue_item_id, plex_id)
     found = True
-    for player in js.get_players().values():
+    for player in list(js.get_players().values()):
         playqueue = PQ.PLAYQUEUES[player['playerid']]
         for i, item in enumerate(playqueue.items):
             if item.id == playqueue_item_id:

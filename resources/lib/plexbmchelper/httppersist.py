@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
-import httplib
+import http.client
 import traceback
 import string
 import errno
@@ -23,9 +23,9 @@ class RequestMgr:
         conn = self.conns.get(protocol + host + str(port), False)
         if not conn:
             if protocol == "https":
-                conn = httplib.HTTPSConnection(host, port)
+                conn = http.client.HTTPSConnection(host, port)
             else:
-                conn = httplib.HTTPConnection(host, port)
+                conn = http.client.HTTPConnection(host, port)
             self.conns[protocol + host + str(port)] = conn
         return conn
 
@@ -36,7 +36,7 @@ class RequestMgr:
             self.conns.pop(protocol + host + str(port), None)
 
     def dumpConnections(self):
-        for conn in self.conns.values():
+        for conn in list(self.conns.values()):
             conn.close()
         self.conns = {}
 

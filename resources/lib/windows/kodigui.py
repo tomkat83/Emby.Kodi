@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 import xbmc
 import xbmcgui
 import time
@@ -242,10 +242,10 @@ class ManagedListItem(object):
         self._manager = None
         self._valid = True
         if properties:
-            for k, v in properties.items():
+            for k, v in list(properties.items()):
                 self.setProperty(k, v)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self._valid
 
     @property
@@ -281,7 +281,7 @@ class ManagedListItem(object):
         self.listItem.setIconImage(self.iconImage)
         self.listItem.setThumbnailImage(self.thumbnailImage)
         self.listItem.setPath(self.path)
-        for k in self._manager._properties.keys():
+        for k in list(self._manager._properties.keys()):
             self.listItem.setProperty(k, self.properties.get(k) or '')
 
     def clear(self):
@@ -615,9 +615,9 @@ class ManagedControlList(object):
     def getViewRange(self):
         viewPosition = self.getViewPosition()
         selected = self.getSelectedPosition()
-        return range(max(selected - viewPosition, 0),
+        return list(range(max(selected - viewPosition, 0),
                      min(selected + (self._maxViewIndex - viewPosition) + 1,
-                         self.size() - 1))
+                         self.size() - 1)))
 
     def positionIsValid(self, pos):
         return 0 <= pos < self.size()
@@ -751,7 +751,7 @@ class MultiWindow(object):
         self._current.setProperty(key, value)
 
     def _onFirstInit(self):
-        for k, v in self._properties.items():
+        for k, v in list(self._properties.items()):
             self._current.setProperty(k, v)
         self.onFirstInit()
 

@@ -3,7 +3,7 @@
 """
 Monitors the Kodi playqueue and adjusts the Plex playqueue accordingly
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 import copy
 

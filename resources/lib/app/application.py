@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
-import Queue
+import queue
 from threading import Lock, RLock
 
 import xbmc
@@ -38,9 +38,9 @@ class App(object):
             self.lock_playlists = Lock()
 
             # Plex Companion Queue()
-            self.companion_queue = Queue.Queue(maxsize=100)
+            self.companion_queue = queue.Queue(maxsize=100)
             # Websocket_client queue to communicate with librarysync
-            self.websocket_queue = Queue.Queue()
+            self.websocket_queue = queue.Queue()
             # xbmc.Monitor() instance from kodimonitor.py
             self.monitor = None
             # xbmc.Player() instance

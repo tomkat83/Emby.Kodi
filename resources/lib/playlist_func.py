@@ -3,7 +3,7 @@
 """
 Collection of functions associated with Kodi and Plex playlists and playqueues
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 
 from .plex_api import API

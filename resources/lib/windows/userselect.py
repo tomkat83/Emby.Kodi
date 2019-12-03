@@ -5,7 +5,7 @@
 :synopsis: This module shows a dialog to let one choose between different Plex
            (home) users
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 import xbmc
 import xbmcgui
@@ -152,7 +152,7 @@ class UserSelectWindow(kodigui.BaseWindow):
             pin = pin[:-1]
 
         if pin:
-            item.setProperty('pin', ' '.join(list(u"\u2022" * len(pin))))
+            item.setProperty('pin', ' '.join(list("\u2022" * len(pin))))
             item.setProperty('editing.pin', pin)
             if len(pin) > 3:
                 self.userSelected(item, pin)

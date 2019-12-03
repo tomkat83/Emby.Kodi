@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
-import Queue
+import queue
 import copy
 
 import xbmcgui
@@ -300,20 +300,20 @@ class FullSync(common.fullsync_mixin):
         #   download children items, e.g. songs for a specific album?,
         #   Queue)
         kinds = [
-            (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_MOVIE, itemtypes.Movie, False, Queue.Queue),
-            (v.PLEX_TYPE_SHOW, v.PLEX_TYPE_SHOW, itemtypes.Show, False, Queue.Queue),
-            (v.PLEX_TYPE_SEASON, v.PLEX_TYPE_SHOW, itemtypes.Season, False, Queue.Queue),
-            (v.PLEX_TYPE_EPISODE, v.PLEX_TYPE_SHOW, itemtypes.Episode, False, Queue.Queue)
+            (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_MOVIE, itemtypes.Movie, False, queue.Queue),
+            (v.PLEX_TYPE_SHOW, v.PLEX_TYPE_SHOW, itemtypes.Show, False, queue.Queue),
+            (v.PLEX_TYPE_SEASON, v.PLEX_TYPE_SHOW, itemtypes.Season, False, queue.Queue),
+            (v.PLEX_TYPE_EPISODE, v.PLEX_TYPE_SHOW, itemtypes.Episode, False, queue.Queue)
         ]
         if app.SYNC.enable_music:
             kinds.extend([
-                (v.PLEX_TYPE_ARTIST, v.PLEX_TYPE_ARTIST, itemtypes.Artist, False, Queue.Queue),
+                (v.PLEX_TYPE_ARTIST, v.PLEX_TYPE_ARTIST, itemtypes.Artist, False, queue.Queue),
                 (v.PLEX_TYPE_ALBUM, v.PLEX_TYPE_ARTIST, itemtypes.Album, True, backgroundthread.OrderedQueue),
             ])
         # ADD NEW ITEMS
         # Already start setting up the iterators. We need to enforce
         # syncing e.g. show before season before episode
-        iterator_queue = Queue.Queue()
+        iterator_queue = queue.Queue()
         task = backgroundthread.FunctionAsTask(self.threaded_get_iterators,
                                                None,
                                                kinds,
@@ -363,8 +363,8 @@ class FullSync(common.fullsync_mixin):
             # We don't need to enforce the album order now
             kinds.pop(5)
             kinds.extend([
-                (v.PLEX_TYPE_ALBUM, v.PLEX_TYPE_ARTIST, itemtypes.Album, True, Queue.Queue),
-                (v.PLEX_TYPE_SONG, v.PLEX_TYPE_ARTIST, itemtypes.Song, True, Queue.Queue),
+                (v.PLEX_TYPE_ALBUM, v.PLEX_TYPE_ARTIST, itemtypes.Album, True, queue.Queue),
+                (v.PLEX_TYPE_SONG, v.PLEX_TYPE_ARTIST, itemtypes.Song, True, queue.Queue),
             ])
         # Make sure we're not showing an item's title in the sync dialog
         self.title = ''

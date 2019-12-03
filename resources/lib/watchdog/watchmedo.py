@@ -29,10 +29,10 @@ import time
 import logging
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
     try:
-        from StringIO import StringIO
+        from io import StringIO
     except ImportError:
         from io import StringIO
 

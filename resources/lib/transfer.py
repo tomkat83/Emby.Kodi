@@ -4,7 +4,7 @@
 Used to shovel data from separate Kodi Python instances to the main thread
 and vice versa.
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 import json
 
@@ -33,15 +33,15 @@ def cast(func, value):
         return value
     elif func == bool:
         return bool(int(value))
-    elif func == unicode:
-        if isinstance(value, (int, long, float)):
-            return unicode(value)
-        elif isinstance(value, unicode):
+    elif func == str:
+        if isinstance(value, (int, float)):
+            return str(value)
+        elif isinstance(value, str):
             return value
         else:
             return value.decode('utf-8')
     elif func == str:
-        if isinstance(value, (int, long, float)):
+        if isinstance(value, (int, float)):
             return str(value)
         elif isinstance(value, str):
             return value
@@ -163,7 +163,7 @@ def convert_pkc_to_listitem(pkc_listitem):
         listitem.addStreamInfo(**stream)
     if data['art']:
         listitem.setArt(data['art'])
-    for key, value in data['property'].iteritems():
+    for key, value in data['property'].items():
         listitem.setProperty(key, cast(str, value))
     if data['subtitles']:
         listitem.setSubtitles(data['subtitles'])

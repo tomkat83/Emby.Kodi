@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
-from __future__ import absolute_import, division, unicode_literals
+
 from sys import listitem
-from urllib import urlencode
+from urllib.parse import urlencode
 
 from xbmc import getCondVisibility, sleep
 from xbmcgui import Window

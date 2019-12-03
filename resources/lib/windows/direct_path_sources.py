@@ -5,11 +5,11 @@
 :synopsis: Prompts the user to add network paths and username passwords for
            e.g. smb paths
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 import re
 import socket
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import xbmc
 
@@ -156,7 +156,7 @@ def start():
                 xml.write_xml = False
                 return
             user = user.strip()
-            user = urllib.quote(user)
+            user = urllib.parse.quote(user)
             user = user.decode('utf-8')
             # "Password"
             # May also be blank!! (=user aborts dialog)
@@ -165,7 +165,7 @@ def start():
                                     '',
                                     type='{alphanum}',
                                     option='{hide}')
-            password = urllib.quote(password)
+            password = urllib.parse.quote(password)
             password = password.decode('utf-8')
             utils.etree.SubElement(entry,
                                    'from',

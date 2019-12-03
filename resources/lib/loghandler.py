@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 import logging
 import xbmc
 ###############################################################################
@@ -41,7 +41,7 @@ class LogHandler(logging.StreamHandler):
         self.setFormatter(logging.Formatter(fmt=b"%(name)s: %(message)s"))
 
     def emit(self, record):
-        if isinstance(record.msg, unicode):
+        if isinstance(record.msg, str):
             record.msg = record.msg.encode('utf-8')
         try:
             xbmc.log(self.format(record), level=LEVELS[record.levelno])

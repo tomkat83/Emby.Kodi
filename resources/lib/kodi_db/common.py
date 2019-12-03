@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from threading import Lock
 
 from .. import db, path_ops
@@ -68,7 +68,7 @@ class KodiDBBase(object):
         """
         Pass in an artworks dict (see PlexAPI) to set an items artwork.
         """
-        for kodi_art, url in artworks.iteritems():
+        for kodi_art, url in artworks.items():
             self.add_art(url, kodi_id, kodi_type, kodi_art)
 
     @db.catch_operationalerrors
@@ -87,7 +87,7 @@ class KodiDBBase(object):
         """
         Pass in an artworks dict (see PlexAPI) to set an items artwork.
         """
-        for kodi_art, url in artworks.iteritems():
+        for kodi_art, url in artworks.items():
             self.modify_art(url, kodi_id, kodi_type, kodi_art)
 
     @db.catch_operationalerrors

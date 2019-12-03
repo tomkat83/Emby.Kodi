@@ -3,14 +3,14 @@
 """
 Various functions and decorators for PKC
 """
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 from sqlite3 import OperationalError
 from datetime import datetime
 from unicodedata import normalize
 from threading import Lock
-import urllib
-import urlparse as _urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse as _urlparse
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 import xml.etree.ElementTree as etree
 # etree parse unsafe; make sure we're always receiving unicode
@@ -191,7 +191,7 @@ def dialog(typus, *args, **kwargs):
             '{warning}': xbmcgui.NOTIFICATION_WARNING,
             '{error}': xbmcgui.NOTIFICATION_ERROR
         }
-        for key, value in types.iteritems():
+        for key, value in types.items():
             kwargs['icon'] = kwargs['icon'].replace(key, value)
     if 'type' in kwargs:
         types = {
@@ -282,15 +282,15 @@ def cast(func, value):
         return value
     elif func == bool:
         return bool(int(value))
-    elif func == unicode:
-        if isinstance(value, (int, long, float)):
-            return unicode(value)
-        elif isinstance(value, unicode):
+    elif func == str:
+        if isinstance(value, (int, float)):
+            return str(value)
+        elif isinstance(value, str):
             return value
         else:
             return value.decode('utf-8')
     elif func == str:
-        if isinstance(value, (int, long, float)):
+        if isinstance(value, (int, float)):
             return str(value)
         elif isinstance(value, str):
             return value
@@ -320,7 +320,7 @@ def extend_url(url, params):
     in unicode
     """
     params = encode_dict(params) if params else {}
-    params = urllib.urlencode(params).decode('utf-8')
+    params = urllib.parse.urlencode(params).decode('utf-8')
     if '?' in url:
         return '%s&%s' % (url, params)
     else:
@@ -334,10 +334,10 @@ def encode_dict(dictionary):
 
     Useful for urllib.urlencode or urllib.(un)quote
     """
-    for key, value in dictionary.iteritems():
-        if isinstance(key, unicode):
+    for key, value in dictionary.items():
+        if isinstance(key, str):
             dictionary[key.encode('utf-8')] = dictionary.pop(key)
-        if isinstance(value, unicode):
+        if isinstance(value, str):
             dictionary[key] = value.encode('utf-8')
     return dictionary
 
@@ -348,11 +348,11 @@ def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
     either as str or unicode
     Returns a dict with lists as values; all entires unicode
     """
-    if isinstance(qs, unicode):
+    if isinstance(qs, str):
         qs = qs.encode('utf-8')
     qs = _urlparse.parse_qs(qs, keep_blank_values, strict_parsing)
     return {k.decode('utf-8'): [e.decode('utf-8') for e in v]
-            for k, v in qs.iteritems()}
+            for k, v in qs.items()}
 
 
 def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
@@ -360,7 +360,7 @@ def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
     unicode-safe way to use urlparse.parse_qsl(). Pass in either str or unicode
     Returns a list of unicode tuples
     """
-    if isinstance(qs, unicode):
+    if isinstance(qs, str):
         qs = qs.encode('utf-8')
     qs = _urlparse.parse_qsl(qs, keep_blank_values, strict_parsing)
     return [(x.decode('utf-8'), y.decode('utf-8')) for (x, y) in qs]
@@ -371,7 +371,7 @@ def urlparse(url, scheme='', allow_fragments=True):
     unicode-safe way to use urlparse.urlparse(). Pass in either str or unicode
     CAREFUL: returns an encoded urlparse.ParseResult()!
     """
-    if isinstance(url, unicode):
+    if isinstance(url, str):
         url = url.encode('utf-8')
     return _urlparse.urlparse(url, scheme, allow_fragments)
 
@@ -387,7 +387,7 @@ def escape_path(path):
     you in trouble (e.g. '@')
     Returns the escaped path as unicode
     """
-    return urllib.quote(path.encode('utf-8'),
+    return urllib.parse.quote(path.encode('utf-8'),
                         safe=SAFE_URL_CHARACTERS).decode('utf-8')
 
 
@@ -396,9 +396,9 @@ def quote(s, safe='/'):
     unicode-safe way to use urllib.quote(). Pass in either str or unicode
     Returns unicode
     """
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('utf-8')
-    s = urllib.quote(s, safe.encode('utf-8'))
+    s = urllib.parse.quote(s, safe.encode('utf-8'))
     return s.decode('utf-8')
 
 
@@ -407,9 +407,9 @@ def quote_plus(s, safe=''):
     unicode-safe way to use urllib.quote(). Pass in either str or unicode
     Returns unicode
     """
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('utf-8')
-    s = urllib.quote_plus(s, safe.encode('utf-8'))
+    s = urllib.parse.quote_plus(s, safe.encode('utf-8'))
     return s.decode('utf-8')
 
 
@@ -418,9 +418,9 @@ def unquote(s):
     unicode-safe way to use urllib.unquote(). Pass in either str or unicode
     Returns unicode
     """
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('utf-8')
-    s = urllib.unquote(s)
+    s = urllib.parse.unquote(s)
     return s.decode('utf-8')
 
 
@@ -446,7 +446,7 @@ def try_decode(string, encoding='utf-8'):
     fails with e.g. Android TV's Python, which does not accept arguments for
     string.encode()
     """
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         # already decoded
         return string
     try:
@@ -461,9 +461,9 @@ def slugify(text):
     Normalizes text (in unicode or string) to e.g. enable safe filenames.
     Returns unicode
     """
-    if not isinstance(text, unicode):
-        text = unicode(text)
-    return unicode(normalize('NFKD', text).encode('ascii', 'ignore'))
+    if not isinstance(text, str):
+        text = str(text)
+    return str(normalize('NFKD', text).encode('ascii', 'ignore'))
 
 
 def valid_filename(text):
@@ -473,7 +473,7 @@ def valid_filename(text):
     # Get rid of all whitespace except a normal space
     text = re.sub(r'(?! )\s', '', text)
     # ASCII characters 0 to 31 (non-printable, just in case)
-    text = re.sub(u'[\x00-\x1f]', '', text)
+    text = re.sub('[\x00-\x1f]', '', text)
     if v.DEVICE == 'Windows':
         # Whitespace at the end of the filename is illegal
         text = text.strip()
@@ -507,7 +507,7 @@ def escape_html(string):
         '>': '&gt;',
         '&': '&amp;'
     }
-    for key, value in escapes.iteritems():
+    for key, value in escapes.items():
         string = string.replace(key, value)
     return string
 
@@ -677,7 +677,7 @@ def normalize_string(text):
     # Remove dots from the last character as windows can not have directories
     # with dots at the end
     text = text.rstrip('.')
-    text = try_encode(normalize('NFKD', unicode(text, 'utf-8')))
+    text = try_encode(normalize('NFKD', str(text, 'utf-8')))
 
     return text
 
@@ -700,7 +700,7 @@ def normalize_nodes(text):
     # Remove dots from the last character as windows can not have directories
     # with dots at the end
     text = text.rstrip('.')
-    text = normalize('NFKD', unicode(text, 'utf-8'))
+    text = normalize('NFKD', str(text, 'utf-8'))
     return text
 
 
@@ -923,7 +923,7 @@ class XmlKodiSetting(object):
         # Write new values
         element.text = value
         if attrib:
-            for key, attribute in attrib.iteritems():
+            for key, attribute in attrib.items():
                 element.set(key, attribute)
         return element
 
@@ -945,7 +945,7 @@ def process_method_on_list(method_to_run, items):
         pool.join()
     else:
         all_items = [method_to_run(item) for item in items]
-    all_items = filter(None, all_items)
+    all_items = [_f for _f in all_items if _f]
     return all_items
 
 

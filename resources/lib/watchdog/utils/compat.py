@@ -20,7 +20,7 @@ __all__ = ['queue', 'Event']
 try:
     import queue
 except ImportError:
-    import Queue as queue
+    import queue as queue
 
 
 if sys.version_info < (2, 7):

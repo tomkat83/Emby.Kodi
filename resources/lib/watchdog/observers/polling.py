@@ -34,7 +34,7 @@ Classes
    :special-members:
 """
 
-from __future__ import with_statement
+
 import os
 import threading
 from functools import partial

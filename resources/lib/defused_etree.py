@@ -4,7 +4,7 @@
 xml.etree.ElementTree tries to encode with text.encode('ascii') - which is
 just plain BS. This etree will always return unicode, not string
 """
-from __future__ import absolute_import, division, unicode_literals
+
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 from defusedxml.ElementTree import DefusedXMLParser, _generate_etree_functions
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 import copy
 
@@ -100,7 +100,7 @@ class Section(object):
                 "}}").format(self=self).encode('utf-8')
     __str__ = __repr__
 
-    def __nonzero__(self):
+    def __bool__(self):
         return (self.section_id is not None and
                 self.name is not None and
                 self.section_type is not None)
@@ -224,7 +224,7 @@ class Section(object):
             {key: '{self.<Section attribute>}'}
         """
         args = copy.deepcopy(args)
-        for key, value in args.iteritems():
+        for key, value in args.items():
             args[key] = value.format(self=self)
         return utils.extend_url('plugin://%s' % v.ADDON_ID, args)
 
@@ -253,7 +253,7 @@ class Section(object):
             args = {
                 'mode': 'browseplex',
                 'key': '/library/sections/%s' % self.section_id,
-                'section_id': unicode(self.section_id)
+                'section_id': str(self.section_id)
             }
             if not self.sync_to_kodi:
                 args['synched'] = 'false'
@@ -264,7 +264,7 @@ class Section(object):
             args = {
                 'mode': 'browseplex',
                 'key': '/library/sections/%s/all' % self.section_id,
-                'section_id': unicode(self.section_id)
+                'section_id': str(self.section_id)
             }
             if not self.sync_to_kodi:
                 args['synched'] = 'false'
@@ -306,7 +306,7 @@ class Section(object):
         if not path_ops.exists(path_ops.path.join(self.path, 'index.xml')):
             LOG.debug('Creating index.xml for section %s', self.name)
             xml = etree.Element('node',
-                                attrib={'order': unicode(self.order)})
+                                attrib={'order': str(self.order)})
             etree.SubElement(xml, 'label').text = self.name
             etree.SubElement(xml, 'icon').text = self.icon or nodes.ICON_PATH
             self._write_xml(xml, 'index.xml')
@@ -660,7 +660,7 @@ def _clear_window_vars(index):
     utils.window('%s.path' % node, clear=True)
     utils.window('%s.id' % node, clear=True)
     # Just clear everything here, ignore the plex_type
-    for typus in (x[0] for y in nodes.NODE_TYPES.values() for x in y):
+    for typus in (x[0] for y in list(nodes.NODE_TYPES.values()) for x in y):
         for kind in WINDOW_ARGS:
             node = 'Plex.nodes.%s.%s.%s' % (index, typus, kind)
             utils.window(node, clear=True)

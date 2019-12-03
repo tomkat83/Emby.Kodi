@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 from sqlite3 import IntegrityError
 
@@ -352,7 +352,7 @@ class KodiVideoDB(common.KodiDBBase):
         for the elmement kodi_id, kodi_type.
         Will also delete a freshly orphaned actor entry.
         """
-        for kind, people_list in people.iteritems():
+        for kind, people_list in people.items():
             self._add_people_kind(kodi_id, kodi_type, kind, people_list)
 
     @db.catch_operationalerrors
@@ -397,7 +397,7 @@ class KodiVideoDB(common.KodiDBBase):
         for kind, people_list in (people if people else
                                   {'actor': [],
                                    'director': [],
-                                   'writer': []}).iteritems():
+                                   'writer': []}).items():
             self._modify_people_kind(kodi_id, kodi_type, kind, people_list)
 
     @db.catch_operationalerrors

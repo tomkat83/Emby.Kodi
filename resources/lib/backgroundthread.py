@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
+
 from logging import getLogger
 import threading
-import Queue
+import queue
 import heapq
 import xbmc
 
@@ -140,7 +140,7 @@ class KillableThread(threading.Thread):
         return self._suspended
 
 
-class OrderedQueue(Queue.PriorityQueue, object):
+class OrderedQueue(queue.PriorityQueue, object):
     """
     Queue that enforces an order on the items it returns. An item you push
     onto the queue must be a tuple
@@ -173,7 +173,7 @@ class OrderedQueue(Queue.PriorityQueue, object):
         try:
             if not block:
                 if not self._qsize() or self.queue[0][0] != self.smallest:
-                    raise Queue.Empty
+                    raise queue.Empty
             elif timeout is None:
                 while not self._qsize():
                     self.not_empty.wait()
@@ -182,16 +182,16 @@ class OrderedQueue(Queue.PriorityQueue, object):
             elif timeout < 0:
                 raise ValueError("'timeout' must be a non-negative number")
             else:
-                endtime = Queue._time() + timeout
+                endtime = queue._time() + timeout
                 while not self._qsize():
-                    remaining = endtime - Queue._time()
+                    remaining = endtime - queue._time()
                     if remaining <= 0.0:
-                        raise Queue.Empty
+                        raise queue.Empty
                     self.not_empty.wait(remaining)
                 while self.queue[0][0] != self.smallest:
-                    remaining = endtime - Queue._time()
+                    remaining = endtime - queue._time()
                     if remaining <= 0.0:
-                        raise Queue.Empty
+                        raise queue.Empty
                     self.not_next_item.wait(remaining)
             item = self._get()
             self.smallest += 1
@@ -260,7 +260,7 @@ class FunctionAsTask(Task):
             self._callback(result)
 
 
-class MutablePriorityQueue(Queue.PriorityQueue):
+class MutablePriorityQueue(queue.PriorityQueue):
     def _get(self, heappop=heapq.heappop):
             self.queue.sort()
             return heappop(self.queue)
@@ -320,7 +320,7 @@ class BackgroundWorker(object):
                 self._runTask(self._task)
                 self._queue.task_done()
                 self._task = None
-        except Queue.Empty:
+        except queue.Empty:
             LOG.debug('(%s): Idle', self.name)
 
     def shutdown(self):
@@ -352,7 +352,7 @@ class NonstoppingBackgroundWorker(BackgroundWorker):
                 self._working = False
                 self._queue.task_done()
                 self._task = None
-            except Queue.Empty:
+            except queue.Empty:
                 app.APP.monitor.waitForAbort(0.05)
 
     def working(self):
