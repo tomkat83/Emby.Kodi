@@ -506,7 +506,7 @@ class WebSocket(object):
         headers.append("")
 
         header_str = "\r\n".join(headers)
-        self._send(header_str)
+        self._send(header_str.encode())
         if TRACE_ENABLED:
             LOG.debug("--- request header ---")
             LOG.debug(header_str)

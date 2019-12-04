@@ -89,7 +89,7 @@ class Playqueue_Object(object):
                 "'pkc_edit': {self.pkc_edit}, ".format(self=self))
         answ = answ.encode('utf-8')
         # Since list.__repr__ will return string, not unicode
-        return answ + b"'items': {self.items}}}".format(self=self)
+        return answ + "'items': {self.items}}}".format(self=self).encode('utf-8')
 
     def __str__(self):
         return self.__repr__()

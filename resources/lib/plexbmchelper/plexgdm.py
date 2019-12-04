@@ -161,18 +161,19 @@ class plexgdm:
             except socket.error:
                 pass
             else:
-                if "M-SEARCH * HTTP/1." in data:
+                if b"M-SEARCH * HTTP/1." in data:
                     log.debug("Detected client discovery request from %s. "
                               " Replying" % str(addr))
-                    try:
-                        update_sock.sendto("HTTP/1.0 200 OK\n%s"
-                                           % self.client_data,
-                                           addr)
-                    except Exception:
-                        log.error("Unable to send client update message")
-
                     log.debug("Sending registration data HTTP/1.0 200 OK")
+                    try:
+                        reg_data = "HTTP/1.0 200 OK\n%s" % self.client_data
+                        log.debug(reg_data)
+                        update_sock.sendto(reg_data.encode(), addr)
+                    except Exception as err:
+                        log.error("Unable to send 200 client update message\n%s" % err)
+
                     self.client_registered = True
+            log.debug("Response sent")
             app.APP.monitor.waitForAbort(0.5)
         log.info("Client Update loop stopped")
         # When we are finished, then send a final goodbye message to
@@ -180,7 +181,7 @@ class plexgdm:
         log.debug("Sending registration data: BYE %s\n%s"
                   % (self.client_header, self.client_data))
         try:
-            update_sock.sendto("BYE %s\n%s"
+            update_sock.sendto(b"BYE %s\n%s"
                                % (self.client_header, self.client_data),
                                self.client_register_group)
         except Exception:

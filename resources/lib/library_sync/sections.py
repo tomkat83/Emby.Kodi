@@ -589,7 +589,7 @@ def sync_from_pms(parent_self, pick_libraries=False):
         return _sync_from_pms(pick_libraries)
     finally:
         IS_CANCELED = None
-        LOG.info('Done synching sections from the PMS: %s', app.SYNC.sections)
+#        LOG.info('Done synching sections from the PMS: %s', app.SYNC.sections)
 
 
 def _sync_from_pms(pick_libraries):

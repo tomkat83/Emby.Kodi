@@ -320,7 +320,7 @@ def extend_url(url, params):
     in unicode
     """
     params = encode_dict(params) if params else {}
-    params = urllib.parse.urlencode(params).decode('utf-8')
+    params = urllib.parse.urlencode(params)
     if '?' in url:
         return '%s&%s' % (url, params)
     else:
@@ -334,12 +334,16 @@ def encode_dict(dictionary):
 
     Useful for urllib.urlencode or urllib.(un)quote
     """
+    encoded_dictionary = {}
+
     for key, value in dictionary.items():
         if isinstance(key, str):
-            dictionary[key.encode('utf-8')] = dictionary.pop(key)
-        if isinstance(value, str):
-            dictionary[key] = value.encode('utf-8')
-    return dictionary
+            encoded_dictionary[key.encode('utf-8')] = value if not isinstance(value, str) else value.encode('utf-8') 
+        elif isinstance(value, str):
+            encoded_dictionary[key] = value.encode('utf-8')
+        else:
+            encoded_dictionary[key] = value
+    return encoded_dictionary
 
 
 def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
@@ -396,10 +400,9 @@ def quote(s, safe='/'):
     unicode-safe way to use urllib.quote(). Pass in either str or unicode
     Returns unicode
     """
-    if isinstance(s, str):
+    if isinstance(s, bytes):
         s = s.encode('utf-8')
-    s = urllib.parse.quote(s, safe.encode('utf-8'))
-    return s.decode('utf-8')
+    return urllib.parse.quote(s, safe.encode('utf-8'))
 
 
 def quote_plus(s, safe=''):
@@ -407,10 +410,9 @@ def quote_plus(s, safe=''):
     unicode-safe way to use urllib.quote(). Pass in either str or unicode
     Returns unicode
     """
-    if isinstance(s, str):
+    if isinstance(s, bytes):
         s = s.encode('utf-8')
-    s = urllib.parse.quote_plus(s, safe.encode('utf-8'))
-    return s.decode('utf-8')
+    return urllib.parse.quote_plus(s, safe.encode('utf-8'))
 
 
 def unquote(s):
@@ -418,10 +420,9 @@ def unquote(s):
     unicode-safe way to use urllib.unquote(). Pass in either str or unicode
     Returns unicode
     """
-    if isinstance(s, str):
+    if isinstance(s, bytes):
         s = s.encode('utf-8')
-    s = urllib.parse.unquote(s)
-    return s.decode('utf-8')
+    return urllib.parse.unquote(s)
 
 
 def try_encode(input_str, encoding='utf-8'):
