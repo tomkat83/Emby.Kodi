@@ -338,7 +338,10 @@ def encode_dict(dictionary):
 
     for key, value in dictionary.items():
         if isinstance(key, str):
-            encoded_dictionary[key.encode('utf-8')] = value if not isinstance(value, str) else value.encode('utf-8')
+            if isinstance(value, str):
+                encoded_dictionary[key.encode('utf-8')] = value.encode('utf-8')
+            else:
+                encoded_dictionary[key.encode('utf-8')] = value
         elif isinstance(value, str):
             encoded_dictionary[key] = value.encode('utf-8')
         else:
