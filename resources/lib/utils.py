@@ -9,7 +9,7 @@ from sqlite3 import OperationalError
 from datetime import datetime
 from unicodedata import normalize
 from threading import Lock
-import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error
 import urllib.parse as _urlparse
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 import xml.etree.ElementTree as etree
@@ -338,7 +338,7 @@ def encode_dict(dictionary):
 
     for key, value in dictionary.items():
         if isinstance(key, str):
-            encoded_dictionary[key.encode('utf-8')] = value if not isinstance(value, str) else value.encode('utf-8') 
+            encoded_dictionary[key.encode('utf-8')] = value if not isinstance(value, str) else value.encode('utf-8')
         elif isinstance(value, str):
             encoded_dictionary[key] = value.encode('utf-8')
         else:
