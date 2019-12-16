@@ -542,7 +542,7 @@ class WebSocket(object):
             return False
         result = result.lower()
 
-        value = key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+        value = key + b'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
         hashed = base64.encodestring(hashlib.sha1(value).digest()).strip().lower()
         return hashed == result
 
@@ -771,7 +771,7 @@ class WebSocket(object):
     def _recv_line(self):
         line = []
         while True:
-            c = self._recv(1)
+            c = self._recv(1).decode('utf-8', 'ignore')
             line.append(c)
             if c == "\n":
                 break
