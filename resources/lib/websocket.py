@@ -357,7 +357,7 @@ class ABNF(object):
         data: data to mask/unmask.
         """
         _m = array.array("B", mask_key)
-        _d = array.array("B", data)
+        _d = array.array("B", data.encode())
         for i in enumerate(_d):
             _d[i] ^= _m[i % 4]
         return _d.tostring()
@@ -709,7 +709,7 @@ class WebSocket(object):
         """
         if status < 0 or status >= ABNF.LENGTH_16:
             raise ValueError("code is invalid range")
-        self.send(struct.pack('!H', status) + reason, ABNF.OPCODE_CLOSE)
+        self.send(struct.pack('!H', status).decode('utf-8', 'ignore') + reason, ABNF.OPCODE_CLOSE)
 
     def close(self, status=STATUS_NORMAL, reason=""):
         """
