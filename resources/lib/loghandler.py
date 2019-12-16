@@ -19,13 +19,11 @@ def try_encode(uniString, encoding='utf-8'):
     fails with e.g. Android TV's Python, which does not accept arguments for
     string.encode()
     """
-    if isinstance(uniString, str):
-        # already encoded
-        return uniString
-    try:
-        uniString = uniString.encode(encoding, "ignore")
-    except TypeError:
-        uniString = uniString.encode()
+    if not isinstance(uniString, str):
+        try:
+            uniString = uniString.decode(encoding, "ignore")
+        except TypeError:
+            uniString = uniString.decode()
     return uniString
 
 
