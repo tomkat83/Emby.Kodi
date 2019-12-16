@@ -52,7 +52,7 @@ def init_playqueues():
                     # Overwrite 'picture' with 'photo'
                     playqueue.type = v.KODI_TYPE_PHOTO
                 PLAYQUEUES.append(playqueue)
-#    LOG.debug('Initialized the Kodi playqueues: %s', PLAYQUEUES)
+    LOG.debug('Initialized the Kodi playqueues: %s', PLAYQUEUES)
 
 
 def get_playqueue_from_type(kodi_playlist_type):
