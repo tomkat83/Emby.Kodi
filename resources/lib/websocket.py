@@ -364,10 +364,10 @@ class ABNF(object):
         data: data to mask/unmask.
         """
         _m = array.array("B", mask_key)
-        _d = array.array("B", data)
-        for i in range(len(_d)):
+        _d = array.array("B", data.encode())
+        for i, _v in enumerate(_d):
             _d[i] ^= _m[i % 4]
-        return _d.tostring()
+        return ''.join(_d)
 
 
 class WebSocket(object):
@@ -503,7 +503,7 @@ class WebSocket(object):
         else:
             headers.append("Origin: http://%s" % hostport)
 
-        key = _create_sec_websocket_key()
+        key = _create_sec_websocket_key().decode('utf-8')
         headers.append("Sec-WebSocket-Key: %s" % key)
         headers.append("Sec-WebSocket-Version: %s" % VERSION)
         if "header" in options:
@@ -513,7 +513,7 @@ class WebSocket(object):
         headers.append("")
 
         header_str = "\r\n".join(headers)
-        self._send(header_str)
+        self._send(header_str.encode())
         if TRACE_ENABLED:
             LOG.debug("--- request header ---")
             LOG.debug(header_str)
@@ -549,8 +549,8 @@ class WebSocket(object):
             return False
         result = result.lower()
 
-        value = key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
-        hashed = base64.encodestring(hashlib.sha1(value).digest()).strip().lower()
+        value = (key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11').encode()
+        hashed = base64.encodestring(hashlib.sha1(value).digest()).strip().lower().decode('utf-8')
         return hashed == result
 
     def _read_headers(self):
@@ -716,7 +716,7 @@ class WebSocket(object):
         """
         if status < 0 or status >= ABNF.LENGTH_16:
             raise ValueError("code is invalid range")
-        self.send(struct.pack('!H', status) + reason, ABNF.OPCODE_CLOSE)
+        self.send(struct.pack('!H', status).decode('utf-8', 'ignore') + reason, ABNF.OPCODE_CLOSE)
 
     def close(self, status=STATUS_NORMAL, reason=""):
         """
@@ -764,7 +764,7 @@ class WebSocket(object):
     def _recv_strict(self, bufsize):
         shortage = bufsize - sum(len(x) for x in self._recv_buffer)
         while shortage > 0:
-            bytes_ = self._recv(shortage)
+            bytes_ = self._recv(shortage).decode('utf-8', 'ignore')
             self._recv_buffer.append(bytes_)
             shortage -= len(bytes_)
         unified = "".join(self._recv_buffer)
@@ -778,7 +778,7 @@ class WebSocket(object):
     def _recv_line(self):
         line = []
         while True:
-            c = self._recv(1)
+            c = self._recv(1).decode('utf-8', 'ignore')
             line.append(c)
             if c == "\n":
                 break

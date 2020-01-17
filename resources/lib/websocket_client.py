@@ -96,13 +96,13 @@ class WebSocket(backgroundthread.KillableThread):
                         timeout=1,
                         sslopt=sslopt,
                         enable_multithread=True)
-                except IOError:
+                except IOError as e:
                     # Server is probably offline
-                    LOG.debug("%s: IOError connecting", self.__class__.__name__)
+                    LOG.debug("%s: IOError connecting: %s", self.__class__.__name__, e)
                     self.ws = None
                     self._sleep_cycle()
-                except websocket.WebSocketTimeoutException:
-                    LOG.debug("%s: WebSocketTimeoutException", self.__class__.__name__)
+                except websocket.WebSocketTimeoutException as e:
+                    LOG.debug("%s: WebSocketTimeoutException: %s", self.__class__.__name__, e)
                     self.ws = None
                     self._sleep_cycle()
                 except websocket.WebsocketRedirect as e:

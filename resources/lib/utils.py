@@ -338,12 +338,19 @@ def encode_dict(dictionary):
 
     Useful for urllib.urlencode or urllib.(un)quote
     """
+    encoded_dictionary = {}
+
     for key, value in dictionary.items():
         if isinstance(key, str):
-            dictionary[key.encode('utf-8')] = dictionary.pop(key)
-        if isinstance(value, str):
-            dictionary[key] = value.encode('utf-8')
-    return dictionary
+            if isinstance(value, str):
+                encoded_dictionary[key.encode('utf-8')] = value.encode('utf-8')
+            else:
+                encoded_dictionary[key.encode('utf-8')] = value
+        elif isinstance(value, str):
+            encoded_dictionary[key] = value.encode('utf-8')
+        else:
+            encoded_dictionary[key] = value
+    return encoded_dictionary
 
 
 def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
@@ -477,7 +484,7 @@ def valid_filename(text):
     # Get rid of all whitespace except a normal space
     text = re.sub(r'(?! )\s', '', text)
     # ASCII characters 0 to 31 (non-printable, just in case)
-    text = re.sub(u'[\x00-\x1f]', '', text)
+    text = re.sub('[\x00-\x1f]', '', text)
     if v.DEVICE == 'Windows':
         # Whitespace at the end of the filename is illegal
         text = text.strip()
