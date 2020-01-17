@@ -324,7 +324,7 @@ def extend_url(url, params):
     in unicode
     """
     params = encode_dict(params) if params else {}
-    params = urllib.parse.urlencode(params).decode('utf-8')
+    params = urllib.parse.urlencode(params)
     if '?' in url:
         return '%s&%s' % (url, params)
     else:

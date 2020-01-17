@@ -367,7 +367,7 @@ class ABNF(object):
         _d = array.array("B", data.encode())
         for i, _v in enumerate(_d):
             _d[i] ^= _m[i % 4]
-        return ''.join(_d)
+        return ''.join(map(str, _d))
 
 
 class WebSocket(object):
