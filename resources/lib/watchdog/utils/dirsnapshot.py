@@ -43,7 +43,10 @@ Classes
    :show-inheritance:
 
 """
+from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 import errno
 import os
 from stat import S_ISDIR

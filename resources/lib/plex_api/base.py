@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from builtins import str
+from builtins import object
 from logging import getLogger
 from re import sub
 
@@ -348,9 +350,9 @@ class Base(object):
             total = int(self.xml.attrib['leafCount'])
             watched = int(self.xml.attrib['viewedLeafCount'])
             return {
-                'totalepisodes': unicode(total),
-                'watchedepisodes': unicode(watched),
-                'unwatchedepisodes': unicode(total - watched)
+                'totalepisodes': str(total),
+                'watchedepisodes': str(watched),
+                'unwatchedepisodes': str(total - watched)
             }
         except (KeyError, TypeError):
             pass

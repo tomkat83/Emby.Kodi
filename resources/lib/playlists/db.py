@@ -5,6 +5,7 @@ Synced playlists are stored in our plex.db. Interact with it through this
 module
 """
 from __future__ import absolute_import, division, unicode_literals
+from builtins import next
 from logging import getLogger
 
 from .common import Playlist, PlaylistError

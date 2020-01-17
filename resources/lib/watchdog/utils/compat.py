@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
 import sys
 
 __all__ = ['queue', 'Event']
@@ -20,7 +23,7 @@ __all__ = ['queue', 'Event']
 try:
     import queue
 except ImportError:
-    import Queue as queue
+    import queue as queue
 
 
 if sys.version_info < (2, 7):

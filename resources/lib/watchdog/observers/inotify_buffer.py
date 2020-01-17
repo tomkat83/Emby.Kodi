@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import unicode_literals
 import logging
 from ..utils import BaseThread
 from ..utils.delayed_queue import DelayedQueue

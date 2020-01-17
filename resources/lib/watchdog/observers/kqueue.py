@@ -76,7 +76,9 @@ Collections and Utility Classes
 .. _Mac OS X File System Performance Guidelines: http://developer.apple.com/library/ios/#documentation/Performance/Conceptual/FileSystem/Articles/TrackingChanges.html#//apple_ref/doc/uid/20001993-CJBJFIDD
 
 """
+from __future__ import unicode_literals
 
+from builtins import object
 from __future__ import with_statement
 from ..utils import platform
 

@@ -18,6 +18,7 @@
 # limitations under the License.
 
 from __future__ import with_statement
+from __future__ import unicode_literals
 
 import ctypes
 import threading

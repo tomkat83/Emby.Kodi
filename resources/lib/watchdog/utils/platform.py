@@ -17,6 +17,7 @@
 # limitations under the License.
 
 
+from __future__ import unicode_literals
 import sys
 
 PLATFORM_WINDOWS = 'windows'

@@ -32,6 +32,9 @@ Example:
   def my_function(args):
       pass
 """
+from __future__ import unicode_literals
+from builtins import map
+from builtins import zip
 import inspect
 import sys
 

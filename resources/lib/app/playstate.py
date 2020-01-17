@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 
+from builtins import object
 class PlayState(object):
     # "empty" dict for the PLAYER_STATES above. Use copy.deepcopy to duplicate!
     template = {

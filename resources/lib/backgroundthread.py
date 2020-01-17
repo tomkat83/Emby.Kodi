@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
 from logging import getLogger
 from time import time as _time
 import threading
-import Queue
+import queue
 import heapq
 from collections import deque
 
@@ -115,7 +120,7 @@ class KillableThread(threading.Thread):
         self._suspension_reached.set()
 
 
-class ProcessingQueue(Queue.Queue, object):
+class ProcessingQueue(queue.Queue, object):
     """
     Queue of queues that processes a queue completely before moving on to the
     next queue. There's one queue per Section(). You need to initialize each
@@ -162,7 +167,7 @@ class ProcessingQueue(Queue.Queue, object):
                 if not block:
                     # Use >= instead of == due to OrderedQueue!
                     if self._qsize() >= self.maxsize:
-                        raise Queue.Full
+                        raise queue.Full
                 elif timeout is None:
                     while self._qsize() >= self.maxsize:
                         self.not_full.wait()
@@ -173,7 +178,7 @@ class ProcessingQueue(Queue.Queue, object):
                     while self._qsize() >= self.maxsize:
                         remaining = endtime - _time()
                         if remaining <= 0.0:
-                            raise Queue.Full
+                            raise queue.Full
                         self.not_full.wait(remaining)
             if self._put(item) == 0:
                 # Only notify one waiting thread if this item is put into the
@@ -253,7 +258,7 @@ class ProcessingQueue(Queue.Queue, object):
         self._sections.append(section)
         self._queues.append(
             OrderedQueue() if section.plex_type == v.PLEX_TYPE_ALBUM
-            else Queue.Queue())
+            else queue.Queue())
         if self._current_section is None:
             self._switch_queues()
 
@@ -275,7 +280,7 @@ class ProcessingQueue(Queue.Queue, object):
         return item[1]
 
 
-class OrderedQueue(Queue.PriorityQueue, object):
+class OrderedQueue(queue.PriorityQueue, object):
     """
     Queue that enforces an order on the items it returns. An item you push
     onto the queue must be a tuple
@@ -366,7 +371,7 @@ class FunctionAsTask(Task):
             self._callback(result)
 
 
-class MutablePriorityQueue(Queue.PriorityQueue):
+class MutablePriorityQueue(queue.PriorityQueue):
     def _get(self, heappop=heapq.heappop):
             self.queue.sort()
             return heappop(self.queue)
@@ -426,7 +431,7 @@ class BackgroundWorker(object):
                 self._runTask(self._task)
                 self._queue.task_done()
                 self._task = None
-        except Queue.Empty:
+        except queue.Empty:
             LOG.debug('(%s): Idle', self.name)
 
     def shutdown(self, block=True):
@@ -466,7 +471,7 @@ class NonstoppingBackgroundWorker(BackgroundWorker):
         return self._working
 
 
-class BackgroundThreader:
+class BackgroundThreader(object):
     def __init__(self, name=None, worker=BackgroundWorker, worker_count=6):
         self.name = name
         self._queue = MutablePriorityQueue()
@@ -546,7 +551,7 @@ class BackgroundThreader:
         qitem.priority = lowest - 1
 
 
-class ThreaderManager:
+class ThreaderManager(object):
     def __init__(self,
                  worker=NonstoppingBackgroundWorker,
                  worker_count=WORKER_COUNT):

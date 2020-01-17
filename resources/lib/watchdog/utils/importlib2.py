@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 # The MIT License (MIT)
 
 # Copyright (c) 2013 Peter M. Elias
@@ -31,7 +32,7 @@ def import_module(target, relative_to=None):
         relative_parts = relative_to.split('.')
         relative_to = '.'.join(relative_parts[:-(target_depth - 1) or None])
     if len(target_path) > 1:
-        relative_to = '.'.join(filter(None, [relative_to]) + target_path[:-1])
+        relative_to = '.'.join([_f for _f in [relative_to] if _f] + target_path[:-1])
         fromlist = target_path[-1:]
         target = fromlist[0]
     elif not relative_to:

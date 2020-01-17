@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 MA 02110-1301, USA.
 """
 from __future__ import absolute_import, division, unicode_literals
+from builtins import str
+from builtins import object
 import logging
 import socket
 import threading
@@ -39,7 +41,7 @@ log = logging.getLogger('PLEX.plexgdm')
 ###############################################################################
 
 
-class plexgdm:
+class plexgdm(object):
 
     def __init__(self):
         self.discover_message = 'M-SEARCH * HTTP/1.0'

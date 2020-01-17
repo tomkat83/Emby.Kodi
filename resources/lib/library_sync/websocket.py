@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from builtins import str
 from logging import getLogger
 
 from .common import update_kodi_library, PLAYLIST_SYNC_ENABLED
@@ -160,7 +161,7 @@ def store_timeline_message(data):
             continue
         status = int(message['state'])
         if typus == 'playlist' and PLAYLIST_SYNC_ENABLED:
-            playlists.websocket(plex_id=unicode(message['itemID']),
+            playlists.websocket(plex_id=str(message['itemID']),
                                 status=status)
         elif status == 9:
             # Immediately and always process deletions (as the PMS will

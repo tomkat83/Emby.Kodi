@@ -24,7 +24,10 @@ Functions
 .. autofunction:: stat
 
 """
+from __future__ import division
+from __future__ import unicode_literals
 
+from past.utils import old_div
 import ctypes
 import ctypes.wintypes
 import stat as stdstat
@@ -99,7 +102,7 @@ def _to_mode(attr):
 
 def _to_unix_time(ft):
     t = (ft.dwHighDateTime) << 32 | ft.dwLowDateTime
-    return (t / 10000000) - 11644473600
+    return (old_div(t, 10000000)) - 11644473600
 
 def stat(path):
     hfile = CreateFile(path,

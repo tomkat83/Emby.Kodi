@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import range
 from logging import getLogger
-import Queue
+import queue
 
 import xbmcgui
 
@@ -46,8 +49,8 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
         else:
             self.dialog = None
 
-        self.section_queue = Queue.Queue()
-        self.get_metadata_queue = Queue.Queue(maxsize=BACKLOG_QUEUE_SIZE)
+        self.section_queue = queue.Queue()
+        self.get_metadata_queue = queue.Queue(maxsize=BACKLOG_QUEUE_SIZE)
         self.processing_queue = bg.ProcessingQueue(maxsize=XML_QUEUE_SIZE)
         self.current_time = timing.plex_now()
         self.last_section = sections.Section()

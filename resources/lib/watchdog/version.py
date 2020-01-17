@@ -19,6 +19,7 @@
 
 # When updating this version number, please update the
 # ``docs/source/global.rst.inc`` file as well.
+from __future__ import unicode_literals
 VERSION_MAJOR = 0
 VERSION_MINOR = 8
 VERSION_BUILD = 3

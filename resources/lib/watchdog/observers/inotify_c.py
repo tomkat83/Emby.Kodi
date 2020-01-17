@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import unicode_literals
+from builtins import object
 from __future__ import with_statement
 import os
 import errno

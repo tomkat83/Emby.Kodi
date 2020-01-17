@@ -33,7 +33,9 @@ Functions
 .. autofunction:: match_path_against
 .. autofunction:: filter_paths
 """
+from __future__ import unicode_literals
 
+from builtins import map
 from fnmatch import fnmatch, fnmatchcase
 
 __all__ = ['match_path',

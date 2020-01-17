@@ -24,6 +24,7 @@
 """
 
 from __future__ import with_statement
+from __future__ import unicode_literals
 
 import sys
 import threading
@@ -150,7 +151,7 @@ class FSEventsObserver(BaseObserver):
     def schedule(self, event_handler, path, recursive=False):
         # Python 2/3 compat
         try:
-            str_class = unicode
+            str_class = str
         except NameError:
             str_class = str
 

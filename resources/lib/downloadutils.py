@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from builtins import object
 from logging import getLogger
 import requests
 import requests.exceptions as exceptions
@@ -18,7 +19,7 @@ LOG = getLogger('PLEX.download')
 ###############################################################################
 
 
-class DownloadUtils():
+class DownloadUtils(object):
     """
     Manages any up/downloads with PKC. Careful to initiate correctly
     Use startSession() to initiate.

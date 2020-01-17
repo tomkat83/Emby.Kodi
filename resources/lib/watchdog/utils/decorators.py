@@ -13,7 +13,9 @@ decorators:
 - attrs
 - deprecated
 """
+from __future__ import unicode_literals
 
+from builtins import zip
 import functools
 import warnings
 import threading

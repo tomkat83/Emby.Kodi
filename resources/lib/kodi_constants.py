@@ -5,6 +5,7 @@ script.module.metadatautils
 kodi_constants.py
 Several common constants for use with Kodi json api
 '''
+from __future__ import unicode_literals
 FIELDS_BASE = ['dateadded', 'file', 'lastplayed', 'plot', 'title', 'art',
                'playcount']
 FIELDS_FILE = FIELDS_BASE + ['streamdetails', 'director', 'resume', 'runtime']

@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 # Backport of Event from py2.7 (method wait in py2.6 returns None)
 
+from __future__ import unicode_literals
+from builtins import object
 from threading import Condition, Lock
 
 

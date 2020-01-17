@@ -35,7 +35,10 @@ Classes
 .. autoclass:: OrderedSet
 
 """
+from __future__ import unicode_literals
 
+from builtins import next
+from builtins import range
 import sys
 import collections
 from .compat import queue

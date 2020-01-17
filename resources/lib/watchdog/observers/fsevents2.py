@@ -19,7 +19,11 @@
 :synopsis: FSEvents based emitter implementation.
 :platforms: Mac OS X
 """
+from __future__ import unicode_literals
 
+from builtins import hex
+from builtins import zip
+from builtins import object
 import os
 import logging
 import unicodedata

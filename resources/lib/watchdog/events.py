@@ -84,7 +84,9 @@ Event Handler Classes
    :show-inheritance:
 
 """
+from __future__ import unicode_literals
 
+from builtins import object
 import os.path
 import logging
 import re

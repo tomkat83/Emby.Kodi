@@ -53,6 +53,7 @@ Class          Platforms                        Note
 .. |Polling|     replace:: :class:`.polling.PollingObserver`
 
 """
+from __future__ import unicode_literals
 
 import warnings
 from ..utils import platform
