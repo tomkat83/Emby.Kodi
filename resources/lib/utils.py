@@ -410,7 +410,7 @@ def quote(s, safe='/'):
     if isinstance(s, str):
         s = s.encode('utf-8')
     s = urllib.parse.quote(s, safe.encode('utf-8'))
-    return s.decode('utf-8')
+    return urllib.parse.quote(s, safe.encode('utf-8'))
 
 
 def quote_plus(s, safe=''):
@@ -421,7 +421,7 @@ def quote_plus(s, safe=''):
     if isinstance(s, str):
         s = s.encode('utf-8')
     s = urllib.parse.quote_plus(s, safe.encode('utf-8'))
-    return s.decode('utf-8')
+    return urllib.parse.quote_plus(s, safe.encode('utf-8'))
 
 
 def unquote(s):
@@ -432,7 +432,7 @@ def unquote(s):
     if isinstance(s, str):
         s = s.encode('utf-8')
     s = urllib.parse.unquote(s)
-    return s.decode('utf-8')
+    return urllib.parse.unquote(s)
 
 
 def try_encode(input_str, encoding='utf-8'):

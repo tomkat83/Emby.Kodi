@@ -88,7 +88,6 @@ class Playqueue_Object(object):
                 "'repeat': {self.repeat}, "
                 "'kodi_playlist_playback': {self.kodi_playlist_playback}, "
                 "'pkc_edit': {self.pkc_edit}, ".format(self=self))
-        answ = answ.encode('utf-8')
         # Since list.__repr__ will return string, not unicode
         return answ + "'items': {self.items}}}".format(self=self)
 
