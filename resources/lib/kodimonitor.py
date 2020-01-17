@@ -58,7 +58,7 @@ class KodiMonitor(xbmc.Monitor):
         Called when a bunch of different stuff happens on the Kodi side
         """
         if data:
-            data = loads(data, 'utf-8')
+            data = loads(data)
             LOG.debug("Method: %s Data: %s", method, data)
 
         if method == "Player.OnPlay":

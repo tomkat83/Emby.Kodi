@@ -58,7 +58,7 @@ def translate_path(path):
     -> '/home/user/XBMC/UserData/script_data' on Linux.
     """
     translated = xbmc.translatePath(path.encode(KODI_ENCODING, 'strict'))
-    return translated.decode(KODI_ENCODING, 'strict')
+    return translated
 
 
 def exists(path):
