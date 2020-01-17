@@ -293,10 +293,10 @@ def sync_kodi_playlist(path):
     bool
         True if we should sync this Kodi playlist to Plex, False otherwise
     """
-    if path.startswith(v.PLAYLIST_PATH_MIXED):
+    if path.startswith(v.PLAYLIST_PATH_MIXED.encode('utf-8')):
         return False
     try:
-        extension = path.rsplit('.', 1)[1].lower()
+        extension = path.decode().rsplit('.', 1)[1].lower()
     except IndexError:
         return False
     if extension not in SUPPORTED_FILETYPES:

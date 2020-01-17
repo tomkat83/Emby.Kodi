@@ -124,8 +124,8 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
             self.playstate_per_section(section)
 
     def playstate_per_section(self, section):
-        LOG.debug('Processing %s playstates for library section %s',
-                  section.number_of_items, section)
+#        LOG.debug('Processing %s playstates for library section %s',
+#                  section.number_of_items, section)
         try:
             with section.context(self.current_time) as context:
                 for xml in section.iterator:
@@ -181,8 +181,8 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
                         if section.number_of_items > 0:
                             self.processing_queue.add_section(section)
                             queue.put(section)
-                            LOG.debug('Put section in queue with %s items: %s',
-                                      section.number_of_items, section)
+#                            LOG.debug('Put section in queue with %s items: %s',
+#                                      section.number_of_items, section)
         except Exception:
             utils.ERROR(notify=True)
         finally:

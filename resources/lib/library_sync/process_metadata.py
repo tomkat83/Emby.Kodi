@@ -28,7 +28,7 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
         if section != self.last_section:
             if self.last_section:
                 self.finish_last_section()
-            LOG.debug('Start or continue processing section %s', section)
+#            LOG.debug('Start or continue processing section %s', section)
             self.last_section = section
             # Warn the user for this new section if we cannot access a file
             app.SYNC.path_verified = False
@@ -44,8 +44,8 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
                 # Set the new time mark for the next delta sync
                 plexdb.update_section_last_sync(self.last_section.section_id,
                                                 self.current_time)
-            LOG.info('Finished processing section successfully: %s',
-                     self.last_section)
+#            LOG.info('Finished processing section successfully: %s',
+#                     self.last_section)
         elif self.last_section and not self.last_section.sync_successful:
             LOG.warn('Sync not successful for section %s', self.last_section)
             self.successful = False

@@ -30,8 +30,8 @@ class FillMetadataQueue(common.LibrarySyncMixin,
     def _process_section(self, section):
         # Initialize only once to avoid loosing the last value before we're
         # breaking the for loop
-        LOG.debug('Process section %s with %s items',
-                  section, section.number_of_items)
+#        LOG.debug('Process section %s with %s items',
+#                  section, section.number_of_items)
         count = 0
         with PlexDB(lock=False, copy=True) as plexdb:
             for xml in section.iterator:

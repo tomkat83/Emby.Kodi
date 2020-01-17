@@ -352,7 +352,7 @@ class ABNF(object):
 
     def _get_masked(self, mask_key):
         s = ABNF.mask(mask_key, self.data)
-        return mask_key + "".join(s)
+        return mask_key.decode() + "".join(s)
 
     @staticmethod
     def mask(mask_key, data):
