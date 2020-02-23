@@ -1141,11 +1141,6 @@ msgctxt "#39074"
 msgid "TV Shows"
 msgstr "Seriály"
 
-# PKC Settings - Playback
-msgctxt "#39075"
-msgid "Always use default Plex subtitle if possible"
-msgstr "Vždy použít výchozí titulky Plexu, pokud je to možné"
-
 # Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
@@ -1514,11 +1509,10 @@ msgctxt "#39705"
 msgid "Use at your own risk"
 msgstr "Používejte na vlastní nebezpečí"
 
-# If user gets prompted to choose between several subtitles. Leave the number
-# one at the beginning of the string!
+# If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
-msgid "1 No subtitles"
-msgstr "1 Žádné titulky"
+msgid "Don't burn-in any subtitle"
+msgstr ""
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown

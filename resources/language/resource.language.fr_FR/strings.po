@@ -1172,11 +1172,6 @@ msgctxt "#39074"
 msgid "TV Shows"
 msgstr "Séries TV"
 
-# PKC Settings - Playback
-msgctxt "#39075"
-msgid "Always use default Plex subtitle if possible"
-msgstr "Utilisez toujours le sous-titre Plex par défaut si possible"
-
 # Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
@@ -1554,11 +1549,10 @@ msgctxt "#39705"
 msgid "Use at your own risk"
 msgstr "A utiliser à vos propres risques"
 
-# If user gets prompted to choose between several subtitles. Leave the number
-# one at the beginning of the string!
+# If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
-msgid "1 No subtitles"
-msgstr "1 pas de sous titre"
+msgid "Don't burn-in any subtitle"
+msgstr ""
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown

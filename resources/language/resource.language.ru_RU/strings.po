@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
-# Алексей Коробцов <korobcoff@gmail.com>, 2017
+# Alexey Korobcov <korobcoff@gmail.com>, 2017
 # Павел Хоменко, 2017
 # Alex Freit <alex.nx@mail.ru>, 2019
 # Vladimir Supranenok <stark_v@mail.ru>, 2019
@@ -1154,11 +1154,6 @@ msgctxt "#39074"
 msgid "TV Shows"
 msgstr "Сериалы"
 
-# PKC Settings - Playback
-msgctxt "#39075"
-msgid "Always use default Plex subtitle if possible"
-msgstr "Использовать субтитры по умолчанию из Plex, если доступны"
-
 # Pop-up during initial sync
 msgctxt "#39076"
 msgid ""
@@ -1530,11 +1525,10 @@ msgctxt "#39705"
 msgid "Use at your own risk"
 msgstr "Используйте на свой страх и риск"
 
-# If user gets prompted to choose between several subtitles. Leave the number
-# one at the beginning of the string!
+# If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
-msgid "1 No subtitles"
-msgstr "1 Без субтитров"
+msgid "Don't burn-in any subtitle"
+msgstr ""
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown

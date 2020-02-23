@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2019
-# Savage93 <savageistheking@gmail.com>, 2019
+# Savage93 <savageistheking@gmail.com>, 2020
 # 
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Savage93 <savageistheking@gmail.com>, 2019\n"
+"Last-Translator: Savage93 <savageistheking@gmail.com>, 2020\n"
 "Language-Team: Hungarian (Hungary) (https://www.transifex.com/croneter/teams/73837/hu_HU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -264,6 +264,8 @@ msgstr "Videóminőség, ha transzkódolás szükséges"
 msgctxt "#30161"
 msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
 msgstr ""
+"Transzkódolás minőségének automatikus beállítása (kapcsolja ki Chromecasttal"
+" való használatkor)"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -713,13 +715,13 @@ msgstr "A szerver elérhető"
 # Plex notification when we need to transcode
 msgctxt "#33004"
 msgid "PMS enforced transcoding"
-msgstr ""
+msgstr "PMS kényszerített transzkódolás"
 
 # Plex notification when we need to use direct streaming (instead of
 # transcoding)
 msgctxt "#33005"
 msgid "PMS enforced direct streaming"
-msgstr ""
+msgstr "PMS kényszerített közvetlen streamelés"
 
 # Error notification
 msgctxt "#33009"
@@ -1074,6 +1076,8 @@ msgctxt "#39056"
 msgid ""
 "Used by sync and when attempting Direct Paths. Restart Kodi on changes!"
 msgstr ""
+"Szinkronizáció és közvetlen elérési utak használata esetén szükséges. "
+"Módosítás esetén indítsa újra a Kodi-t!"
 
 # PKC Settings, category name
 msgctxt "#39057"
@@ -1156,12 +1160,6 @@ msgstr "Megjelenés beállításai"
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "TV sorozatok"
-
-# PKC Settings - Playback
-msgctxt "#39075"
-msgid "Always use default Plex subtitle if possible"
-msgstr ""
-"Mindig használja az alapértelmezett Plex feliratot amennyiben lehetséges"
 
 # Pop-up during initial sync
 msgctxt "#39076"
@@ -1292,6 +1290,8 @@ msgstr "Adja meg a Plex médiaszerver IP-címét vagy URL-jét, például:"
 msgctxt "#39217"
 msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
 msgstr ""
+"Kíván HTTPS (SSL) kapcsolatokat használni? Ha nem biztos benne válassza az "
+"igent."
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1540,11 +1540,10 @@ msgctxt "#39705"
 msgid "Use at your own risk"
 msgstr "Csak saját felelősségre használja"
 
-# If user gets prompted to choose between several subtitles. Leave the number
-# one at the beginning of the string!
+# If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
-msgid "1 No subtitles"
-msgstr "1 Feliratok kikapcsolása"
+msgid "Don't burn-in any subtitle"
+msgstr ""
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown
