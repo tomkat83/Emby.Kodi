@@ -1,7 +1,8 @@
 #  XBMC Media Center language file
 # Translators:
 # Elixir59, 2019
-# Croneter None <croneter@gmail.com>, 2019
+# Croneter None <croneter@gmail.com>, 2020
+# Raph Mell, 2020
 # 
 msgid ""
 msgstr ""
@@ -9,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2019\n"
+"Last-Translator: Raph Mell, 2020\n"
 "Language-Team: French (Canada) (https://www.transifex.com/croneter/teams/73837/fr_CA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,8 +69,8 @@ msgstr "Activer les notifications pour la mise en cache d'images"
 msgctxt "#30009"
 msgid "Enable image caching during Kodi playback (restart Kodi!)"
 msgstr ""
-"Activer la mise en cache des images pendant la lecture Kodi (redémarrez Kodi"
-" !)"
+"Activer la mise en cache des images pendant la lecture Kodi (redémarrez "
+"Kodi!)"
 
 # PKC settings - Artwork
 msgctxt "#30010"
@@ -122,7 +123,7 @@ msgstr "Recherche sur FanartTV terminée"
 # PKC settings sync options
 msgctxt "#30020"
 msgid "Sync Plex playlists (reboot Kodi!)"
-msgstr "Synchroniser les playlists de Plex (redémarrez Kodi !)"
+msgstr "Synchroniser les playlists de Plex (redémarrez Kodi!)"
 
 # PKC settings sync options
 msgctxt "#30021"
@@ -224,7 +225,7 @@ msgstr "Pour les films"
 
 msgctxt "#30125"
 msgid "Done"
-msgstr "L'action a été effectuée"
+msgstr "Effectué"
 
 # Error popup message text
 msgctxt "#30128"
@@ -265,7 +266,7 @@ msgstr "Qualité vidéo si un transcodage est nécessaire"
 
 msgctxt "#30161"
 msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
-msgstr ""
+msgstr "Auto-ajuster la qualité du transcodage (désactivé pour Chromecast)"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -277,7 +278,7 @@ msgstr "Transcodage"
 
 msgctxt "#30170"
 msgid "Recently Added TV Shows"
-msgstr "Série(s) récemment ajoutée"
+msgstr "Série(s) récemment ajoutée(s)"
 
 msgctxt "#30171"
 msgid "In Progress TV Shows"
@@ -289,7 +290,7 @@ msgstr "Chaînes"
 
 msgctxt "#30174"
 msgid "Recently Added"
-msgstr "Récemment ajoutée"
+msgstr "Récemment ajouté"
 
 msgctxt "#30177"
 msgid "In Progress Movies"
@@ -441,7 +442,7 @@ msgstr "Evaluer la chanson"
 # contextmenu entry
 msgctxt "#30408"
 msgid "Plex addon settings"
-msgstr "Paramètres d’addon de plex"
+msgstr "Paramètres d’extension de plex"
 
 # contextmenu entry
 msgctxt "#30409"
@@ -465,7 +466,7 @@ msgid ""
 "Server?"
 msgstr ""
 "La suppression n'a pas pu être effectuée. La suppression est-elle activée "
-"sur le serveur de médias Plex ?"
+"sur le serveur de médias Plex?"
 
 # contextmenu entry
 msgctxt "#30415"
@@ -551,13 +552,13 @@ msgstr ""
 msgctxt "#30514"
 msgid "Show all Plex extras instead of immediately playing trailers"
 msgstr ""
-"Afficher tous les extras Plex au lieu de jouer immédiatement les bandes-"
+"Afficher tous les extras Plex au lieu de lire immédiatement les bandes-"
 "annonces."
 
 # PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
-msgstr "Nombre maximum d'éléments concurrents à demander au serveur"
+msgstr "Nombre maximum d'éléments à demander au serveur en même temps"
 
 # PKC Settings, category name
 msgctxt "#30516"
@@ -577,7 +578,7 @@ msgstr "Activer les bandes-annonces Plex (nécessite PlexPass)"
 # PKC Settings - Playback
 msgctxt "#30519"
 msgid "Ask to play trailers"
-msgstr "Demander de jouer les bandes-annonces"
+msgstr "Demander de lire les bandes-annonces"
 
 # PKC Settings - Plex
 msgctxt "#30520"
@@ -600,7 +601,7 @@ msgctxt "#30523"
 msgid "Also show sync progress for playstate and user data"
 msgstr ""
 "Afficher également la progression de la synchronisation pour l'état de "
-"lecture et les données utilisateur"
+"lecture et des données utilisateur"
 
 # PKC Settings - Sync Options
 msgctxt "#30524"
@@ -645,7 +646,8 @@ msgstr "Générer un nouvel ID unique Plex (Ex: pour cloner Kodi)"
 # PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
-msgstr "Les utilisateurs doivent se connectent chaque fois que Kodi redémarre"
+msgstr ""
+"Les utilisateurs doivent se connecter à chaque fois que Kodi redémarre"
 
 # PKC Settings warning
 msgctxt "#30537"
@@ -716,13 +718,13 @@ msgstr "Le serveur est en ligne"
 # Plex notification when we need to transcode
 msgctxt "#33004"
 msgid "PMS enforced transcoding"
-msgstr ""
+msgstr "PMS impose le transcodage"
 
 # Plex notification when we need to use direct streaming (instead of
 # transcoding)
 msgctxt "#33005"
 msgid "PMS enforced direct streaming"
-msgstr ""
+msgstr "PMS impose le streaming en direct"
 
 # Error notification
 msgctxt "#33009"
@@ -751,7 +753,7 @@ msgstr "Choisissez le fichier de sous-titres"
 # Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
-msgstr "Jouer les bandes-annonces ?"
+msgstr "Lire les bandes-annonces?"
 
 # Error message
 msgctxt "#33032"
@@ -772,23 +774,23 @@ msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
 "disk!"
 msgstr ""
-"Supprimer les fichiers du serveur de Plex ? Cela va également supprimer "
-"le(s) fichier(s) du disque !"
+"Supprimer les fichiers du serveur de Plex? Cela va également supprimer le(s)"
+" fichier(s) du disque!"
 
 # PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
-msgstr "-Nombre de bandes-annonces à jouer avant un film"
+msgstr "-Nombre de bandes-annonces à lire avant un film"
 
 # PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
-msgstr "Booster l'audio pendant le transcodage"
+msgstr "Augmenter l'audio pendant le transcodage"
 
 # PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
-msgstr "Taille des sous-titres incorporés"
+msgstr "Taille des sous-titres incrustés"
 
 # PKC Settings - Sync
 msgctxt "#39003"
@@ -798,27 +800,27 @@ msgstr "Nombre de processus de téléchargement simultanés"
 # PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
-msgstr "Activer le compagnon de Plex (redémarrage de Kodi !)"
+msgstr "Activer le compagnon de Plex (redémarrer Kodi!)"
 
 # PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
-msgstr "Plex Companion Port (change only if needed)"
+msgstr "Plex Companion Port (changement uniquement si nécessaire)"
 
 # PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
-msgstr "Plex Companion: Allows flinging media to Kodi through Plex"
+msgstr "Plex Companion: Permet de lancer des médias vers Kodi via Plex"
 
 # Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
-msgstr "Could not login to plex.tv. Please try signing in again."
+msgstr "Impossible de se logguer à plex.tv. Veuillez essayer à nouveau"
 
 # Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
-msgstr "Problèmes de connexion à plex.tv. Problème de réseau ou d’internet ?"
+msgstr "Problèmes de connexion à plex.tv. Problème réseau ou d’internet ?"
 
 # Error message
 msgctxt "#39011"
@@ -838,12 +840,12 @@ msgstr "Pas encore autorisée pour le serveur Plex "
 # Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
-msgstr "S’il vous plaît connectez-vous à plex.tv."
+msgstr "Veuillez vous connexter à plex.tv."
 
 # Error message
 msgctxt "#39015"
 msgid "Problems connecting to server. Pick another server?"
-msgstr "Problèmes de connexion au serveur. Choisir un autre serveur ?"
+msgstr "Problèmes de connexion au serveur. Choisir un autre serveur?"
 
 # Pop-up on initial sync
 msgctxt "#39016"
@@ -851,7 +853,7 @@ msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
 " with direct paths for large music libraries. Kodi might crash otherwise)"
 msgstr ""
-"Désactiver la bibliothèque musicale de Plex ? (Il est fortement recommandé "
+"Désactiver la bibliothèque musicale de Plex? (Il est fortement recommandé "
 "d’utiliser Plex musique seulement avec des chemins d’accès directs pour les "
 "grandes bibliothèques musicale. Sinon Kodi peut s’interrompre)"
 
@@ -861,8 +863,8 @@ msgid ""
 "Would you now like to go to the plugin's settings to fine-tune PKC? You will"
 " need to RESTART Kodi!"
 msgstr ""
-"Aimeriez-vous maintenant aller dans les paramètres du plugin pour affiner la"
-" PKC ? Vous devrez redémarrer Kodi !"
+"Voulez-vous maintenant aller dans les paramètres du plugin pour affiner  "
+"PKC? Vous devrez redémarrer Kodi!"
 
 # PKC Settings - Advanced
 msgctxt "#39018"
@@ -891,12 +893,12 @@ msgstr "local"
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
 msgstr ""
-"Impossible d’effectuer l'authentification. Êtes-vous connectez à plex.tv ?"
+"Impossible d’effectuer l'authentification. Êtes-vous connectez à plex.tv?"
 
 # PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
-msgstr "Vous connecter automatiquement plex.tv au démarrage"
+msgstr "Connecter automatiquement plex.tv au démarrage"
 
 # PKC Settings - Sync
 msgctxt "#39026"
@@ -911,11 +913,11 @@ msgid ""
 "shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or "
 "\\\\myNAS/mymovie.mkv)!"
 msgstr ""
-"MISE EN GARDE ! Si vous choisissez le mode « Natif », vous pourriez perdre "
-"accès à certaines fonctionnalités de Plex tels que : Plex trailers et les "
+"MISE EN GARDE! Si vous choisissez le mode «Natif», vous pourriez perdre "
+"accès à certaines fonctionnalités de Plex tels que: Plex trailers et les "
 "options de transcodage. Toutes les actions de Plex ont besoin d’utiliser des"
 " chemins d’accès directs (par exemple smb://myNAS/mymovie.mkv ou "
-"\\myNAS/mymovie.mkv) !"
+"\\myNAS/mymovie.mkv)!"
 
 # Pop-up on initial sync
 msgctxt "#39029"
@@ -930,7 +932,7 @@ msgid ""
 " Kodi can't locate your content."
 msgstr ""
 "Ajouter des informations d’identification réseau pour permettre d’accéder à "
-"votre contenu Kodi ? Remarque : Sauter cette étape peut générer un message "
+"votre contenu Kodi? Remarque: Sauter cette étape peut générer un message "
 "lors de l’analyse initiale de votre contenu si Kodi ne peut pas localiser "
 "votre contenu."
 
@@ -1009,8 +1011,9 @@ msgid ""
 "Go a step further and completely replace all original Plex library paths "
 "(/volume1/media) with custom SMB paths (smb://NAS/MyStuff)?"
 msgstr ""
-"Go a step further and completely replace all original Plex library paths "
-"(/volume1/media) with custom SMB paths (smb://NAS/MyStuff)?"
+"Continuer et remplacer complètement tous les chemins d'accès originaux de la"
+" bibliothèque Plex (/volume1/media) par des chemins d'accès SMB "
+"personnalisés (smb://NAS/MyStuff)?"
 
 # Pop-up on initial sync
 msgctxt "#39044"
@@ -1018,8 +1021,8 @@ msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
 "and then restart Kodi"
 msgstr ""
-"Please enter your custom smb paths in the settings under \"Sync Options\" "
-"and then restart Kodi"
+"Veuillez entrer vos chemins smb personnalisés dans les paramètres sous "
+"\"Sync Options\" et ensuite redémarrer Kodi"
 
 # PKC Settings - Customize Paths
 msgctxt "#39045"
@@ -1044,7 +1047,7 @@ msgstr "On Deck: Append season- and episode-number SxxExx"
 # PKC Settings - Advanced
 msgctxt "#39049"
 msgid "Nothing works? Try a full reset!"
-msgstr "Rien ne fonctionne ? Essayez une réinitialisation complète !"
+msgstr "Rien ne fonctionne? Essayez une réinitialisation complète!"
 
 # PKC Settings - Connection
 msgctxt "#39050"
@@ -1083,6 +1086,8 @@ msgctxt "#39056"
 msgid ""
 "Used by sync and when attempting Direct Paths. Restart Kodi on changes!"
 msgstr ""
+"Utilisé pour la synchronisation et les chemins directs. Redémarrez Kodi "
+"après les changements!"
 
 # PKC Settings, category name
 msgctxt "#39057"
@@ -1106,7 +1111,7 @@ msgid ""
 "background?"
 msgstr ""
 "Vous souhaitez télécharger des illustrations supplémentaires de FanArtTV en "
-"arrière-plan ?"
+"arrière-plan?"
 
 # PKC Settings - Sync
 msgctxt "#39062"
@@ -1121,22 +1126,22 @@ msgstr "Forcer le transcodage Hi10P"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
-msgstr "Recently Added: Also show already watched episodes"
+msgstr "Ajouté récemment: Montre également les épisodes déjà visionnés"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39065"
 msgid "Force-refresh Kodi skin on stopping playback"
-msgstr "Forcer le rafraîchissement du skin de Kodi va arrêter le playback."
+msgstr "Forcer le rafraîchissement du skin lors de l'arrêt de la lecture"
 
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr "Récemment ajouté : Montrer aussi les films déjà visionnés"
+msgstr "Récemment ajouté: Montrer aussi les films déjà visionnés"
 
 # PKC Settings - Connection
 msgctxt "#39067"
 msgid "Your current Plex Media Server:"
-msgstr "Votre serveur Plex actuel :"
+msgstr "Votre serveur Plex actuel: "
 
 # PKC Settings - Connection
 msgctxt "#39068"
@@ -1146,17 +1151,17 @@ msgstr "Entrez manuellement l'adresse du Plex Media Server"
 # PKC Settings - Connection
 msgctxt "#39069"
 msgid "Current address:"
-msgstr "Adresse actuelle :"
+msgstr "Adresse actuelle: "
 
 # PKC Settings - Connection
 msgctxt "#39070"
 msgid "Current port:"
-msgstr "Port actuel :"
+msgstr "Port actuel: "
 
 # PKC Settings - Connection
 msgctxt "#39071"
 msgid "Current plex.tv status:"
-msgstr "État actuel de plex.tv :"
+msgstr "État actuel de plex.tv: "
 
 # PKC Settings, category name
 msgctxt "#39073"
@@ -1174,8 +1179,8 @@ msgid ""
 "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and "
 "\"Parents Movies\", be sure to check the Wiki: https://goo.gl/JFtQV9"
 msgstr ""
-"Si vous utilisez plusieurs bibliothèques de Plex d’un type, par exemple « "
-"Films enfants » et « Films parents », assurez-vous de consulter le Wiki : "
+"Si vous utilisez plusieurs bibliothèques de Plex d’un type, par exemple "
+"«Films enfants» et «Films parents», assurez-vous de consulter le Wiki:  "
 "https://goo.gl/JFtQV9"
 
 # PKC Settings - Appearance Tweaks
@@ -1186,7 +1191,7 @@ msgstr "Nombre maximum de vidéos à afficher dans les widgets"
 # PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
-msgstr "Plex Companion Update Port (change only if needed)"
+msgstr "Plex Companion Update Port (à modifier uniquement si nécessaire)"
 
 # Error message
 msgctxt "#39079"
@@ -1194,8 +1199,8 @@ msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
 "settings."
 msgstr ""
-"Plex Companion could not open the GDM port. Please change it in the PKC "
-"settings."
+"Plex Companion n'a pas pu ouvrir le port GDM. Veuillez le modifier dans les "
+"paramètres du PKC."
 
 # Pop-up on initial sync.
 # Check that next translations for Add-on Paths and Direct Paths are
@@ -1205,8 +1210,9 @@ msgid ""
 "Use Add-on Paths (default, easy) or Direct Paths? Choose Add-on Paths if "
 "you're unsure. PKC will not work if your Direct Paths setup is wrong!"
 msgstr ""
-"Utiliser les chemins de l'Add-on (par défaut, simple) ou les chemins Directs? \n"
-"Choisissez les chemins de l'Add-on si vous n'êtes pas sûr. PKC ne fonctionnera pas si vos réglages chemins Directs ne sont pas corrects."
+"Utiliser les chemins de l'Add-on (par défaut, simple) ou les chemins "
+"Directs? Choisissez les chemins de l'Add-on si vous n'êtes pas sûr. PKC ne "
+"fonctionnera pas si vos réglages chemins Directs ne sont pas corrects."
 
 # Button text for choosing PKC mode
 msgctxt "#39081"
@@ -1250,24 +1256,24 @@ msgstr "Synchroniser la bibliothèque manuellement"
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr ""
-"Impossible de lancer la synchronisation, l’Add-on n’est pas connecté à un "
-"serveur Plex."
+"Impossible de lancer la synchronisation, l’extension n’est pas connecté à un"
+" serveur Plex."
 
 msgctxt "#39206"
 msgid ""
 "Plex might lock your account if you fail to log in too many times. Proceed "
 "anyway?"
 msgstr ""
-"Plex pourrait bloquer votre compte si vous ne parvenez pas à vous connecter "
-"trop de fois. Continuer néanmoins ?"
+"Plex pourrait bloquer votre compte si vous vous connecter trop de fois. "
+"Poursuivre quand même ?"
 
 msgctxt "#39207"
 msgid "Resetting PMS connections, please wait"
-msgstr "Resetting PMS connections, please wait"
+msgstr "Réinitialisation des connexions PMS, veuillez patienter"
 
 msgctxt "#39208"
 msgid "Failed to reset PKC. Try to restart Kodi."
-msgstr "Failed to reset PKC. Try to restart Kodi."
+msgstr "Impossible de réinitialiser PKC. Essayez de redémarrer Kodi."
 
 # PKC Settings - Plex
 msgctxt "#39209"
@@ -1276,7 +1282,7 @@ msgstr "Interrupteur de connexion à plex.tv (se connecter ou se déconnecter)"
 
 msgctxt "#39210"
 msgid "Not yet connected to Plex Server"
-msgstr "Not yet connected to Plex Server"
+msgstr "Pas encore connecté au serveur Plex"
 
 msgctxt "#39211"
 msgid "Watch later"
@@ -1290,11 +1296,11 @@ msgstr "{0} hors-ligne"
 
 msgctxt "#39215"
 msgid "Enter your Plex Media Server's IP or URL, Examples are:"
-msgstr "Enter your Plex Media Server's IP or URL, Examples are:"
+msgstr "Entrez l'IP ou l'URL du Plex Media Server, exemples: "
 
 msgctxt "#39217"
 msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
-msgstr ""
+msgstr "Utiliser le HTTPS (SSL) ? La réponse devrait être oui."
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1302,7 +1308,7 @@ msgstr "Error contacting PMS"
 
 msgctxt "#39219"
 msgid "Abort (Yes) or save address anyway (No)?"
-msgstr "Abort (Yes) or save address anyway (No)?"
+msgstr "Abandonner (Oui) ou enregistrer quand même l'adresse (Non) ?"
 
 # String attached at the end to get something like "PMS Name is offline"
 msgctxt "#39220"
@@ -1322,8 +1328,8 @@ msgid ""
 "Only look for missing fanart or refresh all fanart? The scan will take quite"
 " a while and happen in the background."
 msgstr ""
-"Only look for missing fanart or refresh all fanart? The scan will take quite"
-" a while and happen in the background."
+"Cherchez seulement le fanart manquant ou rafraîchissez tous les fanart ? Le "
+"balayage prendra un certain temps et se fera en arrière-plan."
 
 msgctxt "#39224"
 msgid "Refresh all"
@@ -1331,7 +1337,7 @@ msgstr "Tout rafraîchir"
 
 msgctxt "#39225"
 msgid "Missing only"
-msgstr "Missing only"
+msgstr "Manquant seulement"
 
 # Message in the PKC settings if user has not logged in to plex.tv
 msgctxt "#39226"
@@ -1369,20 +1375,20 @@ msgid ""
 "Running the image cache process can take some time. It will happen in the "
 "background. Are you sure you want continue?"
 msgstr ""
-"Running the image cache process can take some time. It will happen in the "
-"background. Are you sure you want continue?"
+"L'exécution du processus de mise en cache des images peut prendre un certain"
+" temps. Il se fera en arrière-plan. Êtes-vous sûr de vouloir continuer ?"
 
 msgctxt "#39251"
 msgid "Reset all existing cache data first?"
-msgstr "Reset all existing cache data first?"
+msgstr "Supprimer d'abord tout le cache des données ?"
 
 msgctxt "#39303"
 msgid "Problems trying to contact plex.tv. Try again later"
-msgstr "Problèmes en essayant de contacter plex.tv. Réessayez plus tard"
+msgstr "Problèmes en essayant de connecter plex.tv. Réessayez plus tard"
 
 msgctxt "#39304"
 msgid "Go to https://plex.tv/pin and enter the code: "
-msgstr "Allez sur https://plex.tv/pin et entrez le code : "
+msgstr "Allez sur https://plex.tv/pin et entrez le code: "
 
 msgctxt "#39305"
 msgid "Could not sign in to plex.tv. Try again later"
@@ -1417,8 +1423,8 @@ msgid ""
 "Library sync thread has crashed. You should restart Kodi now. Please report "
 "this on the forum"
 msgstr ""
-"Library sync thread has crashed. You should restart Kodi now. Please report "
-"this on the forum"
+"La synchronisation de la bibliothèque s'est interrompue. Vous devriez "
+"redémarrer Kodi maintenant. Veuillez le signaler sur le forum"
 
 msgctxt "#39401"
 msgid ""
@@ -1465,9 +1471,10 @@ msgid ""
 "returned ERRORS. Try lowering the number of sync download threads in the "
 "settings. Skipped some items for now."
 msgstr ""
-"The Plex Server did not like you asking for so much data at once and "
-"returned ERRORS. Try lowering the number of sync download threads in the "
-"settings. Skipped some items for now."
+"Le serveur Plex n'a pas aimé que vous demandiez autant de données d'un seul "
+"coup et a renvoyé des ERREURS. Essayez de réduire le nombre de threads de "
+"téléchargement de synchronisation dans les paramètres. Certains éléments ont"
+" été ignorés pour l'instant."
 
 msgctxt "#39410"
 msgid "ERROR in library sync"
@@ -1496,19 +1503,20 @@ msgstr ""
 
 msgctxt "#39601"
 msgid "Could not stop the database from running. Please try again later."
-msgstr "Could not stop the database from running. Please try again later."
+msgstr ""
+"Impossible de stopper la base de donnée. Veuillez réessayer plus tard."
 
 msgctxt "#39603"
 msgid ""
 "Reset all PlexKodiConnect Addon settings? (this is usually NOT recommended "
 "and unnecessary!)"
 msgstr ""
-"Réinitialiser tous les paramètres de PlexKodiConnect Addon ? (ceci n’est "
-"généralement pas recommandée et inutiles !)"
+"Réinitialiser tous les paramètres de PlexKodiConnect Addon? (ceci n’est "
+"généralement pas recommandée et inutiles!)"
 
 msgctxt "#39700"
 msgid "Amazon Alexa (Voice Recognition)"
-msgstr "Amazon Alexa (Voice Recognition)"
+msgstr "Amazon Alexa (Reconnaissance vocale)"
 
 msgctxt "#39701"
 msgid "Activate Alexa"
@@ -1516,7 +1524,7 @@ msgstr "Activer Alexa"
 
 msgctxt "#39702"
 msgid "Browse by folder"
-msgstr "Parcourir en suivant les répertoires"
+msgstr "Parcourir par dossier"
 
 # For use with addon.xml (PKC metadata for Kodi, e.g. description)
 # Addon Summary
@@ -1548,7 +1556,7 @@ msgstr "A utiliser à vos propres risques"
 # If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
 msgid "Don't burn-in any subtitle"
-msgstr ""
+msgstr "Ne pas incruster de sous-titres"
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown
@@ -1613,7 +1621,7 @@ msgid ""
 " correct your file!"
 msgstr ""
 "Kodi ne peut pas traiter {0}. PKC ne fonctionnera pas correctement. Merci de"
-" visiter {1} et de corriger votre fichier !"
+" visiter {1} et de corriger votre fichier!"
 
 # Shown once on first installation to comply with the terms of use of
 # themoviedb.org
@@ -1621,7 +1629,7 @@ msgctxt "#39717"
 msgid "PKC uses free additional artwork from www.themoviedb.org. Many thanks!"
 msgstr ""
 "PKC utilise gratuitement des artwork additionnels provenant de "
-"www.themoviedb.org. Merci beaucoup !"
+"www.themoviedb.org. Merci beaucoup!"
 
 # Shown during very first PKC setup only
 msgctxt "#39718"
@@ -1630,7 +1638,7 @@ msgid ""
 "many versions of a media item you posses?"
 msgstr ""
 "Voulez-vous remplacer vos notes d'utilisateurs personnalisées avec un "
-"indicateur du nombre de versions d'un média que vous possédez ?"
+"indicateur du nombre de versions d'un média que vous possédez?"
 
 # In PKC Settings under Sync
 msgctxt "#39719"
