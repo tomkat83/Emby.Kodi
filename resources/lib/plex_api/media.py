@@ -261,10 +261,19 @@ class Media(object):
             if int(stream.get('streamType')) != 3 or 'key' not in stream.attrib:
                 # Not a subtitle or not not an external subtitle
                 continue
-            path = self.download_external_subtitles(
-                '{server}%s' % stream.get('key'),
-                stream.get('displayTitle'),
-                stream.get('codec'))
+            try:
+                path = self.download_external_subtitles(
+                    '{server}%s' % stream.get('key'),
+                    stream.get('displayTitle'),
+                    stream.get('codec'))
+            except IOError:
+                # Catch "IOError: [Errno 22] invalid mode ('wb') or filename"
+                # Due to stream.get('displayTitle') returning chars that our
+                # OS is not supporting, e.g. "српски језик (SRT External)"
+                path = self.download_external_subtitles(
+                    '{server}%s' % stream.get('key'),
+                    stream.get('languageCode', 'Unknown'),
+                    stream.get('codec'))
             if path:
                 externalsubs.append(path)
         LOG.info('Found external subs: %s', externalsubs)
