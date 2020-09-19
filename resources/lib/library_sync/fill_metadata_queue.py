@@ -42,7 +42,7 @@ class FillMetadataQueue(common.LibrarySyncMixin,
                 checksum = int('{}{}'.format(
                     plex_id,
                     xml.get('updatedAt',
-                            xml.get('addedAt', '1541572987'))))
+                            xml.get('addedAt', '1541572987')).replace('-', '')))
                 if (not self.repair and
                         plexdb.checksum(plex_id, section.plex_type) == checksum):
                     continue
