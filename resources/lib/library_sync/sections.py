@@ -526,6 +526,9 @@ def _delete_kodi_db_items(section):
         types = ((v.PLEX_TYPE_ARTIST, itemtypes.Artist),
                  (v.PLEX_TYPE_ALBUM, itemtypes.Album),
                  (v.PLEX_TYPE_SONG, itemtypes.Song))
+    else:
+        types = ()
+        LOG.debug('Skipping deletion of DB elements for section %s', section)
     for plex_type, context in types:
         while True:
             with PlexDB() as plexdb:
