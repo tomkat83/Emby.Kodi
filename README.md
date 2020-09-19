@@ -37,7 +37,7 @@ Unfortunately, the PKC Kodi repository had to move because it stopped working (t
 
 ### Download and Installation
 
-Install PKC via the PlexKodiConnect Kodi repository download button just below (do NOT use the standard GitHub download!). See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Please use the stable version except if you really know what you're doing. Kodi will update PKC automatically. 
+Install PKC via the PlexKodiConnect Kodi repository download button just below (do NOT use the standard GitHub download!). Alternatively, add [https://croneter.github.io/pkc-source](https://croneter.github.io/pkc-source) as a new Kodi `Web server directory (HTTPS)` source. See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Please use the stable version except if you really know what you're doing. Kodi will update PKC automatically. 
 
 | Stable version | Beta version |
 |----------------|--------------|
