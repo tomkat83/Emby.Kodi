@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.12.2" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.12.3" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests" version="2.9.1" />
@@ -83,7 +83,13 @@
     <summary lang="lt_LT">Natūralioji „Plex“ integracija į „Kodi“</summary>
     <description lang="lt_LT">Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai pakeičia). Naudokite savo pačių rizika!</description>
     <disclaimer lang="lt_LT">Naudokite savo pačių rizika</disclaimer>
-    <news>version 2.12.2:
+    <news>version 2.12.3:
+- Fix playback failing due to caching of subtitles with non-ascii chars
+- Fix ValueError: invalid literal for int() with base 10 during show sync
+- Fix UnboundLocalError when certain Plex sections are deleted or being un-synched
+- New method to install PlexKodiConnect directly via an URL. You thus do not need to upload a ZIP file to Kodi anymore.
+
+version 2.12.2:
 - version 2.12.0 and 2.12.1 for everyone 
 - Fix regression: sync dialog not showing up when it should 
 
