@@ -56,19 +56,7 @@ class Movie(ItemBase):
                                                    "default",
                                                    api.rating(),
                                                    api.votecount())
-            if api.provider('imdb') is not None:
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_MOVIE,
-                                                       'imdb',
-                                                       api.provider('imdb'))
-            elif api.provider('tmdb') is not None:
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_MOVIE,
-                                                       'tmdb',
-                                                       api.provider('tmdb'))
-            else:
-                self.kodidb.remove_uniqueid(kodi_id, v.KODI_TYPE_MOVIE)
-                uniqueid = -1
+            unique_id = self.update_provider_ids(api, kodi_id)
             self.kodidb.modify_people(kodi_id,
                                       v.KODI_TYPE_MOVIE,
                                       api.people())
@@ -86,18 +74,7 @@ class Movie(ItemBase):
                                                 "default",
                                                 api.rating(),
                                                 api.votecount())
-            if api.provider('imdb') is not None:
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_MOVIE,
-                                                    api.provider('imdb'),
-                                                    "imdb")
-            elif api.provider('tmdb') is not None:
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_MOVIE,
-                                                    api.provider('tmdb'),
-                                                    "tmdb")
-            else:
-                uniqueid = -1
+            unique_id = self.add_provider_ids(api, kodi_id)
             self.kodidb.add_people(kodi_id,
                                    v.KODI_TYPE_MOVIE,
                                    api.people())
@@ -105,6 +82,8 @@ class Movie(ItemBase):
                 self.kodidb.add_artwork(api.artwork(),
                                         kodi_id,
                                         v.KODI_TYPE_MOVIE)
+
+        unique_id = self._prioritize_provider_id(unique_id)
 
         # Update Kodi's main entry
         self.kodidb.add_movie(kodi_id,
@@ -117,7 +96,7 @@ class Movie(ItemBase):
                               rating_id,
                               api.list_to_string(api.writers()),
                               api.year(),
-                              uniqueid,
+                              unique_id,
                               api.sorttitle(),
                               api.runtime(),
                               api.content_rating(),
@@ -246,3 +225,13 @@ class Movie(ItemBase):
                                       db_item['kodi_type'],
                                       api.userrating())
         return True
+
+    @staticmethod
+    def _prioritize_provider_id(unique_ids):
+        """
+        Prioritize which ID ends up in the SHOW table (there can only be 1)
+        tvdb > imdb > tmdb
+        """
+        return unique_ids.get('imdb',
+                              unique_ids.get('tmdb',
+                                             unique_ids.get('tvdb')))

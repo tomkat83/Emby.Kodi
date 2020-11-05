@@ -145,3 +145,27 @@ class ItemBase(object):
         encountered by PKC
         """
         return section_id in app.SYNC.section_ids
+
+    def update_provider_ids(self, api, kodi_id):
+        """
+        Updates the unique metadata provider ids (such as the IMDB id). Returns
+        a dict of the Kodi unique ids
+        """
+        # We might have an old provider id stored!
+        self.kodidb.remove_uniqueid(kodi_id, api.kodi_type)
+        return self.add_provider_ids(api, kodi_id)
+
+    def add_provider_ids(self, api, kodi_id):
+        """
+        Adds the unique ids for all metadata providers to the Kodi database,
+        such as IMDB or The Movie Database TMDB.
+        Returns a dict of the Kodi ids: {<provider>: <kodi_unique_id>}
+        """
+        kodi_unique_ids = api.guids.copy()
+        for provider, provider_id in api.guids.iteritems():
+            kodi_unique_ids[provider] = self.kodidb.add_uniqueid(
+                kodi_id,
+                api.kodi_type,
+                provider_id,
+                provider)
+        return kodi_unique_ids

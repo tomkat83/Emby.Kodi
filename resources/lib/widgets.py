@@ -168,8 +168,9 @@ def _generate_content(api):
             'trailer': api.trailer(),
             'tvshowtitle': api.show_title(),
             'uniqueid': {
-                'imdbnumber': api.provider('imdb') or '',
-                'tvdb_id': api.provider('tvdb') or ''
+                'imdbnumber': api.guids.get('imdb') or '',
+                'tvdb_id': api.guids.get('tvdb') or '',
+                'tmdb_id': api.guids.get('tmdb') or ''
             },
             'votes': '0',  # [str]!
             'writer': api.writers(),  # list of [str]
