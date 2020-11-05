@@ -1,3 +1,7 @@
+version 2.12.4 (beta only):
+- Hopefully fix freeze during sync: Don't assign multiple sets/collections for a specific movie
+- Support metadata provider ids (e.g. for IMDB) for the new Plex Movie Agent
+
 version 2.12.3:
 - Fix playback failing due to caching of subtitles with non-ascii chars
 - Fix ValueError: invalid literal for int() with base 10 during show sync
