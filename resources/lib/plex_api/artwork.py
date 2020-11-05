@@ -186,9 +186,9 @@ class Artwork(object):
         # Always seek collection's ids since not provided by PMS
         if collection is False:
             if media_type == v.PLEX_TYPE_MOVIE:
-                media_id = self.provider('imdb')
+                media_id = self.guids.get('imdb')
             elif media_type == v.PLEX_TYPE_SHOW:
-                media_id = self.provider('tvdb')
+                media_id = self.guids.get('tvdb')
             if media_id is not None:
                 return media_id, None, None
             LOG.info('Plex did not provide ID for IMDB or TVDB. Start '

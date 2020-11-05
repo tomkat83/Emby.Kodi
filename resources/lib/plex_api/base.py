@@ -13,6 +13,9 @@ from .. import widgets
 
 LOG = getLogger('PLEX.api')
 
+METADATA_PROVIDERS = (('imdb', utils.REGEX_IMDB),
+                      ('tvdb', utils.REGEX_TVDB),
+                      ('tmdb', utils.REGEX_TMDB))
 
 class Base(object):
     """
@@ -40,6 +43,7 @@ class Base(object):
         self._writers = []
         self._producers = []
         self._locations = []
+        self._guids = {}
         self._coll_match = None
         # Plex DB attributes
         self._section_id = None
@@ -130,6 +134,11 @@ class Base(object):
     def fanart_synced(self):
         self.check_db()
         return self._fanart_synced
+
+    @property
+    def guids(self):
+        self._scan_children()
+        return self._guids
 
     def check_db(self, plexdb=None):
         """
@@ -457,6 +466,24 @@ class Base(object):
             elif child.tag == 'Collection':
                 self._collections.append((cast(int, child.get('id')),
                                          child.get('tag')))
+            elif child.tag == 'Guid':
+                guid = child.get('id')
+                guid = guid.split('://', 1)
+                self._guids[guid[0]] = guid[1]
+        # Plex Movie agent (legacy) or "normal" Plex tv show agent
+        if not self._guids:
+            guid = self.xml.get('guid')
+            if not guid:
+                return
+            for provider, regex in METADATA_PROVIDERS:
+                provider_id = regex.findall(guid)
+                try:
+                    self._guids[provider] = provider_id[0]
+                except IndexError:
+                    pass
+                else:
+                    # There will only ever be one entry
+                    break
 
     def cast(self):
         """
@@ -543,33 +570,6 @@ class Base(object):
             'director': [(x, ) for x in self._directors],
             'writer': [(x, ) for x in self._writers]
         }
-
-    def provider(self, providername=None):
-        """
-        providername:  e.g. 'imdb', 'tvdb'
-
-        Return IMDB, e.g. "tt0903624". Returns None if not found
-        """
-        item = self.xml.get('guid')
-        if not item:
-            return
-        if providername == 'imdb':
-            regex = utils.REGEX_IMDB
-        elif providername == 'tvdb':
-            # originally e.g. com.plexapp.agents.thetvdb://276564?lang=en
-            regex = utils.REGEX_TVDB
-        elif providername == 'tmdb':
-            # originally e.g. com.plexapp.agents.themoviedb://603?lang=en
-            regex = utils.REGEX_TMDB
-        else:
-            raise NotImplementedError('Not implemented: %s' % providername)
-
-        provider = regex.findall(item)
-        try:
-            provider = provider[0]
-        except IndexError:
-            provider = None
-        return provider
 
     def extras(self):
         """

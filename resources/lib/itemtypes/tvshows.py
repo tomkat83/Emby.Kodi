@@ -194,19 +194,8 @@ class Show(TvShowMixin, ItemBase):
                                                    "default",
                                                    api.rating(),
                                                    api.votecount())
-            if api.provider('tvdb') is not None:
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_SHOW,
-                                                       'tvdb',
-                                                       api.provider('tvdb'))
-            elif api.provider('tmdb') is not None:
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_SHOW,
-                                                       'tmdb',
-                                                       api.provider('tmdb'))
-            else:
-                self.kodidb.remove_uniqueid(kodi_id, v.KODI_TYPE_SHOW)
-                uniqueid = -1
+            unique_id = self._prioritize_provider_id(
+                self.update_provider_ids(api, kodi_id))
             self.kodidb.modify_people(kodi_id,
                                       v.KODI_TYPE_SHOW,
                                       api.people())
@@ -221,7 +210,7 @@ class Show(TvShowMixin, ItemBase):
                                     api.premiere_date(),
                                     api.list_to_string(api.genres()),
                                     api.title(),
-                                    uniqueid,
+                                    unique_id,
                                     api.content_rating(),
                                     api.list_to_string(api.studios()),
                                     api.sorttitle(),
@@ -236,18 +225,8 @@ class Show(TvShowMixin, ItemBase):
                                                 "default",
                                                 api.rating(),
                                                 api.votecount())
-            if api.provider('tvdb'):
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_SHOW,
-                                                    api.provider('tvdb'),
-                                                    'tvdb')
-            if api.provider('tmdb'):
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_SHOW,
-                                                    api.provider('tmdb'),
-                                                    'tmdb')
-            else:
-                uniqueid = -1
+            unique_id = self._prioritize_provider_id(
+                self.add_provider_ids(api, kodi_id))
             self.kodidb.add_people(kodi_id,
                                    v.KODI_TYPE_SHOW,
                                    api.people())
@@ -263,7 +242,7 @@ class Show(TvShowMixin, ItemBase):
                                  api.premiere_date(),
                                  api.list_to_string(api.genres()),
                                  api.title(),
-                                 uniqueid,
+                                 unique_id,
                                  api.content_rating(),
                                  api.list_to_string(api.studios()),
                                  api.sorttitle())
@@ -281,6 +260,15 @@ class Show(TvShowMixin, ItemBase):
                              kodi_pathid=kodi_pathid,
                              last_sync=self.last_sync)
 
+    @staticmethod
+    def _prioritize_provider_id(unique_ids):
+        """
+        Prioritize which ID ends up in the SHOW table (there can only be 1)
+        tvdb > imdb > tmdb
+        """
+        return unique_ids.get('tvdb',
+                              unique_ids.get('imdb',
+                                             unique_ids.get('tmdb')))
 
 class Season(TvShowMixin, ItemBase):
     def add_update(self, xml, section_name=None, section_id=None,
@@ -459,19 +447,8 @@ class Episode(TvShowMixin, ItemBase):
                                                   "default",
                                                   api.rating(),
                                                   api.votecount())
-            if api.provider('tvdb'):
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_EPISODE,
-                                                       'tvdb',
-                                                       api.provider('tvdb'))
-            elif api.provider('tmdb'):
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_EPISODE,
-                                                       'tmdb',
-                                                       api.provider('tmdb'))
-            else:
-                self.kodidb.remove_uniqueid(kodi_id, v.KODI_TYPE_EPISODE)
-                uniqueid = -1
+            unique_id = self._prioritize_provider_id(
+                self.update_provider_ids(api, kodi_id))
             self.kodidb.modify_people(kodi_id,
                                       v.KODI_TYPE_EPISODE,
                                       api.people())
@@ -493,7 +470,7 @@ class Episode(TvShowMixin, ItemBase):
                                        airs_before_episode,
                                        fullpath,
                                        kodi_pathid,
-                                       uniqueid,
+                                       unique_id,
                                        kodi_fileid,  # and NOT kodi_fileid_2
                                        parent_id,
                                        api.userrating(),
@@ -539,18 +516,8 @@ class Episode(TvShowMixin, ItemBase):
                                                 "default",
                                                 api.rating(),
                                                 api.votecount())
-            if api.provider('tvdb'):
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_EPISODE,
-                                                    api.provider('tvdb'),
-                                                    "tvdb")
-            elif api.provider('tmdb'):
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_EPISODE,
-                                                    api.provider('tmdb'),
-                                                    "tmdb")
-            else:
-                uniqueid = -1
+            unique_id = self._prioritize_provider_id(
+                self.add_provider_ids(api, kodi_id))
             self.kodidb.add_people(kodi_id,
                                    v.KODI_TYPE_EPISODE,
                                    api.people())
@@ -575,7 +542,7 @@ class Episode(TvShowMixin, ItemBase):
                                     airs_before_episode,
                                     fullpath,
                                     kodi_pathid,
-                                    uniqueid,
+                                    unique_id,
                                     parent_id,
                                     api.userrating())
             self.kodidb.set_resume(kodi_fileid,
@@ -605,3 +572,13 @@ class Episode(TvShowMixin, ItemBase):
         self.kodidb.modify_streams(kodi_fileid,  # and NOT kodi_fileid_2
                                    api.mediastreams(),
                                    api.runtime())
+
+    @staticmethod
+    def _prioritize_provider_id(unique_ids):
+        """
+        Prioritize which ID ends up in the SHOW table (there can only be 1)
+        tvdb > imdb > tmdb
+        """
+        return unique_ids.get('tvdb',
+                              unique_ids.get('imdb',
+                                             unique_ids.get('tmdb')))
