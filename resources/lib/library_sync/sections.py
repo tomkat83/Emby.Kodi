@@ -578,7 +578,7 @@ def _choose_libraries(sections):
                                                      selectable_sections,
                                                      preselect=preselected,
                                                      useDetails=False)
-    if selectable_sections is None:
+    if selected_sections is None:
         LOG.info('User chose not to select which libraries to sync')
         return False
     index = 0
