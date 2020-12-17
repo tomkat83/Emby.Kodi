@@ -357,6 +357,10 @@ def sync_plex_playlist(playlist=None, xml=None, plex_id=None):
         if api.playlist_type() == v.PLEX_TYPE_PHOTO_PLAYLIST:
             # Not supported by Kodi
             return False
+        elif api.playlist_type() is None:
+            # Encountered in logs, seems to be a malformed answer
+            LOG.error('Playlist type is missing: %s', api.xml.attrib)
+            return False
         name = api.title()
         typus = v.KODI_PLAYLIST_TYPE_FROM_PLEX[api.playlist_type()]
     if (not app.SYNC.enable_music and typus == v.PLEX_PLAYLIST_TYPE_AUDIO):
