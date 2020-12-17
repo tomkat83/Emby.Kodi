@@ -92,6 +92,9 @@ class PlexCompanion(backgroundthread.KillableThread):
 
     @staticmethod
     def _process_alexa(data):
+        if 'key' not in data or 'containerKey' not in data:
+            LOG.error('Received malformed Alexa data: %s', data)
+            return
         xml = PF.GetPlexMetadata(data['key'])
         try:
             xml[0].attrib
@@ -147,6 +150,9 @@ class PlexCompanion(backgroundthread.KillableThread):
 
     @staticmethod
     def _process_playlist(data):
+        if 'containerKey' not in data:
+            LOG.error('Received malformed playlist data: %s', data)
+            return
         # Get the playqueue ID
         _, container_key, query = PF.ParseContainerKey(data['containerKey'])
         try:
@@ -179,6 +185,9 @@ class PlexCompanion(backgroundthread.KillableThread):
         """
         Plex Companion client adjusted audio or subtitle stream
         """
+        if 'type' not in data:
+            LOG.error('Received malformed stream data: %s', data)
+            return
         playqueue = PQ.get_playqueue_from_type(
             v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[data['type']])
         pos = js.get_position(playqueue.playlistid)
@@ -201,6 +210,9 @@ class PlexCompanion(backgroundthread.KillableThread):
         """
         example data: {'playQueueID': '8475', 'commandID': '11'}
         """
+        if 'playQueueID' not in data:
+            LOG.error('Received malformed refresh data: %s', data)
+            return
         xml = PL.get_pms_playqueue(data['playQueueID'])
         if xml is None:
             return
