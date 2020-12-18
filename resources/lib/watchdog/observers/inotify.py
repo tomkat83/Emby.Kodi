@@ -70,14 +70,14 @@ import os
 import threading
 from .inotify_buffer import InotifyBuffer
 
-from watchdog.observers.api import (
+from .api import (
     EventEmitter,
     BaseObserver,
     DEFAULT_EMITTER_TIMEOUT,
     DEFAULT_OBSERVER_TIMEOUT
 )
 
-from watchdog.events import (
+from ..events import (
     DirDeletedEvent,
     DirModifiedEvent,
     DirMovedEvent,

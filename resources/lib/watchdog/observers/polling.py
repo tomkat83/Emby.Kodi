@@ -38,15 +38,15 @@ import os
 import threading
 from functools import partial
 
-from watchdog.utils.dirsnapshot import DirectorySnapshot, DirectorySnapshotDiff
-from watchdog.observers.api import (
+from ..utils.dirsnapshot import DirectorySnapshot, DirectorySnapshotDiff
+from .api import (
     EventEmitter,
     BaseObserver,
     DEFAULT_OBSERVER_TIMEOUT,
     DEFAULT_EMITTER_TIMEOUT
 )
 
-from watchdog.events import (
+from ..events import (
     DirMovedEvent,
     DirDeletedEvent,
     DirCreatedEvent,

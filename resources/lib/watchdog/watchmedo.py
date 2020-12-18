@@ -32,8 +32,8 @@ import logging
 from io import StringIO
 
 from argh import arg, aliases, ArghParser, expects_obj
-from watchdog.version import VERSION_STRING
-from watchdog.utils import WatchdogShutdown, load_class
+from .version import VERSION_STRING
+from .utils import WatchdogShutdown, load_class
 
 
 logging.basicConfig(level=logging.INFO)
@@ -162,7 +162,7 @@ def tricks_from(args):
     :param args:
         Command line argument options.
     """
-    from watchdog.observers import Observer
+    from .observers import Observer
 
     add_to_sys_path(path_split(args.python_path))
     observers = []
@@ -312,8 +312,8 @@ def log(args):
     :param args:
         Command line argument options.
     """
-    from watchdog.utils import echo
-    from watchdog.tricks import LoggerTrick
+    from .utils import echo
+    from .tricks import LoggerTrick
 
     if args.trace:
         echo.echo_class(LoggerTrick)
@@ -324,23 +324,23 @@ def log(args):
                           ignore_patterns=ignore_patterns,
                           ignore_directories=args.ignore_directories)
     if args.debug_force_polling:
-        from watchdog.observers.polling import PollingObserver as Observer
+        from .observers.polling import PollingObserver as Observer
     elif args.debug_force_kqueue:
-        from watchdog.observers.kqueue import KqueueObserver as Observer
+        from .observers.kqueue import KqueueObserver as Observer
     elif args.debug_force_winapi_async:
-        from watchdog.observers.read_directory_changes_async import\
+        from .observers.read_directory_changes_async import\
             WindowsApiAsyncObserver as Observer
     elif args.debug_force_winapi:
-        from watchdog.observers.read_directory_changes import\
+        from .observers.read_directory_changes import\
             WindowsApiObserver as Observer
     elif args.debug_force_inotify:
-        from watchdog.observers.inotify import InotifyObserver as Observer
+        from .observers.inotify import InotifyObserver as Observer
     elif args.debug_force_fsevents:
-        from watchdog.observers.fsevents import FSEventsObserver as Observer
+        from .observers.fsevents import FSEventsObserver as Observer
     else:
         # Automatically picks the most appropriate observer for the platform
         # on which it is running.
-        from watchdog.observers import Observer
+        from .observers import Observer
     observer = Observer(timeout=args.timeout)
     observe_with(observer, handler, args.directories, args.recursive)
 
@@ -420,15 +420,15 @@ def shell_command(args):
     :param args:
         Command line argument options.
     """
-    from watchdog.tricks import ShellCommandTrick
+    from .tricks import ShellCommandTrick
 
     if not args.command:
         args.command = None
 
     if args.debug_force_polling:
-        from watchdog.observers.polling import PollingObserver as Observer
+        from .observers.polling import PollingObserver as Observer
     else:
-        from watchdog.observers import Observer
+        from .observers import Observer
 
     patterns, ignore_patterns = parse_patterns(args.patterns,
                                                args.ignore_patterns)
@@ -510,11 +510,11 @@ def auto_restart(args):
     """
 
     if args.debug_force_polling:
-        from watchdog.observers.polling import PollingObserver as Observer
+        from .observers.polling import PollingObserver as Observer
     else:
-        from watchdog.observers import Observer
+        from .observers import Observer
 
-    from watchdog.tricks import AutoRestartTrick
+    from .tricks import AutoRestartTrick
     import signal
 
     if not args.directories:

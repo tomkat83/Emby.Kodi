@@ -19,8 +19,8 @@ import queue
 import threading
 from pathlib import Path
 
-from watchdog.utils import BaseThread
-from watchdog.utils.bricks import SkipRepeatsQueue
+from ..utils import BaseThread
+from ..utils.bricks import SkipRepeatsQueue
 
 DEFAULT_EMITTER_TIMEOUT = 1    # in seconds.
 DEFAULT_OBSERVER_TIMEOUT = 1   # in seconds.

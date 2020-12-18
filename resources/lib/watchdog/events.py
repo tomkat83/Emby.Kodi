@@ -88,7 +88,7 @@ Event Handler Classes
 import os.path
 import logging
 import re
-from watchdog.utils.patterns import match_any_paths
+from .utils.patterns import match_any_paths
 
 
 EVENT_TYPE_MOVED = 'moved'

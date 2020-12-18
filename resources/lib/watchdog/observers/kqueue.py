@@ -67,7 +67,7 @@ Collections and Utility Classes
 
 """
 
-from watchdog.utils import platform
+from ..utils import platform
 
 import threading
 import errno
@@ -78,16 +78,16 @@ import select
 
 from pathlib import Path
 
-from watchdog.observers.api import (
+from .api import (
     BaseObserver,
     EventEmitter,
     DEFAULT_OBSERVER_TIMEOUT,
     DEFAULT_EMITTER_TIMEOUT
 )
 
-from watchdog.utils.dirsnapshot import DirectorySnapshot
+from ..utils.dirsnapshot import DirectorySnapshot
 
-from watchdog.events import (
+from ..events import (
     DirMovedEvent,
     DirDeletedEvent,
     DirCreatedEvent,
