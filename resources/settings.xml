@@ -112,7 +112,7 @@
         <setting id="resumeJumpBack" type="slider" label="30521" default="10" range="0,1,120" option="int" visible="false"/>
         <setting type="sep" />
         <setting id="playType" type="enum" label="30002" values="Try Direct Path|Direct Play|Direct Stream|Force Transcode" default="0" />
-        <setting id="transcoderVideoQualities" type="enum" label="30160" values="420x420, 320kbps|576x320, 720kbps|720x480, 1.5Mbps|1024x768, 2Mbps|720p, 3Mbps|720p, 4Mbps|1080p, 8Mbps|1080p, 10Mbps|1080p, 12Mbps|1080p, 20Mbps|1080p, 40Mbps|4K, 35Mbps|4K, 50Mbps" default="10" /><!-- Video Quality if Transcoding necessary -->
+        <setting id="transcoderVideoQualities" type="enum" label="30160" values="720x480, 1.5Mbps|1024x768, 2Mbps|720p, 3Mbps|720p, 4Mbps|1080p, 8Mbps|1080p, 10Mbps|1080p, 12Mbps|1080p, 20Mbps|1080p, 40Mbps|4K, 35Mbps|4K, 50Mbps" default="10" /><!-- Video Quality if Transcoding necessary -->
         <setting id="auto_adjust_transcode_quality" label="30161" type="bool" default="false" /><!-- Auto-adjust transcoding quality (deactivate for Chromecast) -->
         <setting id="maxVideoQualities" type="enum" label="30143" values="320kbps|720kbps|1.5Mbps|2Mbps|3Mbps|4Mbps|8Mbps|10Mbps|12Mbps|20Mbps|40Mbps|deactivated" default="11" /><!-- Always transcode if video bitrate is above -->
         <setting id="transcodeH265" type="enum" label="30522" default="0" values="Disabled (default)|480p (and higher)|720p (and higher)|1080p (and higher)|4K" /><!-- Force transcode h265/HEVC -->
