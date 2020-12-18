@@ -14,6 +14,7 @@ decorators:
 - deprecated
 """
 
+from builtins import zip
 import functools
 import warnings
 import threading

@@ -85,6 +85,7 @@ Event Handler Classes
 
 """
 
+from builtins import object
 import os.path
 import logging
 import re

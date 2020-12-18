@@ -4,10 +4,12 @@
 Plex Companion listener
 """
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
 from logging import getLogger
 from re import sub
-from SocketServer import ThreadingMixIn
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from .. import utils, companion, json_rpc as js, clientinfo, variables as v
 from .. import app

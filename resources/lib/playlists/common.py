@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from logging import getLogger
-import Queue
+import queue
 import time
 import os
 import hashlib
@@ -188,7 +191,7 @@ class PlaylistObserver(Observer):
         while time.time() - start < timeout:
             try:
                 new_event, new_watch = event_queue.get(block=False)
-            except Queue.Empty:
+            except queue.Empty:
                 app.APP.monitor.waitForAbort(0.2)
             else:
                 event_queue.task_done()

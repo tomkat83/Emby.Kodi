@@ -20,6 +20,12 @@ Copyright (C) 2010 Hiroki Ohtani(liris)
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import chr
+from builtins import range
+from builtins import object
 import socket
 
 try:
@@ -35,7 +41,7 @@ except ImportError:
 
     HAVE_SSL = False
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 import os
 import array
 import struct
@@ -228,7 +234,7 @@ def create_connection(url, timeout=None, **options):
 
 
 _MAX_INTEGER = (1 << 32) - 1
-_AVAILABLE_KEY_CHARS = range(0x21, 0x2f + 1) + range(0x3a, 0x7e + 1)
+_AVAILABLE_KEY_CHARS = list(range(0x21, 0x2f + 1)) + list(range(0x3a, 0x7e + 1))
 _MAX_CHAR_BYTE = (1 << 8) - 1
 
 # ref. Websocket gets an update, and it breaks stuff.
@@ -308,7 +314,7 @@ class ABNF(object):
 
         opcode: operation code. please see OPCODE_XXX.
         """
-        if opcode == ABNF.OPCODE_TEXT and isinstance(data, unicode):
+        if opcode == ABNF.OPCODE_TEXT and isinstance(data, str):
             data = utils.try_encode(data)
         # mask must be set if send data from client
         return ABNF(1, 0, 0, 0, opcode, 1, data)
@@ -358,7 +364,7 @@ class ABNF(object):
         """
         _m = array.array("B", mask_key)
         _d = array.array("B", data)
-        for i in xrange(len(_d)):
+        for i in range(len(_d)):
             _d[i] ^= _m[i % 4]
         return _d.tostring()
 
@@ -529,7 +535,7 @@ class WebSocket(object):
 
     @staticmethod
     def _validate_header(headers, key):
-        for k, v in _HEADERS_TO_CHECK.iteritems():
+        for k, v in _HEADERS_TO_CHECK.items():
             r = headers.get(k, None)
             if not r:
                 return False
@@ -882,11 +888,11 @@ class WebSocketApp(object):
                     if data is None or self.keep_running is False:
                         break
                     self._callback(self.on_message, data)
-                except Exception, e:
+                except Exception as e:
                     if "timed out" not in e.args[0]:
                         raise e
 
-        except Exception, e:
+        except Exception as e:
             self._callback(self.on_error, e)
         finally:
             if thread:
@@ -899,7 +905,7 @@ class WebSocketApp(object):
         if callback:
             try:
                 callback(self, *args)
-            except Exception, e:
+            except Exception as e:
                 LOG.error(e)
                 _, _, tb = sys.exc_info()
                 traceback.print_tb(tb)

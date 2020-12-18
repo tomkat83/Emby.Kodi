@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import range
 from logging import getLogger
-import Queue
+import queue
 
 import xbmcgui
 
@@ -80,7 +83,7 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
     @utils.log_time
     def process_new_and_changed_items(self, section_queue, processing_queue):
         LOG.debug('Start working')
-        get_metadata_queue = Queue.Queue(maxsize=BACKLOG_QUEUE_SIZE)
+        get_metadata_queue = queue.Queue(maxsize=BACKLOG_QUEUE_SIZE)
         scanner_thread = FillMetadataQueue(self.repair,
                                            section_queue,
                                            get_metadata_queue,
@@ -182,7 +185,7 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
             LOG.debug('Exiting threaded_get_generators')
 
     def full_library_sync(self):
-        section_queue = Queue.Queue()
+        section_queue = queue.Queue()
         processing_queue = bg.ProcessingQueue(maxsize=XML_QUEUE_SIZE)
         kinds = [
             (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_MOVIE),

@@ -34,6 +34,7 @@ Functions
 .. autofunction:: filter_paths
 """
 
+from builtins import map
 from fnmatch import fnmatch, fnmatchcase
 
 __all__ = ['match_path',

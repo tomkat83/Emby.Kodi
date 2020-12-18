@@ -5,6 +5,7 @@ Collection of functions using the Kodi JSON RPC interface.
 See http://kodi.wiki/view/JSON-RPC_API
 """
 from __future__ import absolute_import, division, unicode_literals
+from builtins import object
 from json import loads, dumps
 from xbmc import executeJSONRPC
 
@@ -85,7 +86,7 @@ def get_player_ids():
     Returns a list of all the active Kodi player ids (usually 3) as int
     """
     ret = []
-    for player in get_players().values():
+    for player in list(get_players().values()):
         ret.append(player['playerid'])
     return ret
 

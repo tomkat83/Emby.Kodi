@@ -20,7 +20,7 @@ def try_decode(string, encoding='utf-8'):
     fails with e.g. Android TV's Python, which does not accept arguments for
     string.encode()
     """
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         # already decoded
         return string
     try:

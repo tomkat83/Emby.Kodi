@@ -4,6 +4,9 @@
 Used to kick off Kodi playback
 """
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from logging import getLogger
 from threading import Thread
 import datetime
@@ -296,7 +299,7 @@ def resume_dialog(resume):
     resume = datetime.timedelta(seconds=resume)
     LOG.debug('Showing PKC resume dialog for resume: %s', resume)
     answ = utils.dialog('contextmenu',
-                        [utils.lang(12022).replace('{0:s}', '{0}').format(unicode(resume)),
+                        [utils.lang(12022).replace('{0:s}', '{0}').format(str(resume)),
                          utils.lang(12021)])
     if answ == -1:
         return

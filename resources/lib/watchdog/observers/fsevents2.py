@@ -19,7 +19,11 @@
 :synopsis: FSEvents based emitter implementation.
 :platforms: Mac OS X
 """
+from __future__ import absolute_import
 
+from builtins import hex
+from builtins import zip
+from builtins import object
 import os
 import logging
 import unicodedata
@@ -45,7 +49,7 @@ from ..observers.api import (
 
 # pyobjc
 import AppKit
-from FSEvents import (
+from .FSEvents import (
     FSEventStreamCreate,
     CFRunLoopGetCurrent,
     FSEventStreamScheduleWithRunLoop,
@@ -57,7 +61,7 @@ from FSEvents import (
     FSEventStreamRelease,
 )
 
-from FSEvents import (
+from .FSEvents import (
     kCFAllocatorDefault,
     kCFRunLoopDefaultMode,
     kFSEventStreamEventIdSinceNow,

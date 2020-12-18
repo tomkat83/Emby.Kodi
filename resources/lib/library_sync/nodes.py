@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import urllib.request, urllib.parse, urllib.error
 import copy
 
 from ..utils import etree
@@ -56,7 +59,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.urlencode({'sort': 'rating:desc'})),
+                      % urllib.parse.urlencode({'sort': 'rating:desc'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_MOVIE,
@@ -84,7 +87,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.urlencode({'sort': 'random'})),
+                      % urllib.parse.urlencode({'sort': 'random'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_MOVIE,
@@ -154,7 +157,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.urlencode({'sort': 'rating:desc'})),
+                      % urllib.parse.urlencode({'sort': 'rating:desc'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_SHOW,
@@ -182,7 +185,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.urlencode({'sort': 'random'})),
+                      % urllib.parse.urlencode({'sort': 'random'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_SHOW,
@@ -192,7 +195,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}/recentlyViewed&%s'
-                      % urllib.urlencode({'type': v.PLEX_TYPE_NUMBER_FROM_PLEX_TYPE[v.PLEX_TYPE_EPISODE]})),
+                      % urllib.parse.urlencode({'type': v.PLEX_TYPE_NUMBER_FROM_PLEX_TYPE[v.PLEX_TYPE_EPISODE]})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_EPISODE,
@@ -236,7 +239,7 @@ def node_pms(section, node_name, args):
     else:
         folder = False
     xml = etree.Element('node',
-                        attrib={'order': unicode(section.order),
+                        attrib={'order': str(section.order),
                                 'type': 'folder' if folder else 'filter'})
     etree.SubElement(xml, 'label').text = node_name
     etree.SubElement(xml, 'icon').text = ICON_PATH
@@ -249,7 +252,7 @@ def node_ondeck(section, node_name):
     """
     For movies only - returns in-progress movies sorted by last played
     """
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -270,7 +273,7 @@ def node_ondeck(section, node_name):
 
 def node_recent(section, node_name):
     xml = etree.Element('node',
-                        attrib={'order': unicode(section.order),
+                        attrib={'order': str(section.order),
                                 'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -299,7 +302,7 @@ def node_recent(section, node_name):
 
 
 def node_all(section, node_name):
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -316,7 +319,7 @@ def node_all(section, node_name):
 
 
 def node_recommended(section, node_name):
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -337,7 +340,7 @@ def node_recommended(section, node_name):
 
 
 def node_genres(section, node_name):
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -355,7 +358,7 @@ def node_genres(section, node_name):
 
 
 def node_sets(section, node_name):
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -374,7 +377,7 @@ def node_sets(section, node_name):
 
 
 def node_random(section, node_name):
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',
@@ -392,7 +395,7 @@ def node_random(section, node_name):
 
 
 def node_lastplayed(section, node_name):
-    xml = etree.Element('node', attrib={'order': unicode(section.order),
+    xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
     rule = etree.SubElement(xml, 'rule', attrib={'field': 'tag',

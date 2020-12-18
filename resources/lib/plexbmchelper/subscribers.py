@@ -5,6 +5,10 @@ Manages getting playstate from Kodi and sending it to the PMS as well as
 subscribed Plex Companion clients.
 """
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 from logging import getLogger
 from threading import Thread
 
@@ -174,7 +178,7 @@ class SubscriptionMgr(object):
         Returns the string 'key1="value1" key2="value2" ...' for dictionary
         """
         answ = ''
-        for key, value in dictionary.iteritems():
+        for key, value in dictionary.items():
             answ += '%s="%s" ' % (key, value)
         return answ
 
@@ -317,7 +321,7 @@ class SubscriptionMgr(object):
         Hence we'd have a missmatch between the state.PLAYER_STATES and our
         playqueues.
         """
-        for player in players.values():
+        for player in list(players.values()):
             info = app.PLAYSTATE.player_states[player['playerid']]
             playqueue = PQ.PLAYQUEUES[player['playerid']]
             position = self._get_correct_position(info, playqueue)
@@ -342,7 +346,7 @@ class SubscriptionMgr(object):
             # Get all the active/playing Kodi players (video, audio, pictures)
             players = js.get_players()
             # Update the PKC info with what's playing on the Kodi side
-            for player in players.values():
+            for player in list(players.values()):
                 update_player_info(player['playerid'])
             # Check whether we can use the CURRENT info or whether PKC is still
             # initializing
@@ -352,12 +356,12 @@ class SubscriptionMgr(object):
             self._notify_server(players)
             if self.subscribers:
                 msg = self.msg(players)
-                for subscriber in self.subscribers.values():
+                for subscriber in list(self.subscribers.values()):
                     subscriber.send_update(msg)
             self.lastplayers = players
 
     def _notify_server(self, players):
-        for typus, player in players.iteritems():
+        for typus, player in players.items():
             self._send_pms_notification(
                 player['playerid'], self._get_pms_params(player['playerid']))
             try:
@@ -365,7 +369,7 @@ class SubscriptionMgr(object):
             except KeyError:
                 pass
         # Process the players we have left (to signal a stop)
-        for player in self.lastplayers.values():
+        for player in list(self.lastplayers.values()):
             self.last_params['state'] = 'stopped'
             self._send_pms_notification(player['playerid'], self.last_params)
 
@@ -442,13 +446,13 @@ class SubscriptionMgr(object):
         (Calls the cleanup() method of the subscriber)
         """
         with app.APP.lock_subscriber:
-            for subscriber in self.subscribers.values():
+            for subscriber in list(self.subscribers.values()):
                 if subscriber.uuid == uuid or subscriber.host == uuid:
                     subscriber.cleanup()
                     del self.subscribers[subscriber.uuid]
 
     def _cleanup(self):
-        for subscriber in self.subscribers.values():
+        for subscriber in list(self.subscribers.values()):
             if subscriber.age > 30:
                 subscriber.cleanup()
                 del self.subscribers[subscriber.uuid]

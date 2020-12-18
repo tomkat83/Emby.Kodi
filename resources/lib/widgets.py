@@ -7,6 +7,7 @@ Loads of different functions called in SEPARATE Python instances through
 e.g. plugin://... calls. Hence be careful to only rely on window variables.
 """
 from __future__ import absolute_import, division, unicode_literals
+from builtins import str
 from logging import getLogger
 
 import xbmc
@@ -296,7 +297,7 @@ def prepare_listitem(item):
         if "imdbnumber" not in properties and "imdbnumber" in item:
             properties["imdbnumber"] = item["imdbnumber"]
         if "imdbnumber" not in properties and "uniqueid" in item:
-            for value in item["uniqueid"].values():
+            for value in list(item["uniqueid"].values()):
                 if value.startswith("tt"):
                     properties["imdbnumber"] = value
 
@@ -421,8 +422,8 @@ def prepare_listitem(item):
             item["thumbnail"] = art["thumb"]
 
         # clean art
-        for key, value in art.iteritems():
-            if not isinstance(value, (str, unicode)):
+        for key, value in art.items():
+            if not isinstance(value, str):
                 art[key] = ""
             elif value:
                 art[key] = get_clean_image(value)
@@ -473,7 +474,7 @@ def create_listitem(item, as_tuple=True, offscreen=True,
             nodetype = "Music"
 
         # extra properties
-        for key, value in item["extraproperties"].iteritems():
+        for key, value in item["extraproperties"].items():
             liz.setProperty(key, value)
 
         # video infolabels

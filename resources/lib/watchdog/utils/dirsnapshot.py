@@ -44,6 +44,8 @@ Classes
 
 """
 
+from builtins import str
+from builtins import object
 import errno
 import os
 from stat import S_ISDIR

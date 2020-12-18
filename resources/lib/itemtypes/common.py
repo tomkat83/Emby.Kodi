@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from builtins import object
 from logging import getLogger
 from ntpath import dirname
 
@@ -162,7 +163,7 @@ class ItemBase(object):
         Returns a dict of the Kodi ids: {<provider>: <kodi_unique_id>}
         """
         kodi_unique_ids = api.guids.copy()
-        for provider, provider_id in api.guids.iteritems():
+        for provider, provider_id in api.guids.items():
             kodi_unique_ids[provider] = self.kodidb.add_uniqueid(
                 kodi_id,
                 api.kodi_type,

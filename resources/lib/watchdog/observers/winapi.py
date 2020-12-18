@@ -36,6 +36,7 @@
 # Portions of this code were taken from pyfilesystem, which uses the above
 # new BSD license.
 
+from builtins import object
 from __future__ import with_statement
 
 import ctypes.wintypes
@@ -308,7 +309,7 @@ def read_directory_changes(handle, recursive):
 
     # Python 2/3 compat
     try:
-        int_class = long
+        int_class = int
     except NameError:
         int_class = int
     return event_buffer.raw, int_class(nbytes.value)

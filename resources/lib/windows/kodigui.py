@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from builtins import zip
+from builtins import str
+from builtins import range
+from builtins import object
 import xbmc
 import xbmcgui
 import time
@@ -12,7 +16,7 @@ from .. import app
 MONITOR = None
 
 
-class BaseFunctions:
+class BaseFunctions(object):
     xmlFile = ''
     path = ''
     theme = ''
@@ -187,7 +191,7 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
         pass
 
 
-class ControlledBase:
+class ControlledBase(object):
     def doModal(self):
         self.show()
         self.wait()
@@ -242,10 +246,10 @@ class ManagedListItem(object):
         self._manager = None
         self._valid = True
         if properties:
-            for k, v in properties.items():
+            for k, v in list(properties.items()):
                 self.setProperty(k, v)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self._valid
 
     @property
@@ -281,7 +285,7 @@ class ManagedListItem(object):
         self.listItem.setIconImage(self.iconImage)
         self.listItem.setThumbnailImage(self.thumbnailImage)
         self.listItem.setPath(self.path)
-        for k in self._manager._properties.keys():
+        for k in list(self._manager._properties.keys()):
             self.listItem.setProperty(k, self.properties.get(k) or '')
 
     def clear(self):
@@ -615,9 +619,9 @@ class ManagedControlList(object):
     def getViewRange(self):
         viewPosition = self.getViewPosition()
         selected = self.getSelectedPosition()
-        return range(max(selected - viewPosition, 0),
+        return list(range(max(selected - viewPosition, 0),
                      min(selected + (self._maxViewIndex - viewPosition) + 1,
-                         self.size() - 1))
+                         self.size() - 1)))
 
     def positionIsValid(self, pos):
         return 0 <= pos < self.size()
@@ -751,7 +755,7 @@ class MultiWindow(object):
         self._current.setProperty(key, value)
 
     def _onFirstInit(self):
-        for k, v in self._properties.items():
+        for k, v in list(self._properties.items()):
             self._current.setProperty(k, v)
         self.onFirstInit()
 
@@ -897,7 +901,7 @@ class SafeControlEdit(object):
         self._setText(self.getText()[:-1])
 
 
-class PropertyTimer():
+class PropertyTimer(object):
     def __init__(self, window_id, timeout, property_, value='', init_value='1', addon_id=None, callback=None):
         self._winID = window_id
         self._timeout = timeout
@@ -976,7 +980,7 @@ class PropertyTimer():
             self._start()
 
 
-class WindowProperty():
+class WindowProperty(object):
     def __init__(self, win, prop, val='1', end=None):
         self.win = win
         self.prop = prop
@@ -995,7 +999,7 @@ class WindowProperty():
         self.win.setProperty(self.prop, self.end or self.old)
 
 
-class GlobalProperty():
+class GlobalProperty(object):
     def __init__(self, prop, val='1', end=None):
         import xbmcaddon
         self._addonID = xbmcaddon.Addon().getAddonInfo('id')

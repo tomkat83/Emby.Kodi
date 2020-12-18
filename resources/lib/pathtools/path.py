@@ -39,6 +39,7 @@ Functions
 .. autofunction:: parent_dir_path
 """
 
+from builtins import next
 import os.path
 from functools import partial
 
@@ -72,7 +73,7 @@ def get_dir_walker(recursive, topdown=True, followlinks=False):
             try:
                 yield next(os.walk(path, topdown=topdown, followlinks=followlinks))
             except NameError:
-                yield os.walk(path, topdown=topdown, followlinks=followlinks).next() #IGNORE:E1101
+                yield next(os.walk(path, topdown=topdown, followlinks=followlinks)) #IGNORE:E1101
     return walk
 
 

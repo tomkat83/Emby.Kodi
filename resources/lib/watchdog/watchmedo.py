@@ -22,6 +22,8 @@
 :synopsis: ``watchmedo`` shell script utility.
 """
 
+from future import standard_library
+standard_library.install_aliases()
 import os.path
 import sys
 import yaml
@@ -29,10 +31,10 @@ import time
 import logging
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
     try:
-        from StringIO import StringIO
+        from io import StringIO
     except ImportError:
         from io import StringIO
 

@@ -2,9 +2,12 @@
 
 ###############################################################################
 from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import logging
 from sys import argv
-from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 
 import xbmc
 import xbmcgui
@@ -23,7 +26,7 @@ LOG = logging.getLogger('PLEX.default')
 HANDLE = int(argv[1])
 
 
-class Main():
+class Main(object):
     # MAIN ENTRY POINT
     # @utils.profiling()
     def __init__(self):
@@ -33,7 +36,7 @@ class Main():
         arguments = unicode_paths.decode(argv[2])
         path = unicode_paths.decode(argv[0])
         # Ensure unicode
-        for key, value in params.iteritems():
+        for key, value in params.items():
             params[key.decode('utf-8')] = params.pop(key)
             params[key] = value.decode('utf-8')
         mode = params.get('mode', '')

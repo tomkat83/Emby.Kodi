@@ -32,6 +32,8 @@ Example:
   def my_function(args):
       pass
 """
+from builtins import map
+from builtins import zip
 import inspect
 import sys
 

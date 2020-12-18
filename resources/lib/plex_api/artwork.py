@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from builtins import object
 from logging import getLogger
 
 from ..kodi_db import KodiVideoDB, KodiMusicDB
@@ -71,7 +72,7 @@ class Artwork(object):
             # either the season or the show
             return artworks
         for kodi_artwork, plex_artwork in \
-                v.KODI_TO_PLEX_ARTWORK_EPISODE.iteritems():
+                v.KODI_TO_PLEX_ARTWORK_EPISODE.items():
             art = self.one_artwork(plex_artwork)
             if art:
                 artworks[kodi_artwork] = art
@@ -109,7 +110,7 @@ class Artwork(object):
                 with KodiMusicDB(lock=False) as kodidb:
                     return kodidb.get_art(kodi_id, kodi_type)
 
-        for kodi_artwork, plex_artwork in v.KODI_TO_PLEX_ARTWORK.iteritems():
+        for kodi_artwork, plex_artwork in v.KODI_TO_PLEX_ARTWORK.items():
             art = self.one_artwork(plex_artwork)
             if art:
                 artworks[kodi_artwork] = art
