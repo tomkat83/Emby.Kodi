@@ -4,11 +4,6 @@
 Manages getting playstate from Kodi and sending it to the PMS as well as
 subscribed Plex Companion clients.
 """
-from __future__ import absolute_import, division, unicode_literals
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import object
 from logging import getLogger
 from threading import Thread
 

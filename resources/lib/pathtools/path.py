@@ -38,8 +38,6 @@ Functions
 .. autofunction:: real_absolute_path
 .. autofunction:: parent_dir_path
 """
-
-from builtins import next
 import os.path
 from functools import partial
 

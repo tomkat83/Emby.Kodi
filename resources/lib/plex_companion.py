@@ -3,9 +3,6 @@
 """
 The Plex Companion master python file
 """
-from __future__ import absolute_import, division, unicode_literals
-from future import standard_library
-standard_library.install_aliases()
 from logging import getLogger
 from threading import Thread
 from queue import Empty

@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
-from builtins import object
 from .. import variables as v
-
 
 class TVShows(object):
     def add_show(self, plex_id, checksum, section_id, kodi_id, kodi_pathid,

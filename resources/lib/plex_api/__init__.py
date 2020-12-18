@@ -3,8 +3,6 @@
 """
 plex_api interfaces with all Plex Media Server (and plex.tv) xml responses
 """
-from __future__ import absolute_import, division, unicode_literals
-
 from .base import Base
 from .artwork import Artwork
 from .file import File

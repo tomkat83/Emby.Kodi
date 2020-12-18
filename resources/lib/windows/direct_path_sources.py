@@ -5,9 +5,6 @@
 :synopsis: Prompts the user to add network paths and username passwords for
            e.g. smb paths
 """
-from __future__ import absolute_import, division, unicode_literals
-from future import standard_library
-standard_library.install_aliases()
 from logging import getLogger
 import re
 import socket

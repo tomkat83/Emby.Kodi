@@ -1,10 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
-from builtins import zip
-from builtins import str
-from builtins import range
-from builtins import object
 import xbmc
 import xbmcgui
 import time

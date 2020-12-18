@@ -3,7 +3,6 @@
 """
 Create and delete playlists on the Plex side of things
 """
-from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 
 from .common import PlaylistError

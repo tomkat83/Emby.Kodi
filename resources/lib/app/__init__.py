@@ -4,7 +4,6 @@
 Used to save PKC's application state and share between modules. Be careful
 if you invoke another PKC Python instance (!!) when e.g. PKC.movies is called
 """
-from __future__ import absolute_import, division, unicode_literals
 from .account import Account
 from .application import App
 from .connection import Connection

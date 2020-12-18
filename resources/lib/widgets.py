@@ -6,8 +6,6 @@ Code from script.module.metadatautils, kodidb.py
 Loads of different functions called in SEPARATE Python instances through
 e.g. plugin://... calls. Hence be careful to only rely on window variables.
 """
-from __future__ import absolute_import, division, unicode_literals
-from builtins import str
 from logging import getLogger
 
 import xbmc

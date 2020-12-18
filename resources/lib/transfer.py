@@ -4,9 +4,6 @@
 Used to shovel data from separate Kodi Python instances to the main thread
 and vice versa.
 """
-from __future__ import absolute_import, division, unicode_literals
-from builtins import str
-from builtins import object
 from logging import getLogger
 import json
 

@@ -3,7 +3,6 @@
 """
 Create and delete playlists on the Kodi side of things
 """
-from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import re
 

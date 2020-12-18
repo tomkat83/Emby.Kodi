@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
-from builtins import str
-from builtins import range
 from logging import getLogger
 from re import sub
 from string import punctuation
