@@ -94,8 +94,7 @@ class Section(object):
                 "'section_type': '{self.section_type}', "
                 "'sync_to_kodi': {self.sync_to_kodi}, "
                 "'last_sync': {self.last_sync}"
-                "}}").format(self=self).encode('utf-8')
-    __str__ = __repr__
+                "}}").format(self=self)
 
     def __bool__(self):
         return (self.section_id is not None and

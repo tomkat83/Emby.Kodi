@@ -86,12 +86,8 @@ class Playqueue_Object(object):
                 "'repeat': {self.repeat}, "
                 "'kodi_playlist_playback': {self.kodi_playlist_playback}, "
                 "'pkc_edit': {self.pkc_edit}, ".format(self=self))
-        answ = answ.encode('utf-8')
         # Since list.__repr__ will return string, not unicode
-        return answ + b"'items': {self.items}}}".format(self=self)
-
-    def __str__(self):
-        return self.__repr__()
+        return answ + "'items': {self.items}}}".format(self=self)
 
     def is_pkc_clear(self):
         """
@@ -201,7 +197,7 @@ class PlaylistItem(object):
     def uri(self):
         return self._uri
 
-    def __unicode__(self):
+    def __repr__(self):
         return ("{{"
                 "'id': {self.id}, "
                 "'plex_id': {self.plex_id}, "
@@ -216,9 +212,6 @@ class PlaylistItem(object):
                 "'offset': {self.offset}, "
                 "'force_transcode': {self.force_transcode}, "
                 "'part': {self.part}".format(self=self))
-
-    def __repr__(self):
-        return self.__unicode__().encode('utf-8')
 
     def plex_stream_index(self, kodi_stream_index, stream_type):
         """

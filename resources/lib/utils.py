@@ -267,13 +267,10 @@ class AttributeDict(dict):
     def __setattr__(self, attr, value):
         self[attr] = value
 
-    def __unicode__(self):
+    def __repr__(self):
         return '<{0}:{1}:{2}>'.format(self.__class__.__name__,
                                       self.id,
                                       self.get('title', 'None'))
-
-    def __repr__(self):
-        return self.__unicode__().encode('utf-8')
 
 
 def cast(func, value):

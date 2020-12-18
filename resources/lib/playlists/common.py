@@ -64,7 +64,7 @@ class Playlist(object):
         self.kodi_type = None
         self.kodi_hash = None
 
-    def __unicode__(self):
+    def __repr__(self):
         return ("{{"
                 "'plex_id': {self.plex_id}, "
                 "'plex_name': '{self.plex_name}', "
@@ -74,12 +74,6 @@ class Playlist(object):
                 "'plex_updatedat': {self.plex_updatedat}, "
                 "'kodi_hash': '{self.kodi_hash}'"
                 "}}").format(self=self)
-
-    def __repr__(self):
-        return self.__unicode__().encode('utf-8')
-
-    def __str__(self):
-        return self.__repr__()
 
     def __bool__(self):
         return (self.plex_id and self.plex_updatedat and self.plex_name and
