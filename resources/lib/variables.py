@@ -103,26 +103,14 @@ MIN_DB_VERSION = '2.6.8'
 
 # Supported databases - version numbers in tuples should decrease
 SUPPORTED_VIDEO_DB = {
-    # Kodi 17 Krypton:
-    17: (107, ),
-    # Kodi 18 Leia:
-    18: (116, 113),
     # Kodi 19 - EXTREMLY EXPERIMENTAL!
-    19: (116, 113)
+    19: (119, )
 }
 SUPPORTED_MUSIC_DB = {
-    # Kodi 17 Krypton:
-    17: (60, ),
-    # Kodi 18 Leia:
-    18: (72, ),
     # Kodi 19 - EXTREMLY EXPERIMENTAL!
-    19: (72, )
+    19: (82, )
 }
 SUPPORTED_TEXTURE_DB = {
-    # Kodi 17 Krypton:
-    17: (13, ),
-    # Kodi 18 Leia:
-    18: (13, ),
     # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (13, )
 }
@@ -707,7 +695,7 @@ def database_paths():
     unsupported version
     '''
     # Check Kodi version first
-    if KODIVERSION not in (17, 18, 19):
+    if KODIVERSION not in (19, ):
         raise RuntimeError('Kodiversion %s not supported by PKC' % KODIVERSION)
 
     database_path = try_decode(xbmc.translatePath('special://database'))
