@@ -5,6 +5,7 @@ import sys
 import platform
 
 import xbmc
+import xbmcvfs
 from xbmcaddon import Addon
 
 from . import path_ops
@@ -41,13 +42,13 @@ ADDON_NAME = 'PlexKodiConnect'
 ADDON_ID = 'plugin.video.plexkodiconnect'
 ADDON_VERSION = _ADDON.getAddonInfo('version')
 ADDON_PATH = try_decode(_ADDON.getAddonInfo('path'))
-ADDON_FOLDER = try_decode(xbmc.translatePath('special://home'))
-ADDON_PROFILE = try_decode(xbmc.translatePath(_ADDON.getAddonInfo('profile')))
+ADDON_FOLDER = try_decode(xbmcvfs.translatePath('special://home'))
+ADDON_PROFILE = try_decode(xbmcvfs.translatePath(_ADDON.getAddonInfo('profile')))
 
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 KODIVERSION = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
 KODILONGVERSION = xbmc.getInfoLabel('System.BuildVersion')
-KODI_PROFILE = try_decode(xbmc.translatePath("special://profile"))
+KODI_PROFILE = try_decode(xbmcvfs.translatePath("special://profile"))
 
 if xbmc.getCondVisibility('system.platform.osx'):
     DEVICE = "MacOSX"
@@ -120,10 +121,10 @@ DB_MUSIC_VERSION = None
 DB_MUSIC_PATH = None
 DB_TEXTURE_VERSION = None
 DB_TEXTURE_PATH = None
-DB_PLEX_PATH = try_decode(xbmc.translatePath("special://database/plex.db"))
-DB_PLEX_COPY_PATH = try_decode(xbmc.translatePath("special://database/plex-copy.db"))
+DB_PLEX_PATH = try_decode(xbmcvfs.translatePath("special://database/plex.db"))
+DB_PLEX_COPY_PATH = try_decode(xbmcvfs.translatePath("special://database/plex-copy.db"))
 
-EXTERNAL_SUBTITLE_TEMP_PATH = try_decode(xbmc.translatePath(
+EXTERNAL_SUBTITLE_TEMP_PATH = try_decode(xbmcvfs.translatePath(
     "special://profile/addon_data/%s/temp/" % ADDON_ID))
 
 
@@ -698,7 +699,7 @@ def database_paths():
     if KODIVERSION not in (19, ):
         raise RuntimeError('Kodiversion %s not supported by PKC' % KODIVERSION)
 
-    database_path = try_decode(xbmc.translatePath('special://database'))
+    database_path = try_decode(xbmcvfs.translatePath('special://database'))
     thismodule = sys.modules[__name__]
     types = (('MyVideos%s.db', SUPPORTED_VIDEO_DB,
               'DB_VIDEO_VERSION', 'DB_VIDEO_PATH'),

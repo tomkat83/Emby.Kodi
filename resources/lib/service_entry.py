@@ -3,6 +3,7 @@
 import logging
 import sys
 import xbmc
+import xbmcvfs
 
 from . import utils, clientinfo
 from . import initialsetup
@@ -37,7 +38,7 @@ class Service(object):
     def __init__(self):
         self._init_done = False
         # Detect switch of Kodi profile - a second instance of PKC is started
-        self.profile = xbmc.translatePath('special://profile')
+        self.profile = xbmcvfs.translatePath('special://profile')
         utils.window('plex_kodi_profilepath', value=self.profile)
 
         # Kodi Version supported by PKC?

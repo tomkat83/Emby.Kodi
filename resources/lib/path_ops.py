@@ -20,7 +20,6 @@ from os import path  # allows to use path_ops.path.join, for example
 from distutils import dir_util
 import re
 
-import xbmc
 import xbmcvfs
 
 from .tools import unicode_paths
@@ -56,8 +55,7 @@ def translate_path(path):
     e.g. Converts 'special://masterprofile/script_data'
     -> '/home/user/XBMC/UserData/script_data' on Linux.
     """
-    translated = xbmc.translatePath(path.encode(KODI_ENCODING, 'strict'))
-    return translated.decode(KODI_ENCODING, 'strict')
+    return xbmcvfs.translatePath(path)
 
 
 def exists(path):
@@ -65,7 +63,7 @@ def exists(path):
     Returns True if the path [unicode] exists. Folders NEED a trailing slash or
     backslash!!
     """
-    return xbmcvfs.exists(path.encode(KODI_ENCODING, 'strict')) == 1
+    return xbmcvfs.exists(path) == 1
 
 
 def rmtree(path, *args, **kwargs):
@@ -79,12 +77,12 @@ def rmtree(path, *args, **kwargs):
     is false and onerror is None, an exception is raised.
 
     """
-    return shutil.rmtree(encode_path(path), *args, **kwargs)
+    return shutil.rmtree(path, *args, **kwargs)
 
 
 def copyfile(src, dst):
     """Copy data from src to dst"""
-    return shutil.copyfile(encode_path(src), encode_path(dst))
+    return shutil.copyfile(src, dst)
 
 
 def makedirs(path, *args, **kwargs):
@@ -94,7 +92,7 @@ def makedirs(path, *args, **kwargs):
     mkdir, except that any intermediate path segment (not just the rightmost)
     will be created if it does not exist.  This is recursive.
     """
-    return os.makedirs(encode_path(path), *args, **kwargs)
+    return os.makedirs(path, *args, **kwargs)
 
 
 def remove(path):
@@ -106,7 +104,7 @@ def remove(path):
     removed but the storage allocated to the file is not made available until
     the original file is no longer in use.
     """
-    return os.remove(encode_path(path))
+    return os.remove(path)
 
 
 def walk(top, topdown=True, onerror=None, followlinks=False):
@@ -169,14 +167,14 @@ def walk(top, topdown=True, onerror=None, followlinks=False):
 
     """
     # Get all the results from os.walk and store them in a list
-    walker = list(os.walk(encode_path(top),
+    walker = list(os.walk(top,
                           topdown,
                           onerror,
                           followlinks))
     for top, dirs, nondirs in walker:
-        yield (decode_path(top),
-               [decode_path(x) for x in dirs],
-               [decode_path(x) for x in nondirs])
+        yield (top,
+               [x for x in dirs],
+               [x for x in nondirs])
 
 
 def copy_tree(src, dst, *args, **kwargs):
@@ -200,8 +198,6 @@ def copy_tree(src, dst, *args, **kwargs):
     (the default), the destination of the symlink will be copied.
     'update' and 'verbose' are the same as for 'copy_file'.
     """
-    src = encode_path(src)
-    dst = encode_path(dst)
     return dir_util.copy_tree(src, dst, *args, **kwargs)
 
 
