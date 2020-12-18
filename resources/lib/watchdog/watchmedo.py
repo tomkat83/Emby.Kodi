@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 #
 # Copyright 2011 Yesudeep Mangalapilly <yesudeep@gmail.com>
-# Copyright 2012 Google, Inc.
+# Copyright 2012 Google, Inc & contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,28 +18,22 @@
 """
 :module: watchdog.watchmedo
 :author: yesudeep@google.com (Yesudeep Mangalapilly)
+:author: contact@tiger-222.fr (Mickaël Schoentgen)
 :synopsis: ``watchmedo`` shell script utility.
 """
 
-from future import standard_library
-standard_library.install_aliases()
+import errno
+import os
 import os.path
 import sys
 import yaml
 import time
 import logging
-
-try:
-    from io import StringIO
-except ImportError:
-    try:
-        from io import StringIO
-    except ImportError:
-        from io import StringIO
+from io import StringIO
 
 from argh import arg, aliases, ArghParser, expects_obj
-from .version import VERSION_STRING
-from .utils import load_class
+from watchdog.version import VERSION_STRING
+from watchdog.utils import WatchdogShutdown, load_class
 
 
 logging.basicConfig(level=logging.INFO)
@@ -49,7 +42,7 @@ CONFIG_KEY_TRICKS = 'tricks'
 CONFIG_KEY_PYTHON_PATH = 'python-path'
 
 
-def path_split(pathname_spec, separator=os.path.sep):
+def path_split(pathname_spec, separator=os.pathsep):
     """
     Splits a pathname specification separated by an OS-dependent separator.
 
@@ -84,11 +77,8 @@ def load_config(tricks_file_pathname):
     :returns:
         A dictionary of configuration information.
     """
-    f = open(tricks_file_pathname, 'rb')
-    content = f.read()
-    f.close()
-    config = yaml.load(content)
-    return config
+    with open(tricks_file_pathname, 'rb') as f:
+        return yaml.safe_load(f.read())
 
 
 def parse_patterns(patterns_spec, ignore_patterns_spec, separator=';'):
@@ -122,7 +112,7 @@ def observe_with(observer, event_handler, pathnames, recursive):
     try:
         while True:
             time.sleep(1)
-    except KeyboardInterrupt:
+    except WatchdogShutdown:
         observer.stop()
     observer.join()
 
@@ -155,12 +145,12 @@ def schedule_tricks(observer, tricks, pathname, recursive):
      help='perform tricks from given file')
 @arg('--python-path',
      default='.',
-     help='paths separated by %s to add to the python path' % os.path.sep)
+     help='paths separated by %s to add to the python path' % os.pathsep)
 @arg('--interval',
      '--timeout',
      dest='timeout',
      default=1.0,
-     help='use this as the polling interval/blocking timeout')
+     help='use this as the polling interval/blocking timeout (in seconds)')
 @arg('--recursive',
      default=True,
      help='recursively monitor paths')
@@ -180,14 +170,14 @@ def tricks_from(args):
         observer = Observer(timeout=args.timeout)
 
         if not os.path.exists(tricks_file):
-            raise IOError("cannot find tricks file: %s" % tricks_file)
+            raise OSError(errno.ENOENT, os.strerror(errno.ENOENT), tricks_file)
 
         config = load_config(tricks_file)
 
         try:
             tricks = config[CONFIG_KEY_TRICKS]
         except KeyError:
-            raise KeyError("No `%s' key specified in %s." % (
+            raise KeyError("No %r key specified in %s." % (
                            CONFIG_KEY_TRICKS, tricks_file))
 
         if CONFIG_KEY_PYTHON_PATH in config:
@@ -203,7 +193,7 @@ def tricks_from(args):
     try:
         while True:
             time.sleep(1)
-    except KeyboardInterrupt:
+    except WatchdogShutdown:
         for o in observers:
             o.unschedule_all()
             o.stop()
@@ -217,7 +207,7 @@ def tricks_from(args):
      help='Dotted paths for all the tricks you want to generate')
 @arg('--python-path',
      default='.',
-     help='paths separated by %s to add to the python path' % os.path.sep)
+     help='paths separated by %s to add to the python path' % os.pathsep)
 @arg('--append-to-file',
      default=None,
      help='appends the generated tricks YAML to a file; \
@@ -258,9 +248,8 @@ def tricks_generate_yaml(args):
     else:
         if not os.path.exists(args.append_to_file):
             content = header + content
-        output = open(args.append_to_file, 'ab')
-        output.write(content)
-        output.close()
+        with open(args.append_to_file, 'ab') as output:
+            output.write(content)
 
 
 @arg('directories',
@@ -349,8 +338,8 @@ def log(args):
     elif args.debug_force_fsevents:
         from watchdog.observers.fsevents import FSEventsObserver as Observer
     else:
-    # Automatically picks the most appropriate observer for the platform
-    # on which it is running.
+        # Automatically picks the most appropriate observer for the platform
+        # on which it is running.
         from watchdog.observers import Observer
     observer = Observer(timeout=args.timeout)
     observe_with(observer, handler, args.directories, args.recursive)
@@ -418,7 +407,7 @@ Example option usage::
      dest='drop_during_process',
      action='store_true',
      default=False,
-     help="Ignore events that occur while command is still being executed " \
+     help="Ignore events that occur while command is still being executed "
           "to avoid multiple simultaneous instances")
 @arg('--debug-force-polling',
      default=False,
@@ -502,6 +491,9 @@ try to interpret them.
      dest='signal',
      default='SIGINT',
      help='stop the subprocess with this signal (default SIGINT)')
+@arg('--debug-force-polling',
+     default=False,
+     help='[debug] forces polling')
 @arg('--kill-after',
      dest='kill_after',
      default=10.0,
@@ -516,26 +508,36 @@ def auto_restart(args):
     :param args:
         Command line argument options.
     """
-    from watchdog.observers import Observer
+
+    if args.debug_force_polling:
+        from watchdog.observers.polling import PollingObserver as Observer
+    else:
+        from watchdog.observers import Observer
+
     from watchdog.tricks import AutoRestartTrick
     import signal
-    import re
 
     if not args.directories:
         args.directories = ['.']
 
     # Allow either signal name or number.
-    if re.match('^SIG[A-Z]+$', args.signal):
+    if args.signal.startswith("SIG"):
         stop_signal = getattr(signal, args.signal)
     else:
         stop_signal = int(args.signal)
 
-    # Handle SIGTERM in the same manner as SIGINT so that
-    # this program has a chance to stop the child process.
-    def handle_sigterm(_signum, _frame):
-        raise KeyboardInterrupt()
+    # Handle termination signals by raising a semantic exception which will
+    # allow us to gracefully unwind and stop the observer
+    termination_signals = {signal.SIGTERM, signal.SIGINT}
 
-    signal.signal(signal.SIGTERM, handle_sigterm)
+    def handler_termination_signal(_signum, _frame):
+        # Neuter all signals so that we don't attempt a double shutdown
+        for signum in termination_signals:
+            signal.signal(signum, signal.SIG_IGN)
+        raise WatchdogShutdown
+
+    for signum in termination_signals:
+        signal.signal(signum, handler_termination_signal)
 
     patterns, ignore_patterns = parse_patterns(args.patterns,
                                                args.ignore_patterns)
@@ -549,12 +551,16 @@ def auto_restart(args):
                                kill_after=args.kill_after)
     handler.start()
     observer = Observer(timeout=args.timeout)
-    observe_with(observer, handler, args.directories, args.recursive)
-    handler.stop()
+    try:
+        observe_with(observer, handler, args.directories, args.recursive)
+    except WatchdogShutdown:
+        pass
+    finally:
+        handler.stop()
 
 
 epilog = """Copyright 2011 Yesudeep Mangalapilly <yesudeep@gmail.com>.
-Copyright 2012 Google, Inc.
+Copyright 2012 Google, Inc & contributors.
 
 Licensed under the terms of the Apache license, version 2.0. Please see
 LICENSE in the source code for more information."""

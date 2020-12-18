@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 #
 # Copyright 2011 Yesudeep Mangalapilly <yesudeep@gmail.com>
-# Copyright 2012 Google, Inc.
+# Copyright 2012 Google, Inc & contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,20 +66,18 @@ Some extremely useful articles and documentation:
 
 """
 
-from __future__ import with_statement
-
 import os
 import threading
 from .inotify_buffer import InotifyBuffer
 
-from ..observers.api import (
+from watchdog.observers.api import (
     EventEmitter,
     BaseObserver,
     DEFAULT_EMITTER_TIMEOUT,
     DEFAULT_OBSERVER_TIMEOUT
 )
 
-from ..events import (
+from watchdog.events import (
     DirDeletedEvent,
     DirModifiedEvent,
     DirMovedEvent,
@@ -92,7 +89,6 @@ from ..events import (
     generate_sub_moved_events,
     generate_sub_created_events,
 )
-from ..utils import unicode_paths
 
 
 class InotifyEmitter(EventEmitter):
@@ -117,7 +113,7 @@ class InotifyEmitter(EventEmitter):
         self._inotify = None
 
     def on_thread_start(self):
-        path = unicode_paths.encode(self.watch.path)
+        path = os.fsencode(self.watch.path)
         self._inotify = InotifyBuffer(path, self.watch.is_recursive)
 
     def on_thread_stop(self):
@@ -125,8 +121,8 @@ class InotifyEmitter(EventEmitter):
             self._inotify.close()
 
     def queue_events(self, timeout, full_events=False):
-        #If "full_events" is true, then the method will report unmatched move events as seperate events
-        #This behavior is by default only called by a InotifyFullEmitter
+        # If "full_events" is true, then the method will report unmatched move events as separate events
+        # This behavior is by default only called by a InotifyFullEmitter
         with self._lock:
             event = self._inotify.read_event()
             if event is None:
@@ -146,7 +142,7 @@ class InotifyEmitter(EventEmitter):
 
             src_path = self._decode_path(event.src_path)
             if event.is_moved_to:
-                if (full_events):
+                if full_events:
                     cls = DirMovedEvent if event.is_directory else FileMovedEvent
                     self.queue_event(cls(None, src_path))
                 else:
@@ -167,19 +163,22 @@ class InotifyEmitter(EventEmitter):
                 self.queue_event(cls(src_path))
                 self.queue_event(DirModifiedEvent(os.path.dirname(src_path)))
             elif event.is_moved_from and full_events:
-                cls = DireMovedEvent if event.is_directory else FileMovedEvent
+                cls = DirMovedEvent if event.is_directory else FileMovedEvent
                 self.queue_event(cls(src_path, None))
                 self.queue_event(DirModifiedEvent(os.path.dirname(src_path)))
             elif event.is_create:
                 cls = DirCreatedEvent if event.is_directory else FileCreatedEvent
                 self.queue_event(cls(src_path))
                 self.queue_event(DirModifiedEvent(os.path.dirname(src_path)))
+            elif event.is_delete_self and src_path == self.watch.path:
+                self.queue_event(DirDeletedEvent(src_path))
+                self.stop()
 
     def _decode_path(self, path):
-        """ Decode path only if unicode string was passed to this emitter. """
+        """Decode path only if unicode string was passed to this emitter. """
         if isinstance(self.watch.path, bytes):
             return path
-        return unicode_paths.decode(path)
+        return os.fsdecode(path)
 
 
 class InotifyFullEmitter(InotifyEmitter):
@@ -200,9 +199,10 @@ class InotifyFullEmitter(InotifyEmitter):
     """
     def __init__(self, event_queue, watch, timeout=DEFAULT_EMITTER_TIMEOUT):
         InotifyEmitter.__init__(self, event_queue, watch, timeout)
-        
+
     def queue_events(self, timeout, events=True):
         InotifyEmitter.queue_events(self, timeout, full_events=events)
+
 
 class InotifyObserver(BaseObserver):
     """
@@ -215,4 +215,4 @@ class InotifyObserver(BaseObserver):
             BaseObserver.__init__(self, emitter_class=InotifyFullEmitter, timeout=timeout)
         else:
             BaseObserver.__init__(self, emitter_class=InotifyEmitter,
-                              timeout=timeout)
+                                  timeout=timeout)

@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 #
 # Copyright 2011 Yesudeep Mangalapilly <yesudeep@gmail.com>
-# Copyright 2012 Google, Inc.
+# Copyright 2012 Google, Inc & contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +19,7 @@
 :module: watchdog.observers
 :synopsis: Observer that picks a native implementation if available.
 :author: yesudeep@google.com (Yesudeep Mangalapilly)
-
+:author: contact@tiger-222.fr (Mickaël Schoentgen)
 
 Classes
 =======
@@ -28,7 +27,7 @@ Classes
    :members:
    :show-inheritance:
    :inherited-members:
-   
+
 Observer thread that schedules watching directories and dispatches
 calls to event handlers.
 
@@ -55,8 +54,8 @@ Class          Platforms                        Note
 """
 
 import warnings
-from ..utils import platform
-from ..utils import UnsupportedLibc
+from watchdog.utils import platform
+from watchdog.utils import UnsupportedLibc
 
 if platform.is_linux():
     try:
@@ -65,14 +64,13 @@ if platform.is_linux():
         from .polling import PollingObserver as Observer
 
 elif platform.is_darwin():
-    # FIXME: catching too broad. Error prone
     try:
         from .fsevents import FSEventsObserver as Observer
-    except:
+    except Exception:
         try:
             from .kqueue import KqueueObserver as Observer
             warnings.warn("Failed to import fsevents. Fall back to kqueue")
-        except:
+        except Exception:
             from .polling import PollingObserver as Observer
             warnings.warn("Failed to import fsevents and kqueue. Fall back to polling.")
 
@@ -84,9 +82,11 @@ elif platform.is_windows():
     # polling explicitly for Windows XP
     try:
         from .read_directory_changes import WindowsApiObserver as Observer
-    except:
+    except Exception:
         from .polling import PollingObserver as Observer
         warnings.warn("Failed to import read_directory_changes. Fall back to polling.")
 
 else:
     from .polling import PollingObserver as Observer
+
+__all__ = ["Observer"]

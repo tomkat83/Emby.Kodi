@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 #
 # Copyright 2011 Yesudeep Mangalapilly <yesudeep@gmail.com>
-# Copyright 2012 Google, Inc.
+# Copyright 2012 Google, Inc & contributors.
 # Copyright 2014 Thomas Amland
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import with_statement
-
-import ctypes
 import threading
 import os.path
 import time
 
-from ..events import (
+from watchdog.events import (
     DirCreatedEvent,
     DirDeletedEvent,
     DirMovedEvent,
@@ -37,14 +33,14 @@ from ..events import (
     generate_sub_created_events,
 )
 
-from ..observers.api import (
+from watchdog.observers.api import (
     EventEmitter,
     BaseObserver,
     DEFAULT_OBSERVER_TIMEOUT,
     DEFAULT_EMITTER_TIMEOUT
 )
 
-from ..observers.winapi import (
+from watchdog.observers.winapi import (
     read_events,
     get_directory_handle,
     close_directory_handle,
@@ -73,13 +69,16 @@ class WindowsApiEmitter(EventEmitter):
         if self._handle:
             close_directory_handle(self._handle)
 
+    def _read_events(self):
+        return read_events(self._handle, self.watch.path, self.watch.is_recursive)
+
     def queue_events(self, timeout):
-        winapi_events = read_events(self._handle, self.watch.is_recursive)
+        winapi_events = self._read_events()
         with self._lock:
             last_renamed_src_path = ""
             for winapi_event in winapi_events:
                 src_path = os.path.join(self.watch.path, winapi_event.src_path)
-                
+
                 if winapi_event.is_renamed_old:
                     last_renamed_src_path = src_path
                 elif winapi_event.is_renamed_new:
@@ -112,7 +111,7 @@ class WindowsApiEmitter(EventEmitter):
                     isdir = os.path.isdir(src_path)
                     cls = DirCreatedEvent if isdir else FileCreatedEvent
                     self.queue_event(cls(src_path))
-                    if isdir:
+                    if isdir and self.watch.is_recursive:
                         # If a directory is moved from outside the watched folder to inside it
                         # we only get a created directory event out of it, not any events for its children
                         # so use the same hack as for file moves to get the child events
@@ -122,6 +121,9 @@ class WindowsApiEmitter(EventEmitter):
                             self.queue_event(sub_created_event)
                 elif winapi_event.is_removed:
                     self.queue_event(FileDeletedEvent(src_path))
+                elif winapi_event.is_removed_self:
+                    self.queue_event(DirDeletedEvent(self.watch.path))
+                    self.stop()
 
 
 class WindowsApiObserver(BaseObserver):
