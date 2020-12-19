@@ -86,12 +86,10 @@ def directory_item(label, path, folder=True):
     Adds a xbmcplugin.addDirectoryItem() directory itemlistitem
     """
     listitem = ListItem(label, path=path)
-    listitem.setThumbnailImage(
-        "special://home/addons/plugin.video.plexkodiconnect/icon.png")
     listitem.setArt(
-        {"fanart": "special://home/addons/plugin.video.plexkodiconnect/fanart.jpg"})
-    listitem.setArt(
-        {"landscape":"special://home/addons/plugin.video.plexkodiconnect/fanart.jpg"})
+        {'landscape':'special://home/addons/plugin.video.plexkodiconnect/fanart.jpg',
+         'fanart': 'special://home/addons/plugin.video.plexkodiconnect/fanart.jpg',
+         'thumb': 'special://home/addons/plugin.video.plexkodiconnect/icon.png'})
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                 url=path,
                                 listitem=listitem,

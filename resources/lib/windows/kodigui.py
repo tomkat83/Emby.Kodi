@@ -229,7 +229,7 @@ DUMMY_LIST_ITEM = xbmcgui.ListItem()
 class ManagedListItem(object):
     def __init__(self, label='', label2='', iconImage='', thumbnailImage='',
                  path='', data_source=None, properties=None):
-        self._listItem = xbmcgui.ListItem(label, label2, iconImage, thumbnailImage, path)
+        self._listItem = xbmcgui.ListItem(label, label2, path)
         self.dataSource = data_source
         self.properties = {}
         self.label = label
@@ -277,8 +277,8 @@ class ManagedListItem(object):
         self.listItem.setProperty('__ID__', self._ID)
         self.listItem.setLabel(self.label)
         self.listItem.setLabel2(self.label2)
-        self.listItem.setIconImage(self.iconImage)
-        self.listItem.setThumbnailImage(self.thumbnailImage)
+        self.listItem.setArt({'thumb': self.thumbnailImage,
+                              'icon': self.iconImage})
         self.listItem.setPath(self.path)
         for k in list(self._manager._properties.keys()):
             self.listItem.setProperty(k, self.properties.get(k) or '')
@@ -331,10 +331,6 @@ class ManagedListItem(object):
     def setArt(self, values):
         return self.listItem.setArt(values)
 
-    def setIconImage(self, icon):
-        self.iconImage = icon
-        return self.listItem.setIconImage(icon)
-
     def setInfo(self, itype, infoLabels):
         return self.listItem.setInfo(itype, infoLabels)
 
@@ -368,7 +364,8 @@ class ManagedListItem(object):
 
     def setThumbnailImage(self, thumb):
         self.thumbnailImage = thumb
-        return self.listItem.setThumbnailImage(thumb)
+        self.listItem.setArt({'thumb': self.thumbnailImage,
+                              'icon': self.iconImage})
 
     def onDestroy(self):
         pass
