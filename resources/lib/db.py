@@ -32,7 +32,7 @@ def catch_operationalerrors(method):
             try:
                 return method(self, *args, **kwargs)
             except sqlite3.OperationalError as err:
-                if 'database is locked' not in err:
+                if err.args[0] and 'database is locked' not in err.args[0]:
                     # Not an error we want to catch, so reraise it
                     raise
                 attempts -= 1
