@@ -237,7 +237,7 @@ class Sync(backgroundthread.KillableThread):
                     # See if there is a PMS message we need to handle
                     try:
                         message = queue.get(block=False)
-                    except backgroundthread.Queue.Empty:
+                    except backgroundthread.queue.Empty:
                         pass
                     # Got a message from PMS; process it
                     else:
