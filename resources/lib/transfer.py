@@ -12,9 +12,9 @@ import xbmcgui
 
 LOG = getLogger('PLEX.transfer')
 WINDOW = xbmcgui.Window(10000)
-WINDOW_UPSTREAM = 'plexkodiconnect.result.upstream'.encode('utf-8')
-WINDOW_DOWNSTREAM = 'plexkodiconnect.result.downstream'.encode('utf-8')
-WINDOW_COMMAND = 'plexkodiconnect.command'.encode('utf-8')
+WINDOW_UPSTREAM = 'plexkodiconnect.result.upstream'
+WINDOW_DOWNSTREAM = 'plexkodiconnect.result.downstream'
+WINDOW_COMMAND = 'plexkodiconnect.command'
 KODIVERSION = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
 
 
@@ -145,15 +145,10 @@ def convert_pkc_to_listitem(pkc_listitem):
     Insert a PKCListItem() and you will receive a valid XBMC listitem
     """
     data = pkc_listitem.data
-    if KODIVERSION >= 18:
-        listitem = xbmcgui.ListItem(label=data.get('label'),
-                                    label2=data.get('label2'),
-                                    path=data.get('path'),
-                                    offscreen=True)
-    else:
-        listitem = xbmcgui.ListItem(label=data.get('label'),
-                                    label2=data.get('label2'),
-                                    path=data.get('path'))
+    listitem = xbmcgui.ListItem(label=data.get('label'),
+                                label2=data.get('label2'),
+                                path=data.get('path'),
+                                offscreen=True)
     if data['info']:
         listitem.setInfo(**data['info'])
     for stream in data['stream_info']:
@@ -163,7 +158,7 @@ def convert_pkc_to_listitem(pkc_listitem):
     if data['art']:
         listitem.setArt(data['art'])
     for key, value in data['property'].items():
-        listitem.setProperty(key, cast(str, value))
+        listitem.setProperty(key, value)
     if data['subtitles']:
         listitem.setSubtitles(data['subtitles'])
     if data['contextmenu']:

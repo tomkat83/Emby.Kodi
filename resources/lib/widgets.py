@@ -447,18 +447,11 @@ def create_listitem(item, as_tuple=True, offscreen=True,
     Code from script.module.metadatautils, kodidb.py
     """
     try:
-        if v.KODIVERSION > 17:
-            liz = listitem(
-                label=item.get("label", ""),
-                label2=item.get("label2", ""),
-                path=item['file'],
-                offscreen=offscreen)
-        else:
-            liz = listitem(
-                label=item.get("label", ""),
-                label2=item.get("label2", ""),
-                path=item['file'])
-
+        liz = listitem(
+            label=item.get("label", ""),
+            label2=item.get("label2", ""),
+            path=item['file'],
+            offscreen=offscreen)
         # only set isPlayable prop if really needed
         if item.get("isFolder", False):
             liz.setProperty('IsPlayable', 'false')
