@@ -20,7 +20,7 @@ from . import playback_decision, app
 LOG = getLogger('PLEX.playback')
 # Do we need to return ultimately with a setResolvedUrl?
 RESOLVE = True
-TRY_TO_SEEK_FOR = 300  # =30 seconds
+TRY_TO_SEEK_FOR = 10  # =30 seconds
 IGNORE_SECONDS_AT_START = 15
 ###############################################################################
 
@@ -599,8 +599,8 @@ def threaded_playback(kodi_playlist, startpos, offset):
         # RuntimeError: XBMC is not playing any media file
         pass
     i = 0
-    answ = js.seek_to(offset * 1000)
-    while 'error' in answ:
+    answ = None
+    while answ is None or (answ and 'error' in answ):
         # Kodi sometimes returns {u'message': u'Failed to execute method.',
         # u'code': -32100} if user quickly switches videos
         if app.APP.monitor.waitForAbort(0.1):
