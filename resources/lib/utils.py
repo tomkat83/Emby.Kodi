@@ -398,61 +398,46 @@ def escape_path(path, safe_url_char=SAFE_URL_CHARACTERS):
         # using RegExp and using safe_url_char as safe characters not to be escaped
         protocol = is_http_dav_ftp.group(1)
         user = is_http_dav_ftp.group(6)
-        psswd = is_http_dav_ftp.group(7)
-        if user and psswd:
-            user = urllib.parse.quote(user.encode('utf-8'), safe=safe_url_char).decode('utf-8')
-            psswd = urllib.parse.quote(psswd.encode('utf-8'), safe=safe_url_char).decode('utf-8')
+        passwd = is_http_dav_ftp.group(7)
+        if user and passwd:
+            user = quote(user, safe=safe_url_char)
+            passwd = quote(passwd, safe=safe_url_char)
         host = is_http_dav_ftp.group(8)
         port = is_http_dav_ftp.group(10)
         url_path = path.replace(is_http_dav_ftp.group(), '', 1)
         if url_path:
-            url_path = urllib.parse.quote(path.replace(is_http_dav_ftp.group(), '', 1).encode('utf-8'),
-                                    safe=safe_url_char).decode('utf-8')
-        return protocol + \
-               u'://' + \
-               (user + u':' + psswd + u'@' if (user and psswd) else u'') + \
+            url_path = quote(path.replace(is_http_dav_ftp.group(), '', 1),
+                                    safe=safe_url_char)
+        return f'{protocol}://' + \
+               (f'{user}:{passwd}@' if user and passwd else '') + \
                host + \
-               (u':' + port if port else u'') + \
-               u'/' + \
-               (url_path if url_path else u'')
+               (f':{port}' if port else '') + \
+               (f'/{url_path}' if url_path else '')
     else:
-        # If paths does not seem to be a http(s), dav(s) or (s)ftp url (e.g. plugin://)
-        # escape path as before
-        return urllib.parse.quote(path.encode('utf-8'),
-                            safe=SAFE_URL_CHARACTERS).decode('utf-8')
+        # If paths does not seem to be a http(s), dav(s) or (s)ftp url (e.g.
+        # plugin://) escape path as before
+        return quote(path, safe=SAFE_URL_CHARACTERS)
 
 
 def quote(s, safe='/'):
     """
-    unicode-safe way to use urllib.quote(). Pass in either str or unicode
-    Returns unicode
+    Pass in unicode, returns unicode
     """
-    if isinstance(s, str):
-        s = s.encode('utf-8')
-    s = urllib.parse.quote(s, safe.encode('utf-8'))
-    return s.decode('utf-8')
+    return urllib.parse.quote(s, safe)
 
 
 def quote_plus(s, safe=''):
     """
-    unicode-safe way to use urllib.quote(). Pass in either str or unicode
-    Returns unicode
+    Pass in unicode, returns unicode
     """
-    if isinstance(s, str):
-        s = s.encode('utf-8')
-    s = urllib.parse.quote_plus(s, safe.encode('utf-8'))
-    return s.decode('utf-8')
+    return urllib.parse.quote_plus(s, safe)
 
 
 def unquote(s):
     """
-    unicode-safe way to use urllib.unquote(). Pass in either str or unicode
-    Returns unicode
+    Pass in unicode, returns unicode
     """
-    if isinstance(s, str):
-        s = s.encode('utf-8')
-    s = urllib.parse.unquote(s)
-    return s.decode('utf-8')
+    return urllib.parse.unquote(s)
 
 
 def try_encode(input_str, encoding='utf-8'):

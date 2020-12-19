@@ -155,8 +155,7 @@ def start():
                 xml.write_xml = False
                 return
             user = user.strip()
-            user = urllib.parse.quote(user)
-            user = user.decode('utf-8')
+            user = utils.quote(user)
             # "Password"
             # May also be blank!! (=user aborts dialog)
             password = utils.dialog('input',
@@ -164,16 +163,15 @@ def start():
                                     '',
                                     type='{alphanum}',
                                     option='{hide}')
-            password = urllib.parse.quote(password)
-            password = password.decode('utf-8')
+            password = utils.quote(password)
             utils.etree.SubElement(entry,
                                    'from',
-                                   attrib={'pathversion': '1'}).text = '%s/' % path
-            login = '%s://%s:%s@%s/' % (protocol, user, password, hostname)
+                                   attrib={'pathversion': '1'}).text = f'{path}/'
+            login = f'{protocol}://{user}:{password}@{hostname}/'
             utils.etree.SubElement(entry,
                                    'to',
                                    attrib={'pathversion': '1'}).text = login
             xml.write_xml = True
     except utils.ParseError:
         return
-    LOG.info('Successfully completed editing sources.xml and padsswords.xml')
+    LOG.info('Successfully completed editing sources.xml and passwords.xml')

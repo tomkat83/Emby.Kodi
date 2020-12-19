@@ -50,12 +50,12 @@ def initialize(playlist, plex_id):
     """
     LOG.debug('Initializing the playlist with Plex id %s on the Plex side: %s',
               plex_id, playlist)
+    url_path = utils.quote(f'/library/metadata/{plex_id}', safe='')
     params = {
         'type': v.PLEX_PLAYLIST_TYPE_FROM_KODI[playlist.kodi_type],
         'title': playlist.plex_name,
         'smart': 0,
-        'uri': ('library://None/item/%s' % (utils.quote('/library/metadata/%s'
-                                                        % plex_id, safe='')))
+        'uri': (f'library://None/item/{url_path}')
     }
     xml = DU().downloadUrl(url='{server}/playlists',
                            action_type='POST',
@@ -77,9 +77,9 @@ def add_item(playlist, plex_id):
     Will set playlist.plex_updatedat
     Raises PlaylistError if that did not work out.
     """
+    url_path = utils.quote(f'/library/metadata/{plex_id}', safe='')
     params = {
-        'uri': ('library://None/item/%s' % (utils.quote('/library/metadata/%s'
-                                                        % plex_id, safe='')))
+        'uri': f'library://None/item/{url_path}'
     }
     xml = DU().downloadUrl(url='{server}/playlists/%s/items' % playlist.plex_id,
                            action_type='PUT',
