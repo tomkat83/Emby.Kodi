@@ -379,7 +379,7 @@ def audio_subtitle_prefs(api, item):
                                            codec,
                                            channellayout)
             audio_streams_list.append(index)
-            audio_streams.append(track.encode('utf-8'))
+            audio_streams.append(track)
             audio_numb += 1
 
         # Subtitles
@@ -405,7 +405,7 @@ def audio_subtitle_prefs(api, item):
                 track = "%s - %s" % (track, utils.lang(39709))  # Forced
             track = "%s (%s)" % (track, utils.lang(39710))  # burn-in
             subtitle_streams_list.append(index)
-            subtitle_streams.append(track.encode('utf-8'))
+            subtitle_streams.append(track)
             sub_num += 1
 
     if audio_numb > 1:
@@ -437,7 +437,7 @@ def audio_subtitle_prefs(api, item):
         else:
             LOG.info('User chose to burn-in subtitle %s: %s',
                       select_subs_index,
-                      subtitle_streams[resp].decode('utf-8'))
+                      subtitle_streams[resp])
             select_subs_index = subtitle_streams_list[resp - 1]
     # Now prep the PMS for our choice
     args = {

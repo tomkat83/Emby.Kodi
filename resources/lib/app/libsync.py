@@ -108,7 +108,7 @@ class Sync(object):
         self.remapSMBphotoOrg = remove_trailing_slash(utils.settings('remapSMBphotoOrg'))
         self.remapSMBphotoNew = remove_trailing_slash(utils.settings('remapSMBphotoNew'))
         self.escape_path = utils.settings('escapePath') == 'true'
-        self.escape_path_safe_chars = utils.settings('escapePathSafeChars').encode('utf-8')
+        self.escape_path_safe_chars = utils.settings('escapePathSafeChars')
         self.indicate_media_versions = utils.settings('indicate_media_versions') == "true"
         self.sync_specific_plex_playlists = utils.settings('syncSpecificPlexPlaylists') == 'true'
         self.sync_specific_kodi_playlists = utils.settings('syncSpecificKodiPlaylists') == 'true'

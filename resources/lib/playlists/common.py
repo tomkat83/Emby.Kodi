@@ -130,7 +130,7 @@ def kodi_playlist_hash(path):
     m = hashlib.md5()
     m.update(repr(stat.st_size))
     m.update(repr(stat.st_mtime))
-    return m.hexdigest().decode('utf-8')
+    return m.hexdigest()
 
 
 class PlaylistQueue(OrderedSetQueue):

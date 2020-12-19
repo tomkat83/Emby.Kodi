@@ -483,7 +483,7 @@ def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
         if prompt is None:
             # User cancelled
             return
-        prompt = prompt.strip().decode('utf-8')
+        prompt = prompt.strip()
         args['query'] = prompt
     xml = DU().downloadUrl(utils.extend_url('{server}%s' % key, args))
     try:

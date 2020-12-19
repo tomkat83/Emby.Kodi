@@ -54,7 +54,7 @@ REGEX_MUSICPATH = re.compile(r'''^\^(.+)\$$''')
 # Grab Plex id from an URL-encoded string
 REGEX_PLEX_ID_FROM_URL = re.compile(r'''metadata%2F(\d+)''')
 
-SAFE_URL_CHARACTERS = "%/:=&?~#+!$,;'@()*[]".encode('utf-8')
+SAFE_URL_CHARACTERS = "%/:=&?~#+!$,;'@()*[]"
 HTTP_DAV_FTP = re.compile(r'(http(s)?|dav(s)?|(s)?ftp)://((.+):(.+)@)?([\w\.]+)(:([\d]+))?/')
 
 def garbageCollect():
@@ -332,35 +332,24 @@ def extend_url(url, params):
 
 def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
     """
-    unicode-safe way to use urlparse.parse_qs(). Pass in the query string qs
-    either as str or unicode
-    Returns a dict with lists as values; all entires unicode
+    Pass in the query string qs as string. Returns a dict with lists as values
+    as unicode
     """
-    if isinstance(qs, str):
-        qs = qs.encode('utf-8')
-    qs = _urlparse.parse_qs(qs, keep_blank_values, strict_parsing)
-    return {k.decode('utf-8'): [e.decode('utf-8') for e in v]
-            for k, v in qs.items()}
+    return _urlparse.parse_qs(qs, keep_blank_values, strict_parsing)
 
 
 def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
     """
-    unicode-safe way to use urlparse.parse_qsl(). Pass in either str or unicode
-    Returns a list of unicode tuples
+    Pass in string. Returns a list of string tuples
     """
-    if isinstance(qs, str):
-        qs = qs.encode('utf-8')
-    qs = _urlparse.parse_qsl(qs, keep_blank_values, strict_parsing)
-    return [(x.decode('utf-8'), y.decode('utf-8')) for (x, y) in qs]
+    return _urlparse.parse_qsl(qs, keep_blank_values, strict_parsing)
 
 
 def urlparse(url, scheme='', allow_fragments=True):
     """
-    unicode-safe way to use urlparse.urlparse(). Pass in either str or unicode
+    Pass in string.
     CAREFUL: returns an encoded urlparse.ParseResult()!
     """
-    if isinstance(url, str):
-        url = url.encode('utf-8')
     return _urlparse.urlparse(url, scheme, allow_fragments)
 
 

@@ -209,7 +209,7 @@ class KodiMonitor(xbmc.Monitor):
         play_info = json.loads(play_info)
         app.APP.player.stop()
         handle = 'RunPlugin(%s)' % play_info.get('handle')
-        xbmc.executebuiltin(handle.encode('utf-8'))
+        xbmc.executebuiltin(handle)
 
     def PlayBackStart(self, data):
         """
@@ -582,11 +582,11 @@ def _notify_upnext(item):
         }
         _complete_artwork_keys(info[key])
     info['play_info'] = {'handle': next_api.fullpath(force_addon=True)[0]}
-    sender = v.ADDON_ID.encode('utf-8')
-    method = 'upnext_data'.encode('utf-8')
+    sender = v.ADDON_ID
+    method = 'upnext_data'
     data = binascii.hexlify(json.dumps(info))
     data = '\\"[\\"{0}\\"]\\"'.format(data)
-    xbmc.executebuiltin('NotifyAll(%s, %s, %s)' % (sender, method, data))
+    xbmc.executebuiltin(f'NotifyAll({sender}, {method}, {data})')
 
 
 def _videolibrary_onupdate(data):

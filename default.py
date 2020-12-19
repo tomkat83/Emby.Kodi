@@ -11,7 +11,6 @@ import xbmcgui
 import xbmcplugin
 
 from resources.lib import entrypoint, utils, transfer, variables as v, loghandler
-from resources.lib.tools import unicode_paths
 
 ###############################################################################
 
@@ -30,12 +29,8 @@ class Main(object):
         LOG.debug('Full sys.argv received: %s', argv)
         # Parse parameters
         params = dict(parse_qsl(argv[2][1:]))
-        arguments = unicode_paths.decode(argv[2])
-        path = unicode_paths.decode(argv[0])
-        # Ensure unicode
-        for key, value in params.items():
-            params[key.decode('utf-8')] = params.pop(key)
-            params[key] = value.decode('utf-8')
+        arguments = argv[2]
+        path = argv[0]
         mode = params.get('mode', '')
         itemid = params.get('id', '')
 

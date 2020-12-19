@@ -141,11 +141,11 @@ class PlexCompanion(backgroundthread.KillableThread):
         app.CONN.plex_transient_token = data.get('key')
         params = {
             'mode': 'plex_node',
-            'key': '{server}%s' % data.get('key'),
+            'key': f"{{server}}{data.get('key')}",
             'offset': data.get('offset')
         }
-        handle = 'RunPlugin(plugin://%s)' % utils.extend_url(v.ADDON_ID, params)
-        executebuiltin(handle.encode('utf-8'))
+        handle = f'RunPlugin(plugin://{utils.extend_url(v.ADDON_ID, params)})'
+        executebuiltin(handle)
 
     @staticmethod
     def _process_playlist(data):

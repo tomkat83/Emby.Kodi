@@ -31,7 +31,7 @@ def external_item_id(title, year, plex_type, collection):
     parameters = {
         'api_key': API_KEY,
         'language': v.KODILANGUAGE,
-        'query': title.encode('utf-8')
+        'query': title
     }
     data = DU().downloadUrl(url,
                             authenticate=False,

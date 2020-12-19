@@ -55,7 +55,7 @@ def ParseContainerKey(containerKey):
     Output hence: library, key, query       (str, int, dict)
     """
     result = utils.urlparse(containerKey)
-    library, key = GetPlexKeyNumber(result.path.decode('utf-8'))
+    library, key = GetPlexKeyNumber(result.path)
     query = dict(utils.parse_qsl(result.query))
     return library, key, query
 

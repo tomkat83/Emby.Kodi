@@ -76,7 +76,7 @@ def start():
     hostname = utils.dialog('input', utils.lang(30201))
     if not hostname:
         return
-    hostname = hostname.decode('utf-8').strip()
+    hostname = hostname.strip()
     if not is_valid_hostname(hostname) and not is_valid_ip(hostname):
         LOG.error('Entered invalid hostname or IP: %s', hostname)
         # "The hostname or IP '{0}' that you entered is not valid"
@@ -90,7 +90,7 @@ def start():
     protocol = utils.dialog('input', utils.lang(30203))
     if not protocol:
         return
-    protocol = protocol.decode('utf-8').lower().strip()
+    protocol = protocol.lower().strip()
     if protocol not in SUPPORTED_PROTOCOLS:
         LOG.error('Entered invalid protocol %s', protocol)
         # "The protocol '{0}' that you entered is not supported."

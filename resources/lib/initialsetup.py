@@ -410,7 +410,7 @@ class InitialSetup(object):
                 utils.messageDialog(
                     utils.lang(29999),
                     '%s %s\n%s' % (utils.lang(39013),
-                                   server['name'].decode('utf-8'),
+                                   server['name'],
                                    utils.lang(39014)))
                 if self.plex_tv_sign_in() is False:
                     # Exit while loop if user cancels

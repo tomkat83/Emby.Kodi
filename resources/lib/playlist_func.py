@@ -795,4 +795,4 @@ def get_plextype_from_xml(xml):
     except (TypeError, IndexError, AttributeError):
         LOG.error('Could not get plex metadata for plex id %s', plex_id)
         return
-    return new_xml[0].attrib.get('type').decode('utf-8')
+    return new_xml[0].attrib.get('type')
