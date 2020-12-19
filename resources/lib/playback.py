@@ -359,7 +359,7 @@ def _prep_playlist_stack(xml, resume):
                 # path = path.replace('plugin.video.plexkodiconnect.movies',
                 #                     'plugin.video.plexkodiconnect', 1)
                 listitem = api.listitem()
-                listitem.setPath(path.encode('utf-8'))
+                listitem.setPath(path)
             else:
                 # Will add directly via the Kodi DB
                 path = None
@@ -461,7 +461,7 @@ def _conclude_playback(playqueue, pos):
         _ensure_resolve()
         return
     listitem = api.listitem(listitem=transfer.PKCListItem, resume=False)
-    listitem.setPath(item.file.encode('utf-8'))
+    listitem.setPath(item.file)
     if item.playmethod != v.PLAYBACK_METHOD_DIRECT_PATH:
         listitem.setSubtitles(api.cache_external_subs())
     transfer.send(listitem)
