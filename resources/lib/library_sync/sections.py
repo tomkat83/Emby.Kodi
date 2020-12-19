@@ -97,14 +97,15 @@ class Section(object):
                 "}}").format(self=self)
 
     def __bool__(self):
+        """Magic method to compare sections with =. section_id, name and
+        section_type must be set and be identical."""
         return (self.section_id is not None and
                 self.name is not None and
                 self.section_type is not None)
 
     def __eq__(self, section):
-        """
-        Sections compare equal if their section_id, name and plex_type (first
-        prio) OR section_type (if there is no plex_type is set) compare equal
+        """Sections compare equal if their section_id, name and plex_type (first
+        prio) OR section_type (if there is no plex_type is set) compare equal.
         """
         return (self.section_id == section.section_id and
                 self.name == section.name and

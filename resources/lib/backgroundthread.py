@@ -6,6 +6,7 @@ import threading
 import queue
 import heapq
 from collections import deque
+from functools import total_ordering
 
 from . import utils, app, variables as v
 
@@ -279,14 +280,20 @@ class Tasks(list):
             self.pop().cancel()
 
 
+@total_ordering
 class Task(object):
     def __init__(self, priority=None):
         self.priority = priority
         self._canceled = False
         self.finished = False
 
-    def __cmp__(self, other):
-        return self.priority - other.priority
+    def __lt__(self, other):
+        """Magic method Task<Other Task; compares the tasks' priorities."""
+        return self.priority - other.priority > 0
+
+    def __eq__(self, other):
+        """Magic method Task=Other Task; compares the tasks' priorities."""
+        return self.priority == other.priority
 
     def start(self):
         BGThreader.addTask(self)
