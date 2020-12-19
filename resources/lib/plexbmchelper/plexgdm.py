@@ -162,16 +162,15 @@ class plexgdm(object):
                 pass
             else:
                 if "M-SEARCH * HTTP/1." in data:
-                    log.debug("Detected client discovery request from %s. "
-                              " Replying" % str(addr))
+                    log.debug('Detected client discovery request from %s. '
+                              'Replying', addr)
+                    message = f'HTTP/1.0 200 OK\n{self.client_data}'.encode()
                     try:
-                        update_sock.sendto("HTTP/1.0 200 OK\n%s"
-                                           % self.client_data,
-                                           addr)
+                        update_sock.sendto(message, addr)
                     except Exception:
                         log.error("Unable to send client update message")
-
-                    log.debug("Sending registration data HTTP/1.0 200 OK")
+                    else:
+                        log.debug("Sent registration data HTTP/1.0 200 OK")
                     self.client_registered = True
             app.APP.monitor.waitForAbort(0.5)
         log.info("Client Update loop stopped")
