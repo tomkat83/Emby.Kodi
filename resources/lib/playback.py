@@ -528,13 +528,13 @@ def process_indirect(key, offset, resolve=True):
         return
 
     item.file = playurl
-    listitem.setPath(utils.try_encode(playurl))
+    listitem.setPath(playurl)
     playqueue.items.append(item)
     if resolve is True:
         transfer.send(listitem)
     else:
         thread = Thread(target=app.APP.player.play,
-                        args={'item': utils.try_encode(playurl),
+                        args={'item': playurl,
                               'listitem': listitem})
         thread.setDaemon(True)
         LOG.debug('Done initializing PKC playback, starting Kodi player')

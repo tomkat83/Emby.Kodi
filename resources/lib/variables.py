@@ -14,22 +14,6 @@ from . import path_ops
 # For any file operations with KODI function, use encoded strings!
 
 
-def try_decode(string, encoding='utf-8'):
-    """
-    Will try to decode string (encoded) using encoding. This possibly
-    fails with e.g. Android TV's Python, which does not accept arguments for
-    string.encode()
-    """
-    if isinstance(string, str):
-        # already decoded
-        return string
-    try:
-        string = string.decode(encoding, "ignore")
-    except TypeError:
-        string = string.decode()
-    return string
-
-
 # Percent of playback progress for watching item as partially watched. Anything
 # more and item will NOT be marked as partially, but fully watched
 MARK_PLAYED_AT = 0.9
@@ -41,14 +25,14 @@ _ADDON = Addon()
 ADDON_NAME = 'PlexKodiConnect'
 ADDON_ID = 'plugin.video.plexkodiconnect'
 ADDON_VERSION = _ADDON.getAddonInfo('version')
-ADDON_PATH = try_decode(_ADDON.getAddonInfo('path'))
-ADDON_FOLDER = try_decode(xbmcvfs.translatePath('special://home'))
-ADDON_PROFILE = try_decode(xbmcvfs.translatePath(_ADDON.getAddonInfo('profile')))
+ADDON_PATH = _ADDON.getAddonInfo('path')
+ADDON_FOLDER = xbmcvfs.translatePath('special://home')
+ADDON_PROFILE = xbmcvfs.translatePath(_ADDON.getAddonInfo('profile'))
 
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 KODIVERSION = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
 KODILONGVERSION = xbmc.getInfoLabel('System.BuildVersion')
-KODI_PROFILE = try_decode(xbmcvfs.translatePath("special://profile"))
+KODI_PROFILE = xbmcvfs.translatePath("special://profile")
 
 if xbmc.getCondVisibility('system.platform.osx'):
     DEVICE = "MacOSX"
@@ -78,9 +62,9 @@ except IOError:
     # See https://github.com/psf/requests/issues/4434
     MODEL = 'Unknown'
 
-DEVICENAME = try_decode(_ADDON.getSetting('deviceName'))
+DEVICENAME = _ADDON.getSetting('deviceName')
 if not DEVICENAME:
-    DEVICENAME = try_decode(xbmc.getInfoLabel('System.FriendlyName'))
+    DEVICENAME = xbmc.getInfoLabel('System.FriendlyName')
     _ADDON.setSetting('deviceName', DEVICENAME)
 DEVICENAME = DEVICENAME.replace(":", "")
 DEVICENAME = DEVICENAME.replace("/", "-")
@@ -121,11 +105,11 @@ DB_MUSIC_VERSION = None
 DB_MUSIC_PATH = None
 DB_TEXTURE_VERSION = None
 DB_TEXTURE_PATH = None
-DB_PLEX_PATH = try_decode(xbmcvfs.translatePath("special://database/plex.db"))
-DB_PLEX_COPY_PATH = try_decode(xbmcvfs.translatePath("special://database/plex-copy.db"))
+DB_PLEX_PATH = xbmcvfs.translatePath("special://database/plex.db")
+DB_PLEX_COPY_PATH = xbmcvfs.translatePath("special://database/plex-copy.db")
 
-EXTERNAL_SUBTITLE_TEMP_PATH = try_decode(xbmcvfs.translatePath(
-    "special://profile/addon_data/%s/temp/" % ADDON_ID))
+EXTERNAL_SUBTITLE_TEMP_PATH = xbmcvfs.translatePath(
+    "special://profile/addon_data/%s/temp/" % ADDON_ID)
 
 
 # Multiply Plex time by this factor to receive Kodi time
@@ -699,7 +683,7 @@ def database_paths():
     if KODIVERSION not in (19, ):
         raise RuntimeError('Kodiversion %s not supported by PKC' % KODIVERSION)
 
-    database_path = try_decode(xbmcvfs.translatePath('special://database'))
+    database_path = xbmcvfs.translatePath('special://database')
     thismodule = sys.modules[__name__]
     types = (('MyVideos%s.db', SUPPORTED_VIDEO_DB,
               'DB_VIDEO_VERSION', 'DB_VIDEO_PATH'),

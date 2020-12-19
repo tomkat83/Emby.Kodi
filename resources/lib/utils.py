@@ -100,13 +100,12 @@ def window(prop, value=None, clear=False, windowid=10000):
         win = xbmcgui.Window(windowid)
     else:
         win = WINDOW
-
     if clear:
         win.clearProperty(prop)
     elif value is not None:
-        win.setProperty(try_encode(prop), try_encode(value))
+        win.setProperty(prop, value)
     else:
-        return try_decode(win.getProperty(prop))
+        return win.getProperty(prop)
 
 
 def settings(setting, value=None):
@@ -120,10 +119,10 @@ def settings(setting, value=None):
         addon = xbmcaddon.Addon(id='plugin.video.plexkodiconnect')
         if value is not None:
                 # Takes string or unicode by default!
-                addon.setSetting(try_encode(setting), try_encode(value))
+                addon.setSetting(setting, value)
         else:
             # Should return unicode by default, but just in case
-            return try_decode(addon.getSetting(setting))
+            return addon.getSetting(setting)
 
 
 def lang(stringid):
@@ -422,38 +421,6 @@ def unquote(s):
     Pass in unicode, returns unicode
     """
     return urllib.parse.unquote(s)
-
-
-def try_encode(input_str, encoding='utf-8'):
-    """
-    Will try to encode input_str (in unicode) to encoding. This possibly
-    fails with e.g. Android TV's Python, which does not accept arguments for
-    string.encode()
-    """
-    if isinstance(input_str, str):
-        # already encoded
-        return input_str
-    try:
-        input_str = input_str.encode(encoding, "ignore")
-    except TypeError:
-        input_str = input_str.encode()
-    return input_str
-
-
-def try_decode(string, encoding='utf-8'):
-    """
-    Will try to decode string (encoded) using encoding. This possibly
-    fails with e.g. Android TV's Python, which does not accept arguments for
-    string.encode()
-    """
-    if isinstance(string, str):
-        # already decoded
-        return string
-    try:
-        string = string.decode(encoding, "ignore")
-    except TypeError:
-        string = string.decode()
-    return string
 
 
 def slugify(text):

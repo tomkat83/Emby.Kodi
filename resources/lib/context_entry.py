@@ -91,7 +91,7 @@ class ContextMenu(object):
         options.append(OPTIONS['Addon'])
         context_menu = context.ContextMenu(
             "script-plex-context.xml",
-            utils.try_encode(v.ADDON_PATH),
+            v.ADDON_PATH,
             "default",
             "1080i")
         context_menu.set_options(options)

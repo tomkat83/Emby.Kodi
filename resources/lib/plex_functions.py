@@ -303,11 +303,11 @@ def _plex_gdm():
         }
         for line in response['data'].split('\n'):
             if 'Content-Type:' in line:
-                pms['product'] = utils.try_decode(line.split(':')[1].strip())
+                pms['product'] = line.split(':')[1].strip()
             elif 'Host:' in line:
                 pms['baseURL'] = line.split(':')[1].strip()
             elif 'Name:' in line:
-                pms['name'] = utils.try_decode(line.split(':')[1].strip())
+                pms['name'] = line.split(':')[1].strip()
             elif 'Port:' in line:
                 pms['port'] = line.split(':')[1].strip()
             elif 'Resource-Identifier:' in line:

@@ -284,7 +284,7 @@ def get_video_files(plex_id, params):
     app.init(entrypoint=True)
     item = PF.GetPlexMetadata(plex_id)
     try:
-        path = utils.try_decode(item[0][0][0].attrib['file'])
+        path = item[0][0][0].attrib['file']
     except (TypeError, IndexError, AttributeError, KeyError):
         LOG.error('Could not get file path for item %s', plex_id)
         return xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -300,15 +300,14 @@ def get_video_files(plex_id, params):
     if path_ops.exists(path):
         for root, dirs, files in path_ops.walk(path):
             for directory in dirs:
-                item_path = utils.try_encode(path_ops.path.join(root,
-                                                                directory))
+                item_path = path_ops.path.join(root, directory)
                 listitem = ListItem(item_path, path=item_path)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                             url=item_path,
                                             listitem=listitem,
                                             isFolder=True)
             for file in files:
-                item_path = utils.try_encode(path_ops.path.join(root, file))
+                item_path = path_ops.path.join(root, file)
                 listitem = ListItem(item_path, path=item_path)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                             url=file,
@@ -353,18 +352,17 @@ def extra_fanart(plex_id, plex_path):
         backdrops = api.artwork()['Backdrop']
         for count, backdrop in enumerate(backdrops):
             # Same ordering as in artwork
-            art_file = utils.try_encode(path_ops.path.join(
-                fanart_dir, "fanart%.3d.jpg" % count))
+            art_file = path_ops.path.join(fanart_dir, "fanart%.3d.jpg" % count)
             listitem = ListItem("%.3d" % count, path=art_file)
             xbmcplugin.addDirectoryItem(
                 handle=int(sys.argv[1]),
                 url=art_file,
                 listitem=listitem)
-            path_ops.copyfile(backdrop, utils.try_decode(art_file))
+            path_ops.copyfile(backdrop, art_file)
     else:
         LOG.info("Found cached backdrop.")
         # Use existing cached images
-        fanart_dir = utils.try_decode(fanart_dir)
+        fanart_dir = fanart_dir
         for root, _, files in path_ops.walk(fanart_dir):
             root = utils.decode_path(root)
             for file in files:
