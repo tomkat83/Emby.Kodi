@@ -10,7 +10,7 @@ from xbmcgui import Window
 
 
 def _get_kodi_type():
-    kodi_type = listitem.getVideoInfoTag().getMediaType().decode('utf-8')
+    kodi_type = listitem.getVideoInfoTag().getMediaType()
     if not kodi_type:
         if getCondVisibility('Container.Content(albums)'):
             kodi_type = "album"

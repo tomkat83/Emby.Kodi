@@ -32,25 +32,23 @@ def get_clean_image(image):
     Pass in either unicode or str; returns unicode
     '''
     if not image:
-        return ""
-    if not isinstance(image, str):
-        image = image.encode('utf-8')
-    if b"music@" in image:
+        return ''
+    if 'music@' in image:
         # fix for embedded images
         thumbcache = xbmc.getCacheThumbName(image)
-        thumbcache = thumbcache.replace(b".tbn", b".jpg")
-        thumbcache = b"special://thumbnails/%s/%s" % (thumbcache[0], thumbcache)
+        thumbcache = thumbcache.replace('.tbn', '.jpg')
+        thumbcache = 'special://thumbnails/%s/%s' % (thumbcache[0], thumbcache)
         if not xbmcvfs.exists(thumbcache):
             xbmcvfs.copy(image, thumbcache)
         image = thumbcache
-    if image and b"image://" in image:
-        image = image.replace(b"image://", b"")
+    if image and 'image://' in image:
+        image = image.replace('image://', '')
         image = utils.unquote(image)
-        if image.endswith("/"):
+        if image.endswith('/'):
             image = image[:-1]
         return image
     else:
-        return image.decode('utf-8')
+        return image
 
 
 def generate_item(api):

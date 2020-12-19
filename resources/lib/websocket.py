@@ -731,7 +731,7 @@ class WebSocket(object):
 
     def _send(self, data):
         try:
-            return self.sock.send(data)
+            return self.sock.send(data.encode('utf-8'))
         except socket.timeout as e:
             raise WebSocketTimeoutException(e.args[0])
         except Exception as e:

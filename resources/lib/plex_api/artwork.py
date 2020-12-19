@@ -47,10 +47,9 @@ class Artwork(object):
             except ValueError:
                 # e.g. playlists
                 pass
-            artwork = '%s?width=%s&height=%s' % (artwork, width, height)
-        artwork = ('%s/photo/:/transcode?width=1920&height=1920&'
-                   'minSize=1&upscale=0&url=%s'
-                   % (app.CONN.server, utils.quote(artwork)))
+            artwork = f'{artwork}?width={width}&height={height}'
+        artwork = (f'{app.CONN.server}/photo/:/transcode?width=1920&height=1920&'
+                   f'minSize=1&upscale=0&url={utils.quote(artwork)}')
         artwork = self.attach_plex_token_to_url(artwork)
         return artwork
 
