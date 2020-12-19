@@ -15,9 +15,9 @@ LOG = getLogger('PLEX.plex_functions')
 CONTAINERSIZE = int(utils.settings('limitindex'))
 
 # For discovery of PMS in the local LAN
-PLEX_GDM_IP = '239.0.0.250'  # multicast to PMS
+PLEX_GDM_IP = b'239.0.0.250'  # multicast to PMS
 PLEX_GDM_PORT = 32414
-PLEX_GDM_MSG = 'M-SEARCH * HTTP/1.0'
+PLEX_GDM_MSG = b'M-SEARCH * HTTP/1.0'
 
 ###############################################################################
 
