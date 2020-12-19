@@ -59,14 +59,14 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
         if action in (ACTION_SELECT_ITEM, ACTION_MOUSE_LEFT_CLICK):
             if self.getFocusId() == LIST:
                 option = self.list_.getSelectedItem()
-                self.selected_option = option.getLabel().decode('utf-8')
+                self.selected_option = option.getLabel()
                 LOG.info('option selected: %s', self.selected_option)
                 self.close()
 
     def _add_editcontrol(self, x, y, height, width, password=None):
         media = path_ops.path.join(
             v.ADDON_PATH, 'resources', 'skins', 'default', 'media')
-        filename = utils.try_encode(path_ops.path.join(media, 'white.png'))
+        filename = path_ops.path.join(media, 'white.png')
         control = xbmcgui.ControlImage(0, 0, 0, 0,
                                        filename=filename,
                                        aspectRatio=0,

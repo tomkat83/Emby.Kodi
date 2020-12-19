@@ -320,31 +320,15 @@ def cast(func, value):
 
 def extend_url(url, params):
     """
-    Pass in an url [unicode] and params [dict]. Returns the extended url
+    Pass in an url [string] and params [dict]. Returns the extended url
         '<url><? or &><urllib.urlencode(params)>'
-    in unicode
+    in string
     """
-    params = encode_dict(params) if params else {}
-    params = urllib.parse.urlencode(params).decode('utf-8')
+    params = urllib.parse.urlencode(params)
     if '?' in url:
-        return '%s&%s' % (url, params)
+        return f'{url}&{params}'
     else:
-        return '%s?%s' % (url, params)
-
-
-def encode_dict(dictionary):
-    """
-    Pass in a dict. Will return the same dict with all keys and values encoded
-    in utf-8 - as long as they are unicode. Ignores all non-unicode entries
-
-    Useful for urllib.urlencode or urllib.(un)quote
-    """
-    for key, value in dictionary.items():
-        if isinstance(key, str):
-            dictionary[key.encode('utf-8')] = dictionary.pop(key)
-        if isinstance(value, str):
-            dictionary[key] = value.encode('utf-8')
-    return dictionary
+        return f'{url}?{params}'
 
 
 def parse_qs(qs, keep_blank_values=0, strict_parsing=0):

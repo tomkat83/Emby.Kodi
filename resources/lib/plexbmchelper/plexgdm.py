@@ -155,6 +155,7 @@ class plexgdm(object):
         while self._registration_is_running:
             try:
                 data, addr = update_sock.recvfrom(1024)
+                data = data.decode()
                 log.debug("Recieved UDP packet from [%s] containing [%s]"
                           % (addr, data.strip()))
             except socket.error:
