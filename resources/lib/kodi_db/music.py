@@ -111,7 +111,7 @@ class KodiMusicDB(common.KodiDBBase):
         Removes the album with id album_id from the table discography
         """
         # Need to get the album name as a string first!
-        self.cursor.execute('SELECT strAlbum, iYear FROM album WHERE idAlbum = ? LIMIT 1',
+        self.cursor.execute('SELECT strAlbum FROM album WHERE idAlbum = ? LIMIT 1',
                             (album_id, ))
         try:
             name, year = self.cursor.fetchone()
