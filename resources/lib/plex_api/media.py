@@ -27,6 +27,21 @@ class Media(object):
         """
         return self.xml[0][self.part].get(key, self.xml[0].get(key))
 
+    def _from_stream_or_part(self, key):
+        """
+        Retrieves XML data 'key' first from the very first stream. If
+        unsuccessful, tries to retrieve the data from the active part.
+
+        If all fails, None is returned.
+        """
+        try:
+            value = self.xml[0][self.part][0].get(key)
+        except IndexError:
+            value = None
+        if value is None:
+            value = self.xml[0][self.part].get(key)
+        return value
+
     def video_codec(self):
         """
         Returns the video codec and resolution for the child and part selected.
@@ -60,6 +75,19 @@ class Media(object):
         except (TypeError, AttributeError, KeyError, IndexError):
             answ['bitDepth'] = None
         return answ
+
+    def audio_codec(self):
+        """
+        Returns the audio codec.  If any data is not found on a part-level, the
+        Media-level data is returned. If that also fails (e.g. for old trailers,
+        None is returned)
+        """
+        return {
+            'bitrate': cast(int, self._from_stream_or_part('bitrate')),
+            'samplingrate': cast(int, self._from_stream_or_part('samplingRate')),
+            'channels': cast(int, self._from_stream_or_part('channels')),
+            'gain': cast(float, self._from_stream_or_part('gain'))
+        }
 
     def mediastreams(self):
         """

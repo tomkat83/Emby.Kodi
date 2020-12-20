@@ -458,6 +458,7 @@ class Song(MusicMixin, ItemBase):
                 moods.append(entry.attrib['tag'])
         mood = api.list_to_string(moods)
         _, path, filename = api.fullpath()
+        audio_codec = api.audio_codec()
         # UPDATE THE SONG #####
         if update_item:
             LOG.info("UPDATE song plex_id: %s - %s", plex_id, title)
@@ -479,6 +480,9 @@ class Song(MusicMixin, ItemBase):
                                     api.userrating(),
                                     comment,
                                     mood,
+                                    audio_codec['bitrate'] or 0,
+                                    audio_codec['samplingrate'] or 0,
+                                    audio_codec['channels'] or 0,
                                     api.date_created(),
                                     kodi_id)
         # OR ADD THE SONG #####
@@ -506,6 +510,9 @@ class Song(MusicMixin, ItemBase):
                                  0,
                                  0,
                                  mood,
+                                 audio_codec['bitrate'] or 0,
+                                 audio_codec['samplingrate'] or 0,
+                                 audio_codec['channels'] or 0,
                                  api.date_created())
         # Link song to artists
         artist_name = api.grandparent_title()

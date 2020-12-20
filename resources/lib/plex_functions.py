@@ -560,7 +560,9 @@ def GetAllPlexChildren(key):
     Input:
         key             Key to a Plex item, e.g. 12345
     """
-    return DownloadChunks("{server}/library/metadata/%s/children" % key)
+    return DownloadChunks(utils.extend_url(
+            f'{{server}}/library/metadata/{key}/children',
+            {'includeElements': 'Stream'}))
 
 
 class ThreadedDownloadChunk(backgroundthread.Task):

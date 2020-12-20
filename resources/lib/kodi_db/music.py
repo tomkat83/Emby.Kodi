@@ -348,8 +348,11 @@ class KodiMusicDB(common.KodiDBBase):
                 iStartOffset,
                 iEndOffset,
                 mood,
+                iBitRate,
+                iSampleRate,
+                iChannels,
                 dateAdded)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (args))
 
     @db.catch_operationalerrors
@@ -370,6 +373,9 @@ class KodiMusicDB(common.KodiDBBase):
                 rating = ?,
                 comment = ?,
                 mood = ?,
+                iBitRate = ?,
+                iSampleRate = ?,
+                iChannels = ?,
                 dateAdded = ?
             WHERE idSong = ?
         ''', (args))
