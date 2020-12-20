@@ -280,9 +280,10 @@ class Album(MusicMixin, ItemBase):
                                      compilation,
                                      api.plot(),
                                      api.list_to_string(api.studios()),
+                                     api.kodi_type,
                                      api.userrating(),
                                      timing.unix_date_to_kodi(self.last_sync),
-                                     'album',
+                                     api.kodi_type,
                                      kodi_id)
         # OR ADD THE ALBUM #####
         else:
@@ -300,9 +301,10 @@ class Album(MusicMixin, ItemBase):
                                   compilation,
                                   api.plot(),
                                   api.list_to_string(api.studios()),
+                                  api.kodi_type,
                                   api.userrating(),
                                   timing.unix_date_to_kodi(self.last_sync),
-                                  'album')
+                                  api.kodi_type)
         self.kodidb.add_albumartist(artist_id, kodi_id, api.artist_name())
         if app.SYNC.artwork:
             self.kodidb.modify_artwork(artworks,
@@ -396,6 +398,7 @@ class Song(MusicMixin, ItemBase):
                                   None,
                                   None,
                                   None,
+                                  'single',
                                   None,
                                   None,
                                   timing.unix_date_to_kodi(self.last_sync),

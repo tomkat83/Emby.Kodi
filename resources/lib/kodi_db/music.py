@@ -197,10 +197,11 @@ class KodiMusicDB(common.KodiDBBase):
                     bCompilation,
                     strReview,
                     strLabel,
+                    strType,
                     iUserrating,
                     lastScraped,
                     strReleaseType)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (args))
         else:
             args = list(args)
@@ -217,10 +218,11 @@ class KodiMusicDB(common.KodiDBBase):
                     bCompilation,
                     strReview,
                     strLabel,
+                    strType,
                     iUserrating,
                     lastScraped,
                     strReleaseType)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (args))
 
     @db.catch_operationalerrors
@@ -237,6 +239,7 @@ class KodiMusicDB(common.KodiDBBase):
                     bCompilation = ?,
                     strReview = ?,
                     strLabel = ?,
+                    strType = ?,
                     iUserrating = ?,
                     lastScraped = ?,
                     strReleaseType = ?
