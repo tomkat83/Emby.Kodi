@@ -290,7 +290,10 @@ class Album(MusicMixin, ItemBase):
                                      musicBrainzId,
                                      api.artist_name(),
                                      genre,
-                                     api.year(),
+                                     api.premiere_date(),
+                                     # TODO: as soon as Plex supports the original
+                                     # release date (Kodi: strOrigReleaseDate)
+                                     api.premiere_date(),
                                      compilation,
                                      api.plot(),
                                      thumb,
@@ -308,7 +311,10 @@ class Album(MusicMixin, ItemBase):
                                   musicBrainzId,
                                   api.artist_name(),
                                   genre,
-                                  api.year(),
+                                  api.premiere_date(),
+                                  # TODO: as soon as Plex supports the original
+                                  # release date (Kodi: strOrigReleaseDate)
+                                  api.premiere_date(),
                                   compilation,
                                   api.plot(),
                                   thumb,
@@ -402,7 +408,10 @@ class Song(MusicMixin, ItemBase):
                                   None,
                                   None,
                                   genre,
-                                  api.year(),
+                                  api.premiere_date(),
+                                  # TODO: as soon as Plex supports the original
+                                  # release date (Kodi: strOrigReleaseDate)
+                                  api.premiere_date(),
                                   None,
                                   None,
                                   None,
