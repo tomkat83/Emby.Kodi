@@ -562,7 +562,6 @@ class KodiMusicDB(common.KodiDBBase):
                 SET strGenres = ?,
                     strBiography = ?,
                     strImage = ?,
-                    strFanart = ?,
                     lastScraped = ?
                 WHERE idArtist = ?
             ''', (args))

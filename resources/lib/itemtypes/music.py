@@ -201,7 +201,6 @@ class Artist(MusicMixin, ItemBase):
         self.kodidb.update_artist(api.list_to_string(api.genres()),
                                   api.plot(),
                                   thumb,
-                                  fanart,
                                   timing.unix_date_to_kodi(self.last_sync),
                                   kodi_id)
         if app.SYNC.artwork:
