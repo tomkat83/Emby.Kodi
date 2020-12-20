@@ -126,8 +126,6 @@ class MusicMixin(object):
         # Check whether we have orphaned path entries
         if not self.kodidb.path_id_from_song(kodi_id):
             self.kodidb.remove_path(path_id)
-        if v.KODIVERSION < 18:
-            self.kodidb.remove_albuminfosong(kodi_id)
         self.kodidb.delete_artwork(kodi_id, v.KODI_TYPE_SONG)
 
     def remove_album(self, kodi_id):
@@ -135,8 +133,6 @@ class MusicMixin(object):
         Remove an album
         '''
         self.kodidb.delete_album_from_discography(kodi_id)
-        if v.KODIVERSION < 18:
-            self.kodidb.delete_album_from_album_genre(kodi_id)
         self.kodidb.remove_album(kodi_id)
         self.kodidb.delete_artwork(kodi_id, v.KODI_TYPE_ALBUM)
 
@@ -290,72 +286,37 @@ class Album(MusicMixin, ItemBase):
         # UPDATE THE ALBUM #####
         if update_item:
             LOG.info("UPDATE album plex_id: %s - Name: %s", plex_id, name)
-            if v.KODIVERSION >= 18:
-                self.kodidb.update_album(name,
-                                         musicBrainzId,
-                                         api.artist_name(),
-                                         genre,
-                                         api.year(),
-                                         compilation,
-                                         api.plot(),
-                                         thumb,
-                                         api.list_to_string(api.studios()),
-                                         api.userrating(),
-                                         timing.unix_date_to_kodi(self.last_sync),
-                                         'album',
-                                         kodi_id)
-            else:
-                self.kodidb.update_album_17(name,
-                                            musicBrainzId,
-                                            api.artist_name(),
-                                            genre,
-                                            api.year(),
-                                            compilation,
-                                            api.plot(),
-                                            thumb,
-                                            api.list_to_string(api.studios()),
-                                            api.userrating(),
-                                            timing.unix_date_to_kodi(self.last_sync),
-                                            'album',
-                                            kodi_id)
+            self.kodidb.update_album(name,
+                                     musicBrainzId,
+                                     api.artist_name(),
+                                     genre,
+                                     api.year(),
+                                     compilation,
+                                     api.plot(),
+                                     thumb,
+                                     api.list_to_string(api.studios()),
+                                     api.userrating(),
+                                     timing.unix_date_to_kodi(self.last_sync),
+                                     'album',
+                                     kodi_id)
         # OR ADD THE ALBUM #####
         else:
             LOG.info("ADD album plex_id: %s - Name: %s", plex_id, name)
             kodi_id = self.kodidb.new_album_id()
-            if v.KODIVERSION >= 18:
-                self.kodidb.add_album(kodi_id,
-                                      name,
-                                      musicBrainzId,
-                                      api.artist_name(),
-                                      genre,
-                                      api.year(),
-                                      compilation,
-                                      api.plot(),
-                                      thumb,
-                                      api.list_to_string(api.studios()),
-                                      api.userrating(),
-                                      timing.unix_date_to_kodi(self.last_sync),
-                                      'album')
-            else:
-                self.kodidb.add_album_17(kodi_id,
-                                         name,
-                                         musicBrainzId,
-                                         api.artist_name(),
-                                         genre,
-                                         api.year(),
-                                         compilation,
-                                         api.plot(),
-                                         thumb,
-                                         api.list_to_string(api.studios()),
-                                         api.userrating(),
-                                         timing.unix_date_to_kodi(self.last_sync),
-                                         'album')
+            self.kodidb.add_album(kodi_id,
+                                  name,
+                                  musicBrainzId,
+                                  api.artist_name(),
+                                  genre,
+                                  api.year(),
+                                  compilation,
+                                  api.plot(),
+                                  thumb,
+                                  api.list_to_string(api.studios()),
+                                  api.userrating(),
+                                  timing.unix_date_to_kodi(self.last_sync),
+                                  'album')
         self.kodidb.add_albumartist(artist_id, kodi_id, api.artist_name())
-        if v.KODIVERSION < 18:
-            self.kodidb.add_discography(artist_id, name, api.year())
-            self.kodidb.add_music_genres(kodi_id,
-                                         api.genres(),
-                                         v.KODI_TYPE_ALBUM)
         if app.SYNC.artwork:
             self.kodidb.modify_artwork(artworks,
                                        kodi_id,
@@ -436,34 +397,19 @@ class Song(MusicMixin, ItemBase):
             # No album found, create a single's album
             LOG.info('Creating singles album')
             parent_id = self.kodidb.new_album_id()
-            if v.KODIVERSION >= 18:
-                self.kodidb.add_album(kodi_id,
-                                      None,
-                                      None,
-                                      None,
-                                      genre,
-                                      api.year(),
-                                      None,
-                                      None,
-                                      None,
-                                      None,
-                                      None,
-                                      timing.unix_date_to_kodi(self.last_sync),
-                                      'single')
-            else:
-                self.kodidb.add_album_17(kodi_id,
-                                         None,
-                                         None,
-                                         None,
-                                         genre,
-                                         api.year(),
-                                         None,
-                                         None,
-                                         None,
-                                         None,
-                                         None,
-                                         timing.unix_date_to_kodi(self.last_sync),
-                                         'single')
+            self.kodidb.add_album(kodi_id,
+                                  None,
+                                  None,
+                                  None,
+                                  genre,
+                                  api.year(),
+                                  None,
+                                  None,
+                                  None,
+                                  None,
+                                  None,
+                                  timing.unix_date_to_kodi(self.last_sync),
+                                  'single')
         else:
             album = self.plexdb.album(album_id)
             if not album:
@@ -524,92 +470,44 @@ class Song(MusicMixin, ItemBase):
             LOG.info("UPDATE song plex_id: %s - %s", plex_id, title)
             # Use dummy strHash '123' for Kodi
             self.kodidb.update_path(path, kodi_pathid)
-            # Update the song entry
-            if v.KODIVERSION >= 18:
-                # Kodi Leia
-                self.kodidb.update_song(parent_id,
-                                        artists,
-                                        genre,
-                                        title,
-                                        track,
-                                        api.runtime(),
-                                        year,
-                                        filename,
-                                        api.viewcount(),
-                                        api.lastplayed(),
-                                        api.userrating(),
-                                        comment,
-                                        mood,
-                                        api.date_created(),
-                                        kodi_id)
-            else:
-                self.kodidb.update_song_17(parent_id,
-                                           artists,
-                                           genre,
-                                           title,
-                                           track,
-                                           api.runtime(),
-                                           year,
-                                           filename,
-                                           api.viewcount(),
-                                           api.lastplayed(),
-                                           api.userrating(),
-                                           comment,
-                                           mood,
-                                           api.date_created(),
-                                           kodi_id)
+            self.kodidb.update_song(parent_id,
+                                    artists,
+                                    genre,
+                                    title,
+                                    track,
+                                    api.runtime(),
+                                    year,
+                                    filename,
+                                    api.viewcount(),
+                                    api.lastplayed(),
+                                    api.userrating(),
+                                    comment,
+                                    mood,
+                                    api.date_created(),
+                                    kodi_id)
         # OR ADD THE SONG #####
         else:
             LOG.info("ADD song plex_id: %s - %s", plex_id, title)
             # Add path
             kodi_pathid = self.kodidb.add_path(path)
-            # Create the song entry
-            if v.KODIVERSION >= 18:
-                # Kodi Leia
-                self.kodidb.add_song(kodi_id,
-                                     parent_id,
-                                     kodi_pathid,
-                                     artists,
-                                     genre,
-                                     title,
-                                     track,
-                                     api.runtime(),
-                                     year,
-                                     filename,
-                                     musicBrainzId,
-                                     api.viewcount(),
-                                     api.lastplayed(),
-                                     api.userrating(),
-                                     0,
-                                     0,
-                                     mood,
-                                     api.date_created())
-            else:
-                self.kodidb.add_song_17(kodi_id,
-                                        parent_id,
-                                        kodi_pathid,
-                                        artists,
-                                        genre,
-                                        title,
-                                        track,
-                                        api.runtime(),
-                                        year,
-                                        filename,
-                                        musicBrainzId,
-                                        api.viewcount(),
-                                        api.lastplayed(),
-                                        api.userrating(),
-                                        0,
-                                        0,
-                                        mood,
-                                        api.date_created())
-        if v.KODIVERSION < 18:
-            # Link song to album
-            self.kodidb.add_albuminfosong(kodi_id,
-                                          parent_id,
-                                          track,
-                                          title,
-                                          api.runtime())
+            self.kodidb.add_song(kodi_id,
+                                 parent_id,
+                                 kodi_pathid,
+                                 artists,
+                                 genre,
+                                 title,
+                                 track,
+                                 api.runtime(),
+                                 year,
+                                 filename,
+                                 musicBrainzId,
+                                 api.viewcount(),
+                                 api.lastplayed(),
+                                 api.userrating(),
+                                 0,
+                                 0,
+                                 mood,
+                                 api.date_created())
         # Link song to artists
         artist_name = api.grandparent_title()
         # Do the actual linking

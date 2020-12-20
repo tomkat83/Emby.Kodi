@@ -180,87 +180,6 @@ class KodiMusicDB(common.KodiDBBase):
         return self.cursor.fetchone()[0] + 1
 
     @db.catch_operationalerrors
-    def add_album_17(self, *args):
-        """
-        strReleaseType: 'album' or 'single'
-        """
-        if app.SYNC.artwork:
-            self.cursor.execute('''
-                INSERT INTO album(
-                    idAlbum,
-                    strAlbum,
-                    strMusicBrainzAlbumID,
-                    strArtists,
-                    strGenres,
-                    iYear,
-                    bCompilation,
-                    strReview,
-                    strImage,
-                    strLabel,
-                    iUserrating,
-                    lastScraped,
-                    strReleaseType)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (args))
-        else:
-            args = list(args)
-            del args[8]
-            self.cursor.execute('''
-                INSERT INTO album(
-                    idAlbum,
-                    strAlbum,
-                    strMusicBrainzAlbumID,
-                    strArtists,
-                    strGenres,
-                    iYear,
-                    bCompilation,
-                    strReview,
-                    strLabel,
-                    iUserrating,
-                    lastScraped,
-                    strReleaseType)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (args))
-
-    @db.catch_operationalerrors
-    def update_album_17(self, *args):
-        if app.SYNC.artwork:
-            self.cursor.execute('''
-                UPDATE album
-                SET strAlbum = ?,
-                    strMusicBrainzAlbumID = ?,
-                    strArtists = ?,
-                    strGenres = ?,
-                    iYear = ?,
-                    bCompilation = ?,
-                    strReview = ?,
-                    strImage = ?,
-                    strLabel = ?,
-                    iUserrating = ?,
-                    lastScraped = ?,
-                    strReleaseType = ?
-                WHERE idAlbum = ?
-            ''', (args))
-        else:
-            args = list(args)
-            del args[7]
-            self.cursor.execute('''
-                UPDATE album
-                SET strAlbum = ?,
-                    strMusicBrainzAlbumID = ?,
-                    strArtists = ?,
-                    strGenres = ?,
-                    iYear = ?,
-                    bCompilation = ?,
-                    strReview = ?,
-                    strLabel = ?,
-                    iUserrating = ?,
-                    lastScraped = ?,
-                    strReleaseType = ?
-                WHERE idAlbum = ?
-            ''', (args))
-
-    @db.catch_operationalerrors
     def add_album(self, *args):
         """
         strReleaseType: 'album' or 'single'
@@ -352,16 +271,6 @@ class KodiMusicDB(common.KodiDBBase):
         ''', (artist_id, kodi_id, artistname))
 
     @db.catch_operationalerrors
-    def add_discography(self, artist_id, albumname, year):
-        self.cursor.execute('''
-            INSERT OR REPLACE INTO discography(
-                idArtist,
-                strAlbum,
-                strYear)
-            VALUES (?, ?, ?)
-        ''', (artist_id, albumname, year))
-
-    @db.catch_operationalerrors
     def add_music_genres(self, kodiid, genres, mediatype):
         """
         Adds a list of genres (list of unicode) for a certain Kodi item
@@ -438,31 +347,6 @@ class KodiMusicDB(common.KodiDBBase):
         ''', (args))
 
     @db.catch_operationalerrors
-    def add_song_17(self, *args):
-        self.cursor.execute('''
-            INSERT INTO song(
-                idSong,
-                idAlbum,
-                idPath,
-                strArtists,
-                strGenres,
-                strTitle,
-                iTrack,
-                iDuration,
-                iYear,
-                strFileName,
-                strMusicBrainzTrackID,
-                iTimesPlayed,
-                lastplayed,
-                rating,
-                iStartOffset,
-                iEndOffset,
-                mood,
-                dateAdded)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (args))
-
-    @db.catch_operationalerrors
     def update_song(self, *args):
         self.cursor.execute('''
             UPDATE song
@@ -489,27 +373,6 @@ class KodiMusicDB(common.KodiDBBase):
             UPDATE song
             SET iTimesPlayed = ?,
                 lastplayed = ?
-            WHERE idSong = ?
-        ''', (args))
-
-    @db.catch_operationalerrors
-    def update_song_17(self, *args):
-        self.cursor.execute('''
-            UPDATE song
-            SET idAlbum = ?,
-                strArtists = ?,
-                strGenres = ?,
-                strTitle = ?,
-                iTrack = ?,
-                iDuration = ?,
-                iYear = ?,
-                strFilename = ?,
-                iTimesPlayed = ?,
-                lastplayed = ?,
-                rating = ?,
-                comment = ?,
-                mood = ?,
-                dateAdded = ?
             WHERE idSong = ?
         ''', (args))
 
@@ -595,22 +458,6 @@ class KodiMusicDB(common.KodiDBBase):
                 strArtist)
             VALUES (?, ?, ?, ?, ?)
         ''', (artist_id, song_id, 1, 0, artist_name))
-
-    @db.catch_operationalerrors
-    def add_albuminfosong(self, song_id, album_id, track_no, track_title,
-                          runtime):
-        """
-        Kodi 17 only
-        """
-        self.cursor.execute('''
-            INSERT OR REPLACE INTO albuminfosong(
-                idAlbumInfoSong,
-                idAlbumInfo,
-                iTrack,
-                strTitle,
-                iDuration)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (song_id, album_id, track_no, track_title, runtime))
 
     @db.catch_operationalerrors
     def update_userrating(self, kodi_id, kodi_type, userrating):
