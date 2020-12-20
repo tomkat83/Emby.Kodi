@@ -485,7 +485,10 @@ class Song(MusicMixin, ItemBase):
                                     title,
                                     track,
                                     api.runtime(),
-                                    year,
+                                    api.premiere_date(),
+                                    # TODO: as soon as Plex supports the original
+                                    # release date (Kodi: strOrigReleaseDate)
+                                    api.premiere_date(),
                                     filename,
                                     api.viewcount(),
                                     api.lastplayed(),
@@ -507,7 +510,10 @@ class Song(MusicMixin, ItemBase):
                                  title,
                                  track,
                                  api.runtime(),
-                                 year,
+                                 api.premiere_date(),
+                                 # TODO: as soon as Plex supports the original
+                                 # release date (Kodi: strOrigReleaseDate)
+                                 api.premiere_date(),
                                  filename,
                                  musicBrainzId,
                                  api.viewcount(),

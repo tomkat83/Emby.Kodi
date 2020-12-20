@@ -337,7 +337,8 @@ class KodiMusicDB(common.KodiDBBase):
                 strTitle,
                 iTrack,
                 iDuration,
-                iYear,
+                strReleaseDate,
+                strOrigReleaseDate,
                 strFileName,
                 strMusicBrainzTrackID,
                 iTimesPlayed,
@@ -347,7 +348,7 @@ class KodiMusicDB(common.KodiDBBase):
                 iEndOffset,
                 mood,
                 dateAdded)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (args))
 
     @db.catch_operationalerrors
@@ -360,7 +361,8 @@ class KodiMusicDB(common.KodiDBBase):
                 strTitle = ?,
                 iTrack = ?,
                 iDuration = ?,
-                iYear = ?,
+                strReleaseDate = ?,
+                strOrigReleaseDate = ?,
                 strFilename = ?,
                 iTimesPlayed = ?,
                 lastplayed = ?,
