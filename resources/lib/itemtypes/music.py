@@ -172,16 +172,6 @@ class Artist(MusicMixin, ItemBase):
 
         if app.SYNC.artwork:
             artworks = api.artwork()
-            if 'poster' in artworks:
-                thumb = "<thumb>%s</thumb>" % artworks['poster']
-            else:
-                thumb = None
-            if 'fanart' in artworks:
-                fanart = "<fanart>%s</fanart>" % artworks['fanart']
-            else:
-                fanart = None
-        else:
-            thumb, fanart = None, None
 
         # UPDATE THE ARTIST #####
         if update_item:
@@ -196,7 +186,6 @@ class Artist(MusicMixin, ItemBase):
             kodi_id = self.kodidb.add_artist(api.title(), musicBrainzId)
         self.kodidb.update_artist(api.list_to_string(api.genres()),
                                   api.plot(),
-                                  thumb,
                                   timing.unix_date_to_kodi(self.last_sync),
                                   kodi_id)
         if app.SYNC.artwork:
@@ -276,12 +265,6 @@ class Album(MusicMixin, ItemBase):
         genre = api.list_to_string(api.genres())
         if app.SYNC.artwork:
             artworks = api.artwork()
-            if 'poster' in artworks:
-                thumb = "<thumb>%s</thumb>" % artworks['poster']
-            else:
-                thumb = None
-        else:
-            thumb = None
 
         # UPDATE THE ALBUM #####
         if update_item:
@@ -296,7 +279,6 @@ class Album(MusicMixin, ItemBase):
                                      api.premiere_date(),
                                      compilation,
                                      api.plot(),
-                                     thumb,
                                      api.list_to_string(api.studios()),
                                      api.userrating(),
                                      timing.unix_date_to_kodi(self.last_sync),
@@ -317,7 +299,6 @@ class Album(MusicMixin, ItemBase):
                                   api.premiere_date(),
                                   compilation,
                                   api.plot(),
-                                  thumb,
                                   api.list_to_string(api.studios()),
                                   api.userrating(),
                                   timing.unix_date_to_kodi(self.last_sync),

@@ -196,12 +196,11 @@ class KodiMusicDB(common.KodiDBBase):
                     strOrigReleaseDate,
                     bCompilation,
                     strReview,
-                    strImage,
                     strLabel,
                     iUserrating,
                     lastScraped,
                     strReleaseType)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (args))
         else:
             args = list(args)
@@ -237,7 +236,6 @@ class KodiMusicDB(common.KodiDBBase):
                     strOrigReleaseDate = ?,
                     bCompilation = ?,
                     strReview = ?,
-                    strImage = ?,
                     strLabel = ?,
                     iUserrating = ?,
                     lastScraped = ?,
@@ -425,25 +423,13 @@ class KodiMusicDB(common.KodiDBBase):
 
     @db.catch_operationalerrors
     def update_artist(self, *args):
-        if app.SYNC.artwork:
-            self.cursor.execute('''
-                UPDATE artist
-                SET strGenres = ?,
-                    strBiography = ?,
-                    strImage = ?,
-                    lastScraped = ?
-                WHERE idArtist = ?
-            ''', (args))
-        else:
-            args = list(args)
-            del args[3], args[2]
-            self.cursor.execute('''
-                UPDATE artist
-                SET strGenres = ?,
-                    strBiography = ?,
-                    lastScraped = ?
-                WHERE idArtist = ?
-            ''', (args))
+        self.cursor.execute('''
+            UPDATE artist
+            SET strGenres = ?,
+                strBiography = ?,
+                lastScraped = ?
+            WHERE idArtist = ?
+        ''', (args))
 
     @db.catch_operationalerrors
     def remove_song(self, kodi_id):
