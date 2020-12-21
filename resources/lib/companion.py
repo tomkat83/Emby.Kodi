@@ -85,7 +85,7 @@ def process_command(request_path, params):
     elif request_path == "player/playback/stop":
         js.stop()
     elif request_path == "player/playback/seekTo":
-        js.seek_to(int(params.get('offset', 0)))
+        js.seek_to(float(params.get('offset', 0.0)) / 1000.0)
     elif request_path == "player/playback/stepForward":
         js.smallforward()
     elif request_path == "player/playback/stepBack":

@@ -610,5 +610,5 @@ def threaded_playback(kodi_playlist, startpos, offset):
         if i > TRY_TO_SEEK_FOR:
             LOG.error('Failed to seek to %s. Error: %s', offset, answ)
             return
-        answ = js.seek_to(offset * 1000)
+        answ = js.seek_to(offset)
     LOG.debug('Seek to offset %s successful', offset)

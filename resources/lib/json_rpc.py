@@ -169,12 +169,12 @@ def stop():
 
 def seek_to(offset):
     """
-    Seeks all Kodi players to offset [int] in milliseconds
+    Seeks all Kodi players to offset [int] in seconds
     """
     for playerid in get_player_ids():
         return JsonRPC("Player.Seek").execute(
             {"playerid": playerid,
-             "value": timing.millis_to_kodi_time(offset)})
+             "value": {'time': timing.millis_to_kodi_time(int(offset * 1000))}})
 
 
 def smallforward():
