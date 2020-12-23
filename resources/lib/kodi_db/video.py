@@ -61,8 +61,7 @@ class KodiVideoDB(common.KodiDBBase):
         of parent path ids
         """
         parentpath = path_ops.path.abspath(
-            path_ops.path.join(path,
-                               path_ops.decode_path(path_ops.path.pardir)))
+            path_ops.path.join(path, path_ops.path.pardir))
         pathid = self.get_path(parentpath)
         if pathid is None:
             self.cursor.execute('''

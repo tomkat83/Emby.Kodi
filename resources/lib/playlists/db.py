@@ -92,7 +92,7 @@ def m3u_to_plex_ids(playlist):
     Adapter to process *.m3u playlist files. Encoding is not uniform!
     """
     plex_ids = list()
-    with open(path_ops.encode_path(playlist.kodi_path), 'rb') as f:
+    with open(playlist.kodi_path, 'rb') as f:
         text = f.read()
     try:
         text = text.decode(v.M3U_ENCODING)

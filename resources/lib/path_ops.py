@@ -22,31 +22,9 @@ import re
 
 import xbmcvfs
 
-from .tools import unicode_paths
-
 # Kodi seems to encode in utf-8 in ALL cases (unlike e.g. the OS filesystem)
 KODI_ENCODING = 'utf-8'
 REGEX_FILE_NUMBERING = re.compile(r'''_(\d\d)\.\w+$''')
-
-
-def encode_path(path):
-    """
-    Filenames and paths are not necessarily utf-8 encoded. Use this function
-    instead of try_encode/trydecode if working with filenames and paths!
-    (os.walk only feeds on encoded paths. sys.getfilesystemencoding returns None
-    for Raspberry Pi)
-    """
-    return unicode_paths.encode(path)
-
-
-def decode_path(path):
-    """
-    Filenames and paths are not necessarily utf-8 encoded. Use this function
-    instead of try_encode/trydecode if working with filenames and paths!
-    (os.walk only feeds on encoded paths. sys.getfilesystemencoding returns None
-    for Raspberry Pi)
-    """
-    return unicode_paths.decode(path)
 
 
 def translate_path(path):

@@ -125,7 +125,7 @@ def kodi_playlist_hash(path):
 
     There are probably way more efficient ways out there to do this
     """
-    stat = os.stat(path_ops.encode_path(path))
+    stat = os.stat(path)
     # stat.st_size is of type long; stat.st_mtime is of type float - hash both
     m = hashlib.md5()
     m.update(repr(stat.st_size))

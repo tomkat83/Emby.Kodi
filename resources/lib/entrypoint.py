@@ -364,10 +364,8 @@ def extra_fanart(plex_id, plex_path):
         # Use existing cached images
         fanart_dir = fanart_dir
         for root, _, files in path_ops.walk(fanart_dir):
-            root = utils.decode_path(root)
             for file in files:
-                file = utils.decode_path(file)
-                art_file = utils.try_encode(path_ops.path.join(root, file))
+                art_file = path_ops.path.join(root, file)
                 listitem = ListItem(file, path=art_file)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                             url=art_file,

@@ -325,7 +325,7 @@ class Media(object):
             return
         else:
             LOG.debug('Writing temp subtitle to %s', path)
-            with open(path_ops.encode_path(path), 'wb') as f:
+            with open(path, 'wb') as f:
                 f.write(response.content)
             return path
 

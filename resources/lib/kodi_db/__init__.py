@@ -73,7 +73,7 @@ def reset_cached_images():
         for path in paths:
             new_path = path_ops.translate_path('special://thumbnails/%s' % path)
             try:
-                path_ops.makedirs(path_ops.encode_path(new_path))
+                path_ops.makedirs(new_path)
             except OSError as err:
                 LOG.warn('Could not create thumbnail directory %s: %s',
                          new_path, err)
