@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from logging import getLogger
+import secrets
 
 from .. import utils, json_rpc as js, variables as v
 
@@ -37,14 +38,29 @@ class Connection(object):
         PKC needs Kodi webserver to work correctly
         """
         LOG.debug('Loading Kodi webserver details')
-        # Kodi webserver details
-        if js.get_setting('services.webserver') in (None, False):
-            # Enable the webserver, it is disabled
+        if not utils.settings('enableTextureCache') == 'true':
+            LOG.info('Artwork caching disabled')
+            return
+        self.webserver_password = js.get_setting('services.webserverpassword')
+        if not self.webserver_password:
+            LOG.warn('No password set for the Kodi web server. Generating a '
+                     'new random password')
+            self.webserver_password = secrets.token_urlsafe(16)
+            js.set_setting('services.webserverpassword', self.webserver_password)
+        if not js.get_setting('services.webserver'):
+            # The Kodi webserver is needed for artwork caching. PKC already set
+            # a strong, random password automatically if you haven't done so
+            # already. Please confirm the next dialog that you want to enable
+            # the webserver now with Yes.
+            utils.messageDialog(utils.lang(29999), utils.lang(30004))
+            # Enable the webserver, it is disabled. Will force a Kodi pop-up
             js.set_setting('services.webserver', True)
+            if not js.get_setting('services.webserver'):
+                LOG.warn('User chose to not enable Kodi webserver')
+                utils.settings('enableTextureCache', value='false')
         self.webserver_host = 'localhost'
         self.webserver_port = js.get_setting('services.webserverport')
         self.webserver_username = js.get_setting('services.webserverusername')
-        self.webserver_password = js.get_setting('services.webserverpassword')
 
     def load(self):
         LOG.debug('Loading connection settings')

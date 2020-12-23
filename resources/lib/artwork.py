@@ -100,10 +100,7 @@ def cache_url(url, should_suspend=None):
     while True:
         try:
             requests.head(
-                url="http://%s:%s/image/image://%s"
-                    % (app.CONN.webserver_host,
-                       app.CONN.webserver_port,
-                       url),
+                url=f'http://{app.CONN.webserver_username}:{app.CONN.webserver_password}@{app.CONN.webserver_host}:{app.CONN.webserver_port}/image/image://{url}',
                 auth=(app.CONN.webserver_username,
                       app.CONN.webserver_password),
                 timeout=TIMEOUT)
