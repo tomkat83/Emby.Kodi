@@ -128,8 +128,8 @@ def kodi_playlist_hash(path):
     stat = os.stat(path)
     # stat.st_size is of type long; stat.st_mtime is of type float - hash both
     m = hashlib.md5()
-    m.update(repr(stat.st_size))
-    m.update(repr(stat.st_mtime))
+    m.update(repr(stat.st_size).encode())
+    m.update(repr(stat.st_mtime).encode())
     return m.hexdigest()
 
 
