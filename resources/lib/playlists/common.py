@@ -76,9 +76,13 @@ class Playlist(object):
                 "}}").format(self=self)
 
     def __bool__(self):
-        return (self.plex_id and self.plex_updatedat and self.plex_name and
-                self._kodi_path and self.kodi_filename and self.kodi_type and
-                self.kodi_hash)
+        return all((bool(self.plex_id),
+                    bool(self.plex_updatedat),
+                    bool(self.plex_name),
+                    bool(self._kodi_path),
+                    bool(self.kodi_filename),
+                    bool(self.kodi_type),
+                    bool(self.kodi_hash)))
 
     # Used for comparison of playlists
     @property
