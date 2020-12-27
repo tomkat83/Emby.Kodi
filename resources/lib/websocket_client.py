@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 from json import loads
-from ssl import CERT_NONE
 
 from . import backgroundthread, websocket, utils, companion, app, variables as v
 

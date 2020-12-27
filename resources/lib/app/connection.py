@@ -3,7 +3,7 @@
 from logging import getLogger
 import secrets
 
-from .. import utils, json_rpc as js, variables as v
+from .. import utils, json_rpc as js
 
 LOG = getLogger('PLEX.connection')
 
