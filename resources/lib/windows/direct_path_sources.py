@@ -22,7 +22,7 @@ PATH = path_ops.translate_path('special://userdata/')
 
 def get_etree(topelement):
     try:
-        xml = utils.defused_etree.parse(
+        xml = utils.etree.parse(
             path_ops.path.join(PATH, '%s.xml' % topelement))
     except IOError:
         # Document is blank or missing

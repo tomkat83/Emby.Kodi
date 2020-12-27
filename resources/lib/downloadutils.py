@@ -262,7 +262,7 @@ class DownloadUtils(object):
                     return r
                 try:
                     # xml response
-                    r = utils.defused_etree.fromstring(r.content)
+                    r = utils.etree.fromstring(r.content)
                     return r
                 except Exception:
                     r.encoding = 'utf-8'

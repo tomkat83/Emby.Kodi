@@ -242,7 +242,7 @@ class Alexa_Websocket(WebSocket):
                   self.__class__.__name__)
         LOG.debug('%s: %s', self.__class__.__name__, message)
         try:
-            message = utils.defused_etree.fromstring(message)
+            message = utils.etree.fromstring(message)
         except Exception as ex:
             LOG.error('%s: Error decoding message from Alexa: %s',
                       self.__class__.__name__, ex)

@@ -10,10 +10,8 @@ from unicodedata import normalize
 from threading import Lock
 import urllib
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
-import xml.etree.ElementTree as etree
 # etree parse unsafe; make sure we're always receiving unicode
-from . import defused_etree
-from xml.etree.ElementTree import ParseError
+from . import defused_etree as etree
 from functools import wraps
 import re
 import gc
@@ -697,7 +695,7 @@ class XmlKodiSetting(object):
 
     def __enter__(self):
         try:
-            self.tree = defused_etree.parse(self.path)
+            self.tree = etree.parse(self.path)
         except IOError:
             # Document is blank or missing
             if self.force_create is False:
@@ -707,14 +705,14 @@ class XmlKodiSetting(object):
             # Create topmost xml entry
             self.tree = etree.ElementTree(etree.Element(self.top_element))
             self.write_xml = True
-        except ParseError:
+        except etree.ParseError:
             LOG.error('Error parsing %s', self.path)
             # "Kodi cannot parse {0}. PKC will not function correctly. Please
             # visit {1} and correct your file!"
             messageDialog(lang(29999), lang(39716).format(
                 self.filename,
                 'http://kodi.wiki'))
-            self.__exit__(ParseError('Error parsing XML'), None, None)
+            self.__exit__(etree.ParseError('Error parsing XML'), None, None)
         self.root = self.tree.getroot()
         return self
 

@@ -12,6 +12,9 @@ from xml.etree.ElementTree import parse as _parse
 from xml.etree.ElementTree import iterparse as _iterparse
 from xml.etree.ElementTree import tostring
 
+# Enable creation of new xmls and xml elements
+from xml.etree.ElementTree import ElementTree, Element, SubElement, ParseError
+
 
 class UnicodeXMLParser(DefusedXMLParser):
     """
