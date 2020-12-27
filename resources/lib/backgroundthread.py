@@ -253,15 +253,15 @@ class OrderedQueue(queue.PriorityQueue, object):
         self.next_index = 0
         super(OrderedQueue, self).__init__(maxsize)
 
-    def _qsize(self, len=len):
+    def _qsize(self):
         try:
             return len(self.queue) if self.queue[0][0] == self.next_index else 0
         except IndexError:
             return 0
 
-    def _get(self, heappop=heapq.heappop):
+    def _get(self):
         self.next_index += 1
-        return heappop(self.queue)
+        return heapq.heappop(self.queue)
 
 
 class Tasks(list):
@@ -335,9 +335,9 @@ class FunctionAsTask(Task):
 
 
 class MutablePriorityQueue(queue.PriorityQueue):
-    def _get(self, heappop=heapq.heappop):
+    def _get(self):
             self.queue.sort()
-            return heappop(self.queue)
+            return heapq.heappop(self.queue)
 
     def lowest(self):
         """Return the lowest priority item in the queue (not reliable!)."""
