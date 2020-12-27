@@ -165,8 +165,6 @@ class PMS_Websocket(WebSocket):
             if app.ACCOUNT.pms_token:
                 uri += '?X-Plex-Token=%s' % app.ACCOUNT.pms_token
         sslopt = {}
-        if v.KODIVERSION == 17 and utils.settings('sslverify') == "false":
-            sslopt["cert_reqs"] = CERT_NONE
         LOG.debug("%s: Uri: %s, sslopt: %s",
                   self.__class__.__name__, uri, sslopt)
         return uri, sslopt

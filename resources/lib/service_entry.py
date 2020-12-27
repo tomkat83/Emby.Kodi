@@ -266,8 +266,6 @@ class Service(object):
         # Save changes to to file
         self.setup.save_pms_settings(server['baseURL'], server['token'])
         self.setup.write_pms_to_settings(server)
-        if not v.KODIVERSION >= 18:
-            utils.settings('sslverify', value='false')
         # Wipe Kodi and Plex database as well as playlists and video nodes
         utils.wipe_database()
         app.CONN.load()

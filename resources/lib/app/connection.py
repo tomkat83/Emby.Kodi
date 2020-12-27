@@ -67,8 +67,7 @@ class Connection(object):
         # Shall we verify SSL certificates? "None" will leave SSL enabled
         # Ignore this setting for Kodi >= 18 as Kodi 18 is much stricter
         # with checking SSL certs
-        self.verify_ssl_cert = None if v.KODIVERSION >= 18 or utils.settings('sslverify') == 'true' \
-            else False
+        self.verify_ssl_cert = None
         # Do we have an ssl certificate for PKC we need to use?
         self.ssl_cert_path = utils.settings('sslcert') \
             if utils.settings('sslcert') != 'None' else None
@@ -89,8 +88,7 @@ class Connection(object):
                   self.server_name, self.machine_identifier, self.server)
 
     def load_entrypoint(self):
-        self.verify_ssl_cert = None if v.KODIVERSION >= 18 or utils.settings('sslverify') == 'true' \
-            else False
+        self.verify_ssl_cert = None
         self.ssl_cert_path = utils.settings('sslcert') \
             if utils.settings('sslcert') != 'None' else None
         self.https = utils.settings('https') == 'true'

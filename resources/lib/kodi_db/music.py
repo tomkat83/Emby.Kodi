@@ -48,17 +48,16 @@ class KodiMusicDB(common.KodiDBBase):
                 strRole)
             VALUES (?, ?)
         ''', (1, 'Artist'))
-        if v.KODIVERSION >= 18:
-            self.cursor.execute('DELETE FROM versiontagscan')
-            self.cursor.execute('''
-                INSERT INTO versiontagscan(
-                    idVersion,
-                    iNeedsScan,
-                    lastscanned)
-                VALUES (?, ?, ?)
-            ''', (v.DB_MUSIC_VERSION,
-                  0,
-                  timing.kodi_now()))
+        self.cursor.execute('DELETE FROM versiontagscan')
+        self.cursor.execute('''
+            INSERT INTO versiontagscan(
+                idVersion,
+                iNeedsScan,
+                lastscanned)
+            VALUES (?, ?, ?)
+        ''', (v.DB_MUSIC_VERSION,
+              0,
+              timing.kodi_now()))
 
     @db.catch_operationalerrors
     def update_path(self, path, kodi_pathid):
@@ -487,9 +486,6 @@ class KodiMusicDB(common.KodiDBBase):
 
     @db.catch_operationalerrors
     def remove_album(self, kodi_id):
-        if v.KODIVERSION < 18:
-            self.cursor.execute('DELETE FROM albuminfosong WHERE idAlbumInfo = ?',
-                                (kodi_id, ))
         self.cursor.execute('DELETE FROM album_artist WHERE idAlbum = ?',
                             (kodi_id, ))
         self.cursor.execute('DELETE FROM album WHERE idAlbum = ?', (kodi_id, ))

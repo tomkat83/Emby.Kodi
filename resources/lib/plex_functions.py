@@ -127,12 +127,6 @@ def check_connection(url, token=None, verifySSL=None):
     header_options = None
     if token is not None:
         header_options = {'X-Plex-Token': token}
-    if verifySSL is True:
-        if v.KODIVERSION >= 18:
-            # Always verify with Kodi >= 18
-            verifySSL = True
-        else:
-            verifySSL = True if utils.settings('sslverify') == 'true' else False
     if 'plex.tv' in url:
         url = 'https://plex.tv/api/home/users'
     LOG.debug("Checking connection to server %s with verifySSL=%s",
@@ -432,7 +426,7 @@ def _poke_pms(pms, queue):
     xml = DU().downloadUrl('%s/identity' % url,
                            authenticate=False,
                            headerOptions={'X-Plex-Token': pms['token']},
-                           verifySSL=True if v.KODIVERSION >= 18 else False,
+                           verifySSL=True,
                            timeout=(3.0, 5.0))
     try:
         xml.attrib['machineIdentifier']
@@ -888,7 +882,7 @@ def GetMachineIdentifier(url):
     """
     xml = DU().downloadUrl('%s/identity' % url,
                            authenticate=False,
-                           verifySSL=True if v.KODIVERSION >= 18 else False,
+                           verifySSL=True,
                            timeout=10,
                            reraise=True)
     try:
@@ -1000,7 +994,7 @@ def pms_root(url, token):
     return DU().downloadUrl(
         url,
         authenticate=False,
-        verifySSL=True if v.KODIVERSION >= 18 else False,
+        verifySSL=True,
         headerOptions={'X-Plex-Token': token} if token else None)
 
 
@@ -1013,7 +1007,7 @@ def get_PMS_settings(url, token):
     return DU().downloadUrl(
         '%s/:/prefs' % url,
         authenticate=False,
-        verifySSL=True if v.KODIVERSION >= 18 else False,
+        verifySSL=True,
         headerOptions={'X-Plex-Token': token} if token else None)
 
 

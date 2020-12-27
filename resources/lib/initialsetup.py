@@ -211,8 +211,7 @@ class InitialSetup(object):
         not set before
         """
         answer = True
-        chk = PF.check_connection(app.CONN.server,
-                                  verifySSL=True if v.KODIVERSION >= 18 else False)
+        chk = PF.check_connection(app.CONN.server, verifySSL=True)
         if chk is False:
             LOG.warn('Could not reach PMS %s', app.CONN.server)
             answer = False
@@ -240,18 +239,13 @@ class InitialSetup(object):
         """
         Checks for server's connectivity. Returns check_connection result
         """
-        if server['local']:
-            # Deactive SSL verification if the server is local for Kodi 17
-            verifySSL = True if v.KODIVERSION >= 18 else False
-        else:
-            verifySSL = True
         if not server['token']:
             # Plex GDM: we only get the token from plex.tv after
             # Sign-in to plex.tv
             server['token'] = utils.settings('plexToken') or None
         return PF.check_connection(server['baseURL'],
                                    token=server['token'],
-                                   verifySSL=verifySSL)
+                                   verifySSL=True)
 
     def pick_pms(self, showDialog=False, inform_of_search=False):
         """
@@ -550,22 +544,14 @@ class InitialSetup(object):
 
         # Display a warning if Kodi puts ALL movies into the queue, basically
         # breaking playback reporting for PKC
-        warn = False
         settings = js.settings_getsettingvalue('videoplayer.autoplaynextitem')
-        if v.KODIVERSION >= 18:
-            # Answer for videoplayer.autoplaynextitem:
-            # [{u'label': u'Music videos', u'value': 0},
-            #  {u'label': u'TV shows', u'value': 1},
-            #  {u'label': u'Episodes', u'value': 2},
-            #  {u'label': u'Movies', u'value': 3},
-            #  {u'label': u'Uncategorized', u'value': 4}]
-            if 1 in settings or 2 in settings or 3 in settings:
-                warn = True
-        else:
-            # Kodi Krypton: answer is boolean
-            if settings:
-                warn = True
-        if warn:
+        # Answer for videoplayer.autoplaynextitem:
+        # [{u'label': u'Music videos', u'value': 0},
+        #  {u'label': u'TV shows', u'value': 1},
+        #  {u'label': u'Episodes', u'value': 2},
+        #  {u'label': u'Movies', u'value': 3},
+        #  {u'label': u'Uncategorized', u'value': 4}]
+        if 1 in settings or 2 in settings or 3 in settings:
             LOG.warn('Kodi setting videoplayer.autoplaynextitem is: %s',
                      settings)
             if utils.settings('warned_setting_videoplayer.autoplaynextitem') == 'false':
@@ -575,17 +561,13 @@ class InitialSetup(object):
                 # Warning: Kodi setting "Play next video automatically" is
                 # enabled. This could break PKC. Deactivate?
                 if utils.yesno_dialog(utils.lang(29999), utils.lang(30003)):
-                    if v.KODIVERSION >= 18:
-                        for i in (1, 2, 3):
-                            try:
-                                settings.remove(i)
-                            except ValueError:
-                                pass
-                        js.settings_setsettingvalue('videoplayer.autoplaynextitem',
-                                                    settings)
-                    else:
-                        js.settings_setsettingvalue('videoplayer.autoplaynextitem',
-                                                    False)
+                    for i in (1, 2, 3):
+                        try:
+                            settings.remove(i)
+                        except ValueError:
+                            pass
+                    js.settings_setsettingvalue('videoplayer.autoplaynextitem',
+                                                settings)
         # Set any video library updates to happen in the background in order to
         # hide "Compressing database"
         js.settings_setsettingvalue('videolibrary.backgroundupdate', True)
