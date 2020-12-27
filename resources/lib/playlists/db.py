@@ -9,7 +9,7 @@ from logging import getLogger
 from .common import Playlist, PlaylistError
 from ..plex_db import PlexDB
 from ..kodi_db import kodiid_from_filename
-from .. import path_ops, utils, variables as v
+from .. import utils, variables as v
 ###############################################################################
 LOG = getLogger('PLEX.playlists.db')
 

@@ -47,7 +47,7 @@ import logging
 import traceback
 import sys
 
-from . import utils, app
+from . import app
 
 ###############################################################################
 

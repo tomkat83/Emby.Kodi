@@ -8,7 +8,6 @@
 from logging import getLogger
 import re
 import socket
-import urllib.request, urllib.parse, urllib.error
 
 import xbmc
 
