@@ -245,6 +245,7 @@ class ManagedListItem(object):
                 self.setProperty(k, v)
 
     def __bool__(self):
+        """Magic method for bool(ManagedListItem)."""
         return self._valid
 
     @property
