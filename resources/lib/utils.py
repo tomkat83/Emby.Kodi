@@ -592,27 +592,6 @@ def compare_version(current, minimum):
     return curr_patch >= min_patch
 
 
-def normalize_string(text):
-    """
-    For theme media, do not modify unless modified in TV Tunes
-    """
-    text = text.replace(":", "")
-    text = text.replace("/", "-")
-    text = text.replace("\\", "-")
-    text = text.replace("<", "")
-    text = text.replace(">", "")
-    text = text.replace("*", "")
-    text = text.replace("?", "")
-    text = text.replace('|', "")
-    text = text.strip()
-    # Remove dots from the last character as windows can not have directories
-    # with dots at the end
-    text = text.rstrip('.')
-    text = try_encode(normalize('NFKD', str(text, 'utf-8')))
-
-    return text
-
-
 def normalize_nodes(text):
     """
     For video nodes. Returns unicode
