@@ -358,7 +358,7 @@ class ABNF(object):
         """
         _m = array.array("B", mask_key)
         _d = array.array("B", data)
-        for i in range(len(_d)):
+        for i, _ in enumerate(_d):
             _d[i] ^= _m[i % 4]
         return _d.tostring()
 
