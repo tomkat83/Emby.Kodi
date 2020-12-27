@@ -8,8 +8,7 @@ from sqlite3 import OperationalError
 from datetime import datetime
 from unicodedata import normalize
 from threading import Lock
-import urllib.request, urllib.parse, urllib.error
-import urllib.parse as _urlparse
+import urllib
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 import xml.etree.ElementTree as etree
 # etree parse unsafe; make sure we're always receiving unicode
@@ -335,14 +334,14 @@ def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
     Pass in the query string qs as string. Returns a dict with lists as values
     as unicode
     """
-    return _urlparse.parse_qs(qs, keep_blank_values, strict_parsing)
+    return urllib.parse.parse_qs(qs, keep_blank_values, strict_parsing)
 
 
 def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
     """
     Pass in string. Returns a list of string tuples
     """
-    return _urlparse.parse_qsl(qs, keep_blank_values, strict_parsing)
+    return urllib.parse.parse_qsl(qs, keep_blank_values, strict_parsing)
 
 
 def urlparse(url, scheme='', allow_fragments=True):
@@ -350,7 +349,7 @@ def urlparse(url, scheme='', allow_fragments=True):
     Pass in string.
     CAREFUL: returns an encoded urlparse.ParseResult()!
     """
-    return _urlparse.urlparse(url, scheme, allow_fragments)
+    return urllib.parse.urlparse(url, scheme, allow_fragments)
 
 
 def escape_path(path, safe_url_char=SAFE_URL_CHARACTERS):
