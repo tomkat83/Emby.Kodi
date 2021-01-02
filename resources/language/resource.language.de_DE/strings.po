@@ -967,6 +967,11 @@ msgid "Escape special characters in path (e.g. space to %20)"
 msgstr "Sonderzeichen im Pfad escapen (z.B. Leerzeichen zu %20)"
 
 # PKC Settings - Customize Paths
+msgctxt "#39090"
+msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
+msgstr "Sichere Zeichen für http(s), dav(s) und (s)ftp urls"
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Ursprünglicher Plex Pfad für FILME:"
