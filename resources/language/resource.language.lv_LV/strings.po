@@ -947,6 +947,11 @@ msgid "Escape special characters in path (e.g. space to %20)"
 msgstr ""
 
 # PKC Settings - Customize Paths
+msgctxt "#39090"
+msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
+msgstr ""
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Oriģinālais Plex MOVIE ceļš, kuru nomainīt:"
@@ -1100,7 +1105,7 @@ msgstr "Uzspiest atjaunošanu Kodi ādiņai apturot atskaņošanu"
 # PKC Settings - Appearance Tweaks
 msgctxt "#39066"
 msgid "Recently Added: Also show already watched movies"
-msgstr ""
+msgstr "Nesen Pievienots: Rādīt arī jau skatītas filmas"
 
 # PKC Settings - Connection
 msgctxt "#39067"
@@ -1110,7 +1115,7 @@ msgstr "Tavs pašreizējais Plex Media Serveris:"
 # PKC Settings - Connection
 msgctxt "#39068"
 msgid "Manually enter Plex Media Server address"
-msgstr ""
+msgstr "Pats ievadi Plex Media Server adresi"
 
 # PKC Settings - Connection
 msgctxt "#39069"
@@ -1173,22 +1178,22 @@ msgstr ""
 # Button text for choosing PKC mode
 msgctxt "#39081"
 msgid "Add-on Paths"
-msgstr ""
+msgstr "Spraudņu Ceļš"
 
 # Button text for choosing PKC mode
 msgctxt "#39082"
 msgid "Direct Paths"
-msgstr ""
+msgstr "Tiešie Ceļi"
 
 # Dialog for manually entering PMS
 msgctxt "#39083"
 msgid "Enter PMS IP or URL"
-msgstr ""
+msgstr "Ievadi PMS IP vai URL"
 
 # Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
-msgstr ""
+msgstr "Ievadi PMS portu"
 
 # PKC settings - Appearance Tweaks
 msgctxt "#39085"
@@ -1291,23 +1296,23 @@ msgstr "Tikai trūkstošo"
 # Message in the PKC settings if user has not logged in to plex.tv
 msgctxt "#39226"
 msgid "Not logged in to plex.tv"
-msgstr ""
+msgstr "Nav pieteicies plex.tv"
 
 # Message in the PKC settings if user is logged in to plex.tv
 msgctxt "#39227"
 msgid "Logged in to plex.tv"
-msgstr ""
+msgstr "Pieteicies plex.tv"
 
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39228"
 msgid "Plex admin user"
-msgstr ""
+msgstr "Plex admin user"
 
 # Error message if user could not log in; the actual user name will be
 # appended at the end of the string
 msgctxt "#39229"
 msgid "Login failed with plex.tv for user"
-msgstr ""
+msgstr "Lietotāja pieteikšanās plex.tv neizdevās"
 
 # Message in the PKC settings to display the plex.tv username
 msgctxt "#39230"
@@ -1472,7 +1477,7 @@ msgstr ""
 # Addon Disclaimer
 msgctxt "#39705"
 msgid "Use at your own risk"
-msgstr ""
+msgstr "Lieto uz savu atbildību"
 
 # If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
@@ -1530,7 +1535,7 @@ msgstr "Sinhronizēt"
 # Shown during sync process
 msgctxt "#39715"
 msgid "Synching playlists"
-msgstr ""
+msgstr "Sinhronizē spēļsarakstus"
 
 # Error message if an xml, e.g. advancedsettings.xml cannot be parsed (xml is
 # screwed up; formated the wrong way). Do NOT replace {0} and {1}!
