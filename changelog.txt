@@ -1,3 +1,7 @@
+version 3.0.1:
+- Fix rare KeyError when using PKC widgets
+- Update translations
+
 version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
 
