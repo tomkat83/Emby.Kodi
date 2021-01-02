@@ -128,7 +128,11 @@ def _generate_content(api):
         # Item is synched to the Kodi db - let's use that info
         # (will thus e.g. include additional artwork or metadata)
         item = js.item_details(api.kodi_id, api.kodi_type)
-    else:
+
+    # In rare cases, Kodi's JSON reply does not provide 'title' plus potentially
+    # other fields - let's use the PMS answer to be safe
+    # See https://github.com/croneter/PlexKodiConnect/issues/1129
+    if not api.kodi_id or 'title' not in item:
         cast = [{
             'name': x[0],
             'thumbnail': x[1],
