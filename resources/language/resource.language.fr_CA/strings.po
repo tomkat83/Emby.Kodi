@@ -976,6 +976,11 @@ msgstr ""
 "espaces)"
 
 # PKC Settings - Customize Paths
+msgctxt "#39090"
+msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
+msgstr "Caractères sûrs pour les urls http(s), dav(s) et (s)ftp"
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Original Plex MOVIE path to replace:"
