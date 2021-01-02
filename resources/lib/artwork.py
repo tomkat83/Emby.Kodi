@@ -82,7 +82,7 @@ class ImageCachingThread(backgroundthread.KillableThread):
                 for url in self._url_generator(kind, kodi_type):
                     if self.should_suspend() or self.should_cancel():
                         return False
-                    cache_url(url)
+                    cache_url(url, self.should_suspend)
         # Toggles Image caching completed to Yes
         utils.settings('plex_status_image_caching', value=utils.lang(107))
         return True
@@ -95,7 +95,7 @@ class ImageCachingThread(backgroundthread.KillableThread):
                 break
 
 
-def cache_url(url):
+def cache_url(url, should_suspend=None):
     url = double_urlencode(url)
     sleeptime = 0
     while True:
@@ -113,11 +113,11 @@ def cache_url(url):
             # download. All is well
             break
         except requests.ConnectionError:
-            if app.APP.stop_pkc:
-                # Kodi terminated
+            if app.APP.stop_pkc or (should_suspend and should_suspend()):
                 break
             # Server thinks its a DOS attack, ('error 10053')
             # Wait before trying again
+            # OR: Kodi refuses Webserver connection (no password set)
             if sleeptime > 5:
                 LOG.error('Repeatedly got ConnectionError for url %s',
                           double_urldecode(url))

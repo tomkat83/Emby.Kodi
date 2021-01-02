@@ -952,6 +952,11 @@ msgid "Escape special characters in path (e.g. space to %20)"
 msgstr "Unngå spesielle tegn i stier (eksempel mellomrom til %20)"
 
 # PKC Settings - Customize Paths
+msgctxt "#39090"
+msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
+msgstr ""
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Opprinnelig Plex FILM sti å erstatte:"

@@ -1,6 +1,6 @@
 #  XBMC Media Center language file
 # Translators:
-# Croneter None <croneter@gmail.com>, 2019
+# Croneter None <croneter@gmail.com>, 2020
 # 
 msgid ""
 msgstr ""
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2019\n"
+"Last-Translator: Croneter None <croneter@gmail.com>, 2020\n"
 "Language-Team: Spanish (Argentina) (https://www.transifex.com/croneter/teams/73837/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -935,7 +935,7 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
-"Kodi no puede localizer el archive %s. Por favoer verificar sus ajustes de "
+"Kodi no puede localizer el archivo %s. Por favor verificar sus ajustes de "
 "PKC. ¿Detener la sincronización?"
 
 # Pop-up on initial sync
@@ -964,7 +964,12 @@ msgstr ""
 # PKC Settings - Customize Paths
 msgctxt "#39036"
 msgid "Escape special characters in path (e.g. space to %20)"
-msgstr "Escapar caracteres especiales en la ruta (i.e. espacio a %20)"
+msgstr "Escapar caracteres especiales en la ruta (p. ej. espacio a %20)"
+
+# PKC Settings - Customize Paths
+msgctxt "#39090"
+msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
+msgstr "Caracteres seguros para urls http(s), dav(s) y (s)ftp"
 
 # PKC Settings - Customize Paths
 msgctxt "#39037"
@@ -1430,7 +1435,7 @@ msgid ""
 "The current Kodi version is not supported by PKC. Please consult the Plex "
 "forum."
 msgstr ""
-"La version actual de Kodi no está soportada por PKC.  Por favor consultar el"
+"La versión actual de Kodi no está soportada por PKC.  Por favor consultar el"
 " fórum de Plex."
 
 msgctxt "#39405"
@@ -1474,7 +1479,7 @@ msgstr "Sagas"
 
 msgctxt "#39502"
 msgid "PKC On Deck (faster)"
-msgstr "Tablero de PKC (mas rapido)"
+msgstr "On Deck de PKC (más rápido)"
 
 msgctxt "#39600"
 msgid ""
@@ -1616,8 +1621,8 @@ msgid ""
 "Do you want to replace your custom user ratings with an indicator of how "
 "many versions of a media item you posses?"
 msgstr ""
-"¿Quiere reemplazar su valoración personalizada con cuántas versione posee de"
-" un elemento de medios?"
+"¿Quiere reemplazar su valoración personalizada por cuántas versiones posee "
+"de un elemento de medios?"
 
 # In PKC Settings under Sync
 msgctxt "#39719"

@@ -1,3 +1,20 @@
+version 2.12.6:
+- Fix rare KeyError when using PKC widgets
+- Fix suspension of artwork caching and PKC becoming unresponsive
+- Update translations
+- Versions 2.12.4 and 2.12.5 for everyone
+
+version 2.12.5 (beta only):
+- Greatly improve matching logic for The Movie Database if Plex does not provide an appropriate id
+- Fix high transcoding resolutions not being available for Win10
+- Fix rare playback progress report failing and KeyError: u'containerKey'
+- Fix rare KeyError: None when trying to sync playlists
+- Fix TypeError when canceling Plex sync section dialog
+
+version 2.12.4 (beta only):
+- Hopefully fix freeze during sync: Don't assign multiple sets/collections for a specific movie
+- Support metadata provider ids (e.g. for IMDB) for the new Plex Movie Agent
+
 version 2.12.3:
 - Fix playback failing due to caching of subtitles with non-ascii chars
 - Fix ValueError: invalid literal for int() with base 10 during show sync

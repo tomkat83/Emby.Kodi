@@ -56,19 +56,7 @@ class Movie(ItemBase):
                                                    "default",
                                                    api.rating(),
                                                    api.votecount())
-            if api.provider('imdb') is not None:
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_MOVIE,
-                                                       'imdb',
-                                                       api.provider('imdb'))
-            elif api.provider('tmdb') is not None:
-                uniqueid = self.kodidb.update_uniqueid(kodi_id,
-                                                       v.KODI_TYPE_MOVIE,
-                                                       'tmdb',
-                                                       api.provider('tmdb'))
-            else:
-                self.kodidb.remove_uniqueid(kodi_id, v.KODI_TYPE_MOVIE)
-                uniqueid = -1
+            unique_id = self.update_provider_ids(api, kodi_id)
             self.kodidb.modify_people(kodi_id,
                                       v.KODI_TYPE_MOVIE,
                                       api.people())
@@ -86,18 +74,7 @@ class Movie(ItemBase):
                                                 "default",
                                                 api.rating(),
                                                 api.votecount())
-            if api.provider('imdb') is not None:
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_MOVIE,
-                                                    api.provider('imdb'),
-                                                    "imdb")
-            elif api.provider('tmdb') is not None:
-                uniqueid = self.kodidb.add_uniqueid(kodi_id,
-                                                    v.KODI_TYPE_MOVIE,
-                                                    api.provider('tmdb'),
-                                                    "tmdb")
-            else:
-                uniqueid = -1
+            unique_id = self.add_provider_ids(api, kodi_id)
             self.kodidb.add_people(kodi_id,
                                    v.KODI_TYPE_MOVIE,
                                    api.people())
@@ -105,6 +82,8 @@ class Movie(ItemBase):
                 self.kodidb.add_artwork(api.artwork(),
                                         kodi_id,
                                         v.KODI_TYPE_MOVIE)
+
+        unique_id = self._prioritize_provider_id(unique_id)
 
         # Update Kodi's main entry
         self.kodidb.add_movie(kodi_id,
@@ -117,7 +96,7 @@ class Movie(ItemBase):
                               rating_id,
                               api.list_to_string(api.writers()),
                               api.year(),
-                              uniqueid,
+                              unique_id,
                               api.sorttitle(),
                               api.runtime(),
                               api.content_rating(),
@@ -140,39 +119,7 @@ class Movie(ItemBase):
         self.kodidb.modify_streams(file_id, api.mediastreams(), api.runtime())
         self.kodidb.modify_studios(kodi_id, v.KODI_TYPE_MOVIE, api.studios())
         tags = [section_name]
-        if api.collections():
-            for plex_set_id, set_name in api.collections():
-                set_api = None
-                tags.append(set_name)
-                # Add any sets from Plex collection tags
-                kodi_set_id = self.kodidb.create_collection(set_name)
-                self.kodidb.assign_collection(kodi_set_id, kodi_id)
-                if not app.SYNC.artwork:
-                    # Rest below is to get collection artwork
-                    continue
-                if children is None:
-                    # e.g. when added via websocket
-                    LOG.debug('Costly looking up Plex collection %s: %s',
-                              plex_set_id, set_name)
-                    for index, coll_plex_id in api.collections_match(section_id):
-                        # Get Plex artwork for collections - a pain
-                        if index == plex_set_id:
-                            set_xml = PF.GetPlexMetadata(coll_plex_id)
-                            try:
-                                set_xml.attrib
-                            except AttributeError:
-                                LOG.error('Could not get set metadata %s',
-                                          coll_plex_id)
-                                continue
-                            set_api = API(set_xml[0])
-                            break
-                elif plex_set_id in children:
-                    # Provided by get_metadata thread
-                    set_api = API(children[plex_set_id][0])
-                if set_api:
-                    self.kodidb.modify_artwork(set_api.artwork(),
-                                               kodi_set_id,
-                                               v.KODI_TYPE_SET)
+        self._process_collections(api, tags, kodi_id, section_id, children)
         self.kodidb.modify_tags(kodi_id, v.KODI_TYPE_MOVIE, tags)
         # Process playstate
         self.kodidb.set_resume(file_id,
@@ -246,3 +193,52 @@ class Movie(ItemBase):
                                       db_item['kodi_type'],
                                       api.userrating())
         return True
+
+    def _process_collections(self, api, tags, kodi_id, section_id, children):
+        for plex_set_id, set_name in api.collections(): 
+            set_api = None
+            tags.append(set_name)
+            # Add any sets from Plex collection tags
+            kodi_set_id = self.kodidb.create_collection(set_name)
+            self.kodidb.assign_collection(kodi_set_id, kodi_id)
+            if not app.SYNC.artwork:
+                # Rest below is to get collection artwork
+                # TODO: continue instead of break (see TODO/break below)
+                break
+            if children is None:
+                # e.g. when added via websocket
+                LOG.debug('Costly looking up Plex collection %s: %s',
+                          plex_set_id, set_name)
+                for index, coll_plex_id in api.collections_match(section_id):
+                    # Get Plex artwork for collections - a pain
+                    if index == plex_set_id:
+                        set_xml = PF.GetPlexMetadata(coll_plex_id)
+                        try:
+                            set_xml.attrib
+                        except AttributeError:
+                            LOG.error('Could not get set metadata %s',
+                                      coll_plex_id)
+                            continue
+                        set_api = API(set_xml[0])
+                        break
+            elif plex_set_id in children:
+                # Provided by get_metadata thread
+                set_api = API(children[plex_set_id][0])
+            if set_api:
+                self.kodidb.modify_artwork(set_api.artwork(),
+                                           kodi_set_id,
+                                           v.KODI_TYPE_SET)
+            # TODO: Once Kodi (19?) supports SEVERAL sets/collections per
+            # movie, support that. For now, we only take the very first
+            # collection/set that Plex returns
+            break
+
+    @staticmethod
+    def _prioritize_provider_id(unique_ids):
+        """
+        Prioritize which ID ends up in the SHOW table (there can only be 1)
+        tvdb > imdb > tmdb
+        """
+        return unique_ids.get('imdb',
+                              unique_ids.get('tmdb',
+                                             unique_ids.get('tvdb')))

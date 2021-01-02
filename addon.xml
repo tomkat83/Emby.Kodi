@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.12.3" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="2.12.6" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests" version="2.9.1" />
@@ -83,7 +83,24 @@
     <summary lang="lt_LT">Natūralioji „Plex“ integracija į „Kodi“</summary>
     <description lang="lt_LT">Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai pakeičia). Naudokite savo pačių rizika!</description>
     <disclaimer lang="lt_LT">Naudokite savo pačių rizika</disclaimer>
-    <news>version 2.12.3:
+    <news>version 2.12.6:
+- Fix rare KeyError when using PKC widgets
+- Fix suspension of artwork caching and PKC becoming unresponsive
+- Update translations
+- Versions 2.12.4 and 2.12.5 for everyone
+
+version 2.12.5 (beta only):
+- Greatly improve matching logic for The Movie Database if Plex does not provide an appropriate id
+- Fix high transcoding resolutions not being available for Win10
+- Fix rare playback progress report failing and KeyError: u'containerKey'
+- Fix rare KeyError: None when trying to sync playlists
+- Fix TypeError when canceling Plex sync section dialog
+
+version 2.12.4 (beta only):
+- Hopefully fix freeze during sync: Don't assign multiple sets/collections for a specific movie
+- Support metadata provider ids (e.g. for IMDB) for the new Plex Movie Agent
+
+version 2.12.3:
 - Fix playback failing due to caching of subtitles with non-ascii chars
 - Fix ValueError: invalid literal for int() with base 10 during show sync
 - Fix UnboundLocalError when certain Plex sections are deleted or being un-synched

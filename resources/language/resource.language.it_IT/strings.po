@@ -968,6 +968,11 @@ msgstr ""
 "trasformato in \"%20\")"
 
 # PKC Settings - Customize Paths
+msgctxt "#39090"
+msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
+msgstr ""
+
+# PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
 msgstr "Percorso FILM Plex originale da sostituire:"

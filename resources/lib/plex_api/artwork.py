@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from re import sub
 
 from ..kodi_db import KodiVideoDB, KodiMusicDB
 from ..downloadutils import DownloadUtils as DU
 from .. import utils, variables as v, app
+
+from . import fanart_lookup
 
 LOG = getLogger('PLEX.api')
 
@@ -186,9 +187,9 @@ class Artwork(object):
         # Always seek collection's ids since not provided by PMS
         if collection is False:
             if media_type == v.PLEX_TYPE_MOVIE:
-                media_id = self.provider('imdb')
+                media_id = self.guids.get('imdb')
             elif media_type == v.PLEX_TYPE_SHOW:
-                media_id = self.provider('tvdb')
+                media_id = self.guids.get('tvdb')
             if media_id is not None:
                 return media_id, None, None
             LOG.info('Plex did not provide ID for IMDB or TVDB. Start '
@@ -196,154 +197,10 @@ class Artwork(object):
         else:
             LOG.debug('Start movie set/collection lookup on themoviedb with %s',
                       item.get('title', ''))
-
-        api_key = utils.settings('themoviedbAPIKey')
-        if media_type == v.PLEX_TYPE_SHOW:
-            media_type = 'tv'
-        title = self.title()
-        # if the title has the year in remove it as tmdb cannot deal with it...
-        # replace e.g. 'The Americans (2015)' with 'The Americans'
-        title = sub(r'\s*\(\d{4}\)$', '', title, count=1)
-        url = 'https://api.themoviedb.org/3/search/%s' % media_type
-        parameters = {
-            'api_key': api_key,
-            'language': v.KODILANGUAGE,
-            'query': title.encode('utf-8')
-        }
-        data = DU().downloadUrl(url,
-                                authenticate=False,
-                                parameters=parameters,
-                                timeout=7)
-        try:
-            data.get('test')
-        except AttributeError:
-            LOG.warning('Could not download data from FanartTV')
-            return
-        if not data.get('results'):
-            LOG.info('No match found on themoviedb for type: %s, title: %s',
-                     media_type, title)
-            return
-
-        year = item.get('year')
-        match_found = None
-        # find year match
-        if year:
-            for entry in data['results']:
-                if year in entry.get('first_air_date', ''):
-                    match_found = entry
-                    break
-                elif year in entry.get('release_date', ''):
-                    match_found = entry
-                    break
-        # find exact match based on title, if we haven't found a year match
-        if match_found is None:
-            LOG.info('No themoviedb match found using year %s', year)
-            replacements = (
-                ' ',
-                '-',
-                '&',
-                ',',
-                ':',
-                ';'
-            )
-            for entry in data['results']:
-                name = entry.get('name', entry.get('title', ''))
-                original_name = entry.get('original_name', '')
-                title_alt = title.lower()
-                name_alt = name.lower()
-                org_name_alt = original_name.lower()
-                for replace_string in replacements:
-                    title_alt = title_alt.replace(replace_string, '')
-                    name_alt = name_alt.replace(replace_string, '')
-                    org_name_alt = org_name_alt.replace(replace_string, '')
-                if name == title or original_name == title:
-                    # match found for exact title name
-                    match_found = entry
-                    break
-                elif (name.split(' (')[0] == title or title_alt == name_alt or
-                      title_alt == org_name_alt):
-                    # match found with substituting some stuff
-                    match_found = entry
-                    break
-
-        # if a match was not found, we accept the closest match from TMDB
-        if match_found is None and data.get('results'):
-            LOG.info('Using very first match from themoviedb')
-            match_found = entry = data.get('results')[0]
-
-        if match_found is None:
-            LOG.info('Still no themoviedb match for type: %s, title: %s, '
-                     'year: %s', media_type, title, year)
-            LOG.debug('themoviedb answer was %s', data['results'])
-            return
-
-        LOG.info('Found themoviedb match for %s: %s',
-                 item.get('title'), match_found)
-
-        tmdb_id = str(entry.get('id', ''))
-        if tmdb_id == '':
-            LOG.error('No themoviedb ID found, aborting')
-            return
-
-        if media_type == 'multi' and entry.get('media_type'):
-            media_type = entry.get('media_type')
-        name = entry.get('name', entry.get('title'))
-        # lookup external tmdb_id and perform artwork lookup on fanart.tv
-        parameters = {'api_key': api_key}
-        if media_type == 'movie':
-            url = 'https://api.themoviedb.org/3/movie/%s' % tmdb_id
-            parameters['append_to_response'] = 'videos'
-        elif media_type == 'tv':
-            url = 'https://api.themoviedb.org/3/tv/%s' % tmdb_id
-            parameters['append_to_response'] = 'external_ids,videos'
-        media_id, poster, background = None, None, None
-        for language in [v.KODILANGUAGE, 'en']:
-            parameters['language'] = language
-            data = DU().downloadUrl(url,
-                                    authenticate=False,
-                                    parameters=parameters,
-                                    timeout=7)
-            try:
-                data.get('test')
-            except AttributeError:
-                LOG.warning('Could not download %s with parameters %s',
-                            url, parameters)
-                continue
-            if collection is False:
-                if data.get('imdb_id'):
-                    media_id = str(data.get('imdb_id'))
-                    break
-                if (data.get('external_ids') and
-                        data['external_ids'].get('tvdb_id')):
-                    media_id = str(data['external_ids']['tvdb_id'])
-                    break
-            else:
-                if not data.get('belongs_to_collection'):
-                    continue
-                media_id = data.get('belongs_to_collection').get('id')
-                if not media_id:
-                    continue
-                media_id = str(media_id)
-                LOG.debug('Retrieved collections tmdb id %s for %s',
-                          media_id, title)
-                url = 'https://api.themoviedb.org/3/collection/%s' % media_id
-                data = DU().downloadUrl(url,
-                                        authenticate=False,
-                                        parameters=parameters,
-                                        timeout=7)
-                try:
-                    data.get('poster_path')
-                except AttributeError:
-                    LOG.debug('Could not find TheMovieDB poster paths for %s'
-                              ' in the language %s', title, language)
-                    continue
-                if not poster and data.get('poster_path'):
-                    poster = ('https://image.tmdb.org/t/p/original%s' %
-                              data.get('poster_path'))
-                if not background and data.get('backdrop_path'):
-                    background = ('https://image.tmdb.org/t/p/original%s' %
-                                  data.get('backdrop_path'))
-        return media_id, poster, background
+        return fanart_lookup.external_item_id(self.title(),
+                                              self.year(),
+                                              self.plex_type,
+                                              collection)
 
     def lookup_fanart_tv(self, media_id, artworks):
         """
