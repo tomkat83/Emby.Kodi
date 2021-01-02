@@ -1,3 +1,16 @@
+version 3.0.1:
+- Fix rare KeyError when using PKC widgets
+- Update translations
+
+version 3.0.0:
+- Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
+
+version 2.12.6:
+- Fix rare KeyError when using PKC widgets
+- Fix suspension of artwork caching and PKC becoming unresponsive
+- Update translations
+- Versions 2.12.4 and 2.12.5 for everyone
+
 version 2.12.5 (beta only):
 - Greatly improve matching logic for The Movie Database if Plex does not provide an appropriate id
 - Fix high transcoding resolutions not being available for Win10
