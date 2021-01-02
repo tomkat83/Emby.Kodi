@@ -1,5 +1,7 @@
-[![stable version](https://img.shields.io/badge/stable_version-2.12.3-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip) 
-[![beta version](https://img.shields.io/badge/beta_version-2.12.3-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip)
+[![Kodi Leia stable version](https://img.shields.io/badge/Kodi_Leia_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.STABLE.zip) 
+[![Kodi Leia beta version](https://img.shields.io/badge/Kodi_Leia_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.BETA.zip)
+[![Kodi Matrix beta version](https://img.shields.io/badge/Kodi_Matrix_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.BETA.zip)
+
 
 [![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
@@ -50,8 +52,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 
 ### PKC Features
 
-- Kodi 19 Matrix is not yet supported (PKC is written in Python 2)
-- Support for Kodi 18 Leia
+- Support for Kodi 18 Leia and Kodi 19 Matrix
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
 - [Plex Watch Later / Plex It!](https://support.plex.tv/hc/en-us/sections/200211783-Plex-It-)
