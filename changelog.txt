@@ -1,3 +1,6 @@
+version 3.0.2:
+- Fix AttributeError: module has no attribute try_decode
+
 version 3.0.1:
 - Fix rare KeyError when using PKC widgets
 - Update translations
