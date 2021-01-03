@@ -435,7 +435,6 @@ class InitialSetup(object):
         utils.settings('plex_servername', server['name'])
         utils.settings('plex_serverowned',
                        'true' if server['owned'] else 'false')
-        utils.settings('accessToken', server['token'])
         # Careful to distinguish local from remote PMS
         if server['local']:
             scheme = server['scheme']
