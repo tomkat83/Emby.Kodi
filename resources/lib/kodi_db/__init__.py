@@ -20,7 +20,6 @@ def kodiid_from_filename(path, kodi_type=None, db_type=None):
     Returns None, <kodi_type> if not possible
     """
     kodi_id = None
-    path = utils.try_decode(path)
     # Make sure path ends in either '/' or '\'
     # We CANNOT use path_ops.path.join as this can result in \ where we need /
     try:
