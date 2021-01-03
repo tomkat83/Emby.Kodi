@@ -280,7 +280,6 @@ class InitialSetup(object):
         }
         or None if unsuccessful
         """
-        server = None
         # If no server is set, let user choose one
         if not app.CONN.server or not app.CONN.machine_identifier:
             showDialog = True
