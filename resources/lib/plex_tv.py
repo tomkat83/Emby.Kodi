@@ -101,15 +101,14 @@ def switch_home_user(userid, pin, token, machine_identifier):
         # Set to empty iterable list for loop
         xml = []
 
-    found = 0
     LOG.debug('Our machine_identifier is %s', machine_identifier)
     for device in xml:
         identifier = device.attrib.get('clientIdentifier')
         LOG.debug('Found the Plex clientIdentifier: %s', identifier)
         if identifier == machine_identifier:
-            found += 1
             token = device.attrib.get('accessToken')
-    if found == 0:
+            break
+    else:
         LOG.info('No tokens found for your server! Using empty string')
         token = ''
     LOG.info('Plex.tv switch HomeUser change successfull for user %s',
