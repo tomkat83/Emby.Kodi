@@ -333,7 +333,7 @@ class PlexCompanion(backgroundthread.KillableThread):
             try:
                 message_count += 1
                 if httpd:
-                    if not thread.isAlive():
+                    if not thread.is_alive():
                         # Use threads cause the method will stall
                         thread = Thread(target=httpd.handle_request)
                         thread.start()
