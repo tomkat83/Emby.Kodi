@@ -414,8 +414,11 @@ class Service(object):
             utils.settings('username', value=username)
             utils.settings('userid', value=user_id)
             utils.settings('accessToken', value=token)
+            utils.settings('plex_restricteduser',
+                           'true' if user.isManaged else 'false')
             app.ACCOUNT.load()
             app.ACCOUNT.set_authenticated()
+            app.CONN.restricted_user = user.isManaged
             return True
 
     def ServiceEntryPoint(self):
