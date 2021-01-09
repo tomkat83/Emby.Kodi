@@ -1,3 +1,8 @@
+version 3.0.3:
+- Fix PKC suddenly using main Plex user's credentials, e.g. when the PMS address changed
+- Fix missing Kodi tags for movie collections/sets
+- Change `thread.isAlive` to `thread.is_alive`
+
 version 3.0.2:
 - Fix AttributeError: module has no attribute try_decode
 
@@ -7,6 +12,10 @@ version 3.0.1:
 
 version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
+
+version 2.12.7 (beta only):
+- Fix PKC suddenly using main Plex user's credentials, e.g. when the PMS address changed
+- Fix missing Kodi tags for movie collections/sets
 
 version 2.12.6:
 - Fix rare KeyError when using PKC widgets
