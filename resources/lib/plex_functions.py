@@ -377,7 +377,7 @@ def _pms_list_from_plex_tv(token):
     while True:
         # Remove finished threads
         for thread in threads:
-            if not thread.isAlive():
+            if not thread.is_alive():
                 threads.remove(thread)
         if len(threads) < max_threads:
             try:

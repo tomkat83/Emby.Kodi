@@ -377,7 +377,7 @@ class BackgroundWorker(object):
         return self._abort or app.APP.monitor.abortRequested()
 
     def start(self):
-        if self._thread and self._thread.isAlive():
+        if self._thread and self._thread.is_alive():
             return
 
         self._thread = KillableThread(target=self._queueLoop, name='BACKGROUND-WORKER({0})'.format(self.name))
@@ -403,13 +403,13 @@ class BackgroundWorker(object):
         if self._task:
             self._task.cancel()
 
-        if block and self._thread and self._thread.isAlive():
+        if block and self._thread and self._thread.is_alive():
             LOG.debug('thread (%s): Waiting...', self.name)
             self._thread.join()
             LOG.debug('thread (%s): Done', self.name)
 
     def working(self):
-        return self._thread and self._thread.isAlive()
+        return self._thread and self._thread.is_alive()
 
 
 class NonstoppingBackgroundWorker(BackgroundWorker):
