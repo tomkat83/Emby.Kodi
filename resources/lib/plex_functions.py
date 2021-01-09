@@ -164,7 +164,7 @@ def check_connection(url, token=None, verifySSL=None):
 def discover_pms(token=None):
     """
     Optional parameter:
-        token       token for plex.tv
+        token       token for plex.tv - WARNING: for the main Plex user only!
 
     Returns a list of available PMS to connect to, one entry is the dict:
     {

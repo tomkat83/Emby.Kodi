@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-:module: plexkodiconnect.userselect
 :synopsis: Prompts the user to add network paths and username passwords for
            e.g. smb paths
 """

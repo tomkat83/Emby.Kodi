@@ -15,6 +15,8 @@ class Account(object):
         self.plex_username = None
         self.plex_user_id = None
         self.plex_token = None
+        # Personal access token per specific user and PMS
+        # As a rule of thumb, always use this token!
         self.pms_token = None
         self.avatar = None
         self.myplexlogin = None
