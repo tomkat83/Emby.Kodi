@@ -35,18 +35,6 @@ class HomeUser(utils.AttributeDict):
         return self.restricted == '1'
 
 
-def homeuser_to_settings(user):
-    """
-    Writes one HomeUser to the Kodi settings file
-    """
-    utils.settings('myplexlogin', 'true')
-    utils.settings('plexLogin', user.title)
-    utils.settings('plexToken', user.authToken)
-    utils.settings('plexid', user.id)
-    utils.settings('plexAvatar', user.thumb)
-    utils.settings('plex_status', value=utils.lang(39227))
-
-
 def switch_home_user(userid, pin, token, machine_identifier):
     """
     Retrieves Plex home token for a Plex home user. Returns None if this fails
@@ -59,8 +47,6 @@ def switch_home_user(userid, pin, token, machine_identifier):
     Output:
         usertoken       Might be empty strings if no token found
                         for the machine_identifier that was chosen
-
-    utils.settings('userid') and utils.settings('username') with new plex token
     """
     LOG.info('Switching to user %s', userid)
     url = 'https://plex.tv/api/home/users/%s/switch' % userid
@@ -78,16 +64,6 @@ def switch_home_user(userid, pin, token, machine_identifier):
 
     username = xml.get('title', '')
     token = xml.get('authenticationToken', '')
-
-    # Write to settings file
-    utils.settings('username', username)
-    utils.settings('accessToken', token)
-    utils.settings('userid', xml.get('id', ''))
-    utils.settings('plex_restricteduser',
-                   'true' if xml.get('restricted', '0') == '1'
-                   else 'false')
-    app.CONN.restricted_user = True if \
-        xml.get('restricted', '0') == '1' else False
 
     # Get final token to the PMS we've chosen
     url = 'https://plex.tv/api/resources?includeHttps=1'
@@ -231,7 +207,11 @@ def sign_in_with_pin():
     if xml is None:
         return
     user = HomeUser(xml.attrib)
-    homeuser_to_settings(user)
+    utils.settings('myplexlogin', 'true')
+    utils.settings('plex_status', value=utils.lang(39227))
+    utils.settings('plexLogin', user.title)
+    utils.settings('plexid', user.id)
+    utils.settings('plexToken', user.authToken)
     return user
 
 
