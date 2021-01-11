@@ -1,3 +1,6 @@
+version 2.12.9:
+- Fix Local variable 'user' referenced before assignement
+
 version 2.12.8:
 - version 2.12.7 for everyone
 
