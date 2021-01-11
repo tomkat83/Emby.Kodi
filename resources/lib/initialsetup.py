@@ -287,7 +287,6 @@ class InitialSetup(object):
         }
         or None if unsuccessful
         """
-        server = None
         # If no server is set, let user choose one
         if not app.CONN.server or not app.CONN.machine_identifier:
             showDialog = True
@@ -435,7 +434,6 @@ class InitialSetup(object):
         utils.settings('plex_servername', server['name'])
         utils.settings('plex_serverowned',
                        'true' if server['owned'] else 'false')
-        utils.settings('accessToken', server['token'])
         # Careful to distinguish local from remote PMS
         if server['local']:
             scheme = server['scheme']

@@ -1,3 +1,10 @@
+version 2.12.8:
+- version 2.12.7 for everyone
+
+version 2.12.7 (beta only):
+- Fix PKC suddenly using main Plex user's credentials, e.g. when the PMS address changed
+- Fix missing Kodi tags for movie collections/sets
+
 version 2.12.6:
 - Fix rare KeyError when using PKC widgets
 - Fix suspension of artwork caching and PKC becoming unresponsive
