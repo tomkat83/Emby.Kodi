@@ -46,8 +46,8 @@ class App(object):
             self.player = None
             # All thread instances
             self.threads = []
-            # Instance of FanartThread()
-            self.fanart_thread = None
+            # Instance of MetadataThread()
+            self.metadata_thread = None
             # Instance of ImageCachingThread()
             self.caching_thread = None
 
@@ -59,24 +59,24 @@ class App(object):
     def is_playing_video(self):
         return self.player.isPlayingVideo() == 1
 
-    def register_fanart_thread(self, thread):
-        self.fanart_thread = thread
+    def register_metadata_thread(self, thread):
+        self.metadata_thread = thread
         self.threads.append(thread)
 
-    def deregister_fanart_thread(self, thread):
-        self.fanart_thread.unblock_callers()
-        self.fanart_thread = None
+    def deregister_metadata_thread(self, thread):
+        self.metadata_thread.unblock_callers()
+        self.metadata_thread = None
         self.threads.remove(thread)
 
-    def suspend_fanart_thread(self, block=True):
+    def suspend_metadata_thread(self, block=True):
         try:
-            self.fanart_thread.suspend(block=block)
+            self.metadata_thread.suspend(block=block)
         except AttributeError:
             pass
 
-    def resume_fanart_thread(self):
+    def resume_metadata_thread(self):
         try:
-            self.fanart_thread.resume()
+            self.metadata_thread.resume()
         except AttributeError:
             pass
 

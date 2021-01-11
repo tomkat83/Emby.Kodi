@@ -21,7 +21,7 @@ class Sync(backgroundthread.KillableThread):
     def __init__(self):
         self.sync_successful = False
         self.last_full_sync = 0
-        self.fanart_thread = None
+        self.metadata_thread = None
         self.image_cache_thread = None
         # Lock used to wait on a full sync, e.g. on initial sync
         # self.lock = backgroundthread.threading.Lock()
@@ -51,7 +51,7 @@ class Sync(backgroundthread.KillableThread):
                                          utils.lang(39223),
                                          utils.lang(39224),  # refresh all
                                          utils.lang(39225)) == 0
-            if not self.start_fanart_download(refresh=refresh):
+            if not self.start_additional_metadata(refresh=refresh):
                 # Fanart download already running
                 utils.dialog('notification',
                              heading='{plex}',
@@ -75,33 +75,31 @@ class Sync(backgroundthread.KillableThread):
         self.last_full_sync = timing.unix_timestamp()
         if not successful:
             LOG.warn('Could not finish scheduled full sync')
-        app.APP.resume_fanart_thread()
+        app.APP.resume_metadata_thread()
         app.APP.resume_caching_thread()
 
     def start_library_sync(self, show_dialog=None, repair=False, block=False):
-        app.APP.suspend_fanart_thread(block=True)
+        app.APP.suspend_metadata_thread(block=True)
         app.APP.suspend_caching_thread(block=True)
         show_dialog = show_dialog if show_dialog is not None else app.SYNC.sync_dialog
         library_sync.start(show_dialog, repair, self.on_library_scan_finished)
 
-    def start_fanart_download(self, refresh):
-        if not utils.settings('FanartTV') == 'true':
-            LOG.info('Additional fanart download is deactivated')
-            return False
+    def start_additional_metadata(self, refresh):
         if not app.SYNC.artwork:
             LOG.info('Not synching Plex PMS artwork, not getting artwork')
             return False
-        elif self.fanart_thread is None or not self.fanart_thread.is_alive():
-            LOG.info('Start downloading additional fanart with refresh %s',
+        elif self.metadata_thread is None or not self.metadata_thread.is_alive():
+            LOG.info('Start downloading additional metadata with refresh %s',
                      refresh)
-            self.fanart_thread = library_sync.FanartThread(self.on_fanart_download_finished, refresh)
-            self.fanart_thread.start()
+            self.metadata_thread = library_sync.MetadataThread(self.on_metadata_finished, refresh)
+            self.metadata_thread.start()
             return True
         else:
-            LOG.info('Still downloading fanart')
+            LOG.info('Still downloading metadata')
             return False
 
-    def on_fanart_download_finished(self, successful):
+    @staticmethod
+    def on_metadata_finished(successful):
         # FanartTV lookup completed
         if successful:
             # Toggled to "Yes"
@@ -188,7 +186,7 @@ class Sync(backgroundthread.KillableThread):
                     xbmc.executebuiltin('ReloadSkin()')
                     if library_sync.PLAYLIST_SYNC_ENABLED:
                         playlist_monitor = playlists.kodi_playlist_monitor()
-                    self.start_fanart_download(refresh=False)
+                    self.start_additional_metadata(refresh=False)
                     self.start_image_cache_thread()
                 else:
                     LOG.error('Initial start-up full sync unsuccessful')
@@ -205,7 +203,7 @@ class Sync(backgroundthread.KillableThread):
                     LOG.info('Done initial sync on Kodi startup')
                     if library_sync.PLAYLIST_SYNC_ENABLED:
                         playlist_monitor = playlists.kodi_playlist_monitor()
-                    self.start_fanart_download(refresh=False)
+                    self.start_additional_metadata(refresh=False)
                     self.start_image_cache_thread()
                 else:
                     LOG.info('Startup sync has not yet been successful')
