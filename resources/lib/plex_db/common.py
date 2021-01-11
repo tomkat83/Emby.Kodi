@@ -160,11 +160,31 @@ class PlexDBBase(object):
         ''' % (plex_type, limit, offset)
         return (x[0] for x in self.cursor.execute(query))
 
+    def missing_trailers(self, plex_type, offset, limit):
+        """
+        Returns an iterator for plex_type for all plex_id, where trailer_synced
+        has not yet been set to 1
+        Will start with records at DB position offset [int] and return limit
+        [int] number of items
+        """
+        query = '''
+            SELECT plex_id FROM %s WHERE trailer_synced = 0
+            LIMIT %s OFFSET %s
+        ''' % (plex_type, limit, offset)
+        return (x[0] for x in self.cursor.execute(query))
+
     def set_fanart_synced(self, plex_id, plex_type):
         """
         Toggles fanart_synced to 1 for plex_id
         """
         self.cursor.execute('UPDATE %s SET fanart_synced = 1 WHERE plex_id = ?' % plex_type,
+                            (plex_id, ))
+
+    def set_trailer_synced(self, plex_id, plex_type):
+        """
+        Toggles fanart_synced to 1 for plex_id
+        """
+        self.cursor.execute('UPDATE %s SET trailer_synced = 1 WHERE plex_id = ?' % plex_type,
                             (plex_id, ))
 
     def plexid_by_sectionid(self, section_id, plex_type, limit):
@@ -210,6 +230,7 @@ def initialize():
                     kodi_fileid INTEGER,
                     kodi_pathid INTEGER,
                     fanart_synced INTEGER,
+                    trailer_synced BOOLEAN,
                     last_sync INTEGER)
             ''')
             plexdb.cursor.execute('''

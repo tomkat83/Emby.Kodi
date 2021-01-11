@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 
 from .common import update_kodi_library, PLAYLIST_SYNC_ENABLED
-from .fanart import SYNC_FANART, FanartTask
+from .additional_metadata import ProcessMetadataTask
 from ..plex_api import API
 from ..plex_db import PlexDB
 from .. import kodi_db
@@ -85,9 +85,8 @@ def process_websocket_messages():
             continue
         else:
             successful, video, music = process_new_item_message(message)
-            if (successful and SYNC_FANART and
-                    message['plex_type'] in (v.PLEX_TYPE_MOVIE, v.PLEX_TYPE_SHOW)):
-                task = FanartTask()
+            if successful:
+                task = ProcessMetadataTask()
                 task.setup(message['plex_id'],
                            message['plex_type'],
                            refresh=False)

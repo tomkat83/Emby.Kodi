@@ -479,6 +479,31 @@ class KodiVideoDB(common.KodiDBBase):
                             (kodi_id, kodi_type))
         return dict(self.cursor.fetchall())
 
+    def get_trailer(self, kodi_id, kodi_type):
+        """
+        Returns the trailer's URL for kodi_type from the Kodi database or None
+        """
+        if kodi_type == v.KODI_TYPE_MOVIE:
+            self.cursor.execute('SELECT c19 FROM movie WHERE idMovie=?',
+                                (kodi_id, ))
+        else:
+            raise NotImplementedError(f'trailers for {kodi_type} not implemented')
+        try:
+            return self.cursor.fetchone()[0]
+        except TypeError:
+            pass
+
+    @db.catch_operationalerrors
+    def set_trailer(self, kodi_id, kodi_type, url):
+        """
+        Writes the trailer's url to the Kodi DB
+        """
+        if kodi_type == v.KODI_TYPE_MOVIE:
+            self.cursor.execute('UPDATE movie SET c19=? WHERE idMovie=?',
+                                (url, kodi_id))
+        else:
+            raise NotImplementedError(f'trailers for {kodi_type} not implemented')
+
     @db.catch_operationalerrors
     def modify_streams(self, fileid, streamdetails=None, runtime=None):
         """

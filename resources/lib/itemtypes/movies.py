@@ -133,6 +133,7 @@ class Movie(ItemBase):
                               kodi_id=kodi_id,
                               kodi_fileid=file_id,
                               kodi_pathid=kodi_pathid,
+                              trailer_synced=bool(api.trailer()),
                               last_sync=self.last_sync)
 
     def remove(self, plex_id, plex_type=None):
