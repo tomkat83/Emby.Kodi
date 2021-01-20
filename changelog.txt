@@ -1,3 +1,6 @@
+version 3.0.4:
+- Automatically look for missing movie trailers using TMDB
+
 version 3.0.3:
 - Fix PKC suddenly using main Plex user's credentials, e.g. when the PMS address changed
 - Fix missing Kodi tags for movie collections/sets
