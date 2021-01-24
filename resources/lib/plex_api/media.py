@@ -62,6 +62,25 @@ class Media(object):
             answ['bitDepth'] = None
         return answ
 
+    def picture_codec(self):
+        """
+        Returns the exif metadata of pictures. This does NOT seem to be used
+        reliably by Kodi skins! (e.g. not at all)
+        """
+        return {
+            'exif:CameraMake': self.xml[0].get('make'),  # e.g. 'Canon'
+            'exif:CameraModel': self.xml[0].get('model'),  # e.g. 'Canon XYZ'
+            'exif:DateTime': self.xml.get('originallyAvailableAt', '').replace('-', ':') or None,  # e.g. '2017-11-05'
+            'exif:Height': self.xml[0].get('height'),  # e.g. '2160'
+            'exif:Width': self.xml[0].get('width'),  # e.g. '3240'
+            'exif:Orientation': self.xml[0][self.part].get('orientation'),  # e.g. '1'
+            'exif:FocalLength': self.xml[0].get('focalLength'),  # TO BE VALIDATED
+            'exif:ExposureTime': self.xml[0].get('exposure'),  # e.g. '1/1000'
+            'exif:ApertureFNumber': self.xml[0].get('aperture'),  # e.g. 'f/5.0'
+            'exif:ISOequivalent': self.xml[0].get('iso'),  # e.g. '1600'
+            # missing on Kodi side: lens, e.g. "EF50mm f/1.8 II"
+        }
+
     def mediastreams(self):
         """
         Returns the media streams for metadata purposes
