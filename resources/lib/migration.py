@@ -22,7 +22,7 @@ def check_migration():
         LOG.info('Already migrated to PKC version %s' % v.ADDON_VERSION)
         return
 
-    if not utils.compare_version(last_migration, '3.0.5'):
+    if not utils.compare_version(last_migration, '3.0.4'):
         LOG.info('Migrating to version 3.0.4')
         # Add an additional column `trailer_synced` in the Plex movie table
         from .plex_db import PlexDB
