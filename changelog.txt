@@ -1,5 +1,6 @@
 version 3.0.5:
 - Fix pictures from Plex picture libraries not working/displaying
+- Fix sqlite3.OperationalError on PKC upgrade
 
 version 3.0.4:
 - Automatically look for missing movie trailers using TMDB
