@@ -464,7 +464,7 @@ def create_listitem(item, as_tuple=True, offscreen=True,
 
         nodetype = "Video"
         if item["type"] in ["song", "album", "artist"]:
-            nodetype = "Music"
+            nodetype = "music"
 
         # extra properties
         for key, value in item["extraproperties"].items():
@@ -522,8 +522,7 @@ def create_listitem(item, as_tuple=True, offscreen=True,
             if "date" in item:
                 infolabels["date"] = item["date"]
 
-        # music infolabels
-        else:
+        elif nodetype == 'music':
             infolabels = {
                 "title": item.get("title"),
                 "size": item.get("size"),
