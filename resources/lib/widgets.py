@@ -462,16 +462,18 @@ def create_listitem(item, as_tuple=True, offscreen=True,
         elif "plugin://script.skin.helper" not in item['file']:
             liz.setProperty('IsPlayable', 'true')
 
-        nodetype = "Video"
         if item["type"] in ["song", "album", "artist"]:
             nodetype = "music"
+        elif item['type'] == 'photo':
+            nodetype = 'pictures'
+        else:
+            nodetype = 'video'
 
         # extra properties
         for key, value in item["extraproperties"].items():
             liz.setProperty(key, value)
 
-        # video infolabels
-        if nodetype == "Video":
+        if nodetype == 'video':
             infolabels = {
                 "title": item.get("title"),
                 "size": item.get("size"),
@@ -542,12 +544,18 @@ def create_listitem(item, as_tuple=True, offscreen=True,
             if "lastplayed" in item:
                 infolabels["lastplayed"] = item["lastplayed"]
 
+        else:
+            # Pictures
+            infolabels = {
+                "title": item.get("title"),
+                'picturepath': item['file']
+            }
         # setting the dbtype and dbid is supported from kodi krypton and up
         # PKC hack: ignore empty type
         if item["type"] not in ["recording", "channel", "favourite", ""]:
             infolabels["mediatype"] = item["type"]
             # setting the dbid on music items is not supported ?
-            if nodetype == "Video" and "DBID" in item["extraproperties"]:
+            if nodetype == "video" and "DBID" in item["extraproperties"]:
                 infolabels["dbid"] = item["extraproperties"]["DBID"]
 
         if "lastplayed" in item:
