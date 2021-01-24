@@ -136,74 +136,84 @@ def _generate_content(api):
     # other fields - let's use the PMS answer to be safe
     # See https://github.com/croneter/PlexKodiConnect/issues/1129
     if not api.kodi_id or 'title' not in item:
-        cast = [{
-            'name': x[0],
-            'thumbnail': x[1],
-            'role': x[2],
-            'order': x[3],
-        } for x in api.people()['actor']]
-        item = {
-            'cast': cast,
-            'country': api.countries(),
-            'dateadded': api.date_created(),  # e.g '2019-01-03 19:40:59'
-            'director': api.directors(),  # list of [str]
-            'duration': api.runtime(),
-            'episode': api.index(),
-            # 'file': '',  # e.g. 'videodb://tvshows/titles/20'
-            'genre': api.genres(),
-            # 'imdbnumber': '',  # e.g.'341663'
-            'label': api.title(),  # e.g. '1x05. Category 55 Emergency Doomsday Crisis'
-            'lastplayed': api.lastplayed(),  # e.g. '2019-01-04 16:05:03'
-            'mpaa': api.content_rating(),  # e.g. 'TV-MA'
-            'originaltitle': '',  # e.g. 'Titans (2018)'
-            'playcount': api.viewcount(),  # [int]
-            'plot': api.plot(),  # [str]
-            'plotoutline': api.tagline(),
-            'premiered': api.premiere_date(),  # '2018-10-12'
-            'rating': api.rating(),  # [float]
-            'season': api.season_number(),
-            'sorttitle': api.sorttitle(),  # 'Titans (2018)'
-            'studio': api.studios(),
-            'tag': [],  # List of tags this item belongs to
-            'tagline': api.tagline(),
-            'thumbnail': '',  # e.g. 'image://https%3a%2f%2fassets.tv'
-            'title': api.title(),  # 'Titans (2018)'
-            'type': api.kodi_type,
-            'trailer': api.trailer(),
-            'tvshowtitle': api.show_title(),
-            'uniqueid': {
-                'imdbnumber': api.guids.get('imdb') or '',
-                'tvdb_id': api.guids.get('tvdb') or '',
-                'tmdb_id': api.guids.get('tmdb') or ''
-            },
-            'votes': '0',  # [str]!
-            'writer': api.writers(),  # list of [str]
-            'year': api.year(),  # [int]
-        }
-
-        if plex_type in (v.PLEX_TYPE_EPISODE, v.PLEX_TYPE_SEASON, v.PLEX_TYPE_SHOW):
-            leaves = api.leave_count()
-            if leaves:
-                item['extraproperties'] = leaves
+        if api.plex_type == v.PLEX_TYPE_PHOTO:
+            item = {
+                'title': api.title(),
+                'label': api.title(),
+                'type': api.kodi_type,
+                'dateadded': api.date_created(),  # e.g '2019-01-03 19:40:59'
+                'lastplayed': api.lastplayed(),  # e.g. '2019-01-04 16:05:03'
+                'playcount': api.viewcount(),
+            }
+            item.update(api.picture_codec())
+        else:
+            cast = [{
+                'name': x[0],
+                'thumbnail': x[1],
+                'role': x[2],
+                'order': x[3],
+            } for x in api.people()['actor']]
+            item = {
+                'cast': cast,
+                'country': api.countries(),
+                'dateadded': api.date_created(),  # e.g '2019-01-03 19:40:59'
+                'director': api.directors(),  # list of [str]
+                'duration': api.runtime(),
+                'episode': api.index(),
+                # 'file': '',  # e.g. 'videodb://tvshows/titles/20'
+                'genre': api.genres(),
+                # 'imdbnumber': '',  # e.g.'341663'
+                'label': api.title(),  # e.g. '1x05. Category 55 Emergency Doomsday Crisis'
+                'lastplayed': api.lastplayed(),  # e.g. '2019-01-04 16:05:03'
+                'mpaa': api.content_rating(),  # e.g. 'TV-MA'
+                'originaltitle': '',  # e.g. 'Titans (2018)'
+                'playcount': api.viewcount(),  # [int]
+                'plot': api.plot(),  # [str]
+                'plotoutline': api.tagline(),
+                'premiered': api.premiere_date(),  # '2018-10-12'
+                'rating': api.rating(),  # [float]
+                'season': api.season_number(),
+                'sorttitle': api.sorttitle(),  # 'Titans (2018)'
+                'studio': api.studios(),
+                'tag': [],  # List of tags this item belongs to
+                'tagline': api.tagline(),
+                'thumbnail': '',  # e.g. 'image://https%3a%2f%2fassets.tv'
+                'title': api.title(),  # 'Titans (2018)'
+                'type': api.kodi_type,
+                'trailer': api.trailer(),
+                'tvshowtitle': api.show_title(),
+                'uniqueid': {
+                    'imdbnumber': api.guids.get('imdb') or '',
+                    'tvdb_id': api.guids.get('tvdb') or '',
+                    'tmdb_id': api.guids.get('tmdb') or ''
+                },
+                'votes': '0',  # [str]!
+                'writer': api.writers(),  # list of [str]
+                'year': api.year(),  # [int]
+            }
+            # Add all info for e.g. video and audio streams
+            item['streamdetails'] = api.mediastreams()
+            # Cleanup required due to the way metadatautils works
+            if not item['lastplayed']:
+                del item['lastplayed']
+            for stream in item['streamdetails']['video']:
+                stream['height'] = utils.cast(int, stream['height'])
+                stream['width'] = utils.cast(int, stream['width'])
+                stream['aspect'] = utils.cast(float, stream['aspect'])
+            item['streamdetails']['subtitle'] = [{'language': x} for x in item['streamdetails']['subtitle']]
+            # Resume point
+            resume = api.resume_point()
+            if resume:
+                item['resume'] = {
+                    'position': resume,
+                    'total': api.runtime()
+                }
+            if plex_type in (v.PLEX_TYPE_EPISODE, v.PLEX_TYPE_SEASON, v.PLEX_TYPE_SHOW):
+                leaves = api.leave_count()
+                if leaves:
+                    item['extraproperties'] = leaves
         # Add all the artwork we can
         item['art'] = api.artwork(full_artwork=True)
-        # Add all info for e.g. video and audio streams
-        item['streamdetails'] = api.mediastreams()
-        # Cleanup required due to the way metadatautils works
-        if not item['lastplayed']:
-            del item['lastplayed']
-        for stream in item['streamdetails']['video']:
-            stream['height'] = utils.cast(int, stream['height'])
-            stream['width'] = utils.cast(int, stream['width'])
-            stream['aspect'] = utils.cast(float, stream['aspect'])
-        item['streamdetails']['subtitle'] = [{'language': x} for x in item['streamdetails']['subtitle']]
-        # Resume point
-        resume = api.resume_point()
-        if resume:
-            item['resume'] = {
-                'position': resume,
-                'total': api.runtime()
-            }
 
     item['icon'] = v.ICON_FROM_PLEXTYPE[plex_type]
     # Some customization
