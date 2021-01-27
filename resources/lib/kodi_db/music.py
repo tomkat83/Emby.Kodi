@@ -105,26 +105,6 @@ class KodiMusicDB(common.KodiDBBase):
                             (song_id, ))
 
     @db.catch_operationalerrors
-    def delete_album_from_discography(self, album_id):
-        """
-        Removes the album with id album_id from the table discography
-        """
-        # Need to get the album name as a string first!
-        self.cursor.execute('SELECT strAlbum FROM album WHERE idAlbum = ? LIMIT 1',
-                            (album_id, ))
-        try:
-            name, year = self.cursor.fetchone()
-        except TypeError:
-            return
-        self.cursor.execute('SELECT idArtist FROM album_artist WHERE idAlbum = ? LIMIT 1',
-                            (album_id, ))
-        artist = self.cursor.fetchone()
-        if not artist:
-            return
-        self.cursor.execute('DELETE FROM discography WHERE idArtist = ? AND strAlbum = ? AND strYear = ?',
-                            (artist[0], name, year))
-
-    @db.catch_operationalerrors
     def delete_song_from_song_genre(self, song_id):
         """
         Deletes the one entry with id song_id from the song_genre table.
@@ -497,6 +477,4 @@ class KodiMusicDB(common.KodiDBBase):
         self.cursor.execute('DELETE FROM artist WHERE idArtist = ?',
                             (kodi_id, ))
         self.cursor.execute('DELETE FROM song_artist WHERE idArtist = ?',
-                            (kodi_id, ))
-        self.cursor.execute('DELETE FROM discography WHERE idArtist = ?',
                             (kodi_id, ))

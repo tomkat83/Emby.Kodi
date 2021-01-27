@@ -132,7 +132,6 @@ class MusicMixin(object):
         '''
         Remove an album
         '''
-        self.kodidb.delete_album_from_discography(kodi_id)
         self.kodidb.remove_album(kodi_id)
         self.kodidb.delete_artwork(kodi_id, v.KODI_TYPE_ALBUM)
 
