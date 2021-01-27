@@ -120,7 +120,7 @@
         <setting id="audioBoost" type="slider" label="39001" default="0" range="0,10,100" option="int"/>
         <setting id="subtitleSize" label="39002" type="slider" option="int" range="0,30,300" default="100" />
         <setting id="force_transcode_pix" type="bool" label="30545" default="false" />
-        <setting id="bestQuality" type="bool" label="30541" default="false" />
+        <setting id="bestQuality" type="bool" label="30541" default="false" /><!-- Transcoding: Auto-pick audio and subtitle stream using Plex defaults -->
         <setting id="bestTrailer" type="bool" label="30542" default="true" />
         <setting type="sep" />
         <setting id="offerDelete" type="bool" label="30114" default="false" visible="false"/>
