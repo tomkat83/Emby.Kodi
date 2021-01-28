@@ -349,8 +349,14 @@ def audio_subtitle_prefs(api, item):
                          action_type='PUT',
                          parameters=args)
         return True
+    return setup_transcoding_audio_subtitle_prefs(mediastreams, part_id)
+
+
+def setup_transcoding_audio_subtitle_prefs(mediastreams, part_id):
     audio_streams_list = []
     audio_streams = []
+    audio_default = None
+    subtitle_default = None
     subtitle_streams_list = []
     # "Don't burn-in any subtitle"
     subtitle_streams = ['1 %s' % utils.lang(39706)]
@@ -379,6 +385,8 @@ def audio_subtitle_prefs(api, item):
                                            utils.lang(39707),  # unknown
                                            codec,
                                            channellayout)
+            if stream.get('default'):
+                audio_default = audio_numb
             audio_streams_list.append(index)
             audio_streams.append(track.encode('utf-8'))
             audio_numb += 1
@@ -391,7 +399,6 @@ def audio_subtitle_prefs(api, item):
                 continue
             # Subtitle is available within the video file
             # Burn in the subtitle, if user chooses to do so
-            default = stream.get('default')
             forced = stream.get('forced')
             try:
                 track = '{} {}'.format(sub_num + 1,
@@ -400,7 +407,8 @@ def audio_subtitle_prefs(api, item):
                 track = '{} {} ({})'.format(sub_num + 1,
                                             utils.lang(39707),  # unknown
                                             stream.get('codec'))
-            if default:
+            if stream.get('default'):
+                subtitle_default = sub_num
                 track = "%s - %s" % (track, utils.lang(39708))  # Default
             if forced:
                 track = "%s - %s" % (track, utils.lang(39709))  # Forced
@@ -410,10 +418,14 @@ def audio_subtitle_prefs(api, item):
             sub_num += 1
 
     if audio_numb > 1:
-        resp = utils.dialog('select', utils.lang(33013), audio_streams)
-        if resp == -1:
-            LOG.info('User aborted dialog to select audio stream')
-            return
+        # "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+        if utils.settings('bestQuality') == 'true' and audio_default is not None:
+            resp = audio_default
+        else:
+            resp = utils.dialog('select', utils.lang(33013), audio_streams)
+            if resp == -1:
+                LOG.info('User aborted dialog to select audio stream')
+                return
         args = {
             'audioStreamID': audio_streams_list[resp],
             'allParts': 1
@@ -428,18 +440,22 @@ def audio_subtitle_prefs(api, item):
         # Otherwise, the PMS might pick-up the last one
         LOG.info('No subtitles to burn-in')
     else:
-        resp = utils.dialog('select', utils.lang(33014), subtitle_streams)
-        if resp == -1:
-            LOG.info('User aborted dialog to select subtitle stream')
-            return
-        elif resp == 0:
-            # User did not select a subtitle or backed out of the dialog
-            LOG.info('User chose to not burn-in any subtitles')
+        # "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+        if utils.settings('bestQuality') == 'true' and subtitle_default is not None:
+            resp = subtitle_default
         else:
-            LOG.info('User chose to burn-in subtitle %s: %s',
-                      select_subs_index,
-                      subtitle_streams[resp].decode('utf-8'))
-            select_subs_index = subtitle_streams_list[resp - 1]
+            resp = utils.dialog('select', utils.lang(33014), subtitle_streams)
+            if resp == -1:
+                LOG.info('User aborted dialog to select subtitle stream')
+                return
+            elif resp == 0:
+                # User did not select a subtitle or backed out of the dialog
+                LOG.info('User chose to not burn-in any subtitles')
+            else:
+                LOG.info('User chose to burn-in subtitle %s: %s',
+                          select_subs_index,
+                          subtitle_streams[resp].decode('utf-8'))
+                select_subs_index = subtitle_streams_list[resp - 1]
     # Now prep the PMS for our choice
     args = {
         'subtitleStreamID': select_subs_index,
