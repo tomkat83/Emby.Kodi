@@ -143,6 +143,7 @@ class ProcessingQueue(queue.Queue, object):
         PKC customization of Queue.put. item needs to be the tuple
             (count [int], {'section': [Section], 'xml': [etree xml]})
         """
+        LOG.debug('Entering ProcessingQueue.put with %s', item)
         self.not_full.acquire()
         try:
             if self.maxsize > 0:
@@ -151,6 +152,7 @@ class ProcessingQueue(queue.Queue, object):
                         raise queue.Full
                 elif timeout is None:
                     while self._total_qsize() == self.maxsize:
+                        LOG.debug('ProcessingQueue._get - waiting in put')
                         self.not_full.wait()
                 elif timeout < 0:
                     raise ValueError("'timeout' must be a non-negative number")
@@ -160,14 +162,17 @@ class ProcessingQueue(queue.Queue, object):
                         remaining = endtime - _time()
                         if remaining <= 0.0:
                             raise queue.Full
+                        LOG.debug('ProcessingQueue._get - waiting 2 in put')
                         self.not_full.wait(remaining)
             self._put(item)
             self.unfinished_tasks += 1
             self.not_empty.notify()
         finally:
             self.not_full.release()
+            LOG.debug('Exiting ProcessingQueue.put with %s', item)
 
     def _put(self, item):
+        LOG.debug('Entering ProcessingQueue._put with %s', item)
         for i, section in enumerate(self._sections):
             if item[1]['section'] == section:
                 self._queues[i]._put(item)
@@ -183,6 +188,7 @@ class ProcessingQueue(queue.Queue, object):
         Once the get()-method returns None, you've received the sentinel and
         you've thus exhausted the queue
         """
+        LOG.debug('Entering ProcessingQueue.add_sentinel with %s', section)
         self.not_full.acquire()
         try:
             section.number_of_items = 1
@@ -193,6 +199,7 @@ class ProcessingQueue(queue.Queue, object):
             self.not_empty.notify()
         finally:
             self.not_full.release()
+            LOG.debug('Exiting ProcessingQueue.add_sentinel with %s', section)
 
     def add_section(self, section):
         """
@@ -202,13 +209,16 @@ class ProcessingQueue(queue.Queue, object):
         Be sure to set section.number_of_items correctly as it will signal
         when processing is completely done for a specific section!
         """
+        LOG.debug('Entering ProcessingQueue.add_section with %s', section)
         self.mutex.acquire()
         try:
             self._add_section(section)
         finally:
             self.mutex.release()
+            LOG.debug('Exiting ProcessingQueue.add_section with %s', section)
 
     def _add_section(self, section):
+        LOG.debug('Entering ProcessingQueue._add_section with %s', section)
         self._sections.append(section)
         self._queues.append(
             OrderedQueue() if section.plex_type == v.PLEX_TYPE_ALBUM
@@ -220,18 +230,24 @@ class ProcessingQueue(queue.Queue, object):
         """
         Call only when a section has been completely exhausted
         """
+        LOG.debug('Entering ProcessingQueue._init_next_section')
         self._sections.popleft()
         self._queues.popleft()
         self._activate_next_section()
 
     def _activate_next_section(self):
+        LOG.debug('Entering ProcessingQueue._activate_next_section')
         self._counter = 0
         self._current_section = self._sections[0] if self._sections else None
         self._current_queue = self._queues[0] if self._queues else None
 
     def _get(self):
+        LOG.debug('Entering ProcessingQueue._get')
         item = self._current_queue._get()
+        LOG.debug('ProcessingQueue._get - got item %s', item)
         self._counter += 1
+        LOG.debug('ProcessingQueue._get - counter %s of %s',
+                  self._counter, self._current_section.number_of_items)
         if self._counter == self._current_section.number_of_items:
             self._init_next_section()
         return item[1]
