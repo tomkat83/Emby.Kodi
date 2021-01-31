@@ -231,8 +231,8 @@ class Base(object):
         addedAt is used.
         """
         return int('%s%s' % (self.xml.get('ratingKey'),
-                             self.xml.get('updatedAt') or
-                             self.xml.get('addedAt', '1541572987')))
+                             abs(int(self.xml.get('updatedAt') or
+                                     self.xml.get('addedAt', '1541572987')))))
 
     def title(self):
         """
