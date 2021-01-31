@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
+from logging import getLogger
 from datetime import datetime, timedelta
 from time import localtime, strftime
+
+LOG = getLogger('PLEX.timing')
 
 EPOCH = datetime.utcfromtimestamp(0)
 
@@ -29,7 +32,13 @@ def unix_date_to_kodi(unix_kodi_time):
 
     Output: Y-m-d h:m:s = 2009-04-05 23:16:04
     """
-    return strftime('%Y-%m-%d %H:%M:%S', localtime(float(unix_kodi_time)))
+    try:
+        return strftime('%Y-%m-%d %H:%M:%S', localtime(float(unix_kodi_time)))
+    except Exception:
+        LOG.exception('Received an illegal timestamp from Plex: %s. '
+                      'Using 1970-01-01 12:00:00',
+                      unix_kodi_time)
+        return '1970-01-01 12:00:00'
 
 
 def plex_date_to_kodi(plex_timestamp):

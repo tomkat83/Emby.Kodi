@@ -41,8 +41,8 @@ class FillMetadataQueue(common.LibrarySyncMixin,
                 plex_id = int(xml.get('ratingKey'))
                 checksum = int('{}{}'.format(
                     plex_id,
-                    xml.get('updatedAt',
-                            xml.get('addedAt', '1541572987')).replace('-', '')))
+                    abs(int(xml.get('updatedAt',
+                            xml.get('addedAt', '1541572987'))))))
                 if (not self.repair and
                         plexdb.checksum(plex_id, section.plex_type) == checksum):
                     continue

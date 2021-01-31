@@ -135,7 +135,6 @@ class MusicMixin(object):
         '''
         Remove an album
         '''
-        self.kodidb.delete_album_from_discography(kodi_id)
         if v.KODIVERSION < 18:
             self.kodidb.delete_album_from_album_genre(kodi_id)
         self.kodidb.remove_album(kodi_id)
@@ -353,11 +352,6 @@ class Album(MusicMixin, ItemBase):
                                          timing.unix_date_to_kodi(self.last_sync),
                                          'album')
         self.kodidb.add_albumartist(artist_id, kodi_id, api.artist_name())
-        if v.KODIVERSION < 18:
-            self.kodidb.add_discography(artist_id, name, api.year())
-            self.kodidb.add_music_genres(kodi_id,
-                                         api.genres(),
-                                         v.KODI_TYPE_ALBUM)
         if app.SYNC.artwork:
             self.kodidb.modify_artwork(artworks,
                                        kodi_id,
