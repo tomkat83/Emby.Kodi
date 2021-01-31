@@ -1,3 +1,8 @@
+version 2.12.12:
+- Hopefully fix rare case when sync would get stuck indefinitely
+- Fix ValueError: invalid literal for int() for invalid dates sent by Plex
+- version 2.12.11 for everyone
+
 version 2.12.11 (beta only):
 - Fix PKC not auto-picking audio/subtitle stream when transcoding
 - Fix ValueError when deleting a music album
