@@ -136,6 +136,11 @@ class ProcessingQueue(Queue.Queue, object):
         return self._current_queue._qsize() if self._current_queue else 0
 
     def _total_qsize(self):
+        """
+        This method is BROKEN as it can lead to a deadlock when a single item
+        from the current section takes longer to download then any new items
+        coming in
+        """
         return sum(q._qsize() for q in self._queues) if self._queues else 0
 
     def put(self, item, block=True, timeout=None):
@@ -147,16 +152,16 @@ class ProcessingQueue(Queue.Queue, object):
         try:
             if self.maxsize > 0:
                 if not block:
-                    if self._total_qsize() == self.maxsize:
+                    if self._qsize() == self.maxsize:
                         raise Queue.Full
                 elif timeout is None:
-                    while self._total_qsize() == self.maxsize:
+                    while self._qsize() == self.maxsize:
                         self.not_full.wait()
                 elif timeout < 0:
                     raise ValueError("'timeout' must be a non-negative number")
                 else:
                     endtime = _time() + timeout
-                    while self._total_qsize() == self.maxsize:
+                    while self._qsize() == self.maxsize:
                         remaining = endtime - _time()
                         if remaining <= 0.0:
                             raise Queue.Full
