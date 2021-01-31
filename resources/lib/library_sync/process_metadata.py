@@ -24,7 +24,6 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
         super(ProcessMetadataThread, self).__init__()
 
     def start_section(self, section):
-        LOG.debug('Entering start_section')
         if section != self.last_section:
             if self.last_section:
                 self.finish_last_section()
@@ -34,10 +33,8 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
             app.SYNC.path_verified = False
         else:
             LOG.debug('Resume processing section %s', section)
-        LOG.debug('Exiting start_section')
 
     def finish_last_section(self):
-        LOG.debug('Entering finish_last_section')
         if (not self.should_cancel() and self.last_section and
                 self.last_section.sync_successful):
             # Check for should_cancel() because we cannot be sure that we
@@ -51,17 +48,12 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
         elif self.last_section and not self.last_section.sync_successful:
             LOG.warn('Sync not successful for section %s', self.last_section)
             self.successful = False
-        LOG.debug('Exiting finish_last_section')
 
     def _get(self):
-        LOG.debug('Entering _get')
         item = {'xml': None}
         while item and item['xml'] is None:
-            LOG.debug('_get: getting item')
             item = self.processing_queue.get()
-            LOG.debug('_get: gotten item')
             self.processing_queue.task_done()
-        LOG.debug('Exiting _get')
         return item
 
     def _run(self):
@@ -73,7 +65,6 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
             processed = 0
             self.start_section(section)
         while not self.should_cancel():
-            LOG.debug('In loop')
             if item is None:
                 break
             elif item['section'] != section:
@@ -81,14 +72,12 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
                 self.start_section(item['section'])
                 section = item['section']
             with section.context(self.current_time) as context:
-                LOG.debug('Processing %s', section)
                 while not self.should_cancel():
                     if item is None or item['section'] != section:
                         break
                     self.update_progressbar(section,
                                             item['xml'][0].get('title'),
                                             section.count)
-                    LOG.debug('Start add_update')
                     context.add_update(item['xml'][0],
                                        section_name=section.name,
                                        section_id=section.section_id,
@@ -97,9 +86,6 @@ class ProcessMetadataThread(common.LibrarySyncMixin,
                     section.count += 1
                     if processed == COMMIT_TO_DB_EVERY_X_ITEMS:
                         processed = 0
-                        LOG.debug('Commiting now')
                         context.commit()
                     item = self._get()
-                    LOG.debug('Gotten a new item')
-        LOG.debug('start finish_last_section')
         self.finish_last_section()
