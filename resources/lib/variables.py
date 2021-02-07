@@ -189,8 +189,14 @@ PLEX_TYPE_PHOTO = 'photo'
 PLEX_TYPE_PLAYLIST = 'playlist'
 PLEX_TYPE_CHANNEL = 'channel'
 
+PLEX_TYPE_GAME = 'game'
+
 # E.g. PMS answer when hitting the PMS endpoint /hubs/search
 PLEX_TYPE_TAG = 'tag'
+
+# PlexKodiConnect does not support all (content) types
+# e.g. Plex Arcade games
+UNSUPPORTED_PLEX_TYPES = (PLEX_TYPE_GAME, )
 
 # Used for /:/timeline XML messages
 PLEX_PLAYLIST_TYPE_VIDEO = 'video'
