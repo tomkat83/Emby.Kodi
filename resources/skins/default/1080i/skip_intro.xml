@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <defaultcontrol always="true">3002</defaultcontrol>
+    <onload>Dialog.Close(fullscreeninfo,true)</onload>
+    <onload>Dialog.Close(videoosd,true)</onload>
+    <controls>
+        <control type="group">
+            <animation type="WindowOpen" reversible="false">
+                <effect type="fade" start="0" end="100" time="500"/>
+            </animation>
+            <animation type="WindowClose" reversible="false">
+                <effect type="fade" start="100" end="0" time="500"/>
+            </animation>
+            <control type="group">
+                <height>64</height>
+                <control type="image">
+                    <width>100%</width>
+                    <height>64</height>
+                    <texture colordiffuse="44000000">skipintro-background.png</texture>
+                </control>
+                <control type="group">
+                    <top>12</top>
+                    <right>20</right>
+                    <width>70%</width>
+                    <control type="grouplist" id="3001">
+                        <orientation>horizontal</orientation>
+                        <height>40</height>
+                        <itemgap>10</itemgap>
+                        <align>right</align>
+                        <control type="button" id="3002">
+                            <label>$ADDON[plugin.video.plexkodiconnect 30525]</label>
+                            <height>40</height>
+                            <width min="50">auto</width>
+                            <font>font20_title</font>
+                            <textoffsetx>32</textoffsetx>
+                            <textcolor>ddffffff</textcolor>
+                            <focusedcolor>eeffffff</focusedcolor>
+                            <selectedcolor>ddffffff</selectedcolor>
+                            <shadowcolor>22000000</shadowcolor>
+                            <aligny>center</aligny>
+                            <align>center</align>
+                            <texturefocus border="10" colordiffuse="FF063FB2">skipintro-button.png</texturefocus>
+                            <texturenofocus border="10" colordiffuse="FF323232">skipintro-button.png</texturenofocus>
+                            <alttexturefocus border="10" colordiffuse="FF063FB2">skipintro-button.png</alttexturefocus>
+                            <alttexturenofocus border="10" colordiffuse="FF323232">skipintro-button.png</alttexturenofocus>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

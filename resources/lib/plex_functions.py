@@ -479,6 +479,7 @@ def GetPlexMetadata(key, reraise=False):
         'includeReviews': 1,
         'includeRelated': 0,        # Similar movies => Video -> Related
         'skipRefresh': 1,
+        'includeMarkers': 1,        # e.g. start + stop of intros
         # 'includeRelatedCount': 0,
         # 'includeOnDeck': 1,
         # 'includeChapters': 1,
@@ -518,7 +519,9 @@ def get_playback_xml(url, server_name, authenticate=True, token=None):
     """
     Returns None if something went wrong
     """
-    header_options = {'X-Plex-Token': token} if not authenticate else None
+    header_options = {'includeMarkers': 1}
+    if not authenticate:
+        header_options['X-Plex-Token'] = token
     try:
         xml = DU().downloadUrl(url,
                                authenticate=authenticate,
@@ -806,7 +809,8 @@ def init_plex_playqueue(plex_id, plex_type, section_uuid, trailers=False):
                 (app.CONN.machine_identifier, plex_id)),
         'includeChapters': '1',
         'shuffle': '0',
-        'repeat': '0'
+        'repeat': '0',
+        'includeMarkers': 1,        # e.g. start + stop of intros
     }
     if trailers is True:
         args['extrasPrefixCount'] = utils.settings('trailerNumber')

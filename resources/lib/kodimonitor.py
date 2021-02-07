@@ -335,6 +335,10 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/playQueues/%s' % playqueue.id
             else:
                 container_key = '/library/metadata/%s' % plex_id
+        # Mechanik for Plex skip intro feature
+        if utils.settings('enableSkipIntro') == 'true':
+            api = API(item.xml)
+            status['intro_markers'] = api.intro_markers()
         # Remember the currently playing item
         app.PLAYSTATE.item = item
         # Remember that this player has been active
@@ -367,6 +371,9 @@ def _playback_cleanup(ended=False):
     """
     LOG.debug('playback_cleanup called. Active players: %s',
               app.PLAYSTATE.active_players)
+    if app.APP.skip_intro_dialog:
+        app.APP.skip_intro_dialog.close()
+        app.APP.skip_intro_dialog = None
     # We might have saved a transient token from a user flinging media via
     # Companion (if we could not use the playqueue to store the token)
     app.CONN.plex_transient_token = None

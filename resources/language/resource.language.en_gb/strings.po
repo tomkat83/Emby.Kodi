@@ -567,6 +567,10 @@ msgctxt "#30524"
 msgid "Select Plex libraries to sync"
 msgstr ""
 
+# PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30527"
