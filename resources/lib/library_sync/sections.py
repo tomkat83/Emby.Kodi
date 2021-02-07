@@ -650,6 +650,9 @@ def _sync_from_pms(pick_libraries):
     sections = []
     old_sections = []
     for i, xml_element in enumerate(xml.findall('Directory')):
+        api = API(xml_element)
+        if api.plex_type in v.UNSUPPORTED_PLEX_TYPES:
+            continue
         sections.append(Section(index=i, xml_element=xml_element))
     with PlexDB() as plexdb:
         for section_db in plexdb.all_sections():

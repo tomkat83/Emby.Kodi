@@ -19,6 +19,8 @@ class App(object):
     def __init__(self, entrypoint=False):
         self.fetch_pms_item_number = None
         self.force_reload_skin = None
+        # All thread instances
+        self.threads = []
         if entrypoint:
             self.load_entrypoint()
         else:
@@ -45,8 +47,6 @@ class App(object):
             self.monitor = None
             # xbmc.Player() instance
             self.player = None
-            # All thread instances
-            self.threads = []
             # Instance of FanartThread()
             self.fanart_thread = None
             # Instance of ImageCachingThread()
