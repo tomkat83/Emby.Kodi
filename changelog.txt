@@ -1,3 +1,7 @@
+version 3.0.9:
+- Add skip intro functionality
+- Fix Kodi add-on NextUp not working
+
 version 3.0.8:
 - Fix KeyError: u'game' if Plex Arcade has been activated
 - Fix AttributeError: 'App' object has no attribute 'threads' when sync is cancelled
