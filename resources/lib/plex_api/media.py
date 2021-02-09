@@ -42,6 +42,16 @@ class Media(object):
             value = self.xml[0][self.part].get(key)
         return value
 
+    def intro_markers(self):
+        """
+        Returns a list of tuples with floats (startTimeOffset, endTimeOffset)
+        in Koditime or an empty list.
+        Each entry represents an (episode) intro that Plex detected and that
+        can be skipped
+        """
+        self._scan_children()
+        return self._intro_markers
+
     def video_codec(self):
         """
         Returns the video codec and resolution for the child and part selected.
