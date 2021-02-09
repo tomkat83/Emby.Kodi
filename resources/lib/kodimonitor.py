@@ -584,7 +584,7 @@ def _notify_upnext(item):
     info['play_info'] = {'handle': next_api.fullpath(force_addon=True)[0]}
     sender = v.ADDON_ID
     method = 'upnext_data'
-    data = binascii.hexlify(json.dumps(info))
+    data = binascii.hexlify(json.dumps(info).encode('utf-8'))
     data = '\\"[\\"{0}\\"]\\"'.format(data)
     xbmc.executebuiltin(f'NotifyAll({sender}, {method}, {data})')
 
