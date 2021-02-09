@@ -51,6 +51,8 @@ class App(object):
             self.fanart_thread = None
             # Instance of ImageCachingThread()
             self.caching_thread = None
+            # Dialog to skip intro
+            self.skip_intro_dialog = None
 
     @property
     def is_playing(self):
