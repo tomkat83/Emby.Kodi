@@ -50,6 +50,13 @@ msgstr ""
 "Varning: Kodi-inställningen \"Spela nästa video automatiskt\" är aktiverad. "
 "Detta kan orsaka problem med PKC. Vill du avaktivera?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Användarnamn:"

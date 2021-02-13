@@ -48,6 +48,13 @@ msgstr ""
 "Waarschuwing: De kodi instelling 'Automatisch volgende video afspelen' is "
 "actief. Dit kan voor problemen zorgen. Instelling deactiveren?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Gebruikersnaam: "

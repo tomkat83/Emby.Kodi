@@ -50,6 +50,13 @@ msgstr ""
 "Avertissement : Le paramètre Kodi \"Lecture automatique de la vidéo "
 "suivante\" est activé. Cela pourrait casser PKC. Désactiver ?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Identifiant : "
