@@ -567,6 +567,10 @@ msgctxt "#30524"
 msgid "Select Plex libraries to sync"
 msgstr ""
 
+# PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -630,7 +634,7 @@ msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
 msgstr ""
 
 # PKC Settings - Playback
