@@ -48,6 +48,13 @@ msgstr ""
 "Waarschuwing: De kodi instelling 'Automatisch volgende video afspelen' is "
 "actief. Dit kan voor problemen zorgen. Instelling deactiveren?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Gebruikersnaam: "
@@ -602,6 +609,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Selecteer Plex-bibliotheken om te synchroniseren"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Specials in de volgende afleveringen negeren"
@@ -665,8 +677,8 @@ msgstr "Download film set/collectie artwork van FanArtTV"
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Niet vragen om een bepaalde stream/kwaliteit te kiezen"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"
