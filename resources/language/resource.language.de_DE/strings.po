@@ -1,6 +1,6 @@
 #  XBMC Media Center language file
 # Translators:
-# Croneter None <croneter@gmail.com>, 2020
+# Croneter None <croneter@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Croneter None <croneter@gmail.com>, 2020\n"
+"Last-Translator: Croneter None <croneter@gmail.com>, 2021\n"
 "Language-Team: German (Germany) (https://www.transifex.com/croneter/teams/73837/de_DE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,6 +43,17 @@ msgid ""
 msgstr ""
 "Achtung: Kodi Einstellung \"Nächsten Video automatisch abspielen\" ist "
 "aktiviert. Dies kann PKC stören. Deaktivieren?"
+
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+"Der Kodi-Webserver wird für Artwork-Caching benötigt. PKC hat bereits "
+"automatisch ein starkes, zufälliges Passwort gesetzt, falls Sie dies nicht "
+"schon getan haben. Bitte bestätigen Sie den nächsten Dialog mit Ja, dass der"
+" Webserver aktiviert werden kann."
 
 msgctxt "#30005"
 msgid "Username: "
@@ -603,6 +614,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Zu synchronisierende Plex Bibliotheken auswählen"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr "Intro überspringen"
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Extras ignorieren, wenn nächste Episode abgespielt wird"
@@ -665,8 +681,9 @@ msgstr "FanArtTV Bilder für Film-Sets/Collections herunterladen"
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Nicht nachfragen, welcher Stream oder Qualität gespielt werden soll"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
+"Transkodierung: Plex-Standards für Audio- und Untertitel-Streams verwenden"
 
 # PKC Settings - Playback
 msgctxt "#30542"

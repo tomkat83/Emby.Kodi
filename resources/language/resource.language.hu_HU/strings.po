@@ -45,6 +45,13 @@ msgstr ""
 "Figyelem: \"A következő videó automatikus lejátszása\" be van kapcsolva. Ez "
 "megakadályozhatja a PKC megfelelő működését. Kikapcsolja?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Felhasználónév: "
@@ -607,6 +614,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Szinkronizálni kívánt Plex könyvtárak kiválasztása"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Extrák figyelmen kívül hagyása a következő epizódok lejátszásakor"
@@ -670,8 +682,8 @@ msgstr "Film-szett/kollekció képek letöltése a FanArtTV-ről"
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Ne kérdezze meg melyik stream/minőség kerüljön lejátszásra"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"

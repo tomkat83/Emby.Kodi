@@ -44,6 +44,13 @@ msgstr ""
 "Попередження: налаштування Kodi \"відтворювати наступне відео автоматично\" "
 "включено. Це може перервати роботу PKC. Вимкнути?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Ім'я користувача:"
@@ -601,6 +608,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Обрати бібліотеки Plex для синхронізації"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Ігнорувати бонуси у наступній серії"
@@ -664,8 +676,8 @@ msgstr "Завантажувати матеріали набору фільмі�
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Не запитувати обирання певного потоку або якості"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"
