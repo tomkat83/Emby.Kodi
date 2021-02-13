@@ -5,7 +5,11 @@ from . import app, variables as v
 
 
 def skip_intro(intros):
-    progress = app.APP.player.getTime()
+    try:
+        progress = app.APP.player.getTime()
+    except RuntimeError:
+        # XBMC is not playing any media file yet
+        return
     in_intro = False
     for start, end in intros:
         if start <= progress < end:
