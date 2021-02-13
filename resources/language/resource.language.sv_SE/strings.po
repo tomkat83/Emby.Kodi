@@ -6,6 +6,7 @@
 # Samuel Linde <samuel@linde.im>, 2018
 # Nisse Karlsson <transifex@xcorp.at>, 2019
 # Ludwig Johnson <public@ludwigjohnson.se>, 2019
+# namob <boman.d@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Ludwig Johnson <public@ludwigjohnson.se>, 2019\n"
+"Last-Translator: namob <boman.d@gmail.com>, 2021\n"
 "Language-Team: Swedish (Sweden) (https://www.transifex.com/croneter/teams/73837/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,6 +49,13 @@ msgid ""
 msgstr ""
 "Varning: Kodi-inställningen \"Spela nästa video automatiskt\" är aktiverad. "
 "Detta kan orsaka problem med PKC. Vill du avaktivera?"
+
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
 
 msgctxt "#30005"
 msgid "Username: "
@@ -266,7 +274,7 @@ msgstr "Videokvalitet då omkodning krävs"
 
 msgctxt "#30161"
 msgid "Auto-adjust transcoding quality (deactivate for Chromecast)"
-msgstr ""
+msgstr "Justera automatiskt omkodningskvaliteten (inaktivera för Chromecast)"
 
 msgctxt "#30165"
 msgid "Direct Play"
@@ -553,12 +561,12 @@ msgstr ""
 # PKC Settings - Sync Options
 msgctxt "#30515"
 msgid "Maximum items to request from the server at once"
-msgstr "max antal föremåls begäran till server"
+msgstr "Max antal föremål att fråga efter på en och samma gång"
 
 # PKC Settings, category name
 msgctxt "#30516"
 msgid "Playback"
-msgstr "uppspelning"
+msgstr "Uppspelning"
 
 # PKC Settings - Connection
 msgctxt "#30517"
@@ -578,17 +586,17 @@ msgstr "Fråga om uppspelning av trailers."
 # PKC Settings - Plex
 msgctxt "#30520"
 msgid "Skip PMS delete confirmation (use at your own risk)"
-msgstr "Skippa PMS radera konfirmations meddelande (avnänd på egen risk)"
+msgstr "Hoppa över PMS bekräftelse på att radera data (använd på egen risk)"
 
 # PKC Settings - Playback
 msgctxt "#30521"
 msgid "Jump back on resume (in seconds)"
-msgstr "Spola tillbaka vid återuppta(i sekunder)"
+msgstr "Spola tillbaka vid återuppta (i sekunder)"
 
 # PKC Settings - Playback
 msgctxt "#30522"
 msgid "Force transcode h265/HEVC"
-msgstr "Tvinga omkodning (trancoding) av h265/hevc"
+msgstr "Tvinga omkodning av H.265/HEVC"
 
 # PKC Settings - Sync Options
 msgctxt "#30523"
@@ -601,45 +609,50 @@ msgid "Select Plex libraries to sync"
 msgstr "Välj Plex-bibliotek att synkronisera "
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
-msgstr "ignorera specialer av nästa episoder"
+msgstr "ignorera specialer i nästa episoder"
 
 msgctxt "#30528"
 msgid "Permanent users to add to the session"
-msgstr "Permanenta användare tillägs till denna session"
+msgstr "Permanenta användare att lägga till i sessionen"
 
 # PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
-msgstr "Uppstartnings dröjsmål (i sekunder)"
+msgstr "Fördröjning vid uppstart (i sekunder)"
 
 msgctxt "#30531"
 msgid "Enable new content notification"
-msgstr "Aktivera nytt innehål notifiering"
+msgstr "Aktivera notifiering vid nytt innehåll"
 
 msgctxt "#30532"
 msgid "Duration of the video library pop up (in seconds)"
-msgstr "varaktighet av video biblioteks pop up(i sekunder)"
+msgstr "Varaktighet av videobibliotekspopup (i sekunder)"
 
 msgctxt "#30533"
 msgid "Duration of the music library pop up (in seconds)"
-msgstr "varaktighet av musik biblioteks pop up(i sekunder)"
+msgstr "Varaktighet av musikbibliotekspopup (i sekunder)"
 
 msgctxt "#30534"
 msgid "Server messages"
-msgstr "Server meddelanden"
+msgstr "Servermeddelanden"
 
 # PKC Settings - Advanced
 msgctxt "#30535"
 msgid "Generate a new unique Plex device Id (e.g. to clone Kodi)"
 msgstr ""
-"Generera ett nytt unikt Plex enhets id (för att exempelvis klona Kodi)"
+"Generera ett nytt unikt Plex enhets-id (för att exempelvis klona Kodi)"
 
 # PKC Settings - Connection
 msgctxt "#30536"
 msgid "Users must log in every time Kodi restarts"
-msgstr "användare måste logga in varje gång kodi startas om"
+msgstr "Användare måste logga in varje gång Kodi startas om"
 
 # PKC Settings warning
 msgctxt "#30537"
@@ -654,7 +667,7 @@ msgstr "Fullständig återställning av Kodi-databasen krävs, se \"Avancerad\""
 # PKC Settings - Artwork
 msgctxt "#30539"
 msgid "Download additional art from FanArtTV"
-msgstr "ladda ner extra affischer från FanArtTV"
+msgstr "Ladda ner extra affischer från FanArtTV"
 
 # PKC Settings - Artwork
 msgctxt "#30540"
@@ -663,8 +676,8 @@ msgstr "Ladda ner film set affischer från FanArtTV"
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Fråga inte om välja stream kvalitet"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"
@@ -678,12 +691,12 @@ msgstr "Föredra Kodi-bilder för kollektioner"
 
 msgctxt "#30544"
 msgid "Artwork"
-msgstr "affischer"
+msgstr "Affischer"
 
 # PKC Settings - Playback
 msgctxt "#30545"
 msgid "Force transcode pictures"
-msgstr "tvinga omkodning(transcoding) av bilder"
+msgstr "Tvinga omkodning av bilder"
 
 # Welcome to Plex notification
 msgctxt "#33000"
@@ -708,18 +721,18 @@ msgstr "Server är online"
 # Plex notification when we need to transcode
 msgctxt "#33004"
 msgid "PMS enforced transcoding"
-msgstr ""
+msgstr "PMS-tvingad omkodning"
 
 # Plex notification when we need to use direct streaming (instead of
 # transcoding)
 msgctxt "#33005"
 msgid "PMS enforced direct streaming"
-msgstr ""
+msgstr "PMS-tvingad direkt ström"
 
 # Error notification
 msgctxt "#33009"
 msgid "Invalid username or password"
-msgstr "fel användarnamn eller lösenord"
+msgstr "Fel användarnamn eller lösenord"
 
 msgctxt "#33010"
 msgid "User is unauthorized for server {0}"
@@ -732,7 +745,7 @@ msgstr "Plex.tv skickade inte en lista över giltiga Plex-användare."
 # Dialog before playback
 msgctxt "#33013"
 msgid "Choose the audio stream"
-msgstr "välj ljudfil"
+msgstr "Välj ljudström"
 
 # Dialog before playback
 msgctxt "#33014"
@@ -742,19 +755,20 @@ msgstr "Välj undertext"
 # Dialog before playback
 msgctxt "#33016"
 msgid "Play trailers?"
-msgstr "spela upp trailer?"
+msgstr "Spela upp trailer?"
 
 # Error message
 msgctxt "#33032"
 msgid ""
 "Failed to generate a new device Id. See your logs for more information."
 msgstr ""
-"misslyckades med att generera nytt enhets id. kolla logs för mer information"
+"Misslyckades med att generera nytt enhets-id. Kontrollera loggar för mer "
+"information."
 
 # Pop-up informing about Kodi restart
 msgctxt "#33033"
 msgid "Kodi will now restart to apply the changes."
-msgstr "Kodi kommer startas om för att applicera inställningar"
+msgstr "Kodi kommer startas om för att applicera förändringarna"
 
 # Confirmation dialog before item gets deleted from the PMS
 msgctxt "#33041"
@@ -762,22 +776,22 @@ msgid ""
 "Delete file(s) from Plex Server? This will also delete the file(s) from "
 "disk!"
 msgstr ""
-"radera filer från plex server?filer kommer också raderas från hårddisk"
+"Radera fil(er) från Plexserver? Fil(er) kommer också raderas från hårddisk!"
 
 # PKC Settings - Playback
 msgctxt "#39000"
 msgid "- Number of trailers to play before a movie"
-msgstr "-antal trailers att spela för filmen"
+msgstr "- Antal trailers att spela innan en film"
 
 # PKC Settings - Playback
 msgctxt "#39001"
 msgid "Boost audio when transcoding"
-msgstr "öka ljudet när det omkodas(transcoding)"
+msgstr "Öka ljudet när det omkodas"
 
 # PKC Settings - Playback
 msgctxt "#39002"
 msgid "Burnt-in subtitle size"
-msgstr "inbränd undertext storlek"
+msgstr "Storlek på inbränd undertext"
 
 # PKC Settings - Sync
 msgctxt "#39003"
@@ -787,47 +801,47 @@ msgstr "Antal samtidiga nedladdningstrådar"
 # PKC Settings - Plex
 msgctxt "#39004"
 msgid "Enable Plex Companion (restart Kodi!)"
-msgstr "aktivera Plex Companion (restart kodi)"
+msgstr "Aktivera Plex Companion (kräver omstart av Kodi!)"
 
 # PKC Settings - Plex
 msgctxt "#39005"
 msgid "Plex Companion Port (change only if needed)"
-msgstr "Plex Companion Port(ändra bara om det är nödvändigt)"
+msgstr "Plex Companion Port (ändra bara om det är nödvändigt)"
 
 # PKC Settings - Plex
 msgctxt "#39008"
 msgid "Plex Companion: Allows flinging media to Kodi through Plex"
-msgstr "Plex companion: tillåt strömmning av media till kodi från plex."
+msgstr "Plex Companion: tillåt strömmning av media till Kodi från Plex."
 
 # Error message
 msgctxt "#39009"
 msgid "Could not login to plex.tv. Please try signing in again."
-msgstr "kunde inte logga in tillplex.tv. Försök logga in igen."
+msgstr "Kunde inte logga in till plex.tv. Försök logga in igen."
 
 # Error message
 msgctxt "#39010"
 msgid "Problems connecting to plex.tv. Network or internet issue?"
-msgstr "problem att ansluta till plex.tv. nätverk eller interna fel."
+msgstr "Problem att ansluta till plex.tv. Nätverks- eller internetproblem?"
 
 # Error message
 msgctxt "#39011"
 msgid "Could not find any Plex server in the network. Aborting..."
-msgstr "kunde inte hitta plex server på nätverket. avbryter."
+msgstr "Kunde inte hitta Plex-server på nätverket. Avbryter..."
 
 # Dialog text for choosing PMS
 msgctxt "#39012"
 msgid "Choose your Plex server"
-msgstr "välj din plex server."
+msgstr "Välj din Plex-server"
 
 # Error message
 msgctxt "#39013"
 msgid "Not yet authorized for Plex server "
-msgstr "inte authoriserad ännu"
+msgstr "Ännu inte auktoriserad för Plex-servern"
 
 # Error message
 msgctxt "#39014"
 msgid "Please sign in to plex.tv."
-msgstr "logga in på plex.tv"
+msgstr "Vänligen logga in mot plex.tv"
 
 # Error message
 msgctxt "#39015"
@@ -840,8 +854,9 @@ msgid ""
 "Disable Plex music library? (It is HIGHLY recommended to use Plex music only"
 " with direct paths for large music libraries. Kodi might crash otherwise)"
 msgstr ""
-"avaktivera Plex music bibliotek (rekommenderat att endast använda plex musik"
-" med direkt paths till stora musik bibliotek.)"
+"Inaktivera Plex musikbibliotek? (Det är STARKT rekommenderat att endast "
+"använda Direct Path tillsammans med stora musikbibliotek, Kodi kan krasha "
+"annars)"
 
 # Pop-up on initial sync
 msgctxt "#39017"
@@ -875,17 +890,17 @@ msgstr "lokal"
 # Error message
 msgctxt "#39023"
 msgid "Failed to authenticate. Did you login to plex.tv?"
-msgstr "misslyckade att authentisera. Har du loggat in på plex.tv"
+msgstr "Misslyckades med autentisering. Har du loggat in på plex.tv?"
 
 # PKC Settings - Plex
 msgctxt "#39025"
 msgid "Automatically log into plex.tv on startup"
-msgstr "automatiskt logga in på plex.tv vid start"
+msgstr "Logga in automatiskt på plex.tv vid start"
 
 # PKC Settings - Sync
 msgctxt "#39026"
 msgid "Enable constant background sync"
-msgstr "aktivera konstant bakgrunds synkronisering"
+msgstr "Aktivera konstant bakgrundssynkronisering"
 
 # Pop-up on initial sync
 msgctxt "#39028"
@@ -895,14 +910,15 @@ msgid ""
 "shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or "
 "\\\\myNAS/mymovie.mkv)!"
 msgstr ""
-"VARNING! om du väljer native läge, kanske du förlorar tillgång till vissa plex funktioner som t.ex.\n"
-"plex trailer och omkodning(transcoding) alternativ. alla plex shares behöver använda direct paths\n"
-"(t.ex. smb://myNAS/mymovie.mkv or \\\\myNAS/mymovie.mkv)!"
+"VARNING! Om du väljer \"Nativt\" läge kan du förlora tillgång till vissa "
+"Plex-funktioner såsom Plextrailer och omkodningsalternativ. ALLA "
+"Plexutdelningar måste använda Direct Path (t.ex smb://myNAS/mymovie.mkv "
+"eller \\\\myNAS\\mymovie.mkv)!"
 
 # Pop-up on initial sync
 msgctxt "#39029"
 msgid "Network credentials"
-msgstr "nätverks inloggningsuppgifter"
+msgstr "Inloggningsuppgifter för nätverk"
 
 # Pop-up on initial sync
 msgctxt "#39030"
@@ -921,7 +937,7 @@ msgid ""
 "Kodi cannot locate the file %s. Please verify your PKC settings. Stop "
 "syncing?"
 msgstr ""
-"Kodi kan inte hitta filen 1%s. verifiera pkc inställningar. sluta synka?"
+"Kodi kan inte hitta filen %s. Verifiera PKC-inställningar. Avsluta synk?"
 
 # Pop-up on initial sync
 msgctxt "#39033"
@@ -929,13 +945,13 @@ msgid ""
 "Transform Plex UNC library paths \\\\myNas\\mymovie.mkv automatically to smb"
 " paths, smb://myNas/mymovie.mkv? (recommended)"
 msgstr ""
-"omvandla plex unc biblioteks paths \\\\myNas\\mymovie.mkv automatiskt till smb delningar.\n"
+"Omvandla Plex UNC-sökvägar \\\\myNas\\mymovie.mkv automatiskt till SMB-sökvägar \n"
 "smb://myNas/mymovie.mkv? (rekommenderas)"
 
 # PKC Settings - Customize Paths
 msgctxt "#39034"
 msgid "Replace Plex UNC paths \\\\myNas with smb://myNas"
-msgstr "Ersätt Plex UNC sökväg \\\\myNas med smb://myNas"
+msgstr "Ersätt Plex UNC-sökväg \\\\myNas med smb://myNas"
 
 # PKC Settings - Customize Paths
 msgctxt "#39035"
@@ -943,8 +959,8 @@ msgid ""
 "Replace Plex paths /volume1/media or \\\\myserver\\media with custom SMB "
 "paths smb://NAS/mystuff"
 msgstr ""
-"Ersätt Plex sökväg /volume1/media eller \\\\myserver\\media med anpassade "
-"SMB sökvägar smb://NAS/mystuff"
+"Ersätt Plex-sökväg /volume1/media eller \\\\myserver\\media med anpassade "
+"SMB-sökvägar smb://NAS/mystuff"
 
 # PKC Settings - Customize Paths
 msgctxt "#39036"
@@ -954,12 +970,12 @@ msgstr "Omkoda specialtecken i sökväg (exempelvis mellanslag som %20)"
 # PKC Settings - Customize Paths
 msgctxt "#39090"
 msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
-msgstr ""
+msgstr "Säkra karaktärer för http(s), dav(s) och (s)ftp URLer"
 
 # PKC Settings - Customize Paths
 msgctxt "#39037"
 msgid "Original Plex MOVIE path to replace:"
-msgstr "Ursprunglig Plex MOVIE sökväg att ersätta."
+msgstr "Ursprunglig Plex MOVIE-sökväg att ersätta:"
 
 # PKC Settings - Customize Paths
 msgctxt "#39038"
@@ -969,7 +985,7 @@ msgstr "Ersätt Plex MOVIE med:"
 # PKC Settings - Customize Paths
 msgctxt "#39039"
 msgid "Original Plex TV SHOWS path to replace:"
-msgstr "Ursprunglig Plex TV SHOWS sökväg att ersätta."
+msgstr "Ursprunglig Plex TV SHOWS-sökväg att ersätta:"
 
 # PKC Settings - Customize Paths
 msgctxt "#39040"
@@ -979,7 +995,7 @@ msgstr "Ersätt Plex TV SHOWS med:"
 # PKC Settings - Customize Paths
 msgctxt "#39041"
 msgid "Original Plex MUSIC path to replace:"
-msgstr "Ursprunglig Plex MUSIC sökväg att ersätta."
+msgstr "Ursprunglig Plex MUSIC-sökväg att ersätta:"
 
 # PKC Settings - Customize Paths
 msgctxt "#39042"
@@ -1002,8 +1018,8 @@ msgid ""
 "Please enter your custom smb paths in the settings under \"Sync Options\" "
 "and then restart Kodi"
 msgstr ""
-"Ange din anpassade smb-sökväg i inställningarna under \"Synkroniserings "
-"inställningar\" och starta sedan om Kodi"
+"Ange din anpassade SMB-sökväg i inställningarna under "
+"\"Synkroniseringsinställningar\" och starta om Kodi"
 
 # PKC Settings - Customize Paths
 msgctxt "#39045"
@@ -1038,12 +1054,12 @@ msgstr "Välj en Plex Server från en lista"
 # PKC Settings - Sync
 msgctxt "#39051"
 msgid "Wait before sync new/changed PMS item [s]"
-msgstr "Vänta före synkronisering av nya/ändrade PMS objekt"
+msgstr "Vänta före synkronisering av nya/ändrade PMS-objekt"
 
 # PKC Settings - Sync
 msgctxt "#39052"
 msgid "Background Sync"
-msgstr "Bakgrundssynkning."
+msgstr "Bakgrundssynkronisering."
 
 # PKC Settings - Sync
 msgctxt "#39053"
@@ -1065,6 +1081,8 @@ msgctxt "#39056"
 msgid ""
 "Used by sync and when attempting Direct Paths. Restart Kodi on changes!"
 msgstr ""
+"Används av sync samt vid användning av Direct Paths. Starta om Kodi vid "
+"förändringar!"
 
 # PKC Settings, category name
 msgctxt "#39057"
@@ -1165,7 +1183,7 @@ msgstr "Maximalt antal filmer att visa i widgets"
 # PKC Settings - Plex
 msgctxt "#39078"
 msgid "Plex Companion Update Port (change only if needed)"
-msgstr "Plex Companion Update port (ändra bara vid behov)"
+msgstr "Plex Companion Update-port (ändra bara vid behov)"
 
 # Error message
 msgctxt "#39079"
@@ -1173,7 +1191,7 @@ msgid ""
 "Plex Companion could not open the GDM port. Please change it in the PKC "
 "settings."
 msgstr ""
-"Plex Companion kunde inte öppna GDM porten. Ändra den i PKC inställningarna."
+"Plex Companion kunde inte öppna GDM-porten. Ändra den i PKC-inställningarna."
 
 # Pop-up on initial sync.
 # Check that next translations for Add-on Paths and Direct Paths are
@@ -1210,7 +1228,7 @@ msgstr "Ange PMS port"
 # PKC settings - Appearance Tweaks
 msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
-msgstr "Ladda om Kodi nodfiler för att applicera alla inställningar nedan"
+msgstr "Ladda om Kodi-nodfiler för att applicera alla inställningar nedan"
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
@@ -1228,8 +1246,8 @@ msgstr "Utför manuell bibliotekssynkronisering"
 msgctxt "#39205"
 msgid "Unable to run the sync, the add-on is not connected to a Plex server."
 msgstr ""
-"Kunde inte köra synkronisering, tillägget är inte ansluten till en Plex "
-"server."
+"Kunde inte köra synkronisering, tillägget är inte ansluten till en "
+"Plexserver."
 
 msgctxt "#39206"
 msgid ""
@@ -1272,7 +1290,7 @@ msgstr "Ange din Plex Media Server IP eller URL, exempelvis:"
 
 msgctxt "#39217"
 msgid "Use HTTPS (SSL) connections? Answer should probably be yes."
-msgstr ""
+msgstr "Används HTTPS(SSL)-anslutningar? Svaret bör nog vara ja."
 
 msgctxt "#39218"
 msgid "Error contacting PMS"
@@ -1408,7 +1426,7 @@ msgstr ""
 
 msgctxt "#39402"
 msgid " may not work correctly until the database is reset."
-msgstr "fungerar kanske inte fören databasen är återställd. "
+msgstr "fungerar kanske inte förrän databasen är återställd. "
 
 msgctxt "#39403"
 msgid ""
@@ -1521,7 +1539,7 @@ msgstr "Använd på egen risk"
 # If user gets prompted to choose between several subtitles to burn in
 msgctxt "#39706"
 msgid "Don't burn-in any subtitle"
-msgstr ""
+msgstr "Använd inte några inbrända undertexter"
 
 # If user gets prompted to choose between several audio/subtitle tracks and
 # language is unknown
@@ -1561,7 +1579,7 @@ msgstr ""
 # Shown during sync process
 msgctxt "#39712"
 msgid "downloaded"
-msgstr "Nedladdade"
+msgstr "nedladdade"
 
 # Shown during sync process
 msgctxt "#39713"

@@ -45,6 +45,13 @@ msgstr ""
 "Įspėjimas: „Kodi“ nustatymas „Leisti kitą vaizdo įrašą automatiškai“ yra "
 "įjungtas. Tai gali pažeisti „PKC“. Išjungti?"
 
+msgctxt "#30004"
+msgid ""
+"The Kodi webserver is needed for artwork caching. PKC already set a strong, "
+"random password automatically if you haven't done so already. Please confirm"
+" the next dialog that you want to enable the webserver now with Yes."
+msgstr ""
+
 msgctxt "#30005"
 msgid "Username: "
 msgstr "Vartotojo vardas:"
@@ -601,6 +608,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Pasirinkti sinchronizuojamas „Plex“ bibliotekas"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Nepaisyti specialių laidų sekančiuose epizoduose"
@@ -664,8 +676,8 @@ msgstr "Atsisiųskite filmų komplekto / rinkinio iliustraciją iš „FanArtTV�
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Neprašykite pasirinkti tam tikro srauto / kokybės"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"
