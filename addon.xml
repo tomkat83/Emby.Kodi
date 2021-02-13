@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.0.9" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.0.10" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -84,7 +84,11 @@
     <summary lang="lt_LT">Natūralioji „Plex“ integracija į „Kodi“</summary>
     <description lang="lt_LT">Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai pakeičia). Naudokite savo pačių rizika!</description>
     <disclaimer lang="lt_LT">Naudokite savo pačių rizika</disclaimer>
-    <news>version 3.0.9:
+    <news>version 3.0.10:
+- Fix skip intros sometimes not working due to a RuntimeError
+- Update translations
+
+version 3.0.9:
 - Add skip intro functionality
 - Fix Kodi add-on NextUp not working
 

@@ -1,3 +1,7 @@
+version 3.0.10:
+- Fix skip intros sometimes not working due to a RuntimeError
+- Update translations
+
 version 3.0.9:
 - Add skip intro functionality
 - Fix Kodi add-on NextUp not working
