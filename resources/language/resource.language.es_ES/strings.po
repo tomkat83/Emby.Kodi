@@ -606,6 +606,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Seleccionar librerias de Plex para sincronizar"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Ignorar especiales en próximos episodios"
@@ -670,8 +675,8 @@ msgstr "Descargar arte de sagas de FanArtTV"
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "No solicitar elegir un stream o una calidad en particular"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"

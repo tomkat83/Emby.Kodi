@@ -601,6 +601,11 @@ msgid "Select Plex libraries to sync"
 msgstr "Pasirinkti sinchronizuojamas „Plex“ bibliotekas"
 
 # PKC Settings - Playback
+msgctxt "#30525"
+msgid "Skip intro"
+msgstr ""
+
+# PKC Settings - Playback
 msgctxt "#30527"
 msgid "Ignore specials in next episodes"
 msgstr "Nepaisyti specialių laidų sekančiuose epizoduose"
@@ -664,8 +669,8 @@ msgstr "Atsisiųskite filmų komplekto / rinkinio iliustraciją iš „FanArtTV�
 
 # PKC Settings - Playback
 msgctxt "#30541"
-msgid "Don't ask to pick a certain stream/quality"
-msgstr "Neprašykite pasirinkti tam tikro srauto / kokybės"
+msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
+msgstr ""
 
 # PKC Settings - Playback
 msgctxt "#30542"
