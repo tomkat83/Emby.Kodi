@@ -1,3 +1,6 @@
+version 2.12.16:
+- versions 2.12.14 and 2.12.15 for everyone
+
 version 2.12.15 (beta only):
 - Fix skip intros sometimes not working due to a RuntimeError
 - Update translations
