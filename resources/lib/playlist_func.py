@@ -478,7 +478,8 @@ def init_plex_playqueue(playlist, plex_id=None, kodi_item=None):
         params = {
             'next': 0,
             'type': playlist.type,
-            'uri': item.uri
+            'uri': item.uri,
+            'includeMarkers': 1,  # e.g. start + stop of intros
         }
         xml = DU().downloadUrl(url="{server}/%ss" % playlist.kind,
                                action_type="POST",
@@ -570,9 +571,15 @@ def add_item_to_plex_playqueue(playlist, pos, plex_id=None, kodi_item=None):
         item = playlist_item_from_plex(plex_id)
     else:
         item = playlist_item_from_kodi(kodi_item)
-    url = "{server}/%ss/%s?uri=%s" % (playlist.kind, playlist.id, item.uri)
+    url = "{server}/%ss/%s" % (playlist.kind, playlist.id)
+    parameters = {
+        'uri': item.uri,
+        'includeMarkers': 1,  # e.g. start + stop of intros
+    }
     # Will always put the new item at the end of the Plex playlist
-    xml = DU().downloadUrl(url, action_type="PUT")
+    xml = DU().downloadUrl(url,
+                           action_type="PUT",
+                           parameters=parameters)
     try:
         xml[-1].attrib
     except (TypeError, AttributeError, KeyError, IndexError):
@@ -671,10 +678,13 @@ def get_PMS_playlist(playlist, playlist_id=None):
     Raises PlaylistError if something went wrong
     """
     playlist_id = playlist_id if playlist_id else playlist.id
+    parameters = {'includeMarkers': 1}
     if playlist.kind == 'playList':
-        xml = DU().downloadUrl("{server}/playlists/%s/items" % playlist_id)
+        xml = DU().downloadUrl("{server}/playlists/%s/items" % playlist_id,
+                               parameters=parameters)
     else:
-        xml = DU().downloadUrl("{server}/playQueues/%s" % playlist_id)
+        xml = DU().downloadUrl("{server}/playQueues/%s" % playlist_id,
+                               parameters=parameters)
     try:
         xml.attrib
     except AttributeError:
@@ -773,9 +783,10 @@ def get_pms_playqueue(playqueue_id):
     """
     Returns the Plex playqueue as an etree XML or None if unsuccessful
     """
-    xml = DU().downloadUrl(
-        "{server}/playQueues/%s" % playqueue_id,
-        headerOptions={'Accept': 'application/xml'})
+    parameters = {'includeMarkers': 1}
+    xml = DU().downloadUrl("{server}/playQueues/%s" % playqueue_id,
+                           parameters=parameters,
+                           headerOptions={'Accept': 'application/xml'})
     try:
         xml.attrib
     except AttributeError:

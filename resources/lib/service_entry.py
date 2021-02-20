@@ -18,6 +18,7 @@ from . import variables as v
 from . import app
 from . import loghandler
 from . import backgroundthread
+from . import skip_plex_intro
 from .windows import userselect
 
 ###############################################################################
@@ -552,7 +553,10 @@ class Service(object):
                 self.playqueue.start()
                 self.alexa.start()
 
-            xbmc.sleep(100)
+            elif app.APP.is_playing:
+                skip_plex_intro.check()
+
+            xbmc.sleep(200)
 
         # EXITING PKC
         # Tell all threads to terminate (e.g. several lib sync threads)
