@@ -99,4 +99,15 @@ def check_migration():
         utils.settings('accessToken', value='')
         utils.settings('plexAvatar', value='')
 
+    # Need to delete the UNIQUE index that prevents creating several
+    # playlist entries with the same kodi_hash
+    if not utils.compare_version(last_migration, '2.12.17'):
+        LOG.info('Migrating to version 2.12.16')
+        # Add an additional column `trailer_synced` in the Plex movie table
+        from .plex_db import PlexDB
+        with PlexDB() as plexdb:
+            query = 'ALTER TABLE movie ADD trailer_synced BOOLEAN'
+            plexdb.cursor.execute(query)
+        # Index will be automatically recreated on next PKC startup
+
     utils.settings('last_migrated_PKC_version', value=v.ADDON_VERSION)

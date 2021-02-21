@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 
 from . import additional_metadata_tmdb

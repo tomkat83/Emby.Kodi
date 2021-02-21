@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 import logging
 import os
 import sys
@@ -14,8 +15,10 @@ from .. import itemtypes, plex_functions as PF, utils, variables as v
 
 # Import the existing Kodi add-on metadata.themoviedb.org.python
 __ADDON__ = xbmcaddon.Addon(id='metadata.themoviedb.org.python')
-__TEMP_PATH__ = os.path.join(__ADDON__.getAddonInfo('path'), 'python', 'lib')
-__BASE__ = xbmcvfs.translatePath(__TEMP_PATH__)
+__TEMP_PATH__ = os.path.join(__ADDON__.getAddonInfo('path').decode('utf-8'),
+                             'python',
+                             'lib')
+__BASE__ = xbmcvfs.translatePath(__TEMP_PATH__.encode('utf-8')).decode('utf-8')
 sys.path.append(__BASE__)
 import tmdbscraper.tmdb as tmdb
 
@@ -25,8 +28,8 @@ TMDB_SUPPORTED_IDS = ('tmdb', 'imdb')
 
 
 def get_tmdb_scraper(settings):
-    language = settings.getSettingString('language')
-    certcountry = settings.getSettingString('tmdbcertcountry')
+    language = settings.getSettingString('language').decode('utf-8')
+    certcountry = settings.getSettingString('tmdbcertcountry').decode('utf-8')
     return tmdb.TMDBMovieScraper(settings, language, certcountry)
 
 
@@ -51,7 +54,7 @@ def process_trailers(plex_id, plex_type, refresh=False):
         with KodiVideoDB() as kodidb:
             trailer = kodidb.get_trailer(db_item['kodi_id'],
                                          db_item['kodi_type'])
-        if trailer and (trailer.startswith(f'plugin://{v.ADDON_ID}') or
+        if trailer and (trailer.startswith('plugin://' + v.ADDON_ID) or
                         not refresh):
             # No need to get a trailer
             return
@@ -61,7 +64,7 @@ def process_trailers(plex_id, plex_type, refresh=False):
             xml[0].attrib
         except (TypeError, IndexError, AttributeError):
             logger.warn('Could not get metadata for %s. Skipping that %s '
-                     'for now', plex_id, plex_type)
+                        'for now', plex_id, plex_type)
             done = False
             return
         api = API(xml[0])

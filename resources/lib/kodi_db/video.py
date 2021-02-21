@@ -487,7 +487,8 @@ class KodiVideoDB(common.KodiDBBase):
             self.cursor.execute('SELECT c19 FROM movie WHERE idMovie=?',
                                 (kodi_id, ))
         else:
-            raise NotImplementedError(f'trailers for {kodi_type} not implemented')
+            raise NotImplementedError('trailers for %s not implemented'
+                                      % kodi_type)
         try:
             return self.cursor.fetchone()[0]
         except TypeError:
@@ -502,7 +503,8 @@ class KodiVideoDB(common.KodiDBBase):
             self.cursor.execute('UPDATE movie SET c19=? WHERE idMovie=?',
                                 (url, kodi_id))
         else:
-            raise NotImplementedError(f'trailers for {kodi_type} not implemented')
+            raise NotImplementedError('trailers for not implemented'
+                                      % kodi_type)
 
     @db.catch_operationalerrors
     def modify_streams(self, fileid, streamdetails=None, runtime=None):
