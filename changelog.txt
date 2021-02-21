@@ -1,3 +1,6 @@
+version 3.0.11:
+- Fix TypeError: function missing required argument 'message'
+
 version 3.0.10:
 - Fix skip intros sometimes not working due to a RuntimeError
 - Update translations
@@ -40,6 +43,16 @@ version 3.0.1:
 
 version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
+
+version 2.12.16:
+- versions 2.12.14 and 2.12.15 for everyone
+
+version 2.12.15 (beta only):
+- Fix skip intros sometimes not working due to a RuntimeError
+- Update translations
+
+version 2.12.14 (beta only):
+- Add skip intro functionality
 
 version 2.12.13:
 - Fix KeyError: u'game' if Plex Arcade has been activated
