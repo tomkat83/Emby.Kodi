@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.0.11" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.0.12" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -84,7 +84,11 @@
     <summary lang="lt_LT">Natūralioji „Plex“ integracija į „Kodi“</summary>
     <description lang="lt_LT">Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai pakeičia). Naudokite savo pačių rizika!</description>
     <disclaimer lang="lt_LT">Naudokite savo pačių rizika</disclaimer>
-    <news>version 3.0.11:
+    <news>version 3.0.12:
+- Sync name and user rating of a TV show season to Kodi
+- Fix rare TypeError: expected string or buffer on playback start
+
+version 3.0.11:
 - Fix TypeError: function missing required argument 'message'
 
 version 3.0.10:
@@ -129,6 +133,10 @@ version 3.0.1:
 
 version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
+
+version 2.12.17 (beta only):
+- Sync name and user rating of a TV show season to Kodi
+- Fix rare TypeError: expected string or buffer on playback start
 
 version 2.12.16:
 - versions 2.12.14 and 2.12.15 for everyone
