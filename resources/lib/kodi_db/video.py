@@ -718,14 +718,31 @@ class KodiVideoDB(common.KodiDBBase):
             self.cursor.execute('DELETE FROM sets WHERE idSet = ?', (set_id,))
 
     @db.catch_operationalerrors
-    def add_season(self, showid, seasonnumber):
+    def add_season(self, showid, seasonnumber, name, userrating):
         """
         Adds a TV show season to the Kodi video DB or simply returns the ID,
         if there already is an entry in the DB
         """
-        self.cursor.execute('INSERT INTO seasons(idShow, season) VALUES (?, ?)',
-                            (showid, seasonnumber))
+        self.cursor.execute('''
+            INSERT INTO seasons(
+                idShow, season, name, userrating)
+            VALUES (?, ?, ?, ?)
+        ''', (showid, seasonnumber, name, userrating))
         return self.cursor.lastrowid
+
+    @db.catch_operationalerrors
+    def update_season(self, seasonid, showid, seasonnumber, name, userrating):
+        """
+        Updates a TV show season with a certain seasonid
+        """
+        self.cursor.execute('''
+            UPDATE seasons
+            SET idShow = ?,
+                season = ?,
+                name = ?,
+                userrating = ?
+            WHERE idSeason = ?
+        ''', (showid, seasonnumber, name, userrating, seasonid))
 
     @db.catch_operationalerrors
     def add_uniqueid(self, *args):

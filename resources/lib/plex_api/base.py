@@ -398,6 +398,12 @@ class Base(object):
         """
         return self.parent_index()
 
+    def season_name(self):
+        """
+        Returns the season's name/title or None
+        """
+        return self.xml.get('title')
+
     def artist_name(self):
         """
         Returns the artist name for an album: first it attempts to return
