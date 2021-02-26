@@ -1,3 +1,6 @@
+version 3.0.13:
+- Fix UnboundLocalError: local variable 'user' referenced before assignment
+
 version 3.0.12:
 - Sync name and user rating of a TV show season to Kodi
 - Fix rare TypeError: expected string or buffer on playback start
