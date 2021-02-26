@@ -360,6 +360,7 @@ class Service(object):
             app.ACCOUNT.set_authenticated()
             return True
 
+        user = None
         while True:
             # Could not use settings - try to get Plex user list from plex.tv
             if app.ACCOUNT.plex_token:
@@ -415,11 +416,15 @@ class Service(object):
             utils.settings('username', value=username)
             utils.settings('userid', value=user_id)
             utils.settings('accessToken', value=token)
-            utils.settings('plex_restricteduser',
-                           'true' if user.isManaged else 'false')
+            if user:
+                utils.settings('plex_restricteduser',
+                               'true' if user.isManaged else 'false')
+                app.CONN.restricted_user = user.isManaged
+            else:
+                utils.settings('plex_restricteduser', 'false')
+                app.CONN.restricted_user = False
             app.ACCOUNT.load()
             app.ACCOUNT.set_authenticated()
-            app.CONN.restricted_user = user.isManaged
             return True
 
     def ServiceEntryPoint(self):
