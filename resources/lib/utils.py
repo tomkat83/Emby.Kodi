@@ -155,8 +155,7 @@ def dialog(typus, *args, **kwargs):
         'yesno', 'ok', 'notification', 'input', 'select', 'numeric'
     kwargs:
         heading='{plex}'        title bar (here PlexKodiConnect)
-        message=lang(30128),    Dialog content. Don't use with 'OK', 'yesno'
-        text=str(),             Dialog content for 'OK'. 'yesno'
+        message=lang(30128),    Dialog content
         time=5000,
         sound=True,
         nolabel=str(),          For 'yesno' dialogs

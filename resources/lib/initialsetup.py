@@ -668,10 +668,10 @@ class InitialSetup(object):
 
         # If you use several Plex libraries of one kind, e.g. "Kids Movies" and
         # "Parents Movies", be sure to check https://goo.gl/JFtQV9
-        # dialog.ok(heading=utils.lang(29999), text=utils.lang(39076))
+        # dialog.ok(heading=utils.lang(29999), message=utils.lang(39076))
 
         # Need to tell about our image source for collections: themoviedb.org
-        # dialog.ok(heading=utils.lang(29999), text=utils.lang(39717))
+        # dialog.ok(heading=utils.lang(29999), message=utils.lang(39717))
         # Make sure that we only ask these questions upon first installation
         utils.settings('InstallQuestionsAnswered', value='true')
 
