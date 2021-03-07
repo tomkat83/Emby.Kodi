@@ -1,3 +1,7 @@
+version 2.12.18 (beta only):
+- Quickly sync recently watched items before synching the playstates of the entire Plex library
+- Improve logging for websocket JSON loads
+
 version 2.12.17 (beta only):
 - Sync name and user rating of a TV show season to Kodi
 - Fix rare TypeError: expected string or buffer on playback start
