@@ -125,13 +125,13 @@ class ContextMenu(object):
         """
         delete = True
         if utils.settings('skipContextMenu') != "true":
-            if not utils.dialog("yesno", heading="{plex}", text=utils.lang(33041)):
+            if not utils.dialog("yesno", heading="{plex}", message=utils.lang(33041)):
                 LOG.info("User skipped deletion for: %s", self.plex_id)
                 delete = False
         if delete:
             LOG.info("Deleting Plex item with id %s", self.plex_id)
             if PF.delete_item_from_pms(self.plex_id) is False:
-                utils.dialog("ok", heading="{plex}", text=utils.lang(30414))
+                utils.dialog("ok", heading="{plex}", message=utils.lang(30414))
 
     def _PMS_play(self):
         """
