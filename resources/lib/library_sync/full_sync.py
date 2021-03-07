@@ -137,7 +137,7 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
             LOG.error('Could not entirely process section %s', section)
             self.successful = False
 
-    def threaded_get_generators(self, kinds, section_queue, all_items):
+    def threaded_get_generators(self, kinds, section_queue, items):
         """
         Getting iterators is costly, so let's do it in a dedicated thread
         """
@@ -154,17 +154,28 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
                         continue
                     section = sections.get_sync_section(section,
                                                         plex_type=kind[0])
-                    if self.repair or all_items:
+                    timestamp = section.last_sync - UPDATED_AT_SAFETY \
+                        if section.last_sync else None
+                    if items == 'all':
                         updated_at = None
-                    else:
-                        updated_at = section.last_sync - UPDATED_AT_SAFETY \
-                            if section.last_sync else None
+                        last_viewed_at = None
+                    elif items == 'watched':
+                        if not timestamp:
+                            # No need to sync playstate updates since section
+                            # has not yet been synched
+                            continue
+                        else:
+                            updated_at = None
+                            last_viewed_at = timestamp
+                    elif items == 'updated':
+                        updated_at = timestamp
+                        last_viewed_at = None
                     try:
                         section.iterator = PF.get_section_iterator(
                             section.section_id,
                             plex_type=section.plex_type,
                             updated_at=updated_at,
-                            last_viewed_at=None)
+                            last_viewed_at=last_viewed_at)
                     except RuntimeError:
                         LOG.error('Sync at least partially unsuccessful!')
                         LOG.error('Error getting section iterator %s', section)
@@ -195,19 +206,42 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
                 (v.PLEX_TYPE_ARTIST, v.PLEX_TYPE_ARTIST),
                 (v.PLEX_TYPE_ALBUM, v.PLEX_TYPE_ARTIST),
             ])
+
         # ADD NEW ITEMS
         # We need to enforce syncing e.g. show before season before episode
         bg.FunctionAsTask(self.threaded_get_generators,
                           None,
-                          kinds, section_queue, False).start()
+                          kinds,
+                          section_queue,
+                          items='all' if self.repair else 'updated').start()
         # Do the heavy lifting
         self.process_new_and_changed_items(section_queue, processing_queue)
         common.update_kodi_library(video=True, music=True)
         if self.should_cancel() or not self.successful:
             return
 
+        # In order to not delete all your songs again for playstate synch
+        if app.SYNC.enable_music:
+            kinds.extend([
+                (v.PLEX_TYPE_SONG, v.PLEX_TYPE_ARTIST),
+            ])
+
+        # Update playstate progress since last sync - especially useful for
+        # users of very large libraries since this step is very fast
+        # These playstates will be synched twice
+        LOG.debug('Start synching playstate for last watched items')
+        bg.FunctionAsTask(self.threaded_get_generators,
+                          None,
+                          kinds,
+                          section_queue,
+                          items='watched').start()
+        self.processing_loop_playstates(section_queue)
+        if self.should_cancel() or not self.successful:
+            return
+
         # Sync Plex playlists to Kodi and vice-versa
         if common.PLAYLIST_SYNC_ENABLED:
+            LOG.debug('Start playlist sync')
             if self.show_dialog:
                 if self.dialog:
                     self.dialog.close()
@@ -218,14 +252,9 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
                 return
 
         # SYNC PLAYSTATE of ALL items (otherwise we won't pick up on items that
-        # were set to unwatched). Also mark all items on the PMS to be able
-        # to delete the ones still in Kodi
+        # were set to unwatched or changed user ratings). Also mark all items on
+        # the PMS to be able to delete the ones still in Kodi
         LOG.debug('Start synching playstate and userdata for every item')
-        if app.SYNC.enable_music:
-            # In order to not delete all your songs again
-            kinds.extend([
-                (v.PLEX_TYPE_SONG, v.PLEX_TYPE_ARTIST),
-            ])
         # Make sure we're not showing an item's title in the sync dialog
         if not self.show_dialog_userdata and self.dialog:
             # Close the progress indicator dialog
@@ -233,7 +262,9 @@ class FullSync(common.LibrarySyncMixin, bg.KillableThread):
             self.dialog = None
         bg.FunctionAsTask(self.threaded_get_generators,
                           None,
-                          kinds, section_queue, True).start()
+                          kinds,
+                          section_queue,
+                          items='all').start()
         self.processing_loop_playstates(section_queue)
         if self.should_cancel() or not self.successful:
             return
