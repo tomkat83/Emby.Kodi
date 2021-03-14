@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.0.13" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.0.15" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -21,6 +21,10 @@
       </item>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>
     <summary lang="en">Native Integration of Plex into Kodi</summary>
     <description lang="en">Connect Kodi to your Plex Media Server. This plugin assumes that you manage all your videos with Plex (and none with Kodi). You might lose data already stored in the Kodi video and music databases (as this plugin directly changes them). Use at your own risk!</description>
     <disclaimer lang="en">Use at your own risk</disclaimer>
@@ -84,7 +88,17 @@
     <summary lang="lt_LT">Natūralioji „Plex“ integracija į „Kodi“</summary>
     <description lang="lt_LT">Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai pakeičia). Naudokite savo pačių rizika!</description>
     <disclaimer lang="lt_LT">Naudokite savo pačių rizika</disclaimer>
-    <news>version 3.0.13:
+    <news>version 3.0.15:
+- 3.0.14 for everyone
+- Rename skip intro skin file
+
+version 3.0.14 (beta only):
+- Quickly sync recently watched items before synching the playstates of the entire Plex library
+- Fix TypeError: function missing required argument 'message'
+- Fix PlexKodiConnect Kodi add-on icon and fanart not showing
+- Improve logging for websocket JSON loads
+
+version 3.0.13:
 - Fix UnboundLocalError: local variable 'user' referenced before assignment
 
 version 3.0.12:
@@ -136,6 +150,10 @@ version 3.0.1:
 
 version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
+
+version 2.12.18 (beta only):
+- Quickly sync recently watched items before synching the playstates of the entire Plex library
+- Improve logging for websocket JSON loads
 
 version 2.12.17 (beta only):
 - Sync name and user rating of a TV show season to Kodi
