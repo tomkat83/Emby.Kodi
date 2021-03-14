@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="30014"><!-- Connection -->
-		<setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 39050][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=chooseServer)" option="close" /><!-- Choose Plex Server from a list -->
-		<setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 39068][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=enterPMS)" option="close" /><!-- Manually enter Plex Media Server IP -->
 		<setting id="plex_servername" label="39067" type="text" default="" enable="false" /><!-- Your current PMS server: -->
 		<setting id="ipaddress" label="39069" type="text" default="" enable="false" /><!-- Current address: -->
 		<setting id="port" label="39070" type="text" default="" enable="false" /><!-- Current port: -->
-		<setting id="plex_serverowned" label="30031" type="bool" default="true" /><!-- I own this PMS -->
+        <setting id="pms_websocket_status" label="39072" type="text" default="" enable="false" /><!-- Background sync connection: -->
+		<setting type="sep" text=""/>
+        <setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 39050][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=chooseServer)" option="close" /><!-- Choose Plex Server from a list -->
+		<setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 39068][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=enterPMS)" option="close" /><!-- Manually enter Plex Media Server IP -->
+		<setting type="sep" text=""/>
+        <setting id="plex_serverowned" label="30031" type="bool" default="true" /><!-- I own this PMS -->
 		<setting id="https" label="30243" type="bool" default="false" />
         <setting id="sslcert" subsetting="true" label="30501" type="file" default="None" visible="eq(-1,true)" />
 		<setting id="sslverify" label="30500" type="bool" default="false" visible="String.StartsWith(System.BuildVersion,17.)" /><!-- Verify SSL Certificate (more secure) - Only visible for Kodi 17 Krypton eq(-1,true) +  -->
@@ -36,6 +39,7 @@
 		<setting type="sep" text=""/>
         <setting type="lsep" label="39700" />
 		<setting id="enable_alexa" label="39701" type="bool" default="true"/>
+        <setting id="alexa_websocket_status" label="39089" type="text" default="" enable="false" /><!-- Alexa connection status: -->
         <!-- Different settings that are not visible - to avoid warnings in the log -->
 		<setting id="plex_restricteduser" type="bool" default="false" visible="false"/>
 		<setting id="plex_allows_mediaDeletion" type="bool" default="true" visible="false"/>

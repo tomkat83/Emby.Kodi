@@ -15,6 +15,7 @@ LOG = getLogger('PLEX.websocket_client')
 
 class WebSocket(backgroundthread.KillableThread):
     opcode_data = (websocket.ABNF.OPCODE_TEXT, websocket.ABNF.OPCODE_BINARY)
+    status_setting = None
 
     def __init__(self):
         self.ws = None
@@ -77,6 +78,8 @@ class WebSocket(backgroundthread.KillableThread):
             if self.should_suspend():
                 # Set in service.py
                 self.close_websocket()
+                # Status = 'Suspended - not connected'
+                utils.settings(self.status_setting, value=utils.lang(39090))
                 if self.wait_while_suspended():
                     # Abort was requested while waiting. We should exit
                     return
@@ -100,10 +103,16 @@ class WebSocket(backgroundthread.KillableThread):
                     # Server is probably offline
                     LOG.debug("%s: IOError connecting", self.__class__.__name__)
                     self.ws = None
+                    # Status = IOError - not connected
+                    utils.settings(self.status_setting,
+                                   value=utils.lang(39092))
                     self._sleep_cycle()
                 except websocket.WebSocketTimeoutException:
                     LOG.debug("%s: WebSocketTimeoutException", self.__class__.__name__)
                     self.ws = None
+                    # Status = 'Timeout - not connected'
+                    utils.settings(self.status_setting,
+                                   value=utils.lang(39091))
                     self._sleep_cycle()
                 except websocket.WebsocketRedirect as e:
                     LOG.debug('301 redirect detected: %s', e)
@@ -116,6 +125,9 @@ class WebSocket(backgroundthread.KillableThread):
                 except websocket.WebSocketException as e:
                     LOG.debug('%s: WebSocketException: %s', self.__class__.__name__, e)
                     self.ws = None
+                    # Status = Error
+                    utils.settings(self.status_setting,
+                                   value=utils.lang(257))
                     self._sleep_cycle()
                 except Exception as e:
                     LOG.error('%s: Unknown exception encountered when '
@@ -124,9 +136,15 @@ class WebSocket(backgroundthread.KillableThread):
                     LOG.error("%s: Traceback:\n%s",
                               self.__class__.__name__, traceback.format_exc())
                     self.ws = None
+                    # Status = Error
+                    utils.settings(self.status_setting,
+                                   value=utils.lang(257))
                     self._sleep_cycle()
                 else:
                     self.sleeptime = 0.0
+                    # Status = Connected
+                    utils.settings(self.status_setting,
+                                   value=utils.lang(13296))
             except Exception as e:
                 LOG.error("%s: Unknown exception encountered: %s",
                           self.__class__.__name__, e)
@@ -134,12 +152,16 @@ class WebSocket(backgroundthread.KillableThread):
                 LOG.error("%s: Traceback:\n%s",
                           self.__class__.__name__, traceback.format_exc())
                 self.close_websocket()
+                # Status = Error
+                utils.settings(self.status_setting, value=utils.lang(257))
 
 
 class PMS_Websocket(WebSocket):
     """
     Websocket connection with the PMS for Plex Companion
     """
+    status_setting = 'pms_websocket_status'
+
     def should_suspend(self):
         """
         Returns True if the thread is suspended.
@@ -208,6 +230,8 @@ class Alexa_Websocket(WebSocket):
     """
     Websocket connection to talk to Amazon Alexa.
     """
+    status_setting = 'alexa_websocket_status'
+
     def should_suspend(self):
         """
         Overwrite method since we need to check for plex token
