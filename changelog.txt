@@ -1,3 +1,7 @@
+version 3.0.15:
+- 3.0.14 for everyone
+- Rename skip intro skin file
+
 version 3.0.14 (beta only):
 - Quickly sync recently watched items before synching the playstates of the entire Plex library
 - Fix TypeError: function missing required argument 'message'
