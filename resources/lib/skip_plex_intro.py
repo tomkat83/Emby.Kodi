@@ -16,7 +16,7 @@ def skip_intro(intros):
         if start <= progress < end:
             in_intro = True
     if in_intro and app.APP.skip_intro_dialog is None:
-        app.APP.skip_intro_dialog = SkipIntroDialog('skip_intro.xml',
+        app.APP.skip_intro_dialog = SkipIntroDialog('script-plex-skip_intro.xml',
                                                     v.ADDON_PATH,
                                                     'default',
                                                     '1080i',
