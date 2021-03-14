@@ -270,6 +270,7 @@ class Show(TvShowMixin, ItemBase):
                               unique_ids.get('imdb',
                                              unique_ids.get('tmdb')))
 
+
 class Season(TvShowMixin, ItemBase):
     def add_update(self, xml, section_name=None, section_id=None,
                    children=None):
@@ -279,7 +280,7 @@ class Season(TvShowMixin, ItemBase):
         api = API(xml)
         if not self.sync_this_item(section_id or api.library_section_id()):
             LOG.debug('Skipping sync of %s %s: %s - section %s not synched to '
-                      'Kodi', api.plex_type, api.plex_id, api.title(),
+                      'Kodi', api.plex_type, api.plex_id, api.season_name(),
                       section_id or api.library_section_id())
             return
         plex_id = api.plex_id
@@ -317,15 +318,24 @@ class Season(TvShowMixin, ItemBase):
                 if key in artwork and artwork[key] == parent_artwork[key]:
                     del artwork[key]
         if update_item:
-            LOG.info('UPDATE season plex_id %s - %s', plex_id, api.title())
+            LOG.info('UPDATE season plex_id %s - %s',
+                     plex_id, api.season_name())
             kodi_id = season['kodi_id']
+            self.kodidb.update_season(kodi_id,
+                                      parent_id,
+                                      api.index(),
+                                      api.season_name(),
+                                      api.userrating() or None)
             if app.SYNC.artwork:
                 self.kodidb.modify_artwork(artwork,
                                            kodi_id,
                                            v.KODI_TYPE_SEASON)
         else:
-            LOG.info('ADD season plex_id %s - %s', plex_id, api.title())
-            kodi_id = self.kodidb.add_season(parent_id, api.index())
+            LOG.info('ADD season plex_id %s - %s', plex_id, api.season_name())
+            kodi_id = self.kodidb.add_season(parent_id,
+                                             api.index(),
+                                             api.season_name(),
+                                             api.userrating() or None)
             if app.SYNC.artwork:
                 self.kodidb.add_artwork(artwork,
                                         kodi_id,

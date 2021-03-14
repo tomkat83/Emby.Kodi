@@ -289,7 +289,7 @@ class KodiMonitor(xbmc.Monitor):
                     LOG.debug('Detected different path')
                     try:
                         tmp_plex_id = int(utils.REGEX_PLEX_ID.findall(path)[0])
-                    except IndexError:
+                    except (IndexError, TypeError):
                         LOG.debug('No Plex id in path, need to init playqueue')
                         initialize = True
                     else:
