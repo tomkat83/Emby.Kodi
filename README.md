@@ -1,7 +1,7 @@
 [![Kodi Leia stable version](https://img.shields.io/badge/Kodi_Leia_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.STABLE.zip) 
 [![Kodi Leia beta version](https://img.shields.io/badge/Kodi_Leia_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.BETA.zip)
+[![Kodi Matrix stable version](https://img.shields.io/badge/Kodi_Matrix_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.STABLE.zip)
 [![Kodi Matrix beta version](https://img.shields.io/badge/Kodi_Matrix_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.BETA.zip)
-
 
 [![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
@@ -39,11 +39,7 @@ Unfortunately, the PKC Kodi repository had to move because it stopped working (t
 
 ### Download and Installation
 
-Install PKC via the PlexKodiConnect Kodi repository download button just below (do NOT use the standard GitHub download!). Alternatively, add [https://croneter.github.io/pkc-source](https://croneter.github.io/pkc-source) as a new Kodi `Web server directory (HTTPS)` source. See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Please use the stable version except if you really know what you're doing. Kodi will update PKC automatically. 
-
-| Stable version | Beta version |
-|----------------|--------------|
-| [![stable version](https://img.shields.io/badge/stable_version-latest-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip)  | [![beta version](https://img.shields.io/badge/beta_version-latest-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip) |
+Using the Kodi file manager, add [https://croneter.github.io/pkc-source](https://croneter.github.io/pkc-source) as a new Kodi `Web server directory (HTTPS)` source, then install the PlexKodiConnect repository from this new source "from ZIP file". See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Kodi will update PKC automatically. 
 
 ### Warning
 Use at your own risk! This plugin assumes that you manage all your videos with Plex (and none with Kodi). You might lose data already stored in the Kodi video and music databases as this plugin directly changes them. Don't worry if you want Plex to manage all your media (like you should ;-)). 
