@@ -265,11 +265,15 @@ def _plex_gdm():
                                     'data': data.decode('utf-8')})
             except socket.timeout:
                 break
-    except Exception as e:
+            except Exception as error:
+                # For some reason, above socket.timeout does not catch :-(
+                LOG.debug('got an unexpected exception %s: %s',
+                          type(error), error)
+                break
+    except Exception as error:
         # Probably error: (101, 'Network is unreachable')
-        LOG.error(e)
-        import traceback
-        LOG.error("Traceback:\n%s", traceback.format_exc())
+        LOG.exception('Got a really unexpected exception %s: %s',
+                      type(error), error)
     finally:
         gdm.close()
     LOG.debug('Plex GDM returned the data: %s', return_data)
