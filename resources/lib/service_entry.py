@@ -98,7 +98,8 @@ class Service(object):
         self.welcome_msg = True
         self.connection_check_counter = 0
         self.setup = None
-        self.alexa = None
+        self.pms_ws = None
+        self.alexa_ws = None
         self.playqueue = None
         # Flags for other threads
         self.connection_check_running = False
@@ -446,8 +447,8 @@ class Service(object):
         self.setup.setup()
 
         # Initialize important threads
-        self.ws = websocket_client.PMS_Websocket()
-        self.alexa = websocket_client.Alexa_Websocket()
+        self.pms_ws = websocket_client.get_pms_websocketapp()
+        self.alexa_ws = websocket_client.get_alexa_websocketapp()
         self.sync = sync.Sync()
         self.plexcompanion = plex_companion.PlexCompanion()
         self.playqueue = playqueue.PlayqueueMonitor()
@@ -547,11 +548,11 @@ class Service(object):
                     continue
             elif not self.startup_completed:
                 self.startup_completed = True
-                self.ws.start()
+                self.pms_ws.start()
                 self.sync.start()
                 self.plexcompanion.start()
                 self.playqueue.start()
-                self.alexa.start()
+                self.alexa_ws.start()
 
             elif app.APP.is_playing:
                 skip_plex_intro.check()
