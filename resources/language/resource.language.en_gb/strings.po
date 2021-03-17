@@ -1135,11 +1135,6 @@ msgid "Alexa connection status:"
 msgstr ""
 
 # PKC Settings - Connection - Background sync connection status
-msgctxt "#39090"
-msgid "Suspended - not connected"
-msgstr ""
-
-# PKC Settings - Connection - Background sync connection status
 msgctxt "#39091"
 msgid "Timeout - not connected"
 msgstr ""
@@ -1147,6 +1142,16 @@ msgstr ""
 # PKC Settings - Connection - Background sync connection status
 msgctxt "#39092"
 msgid "IOError - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39093"
+msgid "Suspended - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39094"
+msgid "Managed Plex User - not connected"
 msgstr ""
 
 msgctxt "#39200"
