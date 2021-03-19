@@ -113,10 +113,10 @@ def settings(setting, value=None):
     """
     # We need to instantiate every single time to read changed variables!
     with SETTINGS_LOCK:
-        addon = xbmcaddon.Addon(id='plugin.video.plexkodiconnect')
+        addon = xbmcaddon.Addon()
         if value is not None:
-                # Takes string or unicode by default!
-                addon.setSetting(setting, value)
+            # Takes string or unicode by default!
+            addon.setSetting(setting, value)
         else:
             # Should return unicode by default, but just in case
             return addon.getSetting(setting)

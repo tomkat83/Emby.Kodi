@@ -1,3 +1,15 @@
+version 3.1.0:
+- version 3.0.16 and 3.0.17 for everyone
+- Fix resume not working if Kodi player start-up is slow
+
+version 3.0.17 (beta only):
+- Fix instantaneous background sync and Alexa not working
+- Hopefully fix RuntimeError: no add-on id "plugin.video.plexkodiconnect"
+- Fix error socket.timeout: timed out 
+
+version 3.0.16 (beta only):
+- Add information to PKC settings for background sync and Alexa whether a connection has been successfully made 
+
 version 3.0.15:
 - 3.0.14 for everyone
 - Rename skip intro skin file

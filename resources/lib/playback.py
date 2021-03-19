@@ -20,7 +20,7 @@ from . import playback_decision, app
 LOG = getLogger('PLEX.playback')
 # Do we need to return ultimately with a setResolvedUrl?
 RESOLVE = True
-TRY_TO_SEEK_FOR = 10  # =30 seconds
+TRY_TO_SEEK_FOR = 300  # =300 seconds
 IGNORE_SECONDS_AT_START = 15
 ###############################################################################
 
