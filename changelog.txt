@@ -1,3 +1,8 @@
+version 2.12.21 (beta only):
+- Switch to new websocket implementation
+- Hopefully fix RuntimeError: no add-on id "plugin.video.plexkodiconnect"
+- Update translations
+
 version 2.12.20 (beta only):
 - Add information to PKC settings for background sync and Alexa whether a connection has been successfully made
 
