@@ -81,6 +81,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
     + Hungarian, thanks @savage93
     + Ukrainian, thanks @uniss
     + Lithuanian, thanks @egidusm
+    + Korean, thanks @so-o-bima
 
 ### Additional Artwork
 PKC uses additional artwork for free from [TheMovieDB](https://www.themoviedb.org). Many thanks for lettings us use the API, guys!
