@@ -227,7 +227,7 @@ class Sync(backgroundthread.KillableThread):
                         not app.APP.is_playing_video):
                     LOG.info('Doing scheduled full library scan')
                     self.start_library_sync()
-                elif not app.SYNC.background_sync_disabled:
+                else:
                     # Check back whether we should process something Only do
                     # this once a while (otherwise, potentially many screen
                     # refreshes lead to flickering)
