@@ -33,4 +33,4 @@ languages = [
 os.system("cd ..")
 
 for lang in languages:
-    os.system(command + " pull -f -l %s" % lang)
+    os.system(command + " pull --minimum-perc=10 -f -l %s" % lang)
