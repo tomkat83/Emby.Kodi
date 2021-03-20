@@ -60,35 +60,35 @@ def indent(elem, level=0):
 
 root = etree.Element('addon')
 for lang in languages:
-        try:
-            with open(os.path.join(PKC_dir,
-                                   'resources',
-                                   'language',
-                                   'resource.language.%s' % lang,
-                                   'strings.po'), 'rb') as f:
-                for line in f:
-                    if line.strip() in addon:
-                        msg = ''
-                        key = str(line.strip())
-                        # Advance to the line msgstr ""
-                        part = ''
-                        while not part.startswith('msgstr'):
-                            part = next(f)
-                        msg += part.replace('msgstr', '').replace('"', '').strip()
-                        part = None
-                        while part != '':
-                            part = next(f).strip()
-                            msg += part
-                        msg = msg.replace('"', '').replace('\r', '').replace('\n', '')
-                        print(msg)
-                        etree.SubElement(root,
-                                         addon[key],
-                                         attrib={'lang': lang}).text = msg.decode('utf-8')
-        except IOError:
-            print('Missing file %s' % os.path.join(PKC_dir,
-                                                   'resources',
-                                                   'language',
-                                                   'resource.language.%s' % lang,
-                                                   'strings.po'))
+    try:
+        with open(os.path.join(PKC_dir,
+                               'resources',
+                               'language',
+                               'resource.language.%s' % lang,
+                               'strings.po'), 'rb') as f:
+            for line in f:
+                if line.strip() in addon:
+                    msg = ''
+                    key = str(line.strip())
+                    # Advance to the line msgstr ""
+                    part = ''
+                    while not part.startswith('msgstr'):
+                        part = next(f)
+                    msg += part.replace('msgstr', '').replace('"', '').strip()
+                    part = None
+                    while part != '':
+                        part = next(f).strip()
+                        msg += part
+                    msg = msg.replace('"', '').replace('\r', '').replace('\n', '')
+                    print(msg)
+                    etree.SubElement(root,
+                                     addon[key],
+                                     attrib={'lang': lang}).text = msg.decode('utf-8')
+    except IOError:
+        print('Missing file %s' % os.path.join(PKC_dir,
+                                               'resources',
+                                               'language',
+                                               'resource.language.%s' % lang,
+                                               'strings.po'))
 indent(root)
 etree.ElementTree(root).write(tmp_file, encoding="UTF-8")
