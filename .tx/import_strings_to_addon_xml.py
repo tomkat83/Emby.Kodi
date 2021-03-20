@@ -65,11 +65,11 @@ for lang in languages:
                                'resources',
                                'language',
                                'resource.language.%s' % lang,
-                               'strings.po'), 'rb') as f:
+                               'strings.po'), 'r', encoding='utf-8') as f:
             for line in f:
                 if line.strip() in addon:
                     msg = ''
-                    key = str(line.strip())
+                    key = line.strip()
                     # Advance to the line msgstr ""
                     part = ''
                     while not part.startswith('msgstr'):
@@ -83,7 +83,7 @@ for lang in languages:
                     print(msg)
                     etree.SubElement(root,
                                      addon[key],
-                                     attrib={'lang': lang}).text = msg.decode('utf-8')
+                                     attrib={'lang': lang}).text = msg
     except IOError:
         print('Missing file %s' % os.path.join(PKC_dir,
                                                'resources',
