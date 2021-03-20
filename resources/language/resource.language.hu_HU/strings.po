@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2019
-# Savage93 <savageistheking@gmail.com>, 2020
+# Savage93 <savageistheking@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: Savage93 <savageistheking@gmail.com>, 2020\n"
+"Last-Translator: Savage93 <savageistheking@gmail.com>, 2021\n"
 "Language-Team: Hungarian (Hungary) (https://www.transifex.com/croneter/teams/73837/hu_HU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,6 +51,10 @@ msgid ""
 "random password automatically if you haven't done so already. Please confirm"
 " the next dialog that you want to enable the webserver now with Yes."
 msgstr ""
+"A művészképek gyorsítótárazásához szükség van a Kodi webszerverének "
+"bekapcsolására. A PKC beállított egy erős, véletlenszerű jelszót ehhez, "
+"amennyiben ezt korábban nem tette meg. Kérem erősítse meg a következő "
+"dialógusablakban, hogy be kívánja kapcsolni a webszervert."
 
 msgctxt "#30005"
 msgid "Username: "
@@ -616,7 +620,7 @@ msgstr "Szinkronizálni kívánt Plex könyvtárak kiválasztása"
 # PKC Settings - Playback
 msgctxt "#30525"
 msgid "Skip intro"
-msgstr ""
+msgstr "Bevezető kihagyása"
 
 # PKC Settings - Playback
 msgctxt "#30527"
@@ -684,6 +688,8 @@ msgstr "Film-szett/kollekció képek letöltése a FanArtTV-ről"
 msgctxt "#30541"
 msgid "Transcoding: Auto-pick audio and subtitle stream using Plex defaults"
 msgstr ""
+"Transzkódolás: hang- és feliratsávok automatikus kiválasztása a Plex "
+"alapértelmezések alapján"
 
 # PKC Settings - Playback
 msgctxt "#30542"
@@ -983,7 +989,7 @@ msgstr ""
 # PKC Settings - Customize Paths
 msgctxt "#39090"
 msgid "Safe characters for http(s), dav(s) and (s)ftp urls"
-msgstr ""
+msgstr "Biztonságos karakterek http(s), dav(s) és (s)ftp elérési utakhoz"
 
 # PKC Settings - Customize Paths
 msgctxt "#39037"
@@ -1168,6 +1174,11 @@ msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "Jelenlegi plex.tv állapot:"
 
+# PKC Settings - Connection
+msgctxt "#39072"
+msgid "Background sync connection:"
+msgstr ""
+
 # PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
@@ -1245,6 +1256,31 @@ msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
 "Kodi csomópont fájlok újratöltése az alábbi beállítások alkalmazásához"
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39089"
+msgid "Alexa connection status:"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39091"
+msgid "Timeout - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39092"
+msgid "IOError - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39093"
+msgid "Suspended - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39094"
+msgid "Managed Plex User - not connected"
+msgstr ""
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
