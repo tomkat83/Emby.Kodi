@@ -1184,6 +1184,11 @@ msgctxt "#39071"
 msgid "Current plex.tv status:"
 msgstr "État actuel de plex.tv: "
 
+# PKC Settings - Connection
+msgctxt "#39072"
+msgid "Background sync connection:"
+msgstr ""
+
 # PKC Settings, category name
 msgctxt "#39073"
 msgid "Appearance Tweaks"
@@ -1260,6 +1265,31 @@ msgctxt "#39085"
 msgid "Reload Kodi node files to apply all the settings below"
 msgstr ""
 "Recharger les fichiers de Kodi pour appliquer tous les paramètres ci-dessous"
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39089"
+msgid "Alexa connection status:"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39091"
+msgid "Timeout - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39092"
+msgid "IOError - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39093"
+msgid "Suspended - not connected"
+msgstr ""
+
+# PKC Settings - Connection - Background sync connection status
+msgctxt "#39094"
+msgid "Managed Plex User - not connected"
+msgstr ""
 
 msgctxt "#39200"
 msgid "Log-out Plex Home User "
