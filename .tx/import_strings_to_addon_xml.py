@@ -17,12 +17,16 @@ languages = [
     'da_DK',
     'it_IT',
     'no_NO',
-    # 'el_GR',
+    'el_GR',
     'pl_PL',
     # 'sv_SE',
     'hu_HU',
     'ru_RU',
     'uk_UA',
+    'lv_LV',
+    'sv_SE',
+    'lt_LT',
+    'ko_KR'
 ]
 
 tmp_file = r'C:\Users\Kat\Desktop\addon.xml'
