@@ -1,3 +1,7 @@
+version 3.1.1 (beta only):
+- Direct paths: fix filename showing instead of full video metadata during playback
+- Update translations
+
 version 3.1.0:
 - version 3.0.16 and 3.0.17 for everyone
 - Fix resume not working if Kodi player start-up is slow
