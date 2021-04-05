@@ -83,12 +83,16 @@
     <summary lang="uk_UA">Нативна інтеграція Plex в Kodi</summary>
     <description lang="uk_UA">Підключає Kodi до серверу Plex. Цей плагін передбачає, що ви керуєте всіма своїми відео за допомогою Plex (і ніяк не Kodi). Ви можете втратити дані, які вже зберігаються у відео та музичних БД Kodi (оскільки цей плагін безпосередньо їх змінює). Використовуйте на свій страх і ризик!</description>
     <disclaimer lang="uk_UA">Використовуйте на свій ризик</disclaimer>
+    <disclaimer lang="lv_LV">Lieto uz savu atbildību</disclaimer>
     <summary lang="sv_SE">Inbyggd integrering av Plex i Kodi</summary>
     <description lang="sv_SE">Anslut Kodi till din Plex Media Server. Detta tillägg antar att du hanterar alla dina filmer med Plex (och ingen med Kodi). Du kan förlora data redan sparad i Kodis video och musik databaser (eftersom detta tillägg direkt ändrar dem). Använd på egen risk!</description>
     <disclaimer lang="sv_SE">Använd på egen risk</disclaimer>
     <summary lang="lt_LT">Natūralioji „Plex“ integracija į „Kodi“</summary>
     <description lang="lt_LT">Prijunkite „Kodi“ prie „Plex Medija Serverio“. Šiame papildinyje daroma prielaida, kad valdote visus savo vaizdo įrašus naudodami „Plex“ (ir nė vieno su „Kodi“). Galite prarasti jau saugomus „Kodi“ vaizdo įrašų ir muzikos duomenų bazių duomenis (kadangi šis papildinys juos tiesiogiai pakeičia). Naudokite savo pačių rizika!</description>
     <disclaimer lang="lt_LT">Naudokite savo pačių rizika</disclaimer>
+    <summary lang="ko_KR">Plex를 Kodi에 기본 통합</summary>
+    <description lang="ko_KR">Kodi를 Plex Media Server에 연결합니다. 이 플러그인은 Plex로 모든 비디오를 관리하고 Kodi로는 관리하지 않는다고 가정합니다. Kodi 비디오 및 음악 데이터베이스에 이미 저장된 데이터가 손실 될 수 있습니다 (이 플러그인이 직접 변경하므로). 자신의 책임하에 사용하십시오!</description>
+    <disclaimer lang="ko_KR">자신의 책임하에 사용</disclaimer>
     <news>version 3.1.1 (beta only):
 - Direct paths: fix filename showing instead of full video metadata during playback
 - Update translations

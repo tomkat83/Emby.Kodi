@@ -97,6 +97,13 @@ class Base(object):
         return self.xml.get('type')
 
     @property
+    def subtype(self):
+        """
+        Returns the subtype of media, e.g. 'clip' as string or None.
+        """
+        return self.xml.get('subtype')
+
+    @property
     def section_id(self):
         self.check_db()
         return self._section_id
