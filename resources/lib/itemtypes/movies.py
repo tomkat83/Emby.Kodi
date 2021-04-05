@@ -1,12 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from logging import getLogger
+import re
+import os
+import string
 
 from .common import ItemBase
 from ..plex_api import API
 from .. import app, variables as v, plex_functions as PF
+from ..path_ops import append_os_sep
 
 LOG = getLogger('PLEX.movies')
+
+# Tolerance in years if comparing videos as equal
+VIDEOYEAR_TOLERANCE = 1
+PUNCTUATION_TRANSLATION = {ord(char): None for char in string.punctuation}
+# Punctuation removed in original strings!!
+# Matches '2010 The Year We Make Contact 1984'
+# from '2010 The Year We Make Contact 1984 720p webrip'
+REGEX_MOVIENAME_AND_YEAR = re.compile(
+    r'''(.+)((?:19|20)\d{2}).*(?!((19|20)\d{2}))''')
 
 
 class Movie(ItemBase):
@@ -37,9 +50,35 @@ class Movie(ItemBase):
 
         fullpath, path, filename = api.fullpath()
         if app.SYNC.direct_paths and not fullpath.startswith('http'):
-            kodi_pathid = self.kodidb.add_path(path,
-                                               content='movies',
-                                               scraper='metadata.local')
+            if api.subtype:
+                # E.g. homevideos, which have "subtype" flag set
+                # Homevideo directories need to be flat by Plex' instructions
+                library_path, video_path = path, path
+            else:
+                # Normal movie libraries
+                library_path, video_path, filename = split_movie_path(fullpath)
+            if library_path == video_path:
+                # "Flat" folder structure where e.g. movies lie all in 1 dir
+                # E.g.
+                #   'C:\\Movies\\Pulp Fiction (1994).mkv'
+                kodi_pathid = self.kodidb.add_path(library_path,
+                                                   content='movies',
+                                                   scraper='metadata.local')
+                path = library_path
+            else:
+                # Plex library contains folders named identical to the
+                # video file, e.g.
+                #   'C:\\Movies\\Pulp Fiction (1994)\\Pulp Fiction (1994).mkv'
+                # Add the "parent" path for the Plex library
+                kodi_parent_pathid = self.kodidb.add_path(
+                    library_path,
+                    content='movies',
+                    scraper='metadata.local')
+                # Add this movie's path
+                kodi_pathid = self.kodidb.add_path(
+                    video_path,
+                    id_parent_path=kodi_parent_pathid)
+                path = video_path
         else:
             kodi_pathid = self.kodidb.get_path(path)
 
@@ -105,7 +144,7 @@ class Movie(ItemBase):
                               api.list_to_string(api.studios()),
                               api.trailer(),
                               api.list_to_string(api.countries()),
-                              fullpath,
+                              path,
                               kodi_pathid,
                               api.premiere_date(),
                               api.userrating())
@@ -243,3 +282,73 @@ class Movie(ItemBase):
         return unique_ids.get('imdb',
                               unique_ids.get('tmdb',
                                              unique_ids.get('tvdb')))
+
+
+def split_movie_path(path):
+    """
+    Implements Plex' video naming convention for movies:
+    https://support.plex.tv/articles/naming-and-organizing-your-movie-media-files/
+
+    Splits a video's path into its librarypath, potential video folder, and
+    filename.
+    E.g. path = 'C:\\Movies\\Pulp Fiction (1994)\\Pulp Fiction (1994).mkv'
+    returns the tuple
+        ('C:\\Movies\\',
+         'C:\\Movies\\Pulp Fiction (1994)\\',
+         'Pulp Fiction (1994).mkv')
+
+    E.g. path = 'C:\\Movies\\Pulp Fiction (1994).mkv'
+    returns the tuple
+        ('C:\\Movies\\',
+         'C:\\Movies\\',
+         'Pulp Fiction (1994).mkv')
+    """
+    basename, filename = os.path.split(path)
+    library_path, videofolder = os.path.split(basename)
+
+    clean_filename = _clean_name(os.path.splitext(filename)[0])
+    clean_videofolder = _clean_name(videofolder)
+
+    try:
+        parsed_filename = _parse_videoname_and_year(clean_filename)
+    except (TypeError, IndexError):
+        LOG.warn('Could not parse video path, be sure to follow the Plex '
+                 'naming guidelines!! We failed to parse this path: %s', path)
+        # Be on the safe side and assume that the movie folder structure is
+        # flat
+        return append_os_sep(basename), append_os_sep(basename), filename
+    try:
+        parsed_videofolder = _parse_videoname_and_year(clean_videofolder)
+    except (TypeError, IndexError):
+        # e.g. no year to parse => flat structure
+        return append_os_sep(basename), append_os_sep(basename), filename
+    if _parsed_names_alike(parsed_filename, parsed_videofolder):
+        # e.g.
+        # filename = The Master.(2012).720p.Blu-ray.axed.mkv
+        # videofolder = The Master 2012
+        # or
+        # filename = National Lampoon's Christmas Vacation (1989)
+        #       [x264-Bluray-1080p DTS-2.0]
+        # videofolder = Christmas Vacation 1989
+        return append_os_sep(library_path), append_os_sep(basename), filename
+    else:
+        # Flat movie file-stuctrue, all movies in one big directory
+        return append_os_sep(basename), append_os_sep(basename), filename
+
+
+def _parsed_names_alike(name1, name2):
+    return (abs(name2[1] - name1[1]) <= VIDEOYEAR_TOLERANCE and
+            (name1[0] in name2[0] or name2[0] in name1[0]))
+
+
+def _clean_name(name):
+    """
+    Returns name with all whitespaces (regex "\\s") and punctuation
+    (string.punctuation) characters removed; all characters in lowercase
+    """
+    return re.sub('\\s', '', name).translate(PUNCTUATION_TRANSLATION).lower()
+
+
+def _parse_videoname_and_year(name):
+    parsed = REGEX_MOVIENAME_AND_YEAR.search(name)
+    return parsed[1], int(parsed[2])
