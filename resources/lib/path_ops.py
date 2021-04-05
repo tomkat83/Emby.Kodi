@@ -27,6 +27,17 @@ KODI_ENCODING = 'utf-8'
 REGEX_FILE_NUMBERING = re.compile(r'''_(\d\d)\.\w+$''')
 
 
+def append_os_sep(path):
+    """
+    Appends either a '\\' or '/' - IRRELEVANT of the host OS!! (os.path.join is
+    dependant on the host OS)
+    """
+    if '/' in path:
+        return path + '/'
+    else:
+        return path + '\\'
+
+
 def translate_path(path):
     """
     Returns the XBMC translated path [unicode]
