@@ -57,8 +57,6 @@ class Sync(object):
 
         # How often shall we sync?
         self.full_sync_intervall = None
-        # Background Sync disabled?
-        self.background_sync_disabled = None
         # How long shall we wait with synching a new item to make sure Plex got all
         # metadata?
         self.backgroundsync_saftymargin = None
@@ -81,7 +79,6 @@ class Sync(object):
         # List of section_ids we're synching to Kodi - will be automatically
         # re-built if sections are set a-new
         self.section_ids = set()
-        self.enable_alexa = None
 
         self.load()
 
@@ -122,8 +119,6 @@ class Sync(object):
         Any settings unrelated to syncs to the Kodi database - can thus be
         safely reset without a Kodi reboot
         """
-        self.background_sync_disabled = utils.settings('enableBackgroundSync') == 'false'
-        self.enable_alexa = utils.settings('enable_alexa') == 'true'
         self.sync_dialog = utils.settings('dbSyncIndicator') == 'true'
         self.full_sync_intervall = int(utils.settings('fullSyncInterval')) * 60
         self.backgroundsync_saftymargin = int(utils.settings('backgroundsync_saftyMargin'))
