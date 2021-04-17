@@ -1,3 +1,8 @@
+version 3.1.2 (beta only):
+- Fix ImportError: cannot import name 'dir_util' from 'distutils' on PKC startup
+- Fix UnicodeEncodeError if Plex playlist name contains illegal chars
+- Fix PKC not showing up as a casting target in some cases
+
 version 3.1.1 (beta only):
 - Direct paths: fix filename showing instead of full video metadata during playback
 - Update translations
