@@ -17,7 +17,6 @@ as well as sources.xml
 import shutil
 import os
 from os import path  # allows to use path_ops.path.join, for example
-from distutils import dir_util
 import re
 
 import xbmcvfs
@@ -187,7 +186,7 @@ def copy_tree(src, dst, *args, **kwargs):
     (the default), the destination of the symlink will be copied.
     'update' and 'verbose' are the same as for 'copy_file'.
     """
-    return dir_util.copy_tree(src, dst, *args, **kwargs)
+    return shutil.copy_tree(src, dst, *args, **kwargs)
 
 
 def basename(path):
