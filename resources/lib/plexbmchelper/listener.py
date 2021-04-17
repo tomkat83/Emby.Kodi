@@ -92,7 +92,7 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', len(body))
             self.send_header('Connection', "close")
             self.end_headers()
-            self.wfile.write(body)
+            self.wfile.write(body.encode('utf-8'))
             self.wfile.close()
         except Exception:
             pass
