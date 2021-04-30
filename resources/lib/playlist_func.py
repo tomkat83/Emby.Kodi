@@ -410,9 +410,9 @@ def _get_playListVersion_from_xml(playlist, xml):
 
     Raises PlaylistError if unsuccessful
     """
-    playlist.version = utils.cast(int,
-                                  xml.get('%sVersion' % playlist.kind))
-    if playlist.version is None:
+    try:
+        playlist.version = int(xml.get('%sVersion' % playlist.kind))
+    except (AttributeError, TypeError):
         raise PlaylistError('Could not get new playlist Version for playlist '
                             '%s' % playlist)
 
@@ -424,6 +424,8 @@ def get_playlist_details_from_xml(playlist, xml):
 
     Raises PlaylistError if something went wrong.
     """
+    if xml is None:
+        raise PlaylistError('No playlist received for playlist %s' % playlist)
     playlist.id = utils.cast(int,
                              xml.get('%sID' % playlist.kind))
     playlist.version = utils.cast(int,
@@ -711,8 +713,8 @@ def delete_playlist_item_from_PMS(playlist, pos):
                             playlist.items[pos].id,
                             playlist.repeat),
                            action_type="DELETE")
-    _get_playListVersion_from_xml(playlist, xml)
     del playlist.items[pos]
+    _get_playListVersion_from_xml(playlist, xml)
 
 
 # Functions operating on the Kodi playlist objects ##########
