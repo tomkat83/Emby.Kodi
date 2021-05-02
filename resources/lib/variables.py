@@ -668,14 +668,10 @@ PLEX_STREAM_TYPE_FROM_STREAM_TYPE = {
 
 # Encoding to be used for our m3u playlist files
 # m3u files do not have encoding specified by definition, unfortunately.
-if DEVICE == 'Windows':
-    M3U_ENCODING = 'mbcs'
-else:
-    M3U_ENCODING = sys.getfilesystemencoding()
-    if (not M3U_ENCODING or
-            M3U_ENCODING == 'ascii' or
-            M3U_ENCODING == 'ANSI_X3.4-1968'):
-        M3U_ENCODING = 'utf-8'
+# The filesystem encoding is generally utf-8
+# For Windows, it can be either utf-8 or mbcs
+# See https://docs.python.org/3/library/sys.html#sys.getfilesystemencoding
+M3U_ENCODING = sys.getfilesystemencoding()
 
 
 def database_paths():
