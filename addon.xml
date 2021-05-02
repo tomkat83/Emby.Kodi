@@ -98,6 +98,7 @@
 - Direct paths: corrections to more closely mirror Kodi's way of saving movie and tv show files to the db
 - Make sure that the correct file system encoding is used for playlists
 - Fix a rare AttributeError when using playlists
+- Fix regression: fix add-on paths always falling back to direct paths
 
 version 3.1.2 (beta only):
 - Fix ImportError: cannot import name 'dir_util' from 'distutils' on PKC startup
