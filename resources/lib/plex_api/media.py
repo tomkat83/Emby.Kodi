@@ -369,7 +369,8 @@ class Media(object):
             force_check : Will always try to check validity of path
                          Will also skip confirmation dialog if path not found
             folder     : Set to True if path is a folder
-            omit_check  : Will entirely omit validity check if True
+            omit_check  : Will entirely omit validity check if True. Will
+                          be superseded by force_check!
         """
         if path is None:
             return
@@ -385,9 +386,13 @@ class Media(object):
                 path = 'smb:' + path.replace('\\', '/')
         if app.SYNC.escape_path:
             path = utils.escape_path(path, app.SYNC.escape_path_safe_chars)
-        if (not app.SYNC.check_media_file_existence
-                or (app.SYNC.path_verified and not force_check)
-                or omit_check):
+        if force_check:
+            pass
+        elif omit_check:
+            return path
+        elif not app.SYNC.check_media_file_existence:
+            return path
+        elif app.SYNC.path_verified:
             return path
 
         # exist() needs a / or \ at the end to work for directories
