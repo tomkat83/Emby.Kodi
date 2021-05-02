@@ -385,7 +385,9 @@ class Media(object):
                 path = 'smb:' + path.replace('\\', '/')
         if app.SYNC.escape_path:
             path = utils.escape_path(path, app.SYNC.escape_path_safe_chars)
-        if (app.SYNC.path_verified and not force_check) or omit_check:
+        if (not app.SYNC.check_media_file_existence
+                or (app.SYNC.path_verified and not force_check)
+                or omit_check):
             return path
 
         # exist() needs a / or \ at the end to work for directories
