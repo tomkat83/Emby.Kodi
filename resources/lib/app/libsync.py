@@ -69,6 +69,8 @@ class Sync(object):
         self.run_lib_scan = None
         # Set if user decided to cancel sync
         self.stop_sync = False
+        # Do we check whether we can access a media file?
+        self.check_media_file_existence = False
         # Could we access the paths?
         self.path_verified = False
 
@@ -92,6 +94,8 @@ class Sync(object):
 
     def load(self):
         self.direct_paths = utils.settings('useDirectPaths') == '1'
+        self.check_media_file_existence = \
+            utils.settings('check_media_file_existence') == '1'
         self.enable_music = utils.settings('enableMusic') == 'true'
         self.artwork = utils.settings('usePlexArtwork') == 'true'
         self.replace_smb_path = utils.settings('replaceSMB') == 'true'
