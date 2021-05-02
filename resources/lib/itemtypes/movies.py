@@ -65,6 +65,7 @@ class Movie(ItemBase):
                                                    content='movies',
                                                    scraper='metadata.local')
                 path = library_path
+                kodi_parent_pathid = kodi_pathid
             else:
                 # Plex library contains folders named identical to the
                 # video file, e.g.
@@ -81,6 +82,7 @@ class Movie(ItemBase):
                 path = video_path
         else:
             kodi_pathid = self.kodidb.get_path(path)
+            kodi_parent_pathid = kodi_pathid
 
         if update_item:
             LOG.info('UPDATE movie plex_id: %s - %s', plex_id, api.title())
@@ -145,7 +147,7 @@ class Movie(ItemBase):
                               api.trailer(),
                               api.list_to_string(api.countries()),
                               path,
-                              kodi_pathid,
+                              kodi_parent_pathid,
                               api.premiere_date(),
                               api.userrating())
 

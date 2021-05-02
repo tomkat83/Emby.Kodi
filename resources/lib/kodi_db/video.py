@@ -45,13 +45,15 @@ class KodiVideoDB(common.KodiDBBase):
                                      strContent,
                                      strScraper,
                                      noUpdate,
-                                     exclude)
-                    VALUES (?, ?, ?, ?, ?)
+                                     exclude,
+                                     allAudio)
+                    VALUES (?, ?, ?, ?, ?, ?)
                 '''
                 self.cursor.execute(query, (path,
                                             kind,
                                             'metadata.local',
                                             1,
+                                            0,
                                             0))
 
     @db.catch_operationalerrors
@@ -108,11 +110,13 @@ class KodiVideoDB(common.KodiDBBase):
                                     idParentPath,
                                     strContent,
                                     strScraper,
-                                    noUpdate)
-                                VALUES (?, ?, ?, ?, ?, ?)
+                                    noUpdate,
+                                    exclude,
+                                    allAudio)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                                 ''',
                                 (path, date_added, id_parent_path, content,
-                                 scraper, 1))
+                                 scraper, 1, 0, 0))
             pathid = self.cursor.lastrowid
         return pathid
 
