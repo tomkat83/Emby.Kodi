@@ -1,3 +1,9 @@
+version 3.1.3 (beta only):
+- Add PKC setting to disable verification whether we can access a media file
+- Direct paths: corrections to more closely mirror Kodi's way of saving movie and tv show files to the db
+- Make sure that the correct file system encoding is used for playlists
+- Fix a rare AttributeError when using playlists
+
 version 3.1.2 (beta only):
 - Fix ImportError: cannot import name 'dir_util' from 'distutils' on PKC startup
 - Fix UnicodeEncodeError if Plex playlist name contains illegal chars
