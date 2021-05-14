@@ -20,10 +20,10 @@ SHOULD_CANCEL = None
 LIBRARY_PATH = path_ops.translate_path('special://profile/library/video/')
 # The video library might not yet exist for this user - create it
 if not path_ops.exists(LIBRARY_PATH):
-    path_ops.copy_tree(
+    path_ops.copytree(
         src=path_ops.translate_path('special://xbmc/system/library/video'),
         dst=LIBRARY_PATH,
-        preserve_mode=0)  # dont copy permission bits so we have write access!
+        copy_function=path_ops.shutil.copyfile)
 PLAYLISTS_PATH = path_ops.translate_path("special://profile/playlists/video/")
 if not path_ops.exists(PLAYLISTS_PATH):
     path_ops.makedirs(PLAYLISTS_PATH)
