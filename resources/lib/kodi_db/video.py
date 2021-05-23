@@ -62,8 +62,8 @@ class KodiVideoDB(common.KodiDBBase):
         Video DB: Adds all subdirectories to path table while setting a "trail"
         of parent path ids
         """
-        parentpath = path_ops.path.abspath(
-            path_ops.path.join(path, path_ops.path.pardir))
+        parentpath = path_ops.path.split(path_ops.path.split(path)[0])[0]
+        parentpath = path_ops.append_os_sep(parentpath)
         pathid = self.get_path(parentpath)
         if pathid is None:
             self.cursor.execute('''
