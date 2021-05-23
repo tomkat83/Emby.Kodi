@@ -26,7 +26,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 
-from . import path_ops, variables as v
+from . import pathvalidate, path_ops, variables as v
 
 LOG = getLogger('PLEX.utils')
 
@@ -422,29 +422,10 @@ def valid_filename(text):
     """
     Return a valid filename after passing it in [unicode].
     """
-    # Get rid of all whitespace except a normal space
-    text = re.sub(r'(?! )\s', '', text)
-    # ASCII characters 0 to 31 (non-printable, just in case)
-    text = re.sub(u'[\x00-\x1f]', '', text)
-    if v.DEVICE == 'Windows':
-        # Whitespace at the end of the filename is illegal
-        text = text.strip()
-        # Dot at the end of a filename is illegal
-        text = re.sub(r'\.+$', '', text)
-        # Illegal Windows characters
-        text = re.sub(r'[/\\:*?"<>|\^]', '', text)
-    elif v.DEVICE == 'MacOSX':
-        # Colon is illegal
-        text = re.sub(r':', '', text)
-        # Files cannot begin with a dot
-        text = re.sub(r'^\.+', '', text)
-    else:
-        # Linux
-        text = re.sub(r'/', '', text)
-    # Ensure that filename length is at most 255 chars (including 3 chars for
-    # filename extension and 1 dot to separate the extension)
-    text = text[:min(len(text), 251)]
-    return text
+    return pathvalidate.sanitize_filename(text,
+                                          replacement_text='_',
+                                          platform='auto',
+                                          max_len=248)
 
 
 def escape_html(string):

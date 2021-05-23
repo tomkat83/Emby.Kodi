@@ -1078,6 +1078,11 @@ msgctxt "#39074"
 msgid "TV Shows"
 msgstr ""
 
+# PKC Settings - Sync
+msgctxt "#39075"
+msgid "Verify access to media files while synching"
+msgstr ""
+
 # Pop-up during initial sync
 msgctxt "#39076"
 msgid "If you use several Plex libraries of one kind, e.g. \"Kids Movies\" and \"Parents Movies\", be sure to check the Wiki: https://goo.gl/JFtQV9"

@@ -64,6 +64,7 @@
         <setting id="dbSyncScreensaver" type="bool" label="39062" default="false" /><!--Sync when screensaver is deactivated-->
         <setting id="dbSyncIndicator" label="30507" type="bool" default="true" /><!-- show syncing progress -->
         <setting id="playstate_sync_indicator" label="30523" type="bool" default="false" visible="eq(-1,true)" subsetting="true"/><!-- Also show sync progress for playstate and user data -->
+        <setting id="check_media_file_existence" type="bool" label="39075" default="true" /><!--Verify access to media files while synching -->
         <setting id="syncThreadNumber" type="slider" label="39003" default="10" option="int" range="1,1,30"/><!-- Number of simultaneous download threads -->
         <setting id="limitindex" type="slider" label="30515" default="200" option="int" range="50,50,1000"/><!-- Maximum items to request from the server at once -->
         <setting type="lsep" label="$LOCALIZE[136]" /><!-- Playlists -->

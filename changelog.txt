@@ -1,3 +1,27 @@
+version 3.2.0:
+WARNING: Database reset and full resync required
+- version 3.1.1-3.1.4 for everyone
+
+version 3.1.4 (beta only):
+- Fix Alexa and RuntimeError: dictionary keys changed during iteration
+- Fix AttributeError: module 'shutil' has no attribute 'copy_tree'
+
+version 3.1.3 (beta only):
+- Add PKC setting to disable verification whether we can access a media file
+- Direct paths: corrections to more closely mirror Kodi's way of saving movie and tv show files to the db
+- Make sure that the correct file system encoding is used for playlists
+- Fix a rare AttributeError when using playlists
+- Fix regression: fix add-on paths always falling back to direct paths
+
+version 3.1.2 (beta only):
+- Fix ImportError: cannot import name 'dir_util' from 'distutils' on PKC startup
+- Fix UnicodeEncodeError if Plex playlist name contains illegal chars
+- Fix PKC not showing up as a casting target in some cases
+
+version 3.1.1 (beta only):
+- Direct paths: fix filename showing instead of full video metadata during playback
+- Update translations
+
 version 3.1.0:
 - version 3.0.16 and 3.0.17 for everyone
 - Fix resume not working if Kodi player start-up is slow

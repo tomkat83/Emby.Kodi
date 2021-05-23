@@ -17,7 +17,6 @@ as well as sources.xml
 import shutil
 import os
 from os import path  # allows to use path_ops.path.join, for example
-from distutils import dir_util
 import re
 
 import xbmcvfs
@@ -25,6 +24,17 @@ import xbmcvfs
 # Kodi seems to encode in utf-8 in ALL cases (unlike e.g. the OS filesystem)
 KODI_ENCODING = 'utf-8'
 REGEX_FILE_NUMBERING = re.compile(r'''_(\d\d)\.\w+$''')
+
+
+def append_os_sep(path):
+    """
+    Appends either a '\\' or '/' - IRRELEVANT of the host OS!! (os.path.join is
+    dependant on the host OS)
+    """
+    if '/' in path:
+        return path + '/'
+    else:
+        return path + '\\'
 
 
 def translate_path(path):
@@ -155,28 +165,47 @@ def walk(top, topdown=True, onerror=None, followlinks=False):
                [x for x in nondirs])
 
 
-def copy_tree(src, dst, *args, **kwargs):
+def copytree(src, dst, *args, **kwargs):
     """
-    Copy an entire directory tree 'src' to a new location 'dst'.
+    Recursively copy an entire directory tree rooted at src to a directory named
+    dst and return the destination directory. dirs_exist_ok dictates whether to
+    raise an exception in case dst or any missing parent directory already
+    exists.
 
-    Both 'src' and 'dst' must be directory names.  If 'src' is not a
-    directory, raise DistutilsFileError.  If 'dst' does not exist, it is
-    created with 'mkpath()'.  The end result of the copy is that every
-    file in 'src' is copied to 'dst', and directories under 'src' are
-    recursively copied to 'dst'.  Return the list of files that were
-    copied or might have been copied, using their output name.  The
-    return value is unaffected by 'update' or 'dry_run': it is simply
-    the list of all files under 'src', with the names changed to be
-    under 'dst'.
+    Permissions and times of directories are copied with copystat(), individual
+    files are copied using copy2().
 
-    'preserve_mode' and 'preserve_times' are the same as for
-    'copy_file'; note that they only apply to regular files, not to
-    directories.  If 'preserve_symlinks' is true, symlinks will be
-    copied as symlinks (on platforms that support them!); otherwise
-    (the default), the destination of the symlink will be copied.
-    'update' and 'verbose' are the same as for 'copy_file'.
+    If symlinks is true, symbolic links in the source tree are represented as
+    symbolic links in the new tree and the metadata of the original links will
+    be copied as far as the platform allows; if false or omitted, the contents
+    and metadata of the linked files are copied to the new tree.
+
+    When symlinks is false, if the file pointed by the symlink doesn’t exist, an
+    exception will be added in the list of errors raised in an Error exception
+    at the end of the copy process. You can set the optional
+    ignore_dangling_symlinks flag to true if you want to silence this exception.
+    Notice that this option has no effect on platforms that don’t support
+    os.symlink().
+
+    If ignore is given, it must be a callable that will receive as its arguments
+    the directory being visited by copytree(), and a list of its contents, as
+    returned by os.listdir(). Since copytree() is called recursively, the ignore
+    callable will be called once for each directory that is copied. The callable
+    must return a sequence of directory and file names relative to the current
+    directory (i.e. a subset of the items in its second argument); these names
+    will then be ignored in the copy process. ignore_patterns() can be used to
+    create such a callable that ignores names based on glob-style patterns.
+
+    If exception(s) occur, an Error is raised with a list of reasons.
+
+    If copy_function is given, it must be a callable that will be used to copy
+    each file. It will be called with the source path and the destination path
+    as arguments. By default, copy2() is used, but any function that supports
+    the same signature (like copy()) can be used.
+
+    Raises an auditing event shutil.copytree with arguments src, dst.
     """
-    return dir_util.copy_tree(src, dst, *args, **kwargs)
+    return shutil.copytree(src, dst, *args, **kwargs)
 
 
 def basename(path):
