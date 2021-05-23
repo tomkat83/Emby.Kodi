@@ -49,7 +49,7 @@ def convert_alexa_to_companion(dictionary):
     """
     The params passed by Alexa must first be converted to Companion talk
     """
-    for key in dictionary:
+    for key in list(dictionary):
         if key in v.ALEXA_TO_COMPANION:
             dictionary[v.ALEXA_TO_COMPANION[key]] = dictionary[key]
             del dictionary[key]
