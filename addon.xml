@@ -4,7 +4,6 @@
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0+matrix.1" />
     <import addon="script.module.defusedxml" version="0.6.0+matrix.1"/>
-    <import addon="script.module.six" />
     <import addon="plugin.video.plexkodiconnect.movies" version="3.0.0" />
     <import addon="plugin.video.plexkodiconnect.tvshows" version="3.0.0" />
     <import addon="metadata.themoviedb.org.python" version="1.3.1+matrix.1" />
