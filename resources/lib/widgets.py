@@ -464,10 +464,11 @@ def prepare_listitem(item):
         LOG.exception('Exception encountered: %s', exc)
 
 
-def create_listitem(item, as_tuple=True, offscreen=True):
+def create_listitem(item, as_tuple=True, offscreen=True,
+                    listitem=xbmcgui.ListItem):
     """helper to create a kodi listitem from kodi compatible dict with mediainfo"""
     try:
-        liz = xbmcgui.ListItem(
+        liz = listitem(
             label=item.get("label", ""),
             label2=item.get("label2", ""),
             path=item['file'],
