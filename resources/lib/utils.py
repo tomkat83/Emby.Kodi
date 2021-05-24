@@ -518,6 +518,19 @@ def init_dbs():
     LOG.info('Init DBs done')
 
 
+def default_kodi_skin_warning_message():
+    """"To ensure a smooth PlexKodiConnect experience, it is HIGHLY recommended
+    to use Kodi's default skin \"Estuary\" for initial set-up and for possible
+    database resets. Continue?"
+    """
+    if yesno_dialog(lang(29999), lang(30029)):
+        LOG.warn('User accepted risk of a non-default skin')
+        return True
+    else:
+        LOG.warn('User chose to stop due to skin not being Estuary')
+        return False
+
+
 def reset(ask_user=True):
     """
     User navigated to the PKC settings, Advanced, and wants to reset the Kodi
@@ -525,6 +538,8 @@ def reset(ask_user=True):
     """
     # Are you sure you want to reset your local Kodi database?
     if ask_user and not yesno_dialog(lang(29999), lang(39600)):
+        return
+    if not default_kodi_skin_warning_message():
         return
     from . import app
     # first stop any db sync

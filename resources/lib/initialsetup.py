@@ -613,7 +613,11 @@ class InitialSetup(object):
             app.ACCOUNT.load()
             app.SYNC.load()
             return
+
         LOG.info('Showing install questions')
+        if not utils.default_kodi_skin_warning_message():
+            LOG.info('Aborting initial setup due to skin')
+            return
         # Additional settings where the user needs to choose
         # Direct paths (\\NAS\mymovie.mkv) or addon (http)?
         goto_settings = False
