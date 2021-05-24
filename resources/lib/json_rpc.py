@@ -585,6 +585,15 @@ def item_details(kodi_id, kodi_type):
     ret = JsonRPC(json).execute({'%sid' % kodi_type: kodi_id,
                                 'properties': fields})
     try:
-        return ret['result']['%sdetails' % kodi_type]
+        ret = ret['result']['%sdetails' % kodi_type]
     except (KeyError, TypeError):
         return {}
+    if kodi_type == v.KODI_TYPE_SHOW:
+        # append watched counts to tvshow details
+        ret["extraproperties"] = {
+            "totalseasons": str(ret["season"]),
+            "totalepisodes": str(ret["episode"]),
+            "watchedepisodes": str(ret["watchedepisodes"]),
+            "unwatchedepisodes": str(ret["episode"] - ret["watchedepisodes"])
+        }
+    return ret

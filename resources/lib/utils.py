@@ -9,6 +9,7 @@ from datetime import datetime
 from unicodedata import normalize
 from threading import Lock
 import urllib
+import arrow
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 # etree parse unsafe; make sure we're always receiving unicode
 from . import defused_etree as etree
@@ -614,6 +615,21 @@ def indent(elem, level=0):
                 elem.tail = i
     except Exception as err:
         LOG.info('Indentation failed with: %s', err)
+
+
+def localdate_from_utc_string(timestring):
+    """helper to convert internal utc time (used in pvr) to local timezone"""
+    utc_datetime = arrow.get(timestring)
+    local_datetime = utc_datetime.to('local')
+    return local_datetime.format("YYYY-MM-DD HH:mm:ss")
+
+
+def localized_date_time(timestring):
+    """returns localized version of the timestring (used in pvr)"""
+    date_time = arrow.get(timestring)
+    local_date = date_time.strftime(xbmc.getRegion("dateshort"))
+    local_time = date_time.strftime(xbmc.getRegion("time").replace(":%S", ""))
+    return local_date, local_time
 
 
 class XmlKodiSetting(object):
