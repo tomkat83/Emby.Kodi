@@ -8,6 +8,7 @@
     <import addon="plugin.video.plexkodiconnect.movies" version="3.0.0" />
     <import addon="plugin.video.plexkodiconnect.tvshows" version="3.0.0" />
     <import addon="metadata.themoviedb.org.python" version="1.3.1+matrix.1" />
+    <import addon="script.module.arrow" version="0.15.5"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video audio image</provides>
