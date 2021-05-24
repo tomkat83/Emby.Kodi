@@ -1,3 +1,8 @@
+version 3.2.2 (beta only):
+- Fix videos not starting due to a TypeError
+- Show warning message to remind user to use Estuary for database resets
+- Update websocket client to 1.0.0
+
 version 3.2.1 (beta only):
 WARNING: Database reset and full resync required
 - Fix PKC widgets not working at all in some cases
