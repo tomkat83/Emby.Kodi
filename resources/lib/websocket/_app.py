@@ -22,15 +22,11 @@ Copyright (C) 2010 Hiroki Ohtani(liris)
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 """
-import inspect
-import select
+import selectors
 import sys
 import threading
 import time
 import traceback
-
-import six
-
 from ._abnf import ABNF
 from ._core import WebSocket, getdefaulttimeout
 from ._exceptions import *
@@ -38,6 +34,7 @@ from . import _logging
 
 
 __all__ = ["WebSocketApp"]
+
 
 class Dispatcher:
     """
@@ -49,12 +46,16 @@ class Dispatcher:
 
     def read(self, sock, read_callback, check_callback):
         while self.app.keep_running:
-            r, w, e = select.select(
-                    (self.app.sock.sock, ), (), (), self.ping_timeout)
+            sel = selectors.DefaultSelector()
+            sel.register(self.app.sock.sock, selectors.EVENT_READ)
+
+            r = sel.select(self.ping_timeout)
             if r:
                 if not read_callback():
                     break
             check_callback()
+            sel.close()
+
 
 class SSLDispatcher:
     """
@@ -77,8 +78,14 @@ class SSLDispatcher:
         if sock.pending():
             return [sock,]
 
-        r, w, e = select.select((sock, ), (), (), self.ping_timeout)
-        return r
+        sel = selectors.DefaultSelector()
+        sel.register(sock, selectors.EVENT_READ)
+
+        r = sel.select(self.ping_timeout)
+        sel.close()
+
+        if len(r) > 0:
+            return r[0][0]
 
 
 class WebSocketApp(object):
@@ -190,18 +197,19 @@ class WebSocketApp(object):
             self.sock.close(**kwargs)
             self.sock = None
 
-    def _send_ping(self, interval, event):
+    def _send_ping(self, interval, event, payload):
         while not event.wait(interval):
             self.last_ping_tm = time.time()
             if self.sock:
                 try:
-                    self.sock.ping()
+                    self.sock.ping(payload)
                 except Exception as ex:
                     _logging.warning("send_ping routine terminated: {}".format(ex))
                     break
 
     def run_forever(self, sockopt=None, sslopt=None,
                     ping_interval=0, ping_timeout=None,
+                    ping_payload="",
                     http_proxy_host=None, http_proxy_port=None,
                     http_no_proxy=None, http_proxy_auth=None,
                     skip_utf8_validation=False,
@@ -226,6 +234,8 @@ class WebSocketApp(object):
             if set to 0, not send automatically.
         ping_timeout: int or float
             timeout (in seconds) if the pong message is not received.
+        ping_payload: str
+            payload message to send with each ping.
         http_proxy_host: <type>
             http proxy host name.
         http_proxy_port: <type>
@@ -250,7 +260,9 @@ class WebSocketApp(object):
         """
 
         if ping_timeout is not None and ping_timeout <= 0:
-            ping_timeout = None
+            raise WebSocketException("Ensure ping_timeout > 0")
+        if ping_interval is not None and ping_interval < 0:
+            raise WebSocketException("Ensure ping_interval >= 0")
         if ping_timeout and ping_interval and ping_interval <= ping_timeout:
             raise WebSocketException("Ensure ping_interval > ping_timeout")
         if not sockopt:
@@ -271,15 +283,16 @@ class WebSocketApp(object):
             If close_frame is set, we will invoke the on_close handler with the
             statusCode and reason from there.
             """
+
             if thread and thread.is_alive():
                 event.set()
                 thread.join()
             self.keep_running = False
             if self.sock:
                 self.sock.close()
-            close_args = self._get_close_args(
-                close_frame.data if close_frame else None)
-            self._callback(self.on_close, *close_args)
+            close_status_code, close_reason = self._get_close_args(
+                close_frame if close_frame else None)
+            self._callback(self.on_close, close_status_code, close_reason)
             self.sock = None
 
         try:
@@ -304,8 +317,8 @@ class WebSocketApp(object):
             if ping_interval:
                 event = threading.Event()
                 thread = threading.Thread(
-                    target=self._send_ping, args=(ping_interval, event))
-                thread.setDaemon(True)
+                    target=self._send_ping, args=(ping_interval, event, ping_payload))
+                thread.daemon = True
                 thread.start()
 
             def read():
@@ -327,7 +340,7 @@ class WebSocketApp(object):
                                    frame.data, frame.fin)
                 else:
                     data = frame.data
-                    if six.PY3 and op_code == ABNF.OPCODE_TEXT:
+                    if op_code == ABNF.OPCODE_TEXT:
                         data = data.decode("utf-8")
                     self._callback(self.on_data, data, frame.opcode, True)
                     self._callback(self.on_message, data)
@@ -340,9 +353,9 @@ class WebSocketApp(object):
                     has_pong_not_arrived_after_last_ping = self.last_pong_tm - self.last_ping_tm < 0
                     has_pong_arrived_too_late = self.last_pong_tm - self.last_ping_tm > ping_timeout
 
-                    if (self.last_ping_tm
-                            and has_timeout_expired
-                            and (has_pong_not_arrived_after_last_ping or has_pong_arrived_too_late)):
+                    if (self.last_ping_tm and
+                            has_timeout_expired and
+                            (has_pong_not_arrived_after_last_ping or has_pong_arrived_too_late)):
                         raise WebSocketTimeoutException("ping/pong timed out")
                 return True
 
@@ -362,25 +375,24 @@ class WebSocketApp(object):
 
         return Dispatcher(self, timeout)
 
-    def _get_close_args(self, data):
+    def _get_close_args(self, close_frame):
         """
-        _get_close_args extracts the code, reason from the close body
-        if they exists, and if the self.on_close except three arguments
+        _get_close_args extracts the close code and reason from the close body
+        if it exists (RFC6455 says WebSocket Connection Close Code is optional)
         """
-        # if the on_close callback is "old", just return empty list
-        if sys.version_info < (3, 0):
-            if not self.on_close or len(inspect.getargspec(self.on_close).args) != 3:
-                return []
+        # Need to catch the case where close_frame is None
+        # Otherwise the following if statement causes an error
+        if not self.on_close or not close_frame:
+            return [None, None]
+
+        # Extract close frame status code
+        if close_frame.data and len(close_frame.data) >= 2:
+            close_status_code = 256 * close_frame.data[0] + close_frame.data[1]
+            reason = close_frame.data[2:].decode('utf-8')
+            return [close_status_code, reason]
         else:
-            if not self.on_close or len(inspect.getfullargspec(self.on_close).args) != 3:
-                return []
-
-        if data and len(data) >= 2:
-            code = 256 * six.byte2int(data[0:1]) + six.byte2int(data[1:2])
-            reason = data[2:].decode('utf-8')
-            return [code, reason]
-
-        return [None, None]
+            # Most likely reached this because len(close_frame_data.data) < 2
+            return [None, None]
 
     def _callback(self, callback, *args):
         if callback:
