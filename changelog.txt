@@ -1,3 +1,7 @@
+version 3.2.3 (beta only):
+- Attempt to fix websocket threading issues and AttributeError: 'NoneType' object has no attribute 'is_ssl' or 'settimeout'
+- Get rid of Python arrow; hopefully fix many Python import errors (also occuring in other add-ons!)
+
 version 3.2.2 (beta only):
 - Fix videos not starting due to a TypeError
 - Show warning message to remind user to use Estuary for database resets
