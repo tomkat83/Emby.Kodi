@@ -7,7 +7,6 @@ Loads of different functions called in SEPARATE Python instances through
 e.g. plugin://... calls. Hence be careful to only rely on window variables.
 """
 from logging import getLogger
-import arrow
 
 import xbmc
 import xbmcgui
@@ -387,22 +386,22 @@ def prepare_listitem(item):
             properties["Album_Description"] = item.get('album_description')
 
         # pvr properties
-        if "starttime" in item:
-            # convert utc time to local time
-            item["starttime"] = utils.localdate_from_utc_string(item["starttime"])
-            item["endtime"] = utils.localdate_from_utc_string(item["endtime"])
-            # set localized versions of the time and date as additional props
-            startdate, starttime = utils.localized_date_time(item['starttime'])
-            enddate, endtime = utils.localized_date_time(item['endtime'])
-            properties["StartTime"] = starttime
-            properties["StartDate"] = startdate
-            properties["EndTime"] = endtime
-            properties["EndDate"] = enddate
-            properties["Date"] = "%s %s-%s" % (startdate, starttime, endtime)
-            properties["StartDateTime"] = "%s %s" % (startdate, starttime)
-            properties["EndDateTime"] = "%s %s" % (enddate, endtime)
-            # set date to startdate
-            item["date"] = arrow.get(item["starttime"]).format("DD.MM.YYYY")
+        # if "starttime" in item:
+        #     # convert utc time to local time
+        #     item["starttime"] = utils.localdate_from_utc_string(item["starttime"])
+        #     item["endtime"] = utils.localdate_from_utc_string(item["endtime"])
+        #     # set localized versions of the time and date as additional props
+        #     startdate, starttime = utils.localized_date_time(item['starttime'])
+        #     enddate, endtime = utils.localized_date_time(item['endtime'])
+        #     properties["StartTime"] = starttime
+        #     properties["StartDate"] = startdate
+        #     properties["EndTime"] = endtime
+        #     properties["EndDate"] = enddate
+        #     properties["Date"] = "%s %s-%s" % (startdate, starttime, endtime)
+        #     properties["StartDateTime"] = "%s %s" % (startdate, starttime)
+        #     properties["EndDateTime"] = "%s %s" % (enddate, endtime)
+        #     # set date to startdate
+        #     item["date"] = arrow.get(item["starttime"]).format("DD.MM.YYYY")
         if "channellogo" in item:
             properties["channellogo"] = item["channellogo"]
             properties["channelicon"] = item["channellogo"]
