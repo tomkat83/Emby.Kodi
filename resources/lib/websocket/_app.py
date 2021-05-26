@@ -214,7 +214,8 @@ class WebSocketApp(object):
                     http_no_proxy=None, http_proxy_auth=None,
                     skip_utf8_validation=False,
                     host=None, origin=None, dispatcher=None,
-                    suppress_origin=False, proxy_type=None):
+                    suppress_origin=False, proxy_type=None,
+                    enable_multithread=True):
         """
         Run event loop for WebSocket framework.
 
@@ -300,7 +301,7 @@ class WebSocketApp(object):
                 self.get_mask_key, sockopt=sockopt, sslopt=sslopt,
                 fire_cont_frame=self.on_cont_message is not None,
                 skip_utf8_validation=skip_utf8_validation,
-                enable_multithread=True if ping_interval else False)
+                enable_multithread=enable_multithread)
             self.sock.settimeout(getdefaulttimeout())
             self.sock.connect(
                 self.url, header=self.header, cookie=self.cookie,
