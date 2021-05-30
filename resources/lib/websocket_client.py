@@ -164,6 +164,14 @@ class PlexWebSocketApp(websocket.WebSocketApp,
         if self.sleeptime < 6:
             self.sleeptime += 1
 
+    def close(self, **kwargs):
+        """websocket.WebSocketApp is not yet thread-safe. close() might
+        encounter websockets that have already been closed"""
+        try:
+            websocket.WebSocketApp.close(self, **kwargs)
+        except AttributeError:
+            pass
+
     def suspend(self, block=False, timeout=None):
         """
         Call this method from another thread to suspend this websocket thread

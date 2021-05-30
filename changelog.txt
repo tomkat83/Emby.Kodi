@@ -1,3 +1,6 @@
+version 2.12.25:
+- Update websocket client to 0.59.0. Fix threading issues and AttributeErrors
+
 version 2.12.24:
 - version 2.12.23 for everyone
 
