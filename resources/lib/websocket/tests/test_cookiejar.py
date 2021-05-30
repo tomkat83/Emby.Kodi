@@ -26,11 +26,6 @@ import unittest
 
 from websocket._cookiejar import SimpleCookieJar
 
-try:
-    import Cookie
-except:
-    import http.cookies as Cookie
-
 
 class CookieJarTest(unittest.TestCase):
     def testAdd(self):
@@ -54,6 +49,7 @@ class CookieJarTest(unittest.TestCase):
         cookie_jar = SimpleCookieJar()
         cookie_jar.add("a=b; c=d; domain=abc")
         self.assertEqual(cookie_jar.get("abc"), "a=b; c=d")
+        self.assertEqual(cookie_jar.get(None), "")
 
         cookie_jar = SimpleCookieJar()
         cookie_jar.add("a=b; c=d; domain=abc")

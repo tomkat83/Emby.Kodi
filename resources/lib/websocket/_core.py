@@ -1,4 +1,3 @@
-from __future__ import print_function
 """
 _core.py
 ====================================
@@ -30,8 +29,6 @@ import struct
 import threading
 import time
 
-import six
-
 # websocket modules
 from ._abnf import *
 from ._exceptions import *
@@ -43,6 +40,7 @@ from ._ssl_compat import *
 from ._utils import *
 
 __all__ = ['WebSocket', 'create_connection']
+
 
 class WebSocket(object):
     """
@@ -225,6 +223,9 @@ class WebSocket(object):
                     cookie value.
                  - origin: str
                     custom origin url.
+                 - connection: str
+                    custom connection header value.
+                    default value "Upgrade" set in _handshake.py
                  - suppress_origin: bool
                     suppress outputting origin header.
                  - host: str
@@ -254,8 +255,8 @@ class WebSocket(object):
                 if self.handshake_response.status in SUPPORTED_REDIRECT_STATUSES:
                     url = self.handshake_response.headers['location']
                     self.sock.close()
-                    self.sock, addrs =  connect(url, self.sock_opt, proxy_info(**options),
-                                                options.pop('socket', None))
+                    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                                               options.pop('socket', None))
                     self.handshake_response = handshake(self.sock, *addrs, **options)
             self.connected = True
         except:
@@ -270,11 +271,11 @@ class WebSocket(object):
 
         Parameters
         ----------
-        payload:  <type>
+        payload:  str
                   Payload must be utf-8 string or unicode,
                   if the opcode is OPCODE_TEXT.
                   Otherwise, it must be string(byte array)
-        opcode:   <type>
+        opcode:   int
                   operation code to send. Please see OPCODE_XXX.
         """
 
@@ -295,7 +296,7 @@ class WebSocket(object):
 
         Parameters
         ----------
-        frame: <type>
+        frame: ABNF frame
             frame data created by ABNF.create_frame
         """
         if self.get_mask_key:
@@ -303,8 +304,8 @@ class WebSocket(object):
         data = frame.format()
         length = len(data)
         if (isEnabledForTrace()):
-            trace("send: " + repr(data))
-
+            trace("++Sent raw: " + repr(data))
+            trace("++Sent decoded: " + frame.__str__())
         with self.lock:
             while data:
                 l = self._send(data)
@@ -321,10 +322,10 @@ class WebSocket(object):
 
         Parameters
         ----------
-        payload: <type>
+        payload: str
             data payload to send server.
         """
-        if isinstance(payload, six.text_type):
+        if isinstance(payload, str):
             payload = payload.encode("utf-8")
         self.send(payload, ABNF.OPCODE_PING)
 
@@ -334,10 +335,10 @@ class WebSocket(object):
 
         Parameters
         ----------
-        payload: <type>
+        payload: str
             data payload to send server.
         """
-        if isinstance(payload, six.text_type):
+        if isinstance(payload, str):
             payload = payload.encode("utf-8")
         self.send(payload, ABNF.OPCODE_PONG)
 
@@ -351,7 +352,7 @@ class WebSocket(object):
         """
         with self.readlock:
             opcode, data = self.recv_data()
-        if six.PY3 and opcode == ABNF.OPCODE_TEXT:
+        if opcode == ABNF.OPCODE_TEXT:
             return data.decode("utf-8")
         elif opcode == ABNF.OPCODE_TEXT or opcode == ABNF.OPCODE_BINARY:
             return data
@@ -393,6 +394,9 @@ class WebSocket(object):
         """
         while True:
             frame = self.recv_frame()
+            if (isEnabledForTrace()):
+                trace("++Rcv raw: " + repr(frame.format()))
+                trace("++Rcv decoded: " + frame.__str__())
             if not frame:
                 # handle error:
                 # 'NoneType' object has no attribute 'opcode'
@@ -430,7 +434,7 @@ class WebSocket(object):
         """
         return self.frame_buffer.recv_frame()
 
-    def send_close(self, status=STATUS_NORMAL, reason=six.b("")):
+    def send_close(self, status=STATUS_NORMAL, reason=bytes('', encoding='utf-8')):
         """
         Send close data to the server.
 
@@ -446,16 +450,16 @@ class WebSocket(object):
         self.connected = False
         self.send(struct.pack('!H', status) + reason, ABNF.OPCODE_CLOSE)
 
-    def close(self, status=STATUS_NORMAL, reason=six.b(""), timeout=3):
+    def close(self, status=STATUS_NORMAL, reason=bytes('', encoding='utf-8'), timeout=3):
         """
         Close Websocket object
 
         Parameters
         ----------
-        status: <type>
+        status: int
             status code to send. see STATUS_XXX.
-        reason: <type>
-            the reason to close. This must be string.
+        reason: bytes
+            the reason to close.
         timeout: int or float
             timeout until receive a close frame.
             If None, it will wait forever until receive a close frame.
@@ -466,8 +470,7 @@ class WebSocket(object):
 
             try:
                 self.connected = False
-                self.send(struct.pack('!H', status) +
-                          reason, ABNF.OPCODE_CLOSE)
+                self.send(struct.pack('!H', status) + reason, ABNF.OPCODE_CLOSE)
                 sock_timeout = self.sock.gettimeout()
                 self.sock.settimeout(timeout)
                 start_time = time.time()
@@ -487,8 +490,10 @@ class WebSocket(object):
                         break
                 self.sock.settimeout(sock_timeout)
                 self.sock.shutdown(socket.SHUT_RDWR)
-            except:
+            except OSError:  # This happens often on Mac
                 pass
+            except:
+                raise
 
             self.shutdown()
 

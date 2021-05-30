@@ -1,3 +1,25 @@
+version 3.3.0:
+WARNING: Database reset and full resync required
+- versions 3.2.1-3.2.4 for everyone
+
+version 3.2.4 (beta only):
+- Fix websockets and AttributeError: 'NoneType' object has no attribute
+
+version 3.2.3 (beta only):
+- Attempt to fix websocket threading issues and AttributeError: 'NoneType' object has no attribute 'is_ssl' or 'settimeout'
+- Get rid of Python arrow; hopefully fix many Python import errors (also occuring in other add-ons!)
+
+version 3.2.2 (beta only):
+- Fix videos not starting due to a TypeError
+- Show warning message to remind user to use Estuary for database resets
+- Update websocket client to 1.0.0
+
+version 3.2.1 (beta only):
+WARNING: Database reset and full resync required
+- Fix PKC widgets not working at all in some cases
+- Direct Paths: fix several issues with episodes
+- New Python-dependency: arrow
+
 version 3.2.0:
 WARNING: Database reset and full resync required
 - version 3.1.1-3.1.4 for everyone

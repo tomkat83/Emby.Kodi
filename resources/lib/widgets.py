@@ -157,7 +157,6 @@ def _generate_content(api):
                 'director': api.directors(),  # list of [str]
                 'duration': api.runtime(),
                 'episode': api.index(),
-                # 'file': '',  # e.g. 'videodb://tvshows/titles/20'
                 'genre': api.genres(),
                 # 'imdbnumber': '',  # e.g.'341663'
                 'label': api.title(),  # e.g. '1x05. Category 55 Emergency Doomsday Crisis'
@@ -246,12 +245,8 @@ def _generate_content(api):
 
 
 def prepare_listitem(item):
-    """
-    helper to convert kodi output from json api to compatible format for
-    listitems
-
-    Code from script.module.metadatautils, kodidb.py
-    """
+    """helper to convert kodi output from json api to compatible format for
+    listitems"""
     try:
         # fix values returned from json to be used as listitem values
         properties = item.get("extraproperties", {})
@@ -292,8 +287,8 @@ def prepare_listitem(item):
         if item['type'] == "album" and 'album' not in item and 'label' in item:
             item['album'] = item['label']
         if "duration" not in item and "runtime" in item:
-            if (item["runtime"] / 60) > 300:
-                item["duration"] = item["runtime"] / 60
+            if (item["runtime"] // 60) > 300:
+                item["duration"] = item["runtime"] // 60
             else:
                 item["duration"] = item["runtime"]
         if "plot" not in item and "comment" in item:
@@ -307,7 +302,7 @@ def prepare_listitem(item):
         if "imdbnumber" not in properties and "imdbnumber" in item:
             properties["imdbnumber"] = item["imdbnumber"]
         if "imdbnumber" not in properties and "uniqueid" in item:
-            for value in list(item["uniqueid"].values()):
+            for value in item["uniqueid"].values():
                 if value.startswith("tt"):
                     properties["imdbnumber"] = value
 
@@ -391,6 +386,22 @@ def prepare_listitem(item):
             properties["Album_Description"] = item.get('album_description')
 
         # pvr properties
+        # if "starttime" in item:
+        #     # convert utc time to local time
+        #     item["starttime"] = utils.localdate_from_utc_string(item["starttime"])
+        #     item["endtime"] = utils.localdate_from_utc_string(item["endtime"])
+        #     # set localized versions of the time and date as additional props
+        #     startdate, starttime = utils.localized_date_time(item['starttime'])
+        #     enddate, endtime = utils.localized_date_time(item['endtime'])
+        #     properties["StartTime"] = starttime
+        #     properties["StartDate"] = startdate
+        #     properties["EndTime"] = endtime
+        #     properties["EndDate"] = enddate
+        #     properties["Date"] = "%s %s-%s" % (startdate, starttime, endtime)
+        #     properties["StartDateTime"] = "%s %s" % (startdate, starttime)
+        #     properties["EndDateTime"] = "%s %s" % (enddate, endtime)
+        #     # set date to startdate
+        #     item["date"] = arrow.get(item["starttime"]).format("DD.MM.YYYY")
         if "channellogo" in item:
             properties["channellogo"] = item["channellogo"]
             properties["channelicon"] = item["channellogo"]
@@ -441,51 +452,48 @@ def prepare_listitem(item):
 
         item["extraproperties"] = properties
 
-        # return the result
+        if "file" not in item or not item['file']:
+            LOG.warn('No filepath for item: %s', item)
+            item["file"] = ""
+
         return item
 
-    except Exception:
-        utils.ERROR(notify=True)
-        LOG.error('item that caused crash: %s', item)
+    except Exception as exc:
+        LOG.error('item: %s', item)
+        LOG.exception('Exception encountered: %s', exc)
 
 
 def create_listitem(item, as_tuple=True, offscreen=True,
                     listitem=xbmcgui.ListItem):
-    """
-    helper to create a kodi listitem from kodi compatible dict with mediainfo
-
-    WARNING: paths, so item['file'] for items NOT synched to the Kodi DB
-             shall NOT occur in the Kodi paths table!
-             Kodi information screen does not work otherwise
-
-    Code from script.module.metadatautils, kodidb.py
-    """
+    """helper to create a kodi listitem from kodi compatible dict with mediainfo"""
     try:
         liz = listitem(
             label=item.get("label", ""),
             label2=item.get("label2", ""),
             path=item['file'],
             offscreen=offscreen)
+
         # only set isPlayable prop if really needed
         if item.get("isFolder", False):
             liz.setProperty('IsPlayable', 'false')
         elif "plugin://script.skin.helper" not in item['file']:
             liz.setProperty('IsPlayable', 'true')
 
+        nodetype = "Video"
         if item["type"] in ["song", "album", "artist"]:
-            nodetype = "music"
+            nodetype = "Music"
         elif item['type'] == 'photo':
-            nodetype = 'pictures'
-        else:
-            nodetype = 'video'
+            nodetype = 'Pictures'
 
         # extra properties
         for key, value in item["extraproperties"].items():
             liz.setProperty(key, value)
 
-        if nodetype == 'video':
+        # video infolabels
+        if nodetype == "Video":
             infolabels = {
                 "title": item.get("title"),
+                "path": item.get("file"),
                 "size": item.get("size"),
                 "genre": item.get("genre"),
                 "year": item.get("year"),
@@ -516,8 +524,7 @@ def create_listitem(item, as_tuple=True, offscreen=True,
                 "album": item.get("album"),
                 "artist": item.get("artist"),
                 "votes": item.get("votes"),
-                "trailer": item.get("trailer"),
-                # "progress": item.get('progresspercentage')
+                "trailer": item.get("trailer")
             }
             if item["type"] == "episode":
                 infolabels["season"] = item["season"]
@@ -534,7 +541,8 @@ def create_listitem(item, as_tuple=True, offscreen=True,
             if "date" in item:
                 infolabels["date"] = item["date"]
 
-        elif nodetype == 'music':
+        # music infolabels
+        elif nodetype == 'Music':
             infolabels = {
                 "title": item.get("title"),
                 "size": item.get("size"),
@@ -560,12 +568,12 @@ def create_listitem(item, as_tuple=True, offscreen=True,
                 "title": item.get("title"),
                 'picturepath': item['file']
             }
+
         # setting the dbtype and dbid is supported from kodi krypton and up
-        # PKC hack: ignore empty type
-        if item["type"] not in ["recording", "channel", "favourite", ""]:
+        if item["type"] not in ["recording", "channel", "favourite", "genre", "categorie"]:
             infolabels["mediatype"] = item["type"]
             # setting the dbid on music items is not supported ?
-            if nodetype == "video" and "DBID" in item["extraproperties"]:
+            if nodetype == "Video" and "DBID" in item["extraproperties"]:
                 infolabels["dbid"] = item["extraproperties"]["DBID"]
 
         if "lastplayed" in item:
@@ -575,9 +583,11 @@ def create_listitem(item, as_tuple=True, offscreen=True,
         liz.setInfo(type=nodetype, infoLabels=infolabels)
 
         # artwork
-        if "icon" in item:
-            item['art']['icon'] = item['icon']
         liz.setArt(item.get("art", {}))
+        if "icon" in item:
+            liz.setArt({"icon": item['icon']})
+        if "thumbnail" in item:
+            liz.setArt({"thumb": item['thumbnail']})
 
         # contextmenu
         if item["type"] in ["episode", "season"] and "season" in item and "tvshowid" in item:
@@ -585,20 +595,20 @@ def create_listitem(item, as_tuple=True, offscreen=True,
             if "contextmenu" not in item:
                 item["contextmenu"] = []
             item["contextmenu"] += [
-                (xbmc.getLocalizedString(20364), "ActivateWindow(Video,videodb://tvshows/titles/%s/,return)"
+                (xbmc.getLocalizedString(20364), "ActivateWindow(Videos,videodb://tvshows/titles/%s/,return)"
                     % (item["tvshowid"])),
-                (xbmc.getLocalizedString(20373), "ActivateWindow(Video,videodb://tvshows/titles/%s/%s/,return)"
+                (xbmc.getLocalizedString(20373), "ActivateWindow(Videos,videodb://tvshows/titles/%s/%s/,return)"
                     % (item["tvshowid"], item["season"]))]
         if "contextmenu" in item:
             liz.addContextMenuItems(item["contextmenu"])
 
         if as_tuple:
-            return (item["file"], liz, item.get("isFolder", False))
+            return item["file"], liz, item.get("isFolder", False)
         else:
             return liz
-    except Exception:
-        utils.ERROR(notify=True)
-        LOG.error('item that should have been turned into a listitem: %s', item)
+    except Exception as exc:
+        LOG.error('item: %s', item)
+        LOG.exception('Exception encountered: %s', exc)
 
 
 def create_main_entry(item):

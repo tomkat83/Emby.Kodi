@@ -517,6 +517,19 @@ def init_dbs():
     LOG.info('Init DBs done')
 
 
+def default_kodi_skin_warning_message():
+    """"To ensure a smooth PlexKodiConnect experience, it is HIGHLY recommended
+    to use Kodi's default skin \"Estuary\" for initial set-up and for possible
+    database resets. Continue?"
+    """
+    if yesno_dialog(lang(29999), lang(30029)):
+        LOG.warn('User accepted risk of a non-default skin')
+        return True
+    else:
+        LOG.warn('User chose to stop due to skin not being Estuary')
+        return False
+
+
 def reset(ask_user=True):
     """
     User navigated to the PKC settings, Advanced, and wants to reset the Kodi
@@ -524,6 +537,8 @@ def reset(ask_user=True):
     """
     # Are you sure you want to reset your local Kodi database?
     if ask_user and not yesno_dialog(lang(29999), lang(39600)):
+        return
+    if not default_kodi_skin_warning_message():
         return
     from . import app
     # first stop any db sync
@@ -614,6 +629,24 @@ def indent(elem, level=0):
                 elem.tail = i
     except Exception as err:
         LOG.info('Indentation failed with: %s', err)
+
+
+# Python's arrow library is broken for Kodi
+# Importing from several Python instances is faulty :-(
+
+# def localdate_from_utc_string(timestring):
+#     """helper to convert internal utc time (used in pvr) to local timezone"""
+#     utc_datetime = arrow.get(timestring)
+#     local_datetime = utc_datetime.to('local')
+#     return local_datetime.format("YYYY-MM-DD HH:mm:ss")
+
+
+# def localized_date_time(timestring):
+#     """returns localized version of the timestring (used in pvr)"""
+#     date_time = arrow.get(timestring)
+#     local_date = date_time.strftime(xbmc.getRegion("dateshort"))
+#     local_time = date_time.strftime(xbmc.getRegion("time").replace(":%S", ""))
+#     return local_date, local_time
 
 
 class XmlKodiSetting(object):
