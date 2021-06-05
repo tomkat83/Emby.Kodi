@@ -178,7 +178,7 @@ class Media(object):
             count += 1
         if (count > 1 and (
                 (self.plex_type != v.PLEX_TYPE_CLIP and
-                 utils.settings('bestQuality') == 'false')
+                 utils.settings('firstVideoStream') == 'false')
             or
                 (self.plex_type == v.PLEX_TYPE_CLIP and
                  utils.settings('bestTrailer') == 'false'))):
