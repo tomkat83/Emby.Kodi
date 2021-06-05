@@ -173,6 +173,14 @@ msgctxt "#30028"
 msgid "PKC-only image caching completed"
 msgstr "El caché de imágenes solo-PKC fue completado"
 
+# Warning shown when PKC switches to the Kodi default skin Estuary
+msgctxt "#30029"
+msgid ""
+"To ensure a smooth PlexKodiConnect experience, it is HIGHLY recommended to "
+"use Kodi's default skin \"Estuary\" for initial set-up and for possible "
+"database resets. Continue?"
+msgstr ""
+
 msgctxt "#30030"
 msgid "Port Number"
 msgstr "Número de puerto"
@@ -1182,6 +1190,11 @@ msgstr "Ajustes de aspecto"
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "Series"
+
+# PKC Settings - Sync
+msgctxt "#39075"
+msgid "Verify access to media files while synching"
+msgstr ""
 
 # Pop-up during initial sync
 msgctxt "#39076"
