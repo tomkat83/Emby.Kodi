@@ -44,7 +44,7 @@ REGEX_END_DIGITS = re.compile(r'''/(.+)/(\d+)$''')
 REGEX_PLEX_DIRECT = re.compile(r'''\.plex\.direct:\d+$''')
 # Plex API
 REGEX_IMDB = re.compile(r'''/(tt\d+)''')
-REGEX_TVDB = re.compile(r'''thetvdb:\/\/(.+?)\?''')
+REGEX_TVDB = re.compile(r'''(?:the)?tvdb(?::\/\/|[2-5]?-)(\d+?)\?''')
 REGEX_TMDB = re.compile(r'''themoviedb:\/\/(.+?)\?''')
 # Plex music
 REGEX_MUSICPATH = re.compile(r'''^\^(.+)\$$''')
