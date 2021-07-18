@@ -1,3 +1,8 @@
+version 2.13.0:
+- Support for the Plex HAMA agent to let Kodi identify animes (using Kodi's uniqueID 'anidb')
+- Support forced HAMA IDs when using tvdb uniqueID
+- version 2.12.26 for everyone
+
 version 2.12.26 (beta only):
 - Add an additional Plex Hub "PKC Continue Watching" that merges the Plex Continue Watching with On Deck
 - Fix auto-picking of video stream if several video versions are available
