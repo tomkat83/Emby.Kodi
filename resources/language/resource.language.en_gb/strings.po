@@ -660,6 +660,11 @@ msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr ""
 
+# PKC Settings - Playback
+msgctxt "#30546"
+msgid "Pick the first video if several versions are present"
+msgstr ""
+
 # Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
