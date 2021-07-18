@@ -6,7 +6,7 @@
 # yun changwon <ycw98@hanmail.net>, 2020
 # k irbymaker <hun010811@naver.com>, 2020
 # Croneter None <croneter@gmail.com>, 2021
-# jaemin kwak <cjhamo@naver.com>, 2021
+# so.o.bima <cjhamo@naver.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: croneter@gmail.com\n"
 "POT-Creation-Date: 2017-04-15 13:13+0000\n"
 "PO-Revision-Date: 2017-04-30 08:30+0000\n"
-"Last-Translator: jaemin kwak <cjhamo@naver.com>, 2021\n"
+"Last-Translator: so.o.bima <cjhamo@naver.com>, 2021\n"
 "Language-Team: Korean (Korea) (https://www.transifex.com/croneter/teams/73837/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -173,6 +173,14 @@ msgstr "동기화를 트리거하는 Kodi 재생 목록 이름의 접두사"
 msgctxt "#30028"
 msgid "PKC-only image caching completed"
 msgstr "PKC 전용 이미지 캐싱 완료"
+
+# Warning shown when PKC switches to the Kodi default skin Estuary
+msgctxt "#30029"
+msgid ""
+"To ensure a smooth PlexKodiConnect experience, it is HIGHLY recommended to "
+"use Kodi's default skin \"Estuary\" for initial set-up and for possible "
+"database resets. Continue?"
+msgstr ""
 
 msgctxt "#30030"
 msgid "Port Number"
@@ -1147,6 +1155,11 @@ msgstr "모양 조정"
 msgctxt "#39074"
 msgid "TV Shows"
 msgstr "TV 프로그램"
+
+# PKC Settings - Sync
+msgctxt "#39075"
+msgid "Verify access to media files while synching"
+msgstr ""
 
 # Pop-up during initial sync
 msgctxt "#39076"

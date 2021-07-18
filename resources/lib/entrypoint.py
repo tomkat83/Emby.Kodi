@@ -6,6 +6,7 @@ e.g. plugin://... calls. Hence be careful to only rely on window variables.
 """
 from logging import getLogger
 import sys
+import copy
 
 import xbmc
 import xbmcplugin
@@ -416,6 +417,7 @@ def hub(content_type):
     # We need to make sure that only entries that WORK are displayed
     # WARNING: using xml.remove(child) in for-loop requires traversing from
     # the end!
+    pkc_cont_watching = None
     for entry in reversed(xml):
         api = API(entry)
         append = False
@@ -432,6 +434,21 @@ def hub(content_type):
             append = True
         if not append:
             xml.remove(entry)
+
+        # HACK ##################
+        # Merge Plex's "Continue watching" with "On deck"
+        if entry.get('key') == '/hubs/home/continueWatching':
+            pkc_cont_watching = copy.deepcopy(entry)
+            pkc_cont_watching.set('key', '/hubs/continueWatching')
+            title = pkc_cont_watching.get('title') or 'Continue Watching'
+            pkc_cont_watching.set('title', 'PKC %s' % title)
+    if pkc_cont_watching:
+        for i, entry in enumerate(xml):
+            if entry.get('key') == '/hubs/home/continueWatching':
+                xml.insert(i + 1, pkc_cont_watching)
+                break
+    # END HACK ##################
+
     show_listing(xml)
 
 

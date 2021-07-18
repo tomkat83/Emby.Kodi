@@ -1,3 +1,12 @@
+version 3.3.2:
+- version 3.3.1 for everyone
+
+version 3.3.1 (beta only):
+- Add an additional Plex Hub "PKC Continue Watching" that merges the Plex Continue Watching with On Deck
+- Fix auto-picking of video stream if several video versions are available
+- Make PKC compatible with Kodi 20 N* by using xbmcvfs for translatePath
+- Update translations
+
 version 3.3.0:
 WARNING: Database reset and full resync required
 - versions 3.2.1-3.2.4 for everyone
