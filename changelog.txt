@@ -1,3 +1,6 @@
+version 3.3.2:
+- version 3.3.1 for everyone
+
 version 3.3.1 (beta only):
 - Add an additional Plex Hub "PKC Continue Watching" that merges the Plex Continue Watching with On Deck
 - Fix auto-picking of video stream if several video versions are available
