@@ -58,12 +58,12 @@ class FillMetadataQueue(common.LibrarySyncMixin,
                 if not do_process_section:
                     do_process_section = True
                     self.processing_queue.add_section(section)
-                    LOG.debug('Put section in queue with %s items: %s',
-                              section.number_of_items, section)
+                    LOG.debug('Put section in processing queue: %s', section)
         # We might have received LESS items from the PMS than anticipated.
         # Ensures that our queues finish
-        LOG.debug('%s items to process for section %s', count, section)
         section.number_of_items = count
+        LOG.debug('%s items to process for section %s',
+                  section.number_of_items, section)
 
     def _run(self):
         while not self.should_cancel():
