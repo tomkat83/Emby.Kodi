@@ -6,6 +6,7 @@ from functools import wraps
 from . import variables as v, app
 
 DB_WRITE_ATTEMPTS = 100
+DB_WRITE_ATTEMPTS_TIMEOUT = 1  # in seconds
 DB_CONNECTION_TIMEOUT = 10
 
 
@@ -43,7 +44,7 @@ def catch_operationalerrors(method):
                 self.kodiconn.commit()
                 if self.artconn:
                     self.artconn.commit()
-                if app.APP.monitor.waitForAbort(0.1):
+                if app.APP.monitor.waitForAbort(DB_WRITE_ATTEMPTS_TIMEOUT):
                     # PKC needs to quit
                     return
                 # Start new transactions
