@@ -151,16 +151,13 @@ class ProcessingQueue(Queue.Queue, object):
         Once the get()-method returns None, you've received the sentinel and
         you've thus exhausted the queue
         """
-        self.not_full.acquire()
-        try:
+        with self.not_full:
             section.number_of_items = 1
             self._add_section(section)
             # Add the actual sentinel to the queue we just added
             self._queues[-1]._put((None, None))
             self.unfinished_tasks += 1
             self.not_empty.notify()
-        finally:
-            self.not_full.release()
 
     def add_section(self, section):
         """
@@ -170,11 +167,8 @@ class ProcessingQueue(Queue.Queue, object):
         Be sure to set section.number_of_items correctly as it will signal
         when processing is completely done for a specific section!
         """
-        self.mutex.acquire()
-        try:
+        with self.mutex:
             self._add_section(section)
-        finally:
-            self.mutex.release()
 
     def _add_section(self, section):
         self._sections.append(section)
