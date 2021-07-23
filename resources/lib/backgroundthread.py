@@ -135,43 +135,6 @@ class ProcessingQueue(Queue.Queue, object):
     def _qsize(self):
         return self._current_queue._qsize() if self._current_queue else 0
 
-    def _total_qsize(self):
-        """
-        This method is BROKEN as it can lead to a deadlock when a single item
-        from the current section takes longer to download then any new items
-        coming in
-        """
-        return sum(q._qsize() for q in self._queues) if self._queues else 0
-
-    def put(self, item, block=True, timeout=None):
-        """
-        PKC customization of Queue.put. item needs to be the tuple
-            (count [int], {'section': [Section], 'xml': [etree xml]})
-        """
-        self.not_full.acquire()
-        try:
-            if self.maxsize > 0:
-                if not block:
-                    if self._qsize() == self.maxsize:
-                        raise Queue.Full
-                elif timeout is None:
-                    while self._qsize() == self.maxsize:
-                        self.not_full.wait()
-                elif timeout < 0:
-                    raise ValueError("'timeout' must be a non-negative number")
-                else:
-                    endtime = _time() + timeout
-                    while self._qsize() == self.maxsize:
-                        remaining = endtime - _time()
-                        if remaining <= 0.0:
-                            raise Queue.Full
-                        self.not_full.wait(remaining)
-            self._put(item)
-            self.unfinished_tasks += 1
-            self.not_empty.notify()
-        finally:
-            self.not_full.release()
-
     def _put(self, item):
         for i, section in enumerate(self._sections):
             if item[1]['section'] == section:
@@ -188,16 +151,13 @@ class ProcessingQueue(Queue.Queue, object):
         Once the get()-method returns None, you've received the sentinel and
         you've thus exhausted the queue
         """
-        self.not_full.acquire()
-        try:
+        with self.not_full:
             section.number_of_items = 1
             self._add_section(section)
             # Add the actual sentinel to the queue we just added
             self._queues[-1]._put((None, None))
             self.unfinished_tasks += 1
             self.not_empty.notify()
-        finally:
-            self.not_full.release()
 
     def add_section(self, section):
         """
@@ -207,11 +167,8 @@ class ProcessingQueue(Queue.Queue, object):
         Be sure to set section.number_of_items correctly as it will signal
         when processing is completely done for a specific section!
         """
-        self.mutex.acquire()
-        try:
+        with self.mutex:
             self._add_section(section)
-        finally:
-            self.mutex.release()
 
     def _add_section(self, section):
         self._sections.append(section)

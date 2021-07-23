@@ -46,6 +46,10 @@ class FillMetadataQueue(common.LibrarySyncMixin,
                 if (not self.repair and
                         plexdb.checksum(plex_id, section.plex_type) == checksum):
                     continue
+                if not do_process_section:
+                    do_process_section = True
+                    self.processing_queue.add_section(section)
+                    LOG.debug('Put section in processing queue: %s', section)
                 try:
                     self.get_metadata_queue.put((count, plex_id, section),
                                                 timeout=QUEUE_TIMEOUT)
@@ -54,16 +58,13 @@ class FillMetadataQueue(common.LibrarySyncMixin,
                               'aborting sync now', plex_id)
                     section.sync_successful = False
                     break
-                count += 1
-                if not do_process_section:
-                    do_process_section = True
-                    self.processing_queue.add_section(section)
-                    LOG.debug('Put section in queue with %s items: %s',
-                              section.number_of_items, section)
+                else:
+                    count += 1
         # We might have received LESS items from the PMS than anticipated.
         # Ensures that our queues finish
-        LOG.debug('%s items to process for section %s', count, section)
         section.number_of_items = count
+        LOG.debug('%s items to process for section %s',
+                  section.number_of_items, section)
 
     def _run(self):
         while not self.should_cancel():
