@@ -92,6 +92,7 @@ class Section(object):
                 "'name': '{self.name}', "
                 "'section_id': {self.section_id}, "
                 "'section_type': '{self.section_type}', "
+                "'plex_type': '{self.plex_type}', "
                 "'sync_to_kodi': {self.sync_to_kodi}, "
                 "'last_sync': {self.last_sync}"
                 "}}").format(self=self)
