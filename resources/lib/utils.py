@@ -9,6 +9,10 @@ from datetime import datetime
 from unicodedata import normalize
 from threading import Lock
 import urllib
+# even with the above import urllib, Python3 sometimes runs into this issue
+# AttributeError: module 'urllib' has no attribute 'parse'
+# Hence import explicitly
+import urllib.parse
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 # etree parse unsafe; make sure we're always receiving unicode
 from . import defused_etree as etree
