@@ -1,3 +1,7 @@
+version 2.13.1 (beta only):
+- Fix a racing condition that could lead to the sync process getting stuck
+- Fix likelyhood of `database is locked` error occuring
+
 version 2.13.0:
 - Support for the Plex HAMA agent to let Kodi identify animes (using Kodi's uniqueID 'anidb')
 - Support forced HAMA IDs when using tvdb uniqueID
