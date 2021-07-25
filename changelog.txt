@@ -1,3 +1,7 @@
+version 3.3.5 (beta only):
+- Rewire defusedxml and xml.etree.ElementTree: Fix AttributeError: module 'resources.lib.utils' has no attribute 'ParseError'
+- Fix errors when PKC tries to edit files that don't exist yet
+
 version 3.3.4 (beta only):
 - Fix a racing condition that could lead to the sync getting stuck
 - Fix RecursionError: maximum recursion depth exceeded
