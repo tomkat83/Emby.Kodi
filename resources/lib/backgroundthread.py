@@ -170,6 +170,24 @@ class ProcessingQueue(Queue.Queue, object):
         with self.mutex:
             self._add_section(section)
 
+    def change_section_number_of_items(self, section, number_of_items):
+        """
+        Hit this method if you've reset section.number_of_items to make
+        sure we're not blocking
+        """
+        with self.mutex:
+            self._change_section_number_of_items(section, number_of_items)
+
+    def _change_section_number_of_items(self, section, number_of_items):
+        section.number_of_items = number_of_items
+        if (self._current_section == section
+                and self._counter == number_of_items):
+            # We were actually waiting for more items to come in - but there
+            # aren't any!
+            self._init_next_section()
+            if self._qsize() > 0:
+                self.not_empty.notify()
+
     def _add_section(self, section):
         self._sections.append(section)
         self._queues.append(
