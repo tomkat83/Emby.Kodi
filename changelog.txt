@@ -1,3 +1,8 @@
+version 3.3.4 (beta only):
+- Fix a racing condition that could lead to the sync getting stuck
+- Fix RecursionError: maximum recursion depth exceeded
+- Bump websocket client: fix AttributeError: 'NoneType' object has no attribute 'is_ssl'
+
 version 3.3.3 (beta only):
 - Fix a racing condition that could lead to the sync process getting stuck
 - Fix likelyhood of `database is locked` error occuring
