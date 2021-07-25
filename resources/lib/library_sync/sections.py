@@ -9,7 +9,7 @@ from ..plex_api import API
 from .. import kodi_db
 from .. import itemtypes, path_ops
 from .. import plex_functions as PF, music, utils, variables as v, app
-from ..utils import etree
+import xml.etree.ElementTree as etree
 
 LOG = getLogger('PLEX.sync.sections')
 

@@ -5,7 +5,7 @@ from logging import getLogger
 from xbmc import executebuiltin
 
 from . import utils
-from .utils import etree
+import xml.etree.ElementTree as etree
 from . import path_ops
 from . import migration
 from .downloadutils import DownloadUtils as DU, exceptions

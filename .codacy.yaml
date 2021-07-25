@@ -1,5 +1,4 @@
 exclude_paths:
   - 'resources/lib/watchdog/**'
   - 'resources/lib/pathtools/**'
-  - 'resources/lib/pathtools/**'
-  - 'resources/lib/defused_etree.py'
+  - 'resources/lib/defusedxml/**'

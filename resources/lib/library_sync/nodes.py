@@ -3,7 +3,7 @@
 import urllib.request, urllib.parse, urllib.error
 import copy
 
-from ..utils import etree
+import xml.etree.ElementTree as etree
 from .. import variables as v, utils
 
 ICON_PATH = 'special://home/addons/plugin.video.plexkodiconnect/icon.png'
