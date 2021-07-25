@@ -62,7 +62,8 @@ class FillMetadataQueue(common.LibrarySyncMixin,
                     count += 1
         # We might have received LESS items from the PMS than anticipated.
         # Ensures that our queues finish
-        section.number_of_items = count
+        self.processing_queue.change_section_number_of_items(section,
+                                                             count)
         LOG.debug('%s items to process for section %s',
                   section.number_of_items, section)
 
