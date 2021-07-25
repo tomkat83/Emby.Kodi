@@ -699,8 +699,7 @@ class XmlKodiSetting(object):
             # Document is blank or missing
             if self.force_create is False:
                 LOG.debug('%s does not seem to exist; not creating', self.path)
-                # This will abort __enter__
-                self.__exit__(IOError('File not found'), None, None)
+                raise
             # Create topmost xml entry
             self.tree = undefused_etree.ElementTree(
                 undefused_etree.Element(self.top_element))
