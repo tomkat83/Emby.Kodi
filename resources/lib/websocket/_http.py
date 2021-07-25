@@ -79,7 +79,7 @@ def _open_proxied_socket(url, options, proxy):
         (hostname, port),
         proxy_type=ptype,
         proxy_addr=proxy.host,
-        proxy_port=proxy.port,
+        proxy_port=int(proxy.port),
         proxy_rdns=rdns,
         proxy_username=proxy.auth[0] if proxy.auth else None,
         proxy_password=proxy.auth[1] if proxy.auth else None,
@@ -200,7 +200,7 @@ def _open_socket(addrinfo_list, sockopt, timeout):
 
 
 def _wrap_sni_socket(sock, sslopt, hostname, check_hostname):
-    context = ssl.SSLContext(sslopt.get('ssl_version', ssl.PROTOCOL_SSLv23))
+    context = ssl.SSLContext(sslopt.get('ssl_version', ssl.PROTOCOL_TLS))
 
     if sslopt.get('cert_reqs', ssl.CERT_NONE) != ssl.CERT_NONE:
         cafile = sslopt.get('ca_certs', None)
@@ -247,6 +247,9 @@ def _ssl_socket(sock, user_sslopt, hostname):
     elif certPath and os.path.isdir(certPath) \
             and user_sslopt.get('ca_cert_path', None) is None:
         sslopt['ca_cert_path'] = certPath
+
+    if sslopt.get('server_hostname', None):
+        hostname = sslopt['server_hostname']
 
     check_hostname = sslopt["cert_reqs"] != ssl.CERT_NONE and sslopt.pop(
         'check_hostname', True)
