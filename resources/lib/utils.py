@@ -9,9 +9,15 @@ from datetime import datetime
 from unicodedata import normalize
 from threading import Lock
 import urllib
+# even with the above import urllib, Python3 sometimes runs into this issue
+# AttributeError: module 'urllib' has no attribute 'parse'
+# Hence import explicitly
+import urllib.parse
 # Originally tried faster cElementTree, but does NOT work reliably with Kodi
 # etree parse unsafe; make sure we're always receiving unicode
-from . import defused_etree as etree
+from .defusedxml import ElementTree as etree
+from .defusedxml.ElementTree import ParseError
+import xml.etree.ElementTree as undefused_etree
 from functools import wraps
 import re
 import gc
@@ -44,8 +50,9 @@ REGEX_END_DIGITS = re.compile(r'''/(.+)/(\d+)$''')
 REGEX_PLEX_DIRECT = re.compile(r'''\.plex\.direct:\d+$''')
 # Plex API
 REGEX_IMDB = re.compile(r'''/(tt\d+)''')
-REGEX_TVDB = re.compile(r'''thetvdb:\/\/(.+?)\?''')
+REGEX_TVDB = re.compile(r'''(?:the)?tvdb(?::\/\/|[2-5]?-)(\d+?)\?''')
 REGEX_TMDB = re.compile(r'''themoviedb:\/\/(.+?)\?''')
+REGEX_ANIDB = re.compile(r'''anidb[2-4]?-(\d+?)\?''')
 # Plex music
 REGEX_MUSICPATH = re.compile(r'''^\^(.+)\$$''')
 # Grab Plex id from an URL-encoded string
@@ -692,19 +699,19 @@ class XmlKodiSetting(object):
             # Document is blank or missing
             if self.force_create is False:
                 LOG.debug('%s does not seem to exist; not creating', self.path)
-                # This will abort __enter__
-                self.__exit__(IOError('File not found'), None, None)
+                raise
             # Create topmost xml entry
-            self.tree = etree.ElementTree(etree.Element(self.top_element))
+            self.tree = undefused_etree.ElementTree(
+                undefused_etree.Element(self.top_element))
             self.write_xml = True
-        except etree.ParseError:
+        except ParseError:
             LOG.error('Error parsing %s', self.path)
             # "Kodi cannot parse {0}. PKC will not function correctly. Please
             # visit {1} and correct your file!"
             messageDialog(lang(29999), lang(39716).format(
                 self.filename,
                 'http://kodi.wiki'))
-            self.__exit__(etree.ParseError('Error parsing XML'), None, None)
+            raise
         self.root = self.tree.getroot()
         return self
 
@@ -730,6 +737,7 @@ class XmlKodiSetting(object):
                                   lang(30417).format(self.filename, err))
                     settings('%s_ioerror' % self.filename,
                              value='warning_shown')
+        return True
 
     def _is_empty(self, element, empty_elements):
         empty = True
@@ -766,7 +774,7 @@ class XmlKodiSetting(object):
         """
         answ = element.find(subelement)
         if answ is None:
-            answ = etree.SubElement(element, subelement)
+            answ = undefused_etree.SubElement(element, subelement)
         return answ
 
     def get_setting(self, node_list):
@@ -842,7 +850,7 @@ class XmlKodiSetting(object):
         for node in nodes:
             element = self._set_sub_element(element, node)
         if append:
-            element = etree.SubElement(element, node_list[-1])
+            element = undefused_etree.SubElement(element, node_list[-1])
         # Write new values
         element.text = value
         if attrib:

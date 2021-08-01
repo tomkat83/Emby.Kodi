@@ -26,7 +26,7 @@ import os
 import socket
 import struct
 
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 
 __all__ = ["parse_url", "get_proxy_info"]
@@ -109,7 +109,7 @@ def _is_address_in_network(ip, net):
 
 def _is_no_proxy_host(hostname, no_proxy):
     if not no_proxy:
-        v = os.environ.get("no_proxy", "").replace(" ", "")
+        v = os.environ.get("no_proxy", os.environ.get("NO_PROXY", "")).replace(" ", "")
         if v:
             no_proxy = v.split(",")
     if not no_proxy:
@@ -139,22 +139,21 @@ def get_proxy_info(
 
     Parameters
     ----------
-    hostname: <type>
-        websocket server name.
-    is_secure: <type>
-        is the connection secure? (wss) looks for "https_proxy" in env
+    hostname: str
+        Websocket server name.
+    is_secure: bool
+        Is the connection secure? (wss) looks for "https_proxy" in env
         before falling back to "http_proxy"
-    options: <type>
-        - http_proxy_host: <type>
-            http proxy host name.
-        - http_proxy_port: <type>
-            http proxy port.
-        - http_no_proxy: <type>
-            host names, which doesn't use proxy.
-        - http_proxy_auth: <type>
-            http proxy auth information. tuple of username and password. default is None
-        - proxy_type: <type>
-            if set to "socks5" PySocks wrapper will be used in place of a http proxy. default is "http"
+    proxy_host: str
+        http proxy host name.
+    http_proxy_port: str or int
+        http proxy port.
+    http_no_proxy: list
+        Whitelisted host names that don't use the proxy.
+    http_proxy_auth: tuple
+        HTTP proxy auth information. Tuple of username and password. Default is None.
+    proxy_type: str
+        If set to "socks4" or "socks5", a PySocks wrapper will be used in place of a HTTP proxy. Default is "http".
     """
     if _is_no_proxy_host(hostname, no_proxy):
         return None, 0, None
@@ -169,10 +168,10 @@ def get_proxy_info(
         env_keys.insert(0, "https_proxy")
 
     for key in env_keys:
-        value = os.environ.get(key, None)
+        value = os.environ.get(key, os.environ.get(key.upper(), "")).replace(" ", "")
         if value:
             proxy = urlparse(value)
-            auth = (proxy.username, proxy.password) if proxy.username else None
+            auth = (unquote(proxy.username), unquote(proxy.password)) if proxy.username else None
             return proxy.hostname, proxy.port, auth
 
     return None, 0, None

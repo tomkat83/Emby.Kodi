@@ -7,6 +7,7 @@
 from logging import getLogger
 import re
 import socket
+import xml.etree.ElementTree as etree
 
 import xbmc
 
@@ -25,7 +26,7 @@ def get_etree(topelement):
     except IOError:
         # Document is blank or missing
         LOG.info('%s.xml is missing or blank, creating it', topelement)
-        root = utils.etree.Element(topelement)
+        root = etree.Element(topelement)
     except utils.ParseError:
         LOG.error('Error parsing %s', topelement)
         # "Kodi cannot parse {0}. PKC will not function correctly. Please visit
@@ -107,10 +108,10 @@ def start():
                                   top_element='sources') as xml:
             files = xml.root.find('files')
             if files is None:
-                files = utils.etree.SubElement(xml.root, 'files')
-                utils.etree.SubElement(files,
-                                       'default',
-                                       attrib={'pathversion': '1'})
+                files = etree.SubElement(xml.root, 'files')
+                etree.SubElement(files,
+                                 'default',
+                                 attrib={'pathversion': '1'})
             for source in files:
                 entry = source.find('path')
                 if entry is None:
@@ -123,12 +124,12 @@ def start():
             else:
                 # Need to add an element for our hostname
                 LOG.debug('Adding subelement to sources.xml for %s', hostname)
-                source = utils.etree.SubElement(files, 'source')
-                utils.etree.SubElement(source, 'name').text = 'PKC %s' % hostname
-                utils.etree.SubElement(source,
-                                       'path',
-                                       attrib={'pathversion': '1'}).text = '%s/' % path
-                utils.etree.SubElement(source, 'allowsharing').text = 'false'
+                source = etree.SubElement(files, 'source')
+                etree.SubElement(source, 'name').text = 'PKC %s' % hostname
+                etree.SubElement(source,
+                                 'path',
+                                 attrib={'pathversion': '1'}).text = '%s/' % path
+                etree.SubElement(source, 'allowsharing').text = 'false'
                 xml.write_xml = True
     except utils.ParseError:
         return
@@ -146,7 +147,7 @@ def start():
                               'replacing it',
                               path)
                     xml.root.remove(entry)
-            entry = utils.etree.SubElement(xml.root, 'path')
+            entry = etree.SubElement(xml.root, 'path')
             # "Username"
             user = utils.dialog('input', utils.lang(1014))
             if user is None:
@@ -162,13 +163,13 @@ def start():
                                     type='{alphanum}',
                                     option='{hide}')
             password = utils.quote(password)
-            utils.etree.SubElement(entry,
-                                   'from',
-                                   attrib={'pathversion': '1'}).text = f'{path}/'
+            etree.SubElement(entry,
+                             'from',
+                             attrib={'pathversion': '1'}).text = f'{path}/'
             login = f'{protocol}://{user}:{password}@{hostname}/'
-            utils.etree.SubElement(entry,
-                                   'to',
-                                   attrib={'pathversion': '1'}).text = login
+            etree.SubElement(entry,
+                             'to',
+                             attrib={'pathversion': '1'}).text = login
             xml.write_xml = True
     except utils.ParseError:
         return

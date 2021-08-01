@@ -9,7 +9,7 @@ from ..plex_api import API
 from .. import kodi_db
 from .. import itemtypes, path_ops
 from .. import plex_functions as PF, music, utils, variables as v, app
-from ..utils import etree
+import xml.etree.ElementTree as etree
 
 LOG = getLogger('PLEX.sync.sections')
 
@@ -92,6 +92,7 @@ class Section(object):
                 "'name': '{self.name}', "
                 "'section_id': {self.section_id}, "
                 "'section_type': '{self.section_type}', "
+                "'plex_type': '{self.plex_type}', "
                 "'sync_to_kodi': {self.sync_to_kodi}, "
                 "'last_sync': {self.last_sync}"
                 "}}").format(self=self)
@@ -105,6 +106,8 @@ class Section(object):
     def __eq__(self, section):
         """Sections compare equal if their section_id, name and plex_type (first prio) OR section_type (if there is no plex_type is set) compare equal.
         """
+        if not isinstance(section, Section):
+            return False
         return (self.section_id == section.section_id and
                 self.name == section.name and
                 (self.plex_type == section.plex_type if self.plex_type else

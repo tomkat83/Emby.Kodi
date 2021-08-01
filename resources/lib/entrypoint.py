@@ -7,6 +7,7 @@ e.g. plugin://... calls. Hence be careful to only rely on window variables.
 from logging import getLogger
 import sys
 import copy
+import xml.etree.ElementTree as etree
 
 import xbmc
 import xbmcplugin
@@ -509,7 +510,7 @@ def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
         return
     if xml[0].tag == 'Hub':
         # E.g. when hitting the endpoint '/hubs/search'
-        answ = utils.etree.Element(xml.tag, attrib=xml.attrib)
+        answ = etree.Element(xml.tag, attrib=xml.attrib)
         for hub in xml:
             if not utils.cast(int, hub.get('size')):
                 # Empty category

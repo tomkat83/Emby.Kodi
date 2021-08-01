@@ -33,10 +33,11 @@ def unix_date_to_kodi(unix_kodi_time):
     """
     try:
         return strftime('%Y-%m-%d %H:%M:%S', localtime(float(unix_kodi_time)))
-    except Exception:
-        LOG.exception('Received an illegal timestamp from Plex: %s. '
-                      'Using 1970-01-01 12:00:00',
-                      unix_kodi_time)
+    except Exception as exception:
+        LOG.error(exception)
+        LOG.error('Received an illegal timestamp from Plex: %s, type %s. '
+                  'Using 1970-01-01 12:00:00',
+                  unix_kodi_time, type(unix_kodi_time))
         return '1970-01-01 12:00:00'
 
 
