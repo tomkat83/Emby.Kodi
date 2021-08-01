@@ -1,3 +1,8 @@
+version 3.4.0:
+- Improve logging for converting Unix timestamps
+- Remove dependency on script.module.defusedxml - that module is now included in PKC
+- version 3.3.3-3.3.5 for everyone
+
 version 3.3.5 (beta only):
 - Rewire defusedxml and xml.etree.ElementTree: Fix AttributeError: module 'resources.lib.utils' has no attribute 'ParseError'
 - Fix errors when PKC tries to edit files that don't exist yet
