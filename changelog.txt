@@ -1,3 +1,6 @@
+version 3.4.1:
+- Fix PMS setting `List of IP addresses and networks that are allowed without auth` causing Kodi to take forever to start playback
+
 version 3.4.0:
 - Improve logging for converting Unix timestamps
 - Remove dependency on script.module.defusedxml - that module is now included in PKC
