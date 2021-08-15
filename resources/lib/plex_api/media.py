@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from logging import getLogger
+import re
 
 from ..utils import cast
 from ..downloadutils import DownloadUtils as DU
@@ -8,6 +9,9 @@ from .. import utils, variables as v, app, path_ops, clientinfo
 from .. import plex_functions as PF
 
 LOG = getLogger('PLEX.api')
+
+
+REGEX_VIDEO_FILENAME = re.compile(r'''\/file\.[a-zA-Z0-9]{1,5}$''')
 
 
 class Media(object):
@@ -286,6 +290,12 @@ class Media(object):
         headers = clientinfo.getXArgsDeviceInfo()
         if action == v.PLAYBACK_METHOD_DIRECT_PLAY:
             path = self.xml[self.mediastream][self.part].get('key')
+            # Kodi 19 will try to look for subtitles in the directory containing the file.
+            # '/' and '/file.*'' both point to the file, and Kodi will happily try to read
+            # the whole file without recognizing it isn't a directory.
+            # To get around that, we omit the filename here since it is unnecessary.
+            # We do this for library videos only, not for e.g. trailers (does not work)
+            path = REGEX_VIDEO_FILENAME.sub('/', path, count=1)
             # e.g. Trailers already feature an '?'!
             return utils.extend_url(app.CONN.server + path, headers)
         # Direct Streaming and Transcoding
