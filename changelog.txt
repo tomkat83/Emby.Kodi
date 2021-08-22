@@ -1,3 +1,7 @@
+version 2.14.0:
+- Fix PlexKodiConnect changing or removing subtitles for every video on the PMS
+- version 2.13.1-2.13.2 for everyone
+
 version 2.13.2 (beta only):
 - Fix a racing condition that could lead to the sync getting stuck
 - Fix RecursionError: maximum recursion depth exceeded
