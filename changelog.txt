@@ -1,3 +1,16 @@
+version 2.14.0:
+- Fix PlexKodiConnect changing or removing subtitles for every video on the PMS
+- version 2.13.1-2.13.2 for everyone
+
+version 2.13.2 (beta only):
+- Fix a racing condition that could lead to the sync getting stuck
+- Fix RecursionError: maximum recursion depth exceeded
+- Websocket Fix AttributeError: 'NoneType' object has no attribute 'is_ssl'
+
+version 2.13.1 (beta only):
+- Fix a racing condition that could lead to the sync process getting stuck
+- Fix likelyhood of `database is locked` error occuring
+
 version 2.13.0:
 - Support for the Plex HAMA agent to let Kodi identify animes (using Kodi's uniqueID 'anidb')
 - Support forced HAMA IDs when using tvdb uniqueID

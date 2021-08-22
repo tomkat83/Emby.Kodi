@@ -93,6 +93,7 @@ class Section(object):
                 "'name': '{self.name}', "
                 "'section_id': {self.section_id}, "
                 "'section_type': '{self.section_type}', "
+                "'plex_type': '{self.plex_type}', "
                 "'sync_to_kodi': {self.sync_to_kodi}, "
                 "'last_sync': {self.last_sync}"
                 "}}").format(self=self).encode('utf-8')
@@ -108,6 +109,8 @@ class Section(object):
         Sections compare equal if their section_id, name and plex_type (first
         prio) OR section_type (if there is no plex_type is set) compare equal
         """
+        if not isinstance(section, Section):
+            return False
         return (self.section_id == section.section_id and
                 self.name == section.name and
                 (self.plex_type == section.plex_type if self.plex_type else
