@@ -1,3 +1,6 @@
+version 3.4.2:
+- Fix PlexKodiConnect changing or removing subtitles for every video on the PMS
+
 version 3.4.1:
 - Fix PMS setting `List of IP addresses and networks that are allowed without auth` causing Kodi to take forever to start playback
 
