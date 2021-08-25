@@ -514,7 +514,8 @@ ALL_KODI_ARTWORK = (
     'clearart',
     'clearlogo',
     'fanart',
-    'discart'
+    'discart',
+    'landscape'
 )
 
 # we need to use a little mapping between fanart.tv arttypes and kodi artttypes
@@ -528,7 +529,8 @@ FANART_TV_TO_KODI_TYPE = [
     ('clearlogo', 'clearlogo'),
     ('background', 'fanart'),
     ('showbackground', 'fanart'),
-    ('characterart', 'characterart')
+    ('characterart', 'characterart'),
+    ('moviethumb', 'landscape')
 ]
 # How many different backgrounds do we want to load from fanart.tv?
 MAX_BACKGROUND_COUNT = 10
