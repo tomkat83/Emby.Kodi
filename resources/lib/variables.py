@@ -558,7 +558,7 @@ FANART_TV_TO_KODI_TYPE = [
     ('background', 'fanart'),
     ('showbackground', 'fanart'),
     ('characterart', 'characterart'),
-    ('moviethumb', 'landscape')
+    ('thumb', 'landscape')
 ]
 # How many different backgrounds do we want to load from fanart.tv?
 MAX_BACKGROUND_COUNT = 10
