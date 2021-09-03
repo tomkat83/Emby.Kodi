@@ -339,14 +339,6 @@ def audio_subtitle_prefs(api, item):
         return
     part_id = mediastreams.attrib['id']
     if item.playmethod != v.PLAYBACK_METHOD_TRANSCODE:
-        LOG.debug('Telling PMS we are not burning in any subtitles')
-        args = {
-            'subtitleStreamID': 0,
-            'allParts': 1
-        }
-        DU().downloadUrl('{server}/library/parts/%s' % part_id,
-                         action_type='PUT',
-                         parameters=args)
         return True
     return setup_transcoding_audio_subtitle_prefs(mediastreams, part_id)
 
