@@ -1,3 +1,9 @@
+version 3.4.3 (beta ony):
+- Use Plex settings for audio and subtitle stream selection. This is a best guess regarding subtitles as Plex and Kodi are not sharing much info
+- Fix PlexKodiConnect setting the Plex subtitle to None
+- Download landscape artwork from fanart.tv, thanks @geropan
+- Revert "Fix PlexKodiConnect changing subtitles for all videos on the PMS"
+
 version 3.4.2:
 - Fix PlexKodiConnect changing or removing subtitles for every video on the PMS
 
