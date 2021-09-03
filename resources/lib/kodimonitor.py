@@ -28,6 +28,7 @@ class KodiMonitor(xbmc.Monitor):
     """
     def __init__(self):
         self._already_slept = False
+        self._switch_to_plex_streams = None
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
@@ -63,6 +64,9 @@ class KodiMonitor(xbmc.Monitor):
         if method == "Player.OnPlay":
             with app.APP.lock_playqueues:
                 self.PlayBackStart(data)
+        elif method == 'Player.OnAVChange':
+            with app.APP.lock_playqueues:
+                self.on_av_change()
         elif method == "Player.OnStop":
             with app.APP.lock_playqueues:
                 _playback_cleanup(ended=data.get('end'))
@@ -358,8 +362,54 @@ class KodiMonitor(xbmc.Monitor):
             # Kodi version < 17
             pass
         LOG.debug('Set the player state: %s', status)
+
+        # Workaround for the Kodi add-on Up Next
         if not app.SYNC.direct_paths:
             _notify_upnext(item)
+        self._switch_to_plex_streams = item
+
+    def on_av_change(self):
+        """
+        Will be called when Kodi has a video, audio or subtitle stream. Also
+        happens when the stream changes.
+        """
+        if self._switch_to_plex_streams is not None:
+            self.switch_to_plex_streams(self._switch_to_plex_streams)
+            self._switch_to_plex_streams = None
+
+    @staticmethod
+    def switch_to_plex_streams(item):
+        """
+        Override Kodi audio and subtitle streams with Plex PMS' selection
+        """
+        for typus in ('audio', 'subtitle'):
+            try:
+                plex_index, language_tag = item.active_plex_stream_index(typus)
+            except TypeError:
+                if typus == 'subtitle':
+                    LOG.info('Deactivating Kodi subtitles because the PMS '
+                             'told us to not show any subtitles')
+                    app.APP.player.showSubtitles(False)
+                continue
+            LOG.info('The PMS wants to display %s stream with Plex id %s and '
+                     'languageTag %s',
+                     typus, plex_index, language_tag)
+            kodi_index = item.kodi_stream_index(plex_index,
+                                                typus)
+            if kodi_index is None:
+                LOG.info('Leaving Kodi %s stream settings untouched since we '
+                         'could not parse Plex %s stream with id %s to a Kodi '
+                         'index', typus, typus, plex_index)
+            else:
+                LOG.info('Switching to Kodi %s stream number %s because the '
+                         'PMS told us to show stream with Plex id %s',
+                         typus, kodi_index, plex_index)
+                # If we're choosing an "illegal" index, this function does
+                # need seem to fail nor log any errors
+                if typus == 'subtitle':
+                    app.APP.player.setSubtitleStream(kodi_index)
+                else:
+                    app.APP.player.setAudioStream(kodi_index)
 
 
 def _playback_cleanup(ended=False):
