@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
 import re
 from os import path
@@ -436,8 +437,8 @@ def external_subs_from_filesystem(dirname, filename):
                 # (but Plex might!!)
                 continue
             regex = SUBTITLE_LANGUAGE.search(name.replace(filename, '', 1))
-            language = (regex[1] or '').lower()
-            forced = True if regex[2] else False
+            language = (regex.group(1) if regex.group(1) else '').lower()
+            forced = True if regex.group(2) else False
             iso = None
             if len(language) == 2:
                 language_searchgrid = (1, )
