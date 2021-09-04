@@ -15,12 +15,10 @@ from . import utils
 from . import json_rpc as js
 from . import variables as v
 from . import app
+from .subtitles import accessible_plex_subtitles
 
-###############################################################################
 
 LOG = getLogger('PLEX.playlist_func')
-
-###############################################################################
 
 
 class PlaylistError(Exception):
@@ -240,16 +238,16 @@ class PlaylistItem(object):
             iterator = self.xml[0][self.part]
         # Kodi indexes differently than Plex
         for stream in iterator:
-            if (stream.attrib['streamType'] == stream_type and
+            if (stream.get('streamType') == stream_type and
                     'key' in stream.attrib):
                 if count == kodi_stream_index:
-                    return stream.attrib['id']
+                    return stream.get('id')
                 count += 1
         for stream in iterator:
-            if (stream.attrib['streamType'] == stream_type and
+            if (stream.get('streamType') == stream_type and
                     'key' not in stream.attrib):
                 if count == kodi_stream_index:
-                    return stream.attrib['id']
+                    return stream.get('id')
                 count += 1
 
     def kodi_stream_index(self, plex_stream_index, stream_type):
@@ -261,20 +259,45 @@ class PlaylistItem(object):
 
         Returns None if unsuccessful
         """
+        if plex_stream_index is None:
+            return
         stream_type = v.PLEX_STREAM_TYPE_FROM_STREAM_TYPE[stream_type]
         count = 0
+        streams = self.sorted_accessible_plex_subtitles(stream_type)
+        for stream in streams:
+            if utils.cast(int, stream.get('id')) == plex_stream_index:
+                return count
+            count += 1
+
+    def active_plex_stream_index(self, stream_type):
+        """
+        Returns the following tuple for the active stream on the Plex side:
+            (id [int], languageTag [str])
+        Returns None if no stream has been selected
+        """
+        stream_type = v.PLEX_STREAM_TYPE_FROM_STREAM_TYPE[stream_type]
         for stream in self.xml[0][self.part]:
-            if (stream.attrib['streamType'] == stream_type and
-                    'key' in stream.attrib):
-                if stream.attrib['id'] == plex_stream_index:
-                    return count
-                count += 1
-        for stream in self.xml[0][self.part]:
-            if (stream.attrib['streamType'] == stream_type and
-                    'key' not in stream.attrib):
-                if stream.attrib['id'] == plex_stream_index:
-                    return count
-                count += 1
+            if stream.get('streamType') == stream_type \
+                    and stream.get('selected') == '1':
+                return (utils.cast(int, stream.get('id')),
+                        stream.get('languageTag'))
+
+    def sorted_accessible_plex_subtitles(self, stream_type):
+        """
+        Returns only the subtitles that Kodi can access when PKC Direct Paths
+        are used; i.e. Kodi has access to a video's directory.
+        NOT supported: additional subtitles downloaded using the Plex interface
+        """
+        # The playqueue response from the PMS does not contain a stream filename
+        # thanks Plex
+        if stream_type == '3':
+            streams = accessible_plex_subtitles(self.playmethod,
+                                                self.file,
+                                                self.xml[0][self.part])
+        else:
+            streams = [x for x in self.xml[0][self.part]
+                       if x.get('streamType') == stream_type]
+        return streams
 
 
 def playlist_item_from_kodi(kodi_item):
