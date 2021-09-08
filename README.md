@@ -53,6 +53,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 ### PKC Features
 
 - Support for Kodi 18 Leia and Kodi 19 Matrix
+- Preliminary support for Kodi 19 Nexus. Keep in mind that development for Kodi Nexus has not even officially reached alpha stage - any issues you encounter are probably caused by that
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
 - If Plex did not provide a trailer, automatically get one using the Kodi add-on [The Movie Database](https://kodi.wiki/view/Add-on:The_Movie_Database)
