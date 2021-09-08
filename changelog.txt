@@ -1,3 +1,6 @@
+version 2.14.2:
+- version 2.14.1 for everyone
+
 version 2.14.1 (beta only):
 - Use Plex settings for audio and subtitle stream selection. This is a best guess regarding subtitles as Plex and Kodi are not sharing much info
 - Fix PlexKodiConnect setting the Plex subtitle to None
