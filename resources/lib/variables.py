@@ -89,15 +89,18 @@ MIN_DB_VERSION = '3.2.1'
 # Supported databases - version numbers in tuples should decrease
 SUPPORTED_VIDEO_DB = {
     # Kodi 19 - EXTREMLY EXPERIMENTAL!
-    19: (119, )
+    19: (119, ),
+    20: (119, ),
 }
 SUPPORTED_MUSIC_DB = {
     # Kodi 19 - EXTREMLY EXPERIMENTAL!
-    19: (82, )
+    19: (82, ),
+    20: (82, ),
 }
 SUPPORTED_TEXTURE_DB = {
     # Kodi 19 - EXTREMLY EXPERIMENTAL!
-    19: (13, )
+    19: (13, ),
+    20: (13, ),
 }
 DB_VIDEO_VERSION = None
 DB_VIDEO_PATH = None
@@ -684,7 +687,7 @@ def database_paths():
     unsupported version
     '''
     # Check Kodi version first
-    if KODIVERSION not in (19, ):
+    if KODIVERSION not in (19, 20):
         raise RuntimeError('Kodiversion %s not supported by PKC' % KODIVERSION)
 
     database_path = xbmcvfs.translatePath('special://database')
