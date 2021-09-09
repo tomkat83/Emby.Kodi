@@ -1,3 +1,6 @@
+version 3.4.5 (beta only):
+- Implement "Reset resume position" from the Kodi context menu
+
 version 3.4.4:
 - Initial compatibility with Kodi 20 Nexus. Keep in mind that development for Kodi Nexus has not even officially reached alpha stage - any issues you encounter are probably caused by that
 - version 3.4.3 for everyone
