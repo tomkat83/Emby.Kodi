@@ -602,6 +602,22 @@ class KodiVideoDB(common.KodiDBBase):
                 return
         return movie_id, typus
 
+    def file_id_from_id(self, kodi_id, kodi_type):
+        """
+        Returns the Kodi file_id for the item with kodi_id and kodi_type or
+        None
+        """
+        if kodi_type == v.KODI_TYPE_MOVIE:
+            identifier = 'idMovie'
+        elif kodi_type == v.KODI_TYPE_EPISODE:
+            identifier = 'idEpisode'
+        self.cursor.execute('SELECT idFile FROM %s WHERE %s = ? LIMIT 1'
+                            % (kodi_type, identifier), (kodi_id, ))
+        try:
+            return self.cursor.fetchone()[0]
+        except TypeError:
+            pass
+
     def get_resume(self, file_id):
         """
         Returns the first resume point in seconds (int) if found, else None for
