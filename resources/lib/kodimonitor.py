@@ -14,6 +14,7 @@ import xbmc
 
 from .plex_api import API
 from .plex_db import PlexDB
+from .kodi_db import KodiVideoDB
 from . import kodi_db
 from .downloadutils import DownloadUtils as DU
 from . import utils, timing, plex_functions as PF
@@ -86,7 +87,8 @@ class KodiMonitor(xbmc.Monitor):
             with app.APP.lock_playqueues:
                 self._playlist_onclear(data)
         elif method == "VideoLibrary.OnUpdate":
-            _videolibrary_onupdate(data)
+            with app.APP.lock_playqueues:
+                _videolibrary_onupdate(data)
         elif method == "VideoLibrary.OnRemove":
             pass
         elif method == "System.OnSleep":
@@ -652,17 +654,34 @@ def _videolibrary_onupdate(data):
     A specific Kodi library item has been updated. This seems to happen if the
     user marks an item as watched/unwatched or if playback of the item just
     stopped
+
+    2 kinds of messages possible, e.g.
+        Method: VideoLibrary.OnUpdate Data: ("Reset resume position" and also
+        fired just after stopping playback - BEFORE OnStop fires)
+            {'id': 1, 'type': 'movie'}
+        Method: VideoLibrary.OnUpdate Data: ("Mark as watched")
+            {'item': {'id': 1, 'type': 'movie'}, 'playcount': 1}
     """
-    playcount = data.get('playcount')
-    item = data.get('item')
-    if playcount is None or item is None:
-        return
+    item = data.get('item') if 'item' in data else data
     try:
         kodi_id = item['id']
         kodi_type = item['type']
     except (KeyError, TypeError):
-        LOG.info("Item is invalid for playstate update.")
+        LOG.debug("Item is invalid for a Plex playstate update")
         return
+    playcount = data.get('playcount')
+    if playcount is None:
+        # "Reset resume position"
+        # Kodi might set as watched or unwatched!
+        with KodiVideoDB(lock=False) as kodidb:
+            file_id = kodidb.file_id_from_id(kodi_id, kodi_type)
+            if file_id is None:
+                return
+            if kodidb.get_resume(file_id):
+                # We do have an existing bookmark entry - not toggling to
+                # either watched or unwatched on the Plex side
+                return
+            playcount = kodidb.get_playcount(file_id) or 0
     if app.PLAYSTATE.item and kodi_id == app.PLAYSTATE.item.kodi_id and \
             kodi_type == app.PLAYSTATE.item.kodi_type:
         # Kodi updates an item immediately after playback. Hence we do NOT
