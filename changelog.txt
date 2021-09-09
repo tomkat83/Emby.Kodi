@@ -1,3 +1,6 @@
+version 2.14.3 (beta only):
+- Implement "Reset resume position" from the Kodi context menu
+
 version 2.14.2:
 - version 2.14.1 for everyone
 
