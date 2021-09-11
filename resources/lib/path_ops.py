@@ -31,10 +31,8 @@ def append_os_sep(path):
     Appends either a '\\' or '/' - IRRELEVANT of the host OS!! (os.path.join is
     dependant on the host OS)
     """
-    if '/' in path:
-        return path + '/'
-    else:
-        return path + '\\'
+    separator = '/' if '/' in path else '\\'
+    return path if path.endswith(separator) else path + separator
 
 
 def translate_path(path):
