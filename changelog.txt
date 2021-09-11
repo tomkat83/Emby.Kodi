@@ -1,3 +1,6 @@
+version 3.4.6 (beta only):
+- Fix RecursionError if a video lies in a root directory
+
 version 3.4.5 (beta only):
 - Implement "Reset resume position" from the Kodi context menu
 
