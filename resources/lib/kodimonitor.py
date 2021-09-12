@@ -30,7 +30,7 @@ class KodiMonitor(xbmc.Monitor):
     """
     def __init__(self):
         self._already_slept = False
-        self._switch_to_plex_streams = None
+        self._switched_to_plex_streams = True
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
@@ -68,7 +68,7 @@ class KodiMonitor(xbmc.Monitor):
                 self.PlayBackStart(data)
         elif method == 'Player.OnAVChange':
             with app.APP.lock_playqueues:
-                self.on_av_change()
+                self._on_av_change(data)
         elif method == "Player.OnStop":
             with app.APP.lock_playqueues:
                 _playback_cleanup(ended=data.get('end'))
@@ -359,32 +359,36 @@ class KodiMonitor(xbmc.Monitor):
         status['plex_type'] = plex_type
         status['playmethod'] = item.playmethod
         status['playcount'] = item.playcount
-        try:
-            status['external_player'] = app.APP.player.isExternalPlayer() == 1
-        except AttributeError:
-            # Kodi version < 17
-            pass
+        status['external_player'] = app.APP.player.isExternalPlayer() == 1
         LOG.debug('Set the player state: %s', status)
 
         # Workaround for the Kodi add-on Up Next
         if not app.SYNC.direct_paths:
             _notify_upnext(item)
-        self._switch_to_plex_streams = item
+        self._switched_to_plex_streams = False
 
-    def on_av_change(self):
+    def _on_av_change(self, data):
         """
         Will be called when Kodi has a video, audio or subtitle stream. Also
         happens when the stream changes.
+
+        Example data as returned by Kodi:
+            {'item': {'id': 5, 'type': 'movie'},
+             'player': {'playerid': 1, 'speed': 1}}
         """
-        if self._switch_to_plex_streams is not None:
-            self.switch_to_plex_streams(self._switch_to_plex_streams)
-            self._switch_to_plex_streams = None
+        if not self._switched_to_plex_streams:
+            self.switch_to_plex_streams()
+            self._switched_to_plex_streams = True
 
     @staticmethod
-    def switch_to_plex_streams(item):
+    def switch_to_plex_streams():
         """
         Override Kodi audio and subtitle streams with Plex PMS' selection
         """
+        item = app.PLAYSTATE.item
+        if item is None:
+            # Player might've quit
+            return
         for typus in ('audio', 'subtitle'):
             try:
                 plex_index, language_tag = item.active_plex_stream_index(typus)
