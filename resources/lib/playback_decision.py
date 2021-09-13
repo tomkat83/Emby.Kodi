@@ -425,7 +425,8 @@ def setup_transcoding_audio_subtitle_prefs(mediastreams, part_id):
                          action_type='PUT',
                          parameters=args)
 
-    select_subs_index = ''
+    # Zero telling the PMS to deactivate subs altogether
+    select_subs_index = 0
     if sub_num == 1:
         # Note: we DO need to tell the PMS that we DONT want any sub
         # Otherwise, the PMS might pick-up the last one
@@ -444,15 +445,8 @@ def setup_transcoding_audio_subtitle_prefs(mediastreams, part_id):
                 LOG.info('User chose to not burn-in any subtitles')
             else:
                 LOG.info('User chose to burn-in subtitle %s: %s',
-                          select_subs_index,
-                          subtitle_streams[resp])
+                         select_subs_index, subtitle_streams[resp])
                 select_subs_index = subtitle_streams_list[resp - 1]
     # Now prep the PMS for our choice
-    args = {
-        'subtitleStreamID': select_subs_index,
-        'allParts': 1
-    }
-    DU().downloadUrl('{server}/library/parts/%s' % part_id,
-                     action_type='PUT',
-                     parameters=args)
+    PF.change_subtitle(select_subs_index, part_id)
     return True
