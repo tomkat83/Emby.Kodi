@@ -14,13 +14,13 @@
 from logging import getLogger
 from sqlite3 import OperationalError
 
-from .common import Playlist, PlaylistError, PlaylistObserver, \
-    kodi_playlist_hash
+from .common import Playlist, PlaylistObserver, kodi_playlist_hash
 from . import pms, db, kodi_pl, plex_pl
 
 from ..watchdog import events
 from ..plex_api import API
 from .. import utils, path_ops, variables as v, app
+from ..exceptions import PlaylistError
 
 ###############################################################################
 LOG = getLogger('PLEX.playlists')

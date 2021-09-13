@@ -6,11 +6,11 @@ manipulate playlists
 """
 from logging import getLogger
 
-from .common import PlaylistError
-
 from ..plex_api import API
 from ..downloadutils import DownloadUtils as DU
 from .. import utils, app, variables as v
+from ..exceptions import PlaylistError
+
 ###############################################################################
 LOG = getLogger('PLEX.playlists.pms')
 

@@ -6,11 +6,13 @@ Create and delete playlists on the Kodi side of things
 from logging import getLogger
 import re
 
-from .common import Playlist, PlaylistError, kodi_playlist_hash
+from .common import Playlist, kodi_playlist_hash
 from . import db, pms
 
 from ..plex_api import API
 from .. import utils, path_ops, variables as v
+from ..exceptions import PlaylistError
+
 ###############################################################################
 LOG = getLogger('PLEX.playlists.kodi_pl')
 REGEX_FILE_NUMBERING = re.compile(r'''_(\d\d)\.\w+$''')

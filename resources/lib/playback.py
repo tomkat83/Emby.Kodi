@@ -15,6 +15,7 @@ from .kodi_db import KodiVideoDB
 from . import plex_functions as PF, playlist_func as PL, playqueue as PQ
 from . import json_rpc as js, variables as v, utils, transfer
 from . import playback_decision, app
+from . import exceptions
 
 ###############################################################################
 LOG = getLogger('PLEX.playback')
@@ -191,7 +192,7 @@ def _playback_init(plex_id, plex_type, playqueue, pos, resume):
         # Special case - we already got a filled Kodi playqueue
         try:
             _init_existing_kodi_playlist(playqueue, pos)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.error('Playback_init for existing Kodi playlist failed')
             _ensure_resolve(abort=True)
             return
@@ -311,7 +312,7 @@ def _init_existing_kodi_playlist(playqueue, pos):
     kodi_items = js.playlist_get_items(playqueue.playlistid)
     if not kodi_items:
         LOG.error('No Kodi items returned')
-        raise PL.PlaylistError('No Kodi items returned')
+        raise exceptions.PlaylistError('No Kodi items returned')
     item = PL.init_plex_playqueue(playqueue, kodi_item=kodi_items[pos])
     item.force_transcode = app.PLAYSTATE.force_transcode
     # playqueue.py will add the rest - this will likely put the PMS under
