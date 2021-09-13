@@ -344,8 +344,7 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/library/metadata/%s' % plex_id
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
-            api = API(item.xml)
-            status['intro_markers'] = api.intro_markers()
+            status['intro_markers'] = item.api.intro_markers()
         # Remember the currently playing item
         app.PLAYSTATE.item = item
         # Remember that this player has been active
@@ -593,11 +592,10 @@ def _next_episode(current_api):
                   current_api.grandparent_title())
         return
     try:
-        next_api = API(xml[counter + 1])
+        return API(xml[counter + 1])
     except IndexError:
         # Was the last episode
-        return
-    return next_api
+        pass
 
 
 def _complete_artwork_keys(info):
@@ -623,7 +621,7 @@ def _notify_upnext(item):
     """
     if not item.plex_type == v.PLEX_TYPE_EPISODE:
         return
-    this_api = API(item.xml)
+    this_api = item.api
     next_api = _next_episode(this_api)
     if next_api is None:
         return
