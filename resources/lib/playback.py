@@ -444,27 +444,26 @@ def _conclude_playback(playqueue, pos):
     """
     LOG.debug('Concluding playback for playqueue position %s', pos)
     item = playqueue.items[pos]
-    api = API(item.xml)
-    if api.mediastream_number() is None:
+    if item.api.mediastream_number() is None:
         # E.g. user could choose between several media streams and cancelled
         LOG.debug('Did not get a mediastream_number')
         _ensure_resolve()
         return
-    api.part = item.part or 0
-    playback_decision.set_pkc_playmethod(api, item)
-    if not playback_decision.audio_subtitle_prefs(api, item):
+    item.api.part = item.part or 0
+    playback_decision.set_pkc_playmethod(item.api, item)
+    if not playback_decision.audio_subtitle_prefs(item.api, item):
         LOG.info('Did not set audio subtitle prefs, aborting silently')
         _ensure_resolve()
         return
-    playback_decision.set_playurl(api, item)
+    playback_decision.set_playurl(item.api, item)
     if not item.file:
         LOG.info('Did not get a playurl, aborting playback silently')
         _ensure_resolve()
         return
-    listitem = api.listitem(listitem=transfer.PKCListItem, resume=False)
+    listitem = item.api.listitem(listitem=transfer.PKCListItem, resume=False)
     listitem.setPath(item.file)
     if item.playmethod != v.PLAYBACK_METHOD_DIRECT_PATH:
-        listitem.setSubtitles(api.cache_external_subs())
+        listitem.setSubtitles(item.api.cache_external_subs())
     transfer.send(listitem)
     LOG.debug('Done concluding playback')
 

@@ -144,13 +144,14 @@ class PlaylistItem(object):
     file = None        [str] Path to the item's file. STRING!!
     uri = None         [str] PMS path to item; will be auto-set with plex_id
     guid = None        [str] Weird Plex guid
-    xml = None         [etree] XML from PMS, 1 lvl below <MediaContainer>
+    api = None         [API] API of xml 1 lvl below <MediaContainer>
     playmethod = None  [str] either 'DirectPath', 'DirectStream', 'Transcode'
     playcount = None   [int] how many times the item has already been played
     offset = None      [int] the item's view offset UPON START in Plex time
     part = 0           [int] part number if Plex video consists of mult. parts
     force_transcode    [bool] defaults to False
     """
+
     def __init__(self):
         self.id = None
         self._plex_id = None
@@ -160,7 +161,7 @@ class PlaylistItem(object):
         self.file = None
         self._uri = None
         self.guid = None
-        self.xml = None
+        self.api = None
         self.playmethod = None
         self.playcount = None
         self.offset = None
@@ -218,10 +219,10 @@ class PlaylistItem(object):
         count = 0
         if kodi_stream_index == -1:
             # Kodi telling us "it's the last one"
-            iterator = list(reversed(self.xml[0][self.part]))
+            iterator = list(reversed(self.api.plex_media_streams()))
             kodi_stream_index = 0
         else:
-            iterator = self.xml[0][self.part]
+            iterator = self.api.plex_media_streams()
         # Kodi indexes differently than Plex
         for stream in iterator:
             if (stream.get('streamType') == stream_type and
@@ -262,7 +263,7 @@ class PlaylistItem(object):
         Returns None if no stream has been selected
         """
         stream_type = v.PLEX_STREAM_TYPE_FROM_STREAM_TYPE[stream_type]
-        for stream in self.xml[0][self.part]:
+        for stream in self.api.plex_media_streams():
             if stream.get('streamType') == stream_type \
                     and stream.get('selected') == '1':
                 return (utils.cast(int, stream.get('id')),
@@ -279,9 +280,9 @@ class PlaylistItem(object):
         if stream_type == '3':
             streams = accessible_plex_subtitles(self.playmethod,
                                                 self.file,
-                                                self.xml[0][self.part])
+                                                self.api.plex_media_streams())
         else:
-            streams = [x for x in self.xml[0][self.part]
+            streams = [x for x in self.api.plex_media_streams()
                        if x.get('streamType') == stream_type]
         return streams
 
@@ -407,14 +408,15 @@ def playlist_item_from_xml(xml_video_element, kodi_id=None, kodi_type=None):
     item.guid = api.guid_html_escaped()
     item.playcount = api.viewcount()
     item.offset = api.resume_point()
-    item.xml = xml_video_element
+    item.api = api
     LOG.debug('Created new playlist item from xml: %s', item)
     return item
 
 
-def _get_playListVersion_from_xml(playlist, xml):
+def _update_playlist_version(playlist, xml):
     """
-    Takes a PMS xml as input to overwrite the playlist version (e.g. Plex
+    Takes a PMS xml (one level above the xml-depth where we're usually applying
+    API()) as input to overwrite the playlist version (e.g. Plex
     playQueueVersion).
 
     Raises PlaylistError if unsuccessful
@@ -597,7 +599,7 @@ def add_item_to_plex_playqueue(playlist, pos, plex_id=None, kodi_item=None):
         raise PlaylistError('Could not add item %s to playlist %s'
                             % (kodi_item, playlist))
     api = API(xml[-1])
-    item.xml = xml[-1]
+    item.api = api
     item.id = api.item_id()
     item.guid = api.guid_html_escaped()
     item.offset = api.resume_point()
@@ -605,7 +607,7 @@ def add_item_to_plex_playqueue(playlist, pos, plex_id=None, kodi_item=None):
     playlist.items.append(item)
     if pos == len(playlist.items) - 1:
         # Item was added at the end
-        _get_playListVersion_from_xml(playlist, xml)
+        _update_playlist_version(playlist, xml)
     else:
         # Move the new item to the correct position
         move_playlist_item(playlist,
@@ -649,7 +651,7 @@ def add_item_to_kodi_playlist(playlist, pos, kodi_id=None, kodi_type=None,
             {'id': kodi_id, 'type': kodi_type, 'file': file})
         if item.plex_id is not None:
             xml = PF.GetPlexMetadata(item.plex_id)
-            item.xml = xml[-1]
+            item.api = API(xml[-1])
     playlist.items.insert(pos, item)
     return item
 
@@ -673,9 +675,10 @@ def move_playlist_item(playlist, before_pos, after_pos):
                playlist.id,
                playlist.items[before_pos].id,
                playlist.items[after_pos - 1].id)
-    # We need to increment the playlistVersion
-    _get_playListVersion_from_xml(
-        playlist, DU().downloadUrl(url, action_type="PUT"))
+    # Tell the PMS that we're moving items around
+    xml = DU().downloadUrl(url, action_type="PUT")
+    # We need to increment the playlist version for communicating with the PMS
+    _update_playlist_version(playlist, xml)
     # Move our item's position in our internal playlist
     playlist.items.insert(after_pos, playlist.items.pop(before_pos))
     LOG.debug('Done moving for %s', playlist)
@@ -723,7 +726,7 @@ def delete_playlist_item_from_PMS(playlist, pos):
                             playlist.repeat),
                            action_type="DELETE")
     del playlist.items[pos]
-    _get_playListVersion_from_xml(playlist, xml)
+    _update_playlist_version(playlist, xml)
 
 
 # Functions operating on the Kodi playlist objects ##########
