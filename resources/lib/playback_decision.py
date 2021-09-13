@@ -328,19 +328,12 @@ def audio_subtitle_prefs(api, item):
     Returns None if user cancelled or we need to abort, True otherwise
     """
     # Set media and part where we're at
-    if (api.mediastream is None and
-            api.mediastream_number() is None):
+    if api.mediastream is None and api.mediastream_number() is None:
         return
-    try:
-        mediastreams = api.plex_media_streams()
-    except (TypeError, IndexError):
-        LOG.error('Could not get media %s, part %s',
-                  api.mediastream, api.part)
-        return
-    part_id = mediastreams.attrib['id']
     if item.playmethod != v.PLAYBACK_METHOD_TRANSCODE:
         return True
-    return setup_transcoding_audio_subtitle_prefs(mediastreams, part_id)
+    return setup_transcoding_audio_subtitle_prefs(api.plex_media_streams(),
+                                                  api.part_id())
 
 
 def setup_transcoding_audio_subtitle_prefs(mediastreams, part_id):
