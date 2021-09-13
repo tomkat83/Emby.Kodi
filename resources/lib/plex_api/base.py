@@ -256,6 +256,12 @@ class Base(object):
         """
         return self.xml[self.mediastream][self.part]
 
+    def part_id(self):
+        """
+        Returns the unique id of the currently active part [int]
+        """
+        return int(self.xml[self.mediastream][self.part].attrib['id'])
+
     def plot(self):
         """
         Returns the plot or None.
