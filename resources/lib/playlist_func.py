@@ -15,17 +15,11 @@ from . import utils
 from . import json_rpc as js
 from . import variables as v
 from . import app
+from .exceptions import PlaylistError
 from .subtitles import accessible_plex_subtitles
 
 
 LOG = getLogger('PLEX.playlist_func')
-
-
-class PlaylistError(Exception):
-    """
-    Exception for our playlist constructs
-    """
-    pass
 
 
 class Playqueue_Object(object):

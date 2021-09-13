@@ -20,6 +20,7 @@ from .downloadutils import DownloadUtils as DU
 from . import utils, timing, plex_functions as PF
 from . import json_rpc as js, playqueue as PQ, playlist_func as PL
 from . import backgroundthread, app, variables as v
+from . import exceptions
 
 LOG = getLogger('PLEX.kodimonitor')
 
@@ -181,7 +182,7 @@ class KodiMonitor(xbmc.Monitor):
         try:
             for i, item in enumerate(items):
                 PL.add_item_to_plex_playqueue(playqueue, i + 1, kodi_item=item)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.info('Could not build Plex playlist for: %s', items)
 
     def _json_item(self, playerid):
@@ -318,7 +319,7 @@ class KodiMonitor(xbmc.Monitor):
                 return
             try:
                 item = PL.init_plex_playqueue(playqueue, plex_id=plex_id)
-            except PL.PlaylistError:
+            except exceptions.PlaylistError:
                 LOG.info('Could not initialize the Plex playlist')
                 return
             item.file = path
