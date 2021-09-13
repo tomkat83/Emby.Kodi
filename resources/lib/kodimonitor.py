@@ -19,6 +19,7 @@ from .downloadutils import DownloadUtils as DU
 from . import utils, timing, plex_functions as PF
 from . import json_rpc as js, playqueue as PQ, playlist_func as PL
 from . import backgroundthread, app, variables as v
+from . import exceptions
 
 LOG = getLogger('PLEX.kodimonitor')
 
@@ -29,7 +30,7 @@ class KodiMonitor(xbmc.Monitor):
     """
     def __init__(self):
         self._already_slept = False
-        self._switch_to_plex_streams = None
+        self._switched_to_plex_streams = True
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
@@ -67,7 +68,7 @@ class KodiMonitor(xbmc.Monitor):
                 self.PlayBackStart(data)
         elif method == 'Player.OnAVChange':
             with app.APP.lock_playqueues:
-                self.on_av_change()
+                self._on_av_change(data)
         elif method == "Player.OnStop":
             with app.APP.lock_playqueues:
                 _playback_cleanup(ended=data.get('end'))
@@ -180,7 +181,7 @@ class KodiMonitor(xbmc.Monitor):
         try:
             for i, item in enumerate(items):
                 PL.add_item_to_plex_playqueue(playqueue, i + 1, kodi_item=item)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.info('Could not build Plex playlist for: %s', items)
 
     def _json_item(self, playerid):
@@ -317,7 +318,7 @@ class KodiMonitor(xbmc.Monitor):
                 return
             try:
                 item = PL.init_plex_playqueue(playqueue, plex_id=plex_id)
-            except PL.PlaylistError:
+            except exceptions.PlaylistError:
                 LOG.info('Could not initialize the Plex playlist')
                 return
             item.file = path
@@ -342,8 +343,7 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/library/metadata/%s' % plex_id
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
-            api = API(item.xml)
-            status['intro_markers'] = api.intro_markers()
+            status['intro_markers'] = item.api.intro_markers()
         # Remember the currently playing item
         app.PLAYSTATE.item = item
         # Remember that this player has been active
@@ -358,32 +358,36 @@ class KodiMonitor(xbmc.Monitor):
         status['plex_type'] = plex_type
         status['playmethod'] = item.playmethod
         status['playcount'] = item.playcount
-        try:
-            status['external_player'] = app.APP.player.isExternalPlayer() == 1
-        except AttributeError:
-            # Kodi version < 17
-            pass
+        status['external_player'] = app.APP.player.isExternalPlayer() == 1
         LOG.debug('Set the player state: %s', status)
 
         # Workaround for the Kodi add-on Up Next
         if not app.SYNC.direct_paths:
             _notify_upnext(item)
-        self._switch_to_plex_streams = item
+        self._switched_to_plex_streams = False
 
-    def on_av_change(self):
+    def _on_av_change(self, data):
         """
         Will be called when Kodi has a video, audio or subtitle stream. Also
         happens when the stream changes.
+
+        Example data as returned by Kodi:
+            {'item': {'id': 5, 'type': 'movie'},
+             'player': {'playerid': 1, 'speed': 1}}
         """
-        if self._switch_to_plex_streams is not None:
-            self.switch_to_plex_streams(self._switch_to_plex_streams)
-            self._switch_to_plex_streams = None
+        if not self._switched_to_plex_streams:
+            self.switch_to_plex_streams()
+            self._switched_to_plex_streams = True
 
     @staticmethod
-    def switch_to_plex_streams(item):
+    def switch_to_plex_streams():
         """
         Override Kodi audio and subtitle streams with Plex PMS' selection
         """
+        item = app.PLAYSTATE.item
+        if item is None:
+            # Player might've quit
+            return
         for typus in ('audio', 'subtitle'):
             try:
                 plex_index, language_tag = item.active_plex_stream_index(typus)
@@ -587,11 +591,10 @@ def _next_episode(current_api):
                   current_api.grandparent_title())
         return
     try:
-        next_api = API(xml[counter + 1])
+        return API(xml[counter + 1])
     except IndexError:
         # Was the last episode
-        return
-    return next_api
+        pass
 
 
 def _complete_artwork_keys(info):
@@ -617,7 +620,7 @@ def _notify_upnext(item):
     """
     if not item.plex_type == v.PLEX_TYPE_EPISODE:
         return
-    this_api = API(item.xml)
+    this_api = item.api
     next_api = _next_episode(this_api)
     if next_api is None:
         return

@@ -11,19 +11,14 @@ from ..watchdog.observers import Observer
 from ..watchdog.utils.bricks import OrderedSetQueue
 
 from .. import path_ops, variables as v, app
+from ..exceptions import PlaylistError
+
 ###############################################################################
 LOG = getLogger('PLEX.playlists.common')
 
 # These filesystem events are considered similar
 SIMILAR_EVENTS = (events.EVENT_TYPE_CREATED, events.EVENT_TYPE_MODIFIED)
 ###############################################################################
-
-
-class PlaylistError(Exception):
-    """
-    The one main exception thrown if anything goes awry
-    """
-    pass
 
 
 class Playlist(object):

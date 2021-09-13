@@ -6,10 +6,12 @@ module
 """
 from logging import getLogger
 
-from .common import Playlist, PlaylistError
+from .common import Playlist
 from ..plex_db import PlexDB
 from ..kodi_db import kodiid_from_filename
 from .. import utils, variables as v
+from ..exceptions import PlaylistError
+
 ###############################################################################
 LOG = getLogger('PLEX.playlists.db')
 
@@ -120,7 +122,7 @@ def m3u_to_plex_ids(playlist):
 def playlist_file_to_plex_ids(playlist):
     """
     Takes the playlist file located at path [unicode] and parses it.
-    Returns a list of plex_ids (str) or raises PL.PlaylistError if a single
+    Returns a list of plex_ids (str) or raises PlaylistError if a single
     item cannot be parsed from Kodi to Plex.
     """
     if playlist.kodi_extension == 'm3u':

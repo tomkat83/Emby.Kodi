@@ -5,6 +5,7 @@ from . import additional_metadata_tmdb
 from ..plex_db import PlexDB
 from .. import backgroundthread, utils
 from .. import variables as v, app
+from ..exceptions import ProcessingNotDone
 
 
 logger = getLogger('PLEX.sync.metadata')
@@ -20,12 +21,6 @@ SUPPORTED_METADATA = {
         ('missing_fanart', additional_metadata_tmdb.process_fanart),
     ),
 }
-
-
-class ProcessingNotDone(Exception):
-    """Exception to detect whether we've completed our sync and did not have to
-    abort or suspend."""
-    pass
 
 
 def processing_is_activated(item_getter):
