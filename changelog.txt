@@ -1,3 +1,9 @@
+version 3.4.7 (beta only):
+- Tell the PMS if a video's audio stream or potentially subtitle stream has changed. For subtitles, this functionality is broken due to a Kodi bug
+- Transcoding: Fix Plex burning-in subtitles when it should not
+- Large refactoring of playlist and playqueue code
+- Refactor usage of a media part's id
+
 version 3.4.6 (beta only):
 - Fix RecursionError if a video lies in a root directory
 
