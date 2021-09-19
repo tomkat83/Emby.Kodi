@@ -88,17 +88,14 @@ MIN_DB_VERSION = '3.2.1'
 
 # Supported databases - version numbers in tuples should decrease
 SUPPORTED_VIDEO_DB = {
-    # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (119, ),
     20: (119, ),
 }
 SUPPORTED_MUSIC_DB = {
-    # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (82, ),
     20: (82, ),
 }
 SUPPORTED_TEXTURE_DB = {
-    # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (13, ),
     20: (13, ),
 }
