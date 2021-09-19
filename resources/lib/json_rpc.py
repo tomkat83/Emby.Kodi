@@ -420,6 +420,41 @@ def get_item(playerid):
         'properties': ['title', 'file']})['result']['item']
 
 
+def get_current_audio_stream_index(playerid):
+    """
+    Returns the currently active audio stream index [int]
+    """
+    return JsonRPC('Player.GetProperties').execute({
+        'playerid': playerid,
+        'properties': ['currentaudiostream']})['result']['currentaudiostream']['index']
+
+
+def get_current_subtitle_stream_index(playerid):
+    """
+    Returns the currently active subtitle stream index [int] or None if there
+    are no subs
+    PICKING UP CHANGES ON SUBTITLES IS CURRENTLY BROKEN ON THE KODI SIDE! The
+    JSON reply won't change even though subtitles are changed :-(
+    """
+    try:
+        return JsonRPC('Player.GetProperties').execute({
+            'playerid': playerid,
+            'properties': ['currentsubtitle', ]})['result']['currentsubtitle']['index']
+    except KeyError:
+        pass
+
+
+def get_subtitle_enabled(playerid):
+    """
+    Returns True if a subtitle is currently enabled, False otherwise.
+    PICKING UP CHANGES ON SUBTITLES IS CURRENTLY BROKEN ON THE KODI SIDE! The
+    JSON reply won't change even though subtitles are changed :-(
+    """
+    return JsonRPC('Player.GetProperties').execute({
+        'playerid': playerid,
+        'properties': ['subtitleenabled', ]})['result']['subtitleenabled']
+
+
 def get_player_props(playerid):
     """
     Returns a dict for the active Kodi player with the following values:
