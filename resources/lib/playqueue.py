@@ -11,6 +11,7 @@ import xbmc
 from .plex_api import API
 from . import playlist_func as PL, plex_functions as PF
 from . import backgroundthread, utils, json_rpc as js, app, variables as v
+from . import exceptions
 
 ###############################################################################
 LOG = getLogger('PLEX.playqueue')
@@ -87,7 +88,7 @@ def init_playqueue_from_plex_children(plex_id, transient_token=None):
         api = API(child)
         try:
             PL.add_item_to_playlist(playqueue, i, plex_id=api.plex_id)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.error('Could not add Plex item to our playlist: %s, %s',
                       child.tag, child.attrib)
     playqueue.plex_transient_token = transient_token
@@ -150,7 +151,7 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
                               i + j, i)
                     try:
                         PL.move_playlist_item(playqueue, i + j, i)
-                    except PL.PlaylistError:
+                    except exceptions.PlaylistError:
                         LOG.error('Could not modify playqueue positions')
                         LOG.error('This is likely caused by mixing audio and '
                                   'video tracks in the Kodi playqueue')
@@ -166,7 +167,7 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
                         PL.add_item_to_plex_playqueue(playqueue,
                                                       i,
                                                       kodi_item=new_item)
-                except PL.PlaylistError:
+                except exceptions.PlaylistError:
                     # Could not add the element
                     pass
                 except KeyError:
@@ -195,7 +196,7 @@ class PlayqueueMonitor(backgroundthread.KillableThread):
             LOG.debug('Detected deletion of playqueue element at pos %s', i)
             try:
                 PL.delete_playlist_item_from_PMS(playqueue, i)
-            except PL.PlaylistError:
+            except exceptions.PlaylistError:
                 LOG.error('Could not delete PMS element from position %s', i)
                 LOG.error('This is likely caused by mixing audio and '
                           'video tracks in the Kodi playqueue')

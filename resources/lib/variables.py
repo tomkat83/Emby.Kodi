@@ -29,6 +29,10 @@ ADDON_PATH = _ADDON.getAddonInfo('path')
 ADDON_FOLDER = xbmcvfs.translatePath('special://home')
 ADDON_PROFILE = xbmcvfs.translatePath(_ADDON.getAddonInfo('profile'))
 
+# Used e.g. for json_rpc
+KODI_VIDEO_PLAYER_ID = 1
+KODI_AUDIO_PLAYER_ID = 0
+
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 KODIVERSION = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
 KODILONGVERSION = xbmc.getInfoLabel('System.BuildVersion')
@@ -88,17 +92,14 @@ MIN_DB_VERSION = '3.2.1'
 
 # Supported databases - version numbers in tuples should decrease
 SUPPORTED_VIDEO_DB = {
-    # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (119, ),
     20: (119, ),
 }
 SUPPORTED_MUSIC_DB = {
-    # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (82, ),
     20: (82, ),
 }
 SUPPORTED_TEXTURE_DB = {
-    # Kodi 19 - EXTREMLY EXPERIMENTAL!
     19: (13, ),
     20: (13, ),
 }

@@ -1116,3 +1116,35 @@ def playback_decision(path, media, part, playmethod, video=True, args=None):
     return DU().downloadUrl(utils.extend_url(url, arguments),
                             headerOptions=v.STREAMING_HEADERS,
                             reraise=True)
+
+
+def change_subtitle(plex_stream_id, part_id):
+    """
+    Tell the PMS to display/burn-in the subtitle stream with id plex_stream_id
+    for the Part (PMS XML etree tag "Part") with unique id part_id.
+    - plex_stream_id = 0 will deactivate the subtitle
+    - We always do this for ALL parts of a video
+    """
+    arguments = {
+        'subtitleStreamID': plex_stream_id,
+        'allParts': 1
+    }
+    url = '{server}/library/parts/%s' % part_id
+    return DU().downloadUrl(utils.extend_url(url, arguments),
+                            action_type='PUT')
+
+
+def change_audio_stream(plex_stream_id, part_id):
+    """
+    Tell the PMS to display/burn-in the subtitle stream with id plex_stream_id
+    for the Part (PMS XML etree tag "Part") with unique id part_id.
+    - plex_stream_id = 0 will deactivate the subtitle
+    - We always do this for ALL parts of a video
+    """
+    arguments = {
+        'audioStreamID': plex_stream_id,
+        'allParts': 1
+    }
+    url = '{server}/library/parts/%s' % part_id
+    return DU().downloadUrl(utils.extend_url(url, arguments),
+                            action_type='PUT')

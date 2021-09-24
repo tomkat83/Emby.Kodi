@@ -11,20 +11,15 @@ from . import plex_functions as PF
 from .kodi_db import kodiid_from_filename
 from .downloadutils import DownloadUtils as DU
 from . import utils
+from .utils import cast
 from . import json_rpc as js
 from . import variables as v
 from . import app
+from .exceptions import PlaylistError
 from .subtitles import accessible_plex_subtitles
 
 
 LOG = getLogger('PLEX.playlist_func')
-
-
-class PlaylistError(Exception):
-    """
-    Exception for our playlist constructs
-    """
-    pass
 
 
 class Playqueue_Object(object):
@@ -150,13 +145,14 @@ class PlaylistItem(object):
     file = None        [str] Path to the item's file. STRING!!
     uri = None         [str] PMS path to item; will be auto-set with plex_id
     guid = None        [str] Weird Plex guid
-    xml = None         [etree] XML from PMS, 1 lvl below <MediaContainer>
+    api = None         [API] API of xml 1 lvl below <MediaContainer>
     playmethod = None  [str] either 'DirectPath', 'DirectStream', 'Transcode'
     playcount = None   [int] how many times the item has already been played
     offset = None      [int] the item's view offset UPON START in Plex time
     part = 0           [int] part number if Plex video consists of mult. parts
     force_transcode    [bool] defaults to False
     """
+
     def __init__(self):
         self.id = None
         self._plex_id = None
@@ -166,7 +162,7 @@ class PlaylistItem(object):
         self.file = None
         self._uri = None
         self.guid = None
-        self.xml = None
+        self.api = None
         self.playmethod = None
         self.playcount = None
         self.offset = None
@@ -180,6 +176,16 @@ class PlaylistItem(object):
         #   False: do NOT resume, don't ask user
         #   True: do resume, don't ask user
         self.resume = None
+        # Get the Plex audio and subtitle streams in the same order as Kodi
+        # uses them (Kodi uses indexes to activate them, not ids like Plex)
+        self._streams_have_been_processed = False
+        self._audio_streams = None
+        self._subtitle_streams = None
+        # Which Kodi streams are active?
+        self.current_kodi_audio_stream = None
+        # False means "deactivated", None means "we do not have a Kodi
+        # equivalent for this Plex subtitle"
+        self.current_kodi_sub_stream = None
 
     @property
     def plex_id(self):
@@ -194,6 +200,18 @@ class PlaylistItem(object):
     @property
     def uri(self):
         return self._uri
+
+    @property
+    def audio_streams(self):
+        if not self._streams_have_been_processed:
+            self._process_streams()
+        return self._audio_streams
+
+    @property
+    def subtitle_streams(self):
+        if not self._streams_have_been_processed:
+            self._process_streams()
+        return self._subtitle_streams
 
     def __repr__(self):
         return ("{{"
@@ -211,85 +229,100 @@ class PlaylistItem(object):
                 "'force_transcode': {self.force_transcode}, "
                 "'part': {self.part}".format(self=self))
 
+    def _process_streams(self):
+        """
+        Builds audio and subtitle streams and enables matching between Plex
+        and Kodi using self.audio_streams and self.subtitle_streams
+        """
+        # The playqueue response from the PMS does not contain a stream filename
+        # thanks Plex
+        self._subtitle_streams = accessible_plex_subtitles(
+            self.playmethod,
+            self.file,
+            self.api.plex_media_streams())
+        # Audio streams are much easier - they're always available and sorted
+        # the same in Kodi and Plex
+        self._audio_streams = [x for x in self.api.plex_media_streams()
+                               if x.get('streamType') == '2']
+        self._streams_have_been_processed = True
+
+    def _get_iterator(self, stream_type):
+        if stream_type == 'audio':
+            return self.audio_streams
+        elif stream_type == 'subtitle':
+            return self.subtitle_streams
+
     def plex_stream_index(self, kodi_stream_index, stream_type):
         """
         Pass in the kodi_stream_index [int] in order to receive the Plex stream
-        index.
-
+        index [int].
             stream_type:    'video', 'audio', 'subtitle'
-
         Returns None if unsuccessful
         """
-        stream_type = v.PLEX_STREAM_TYPE_FROM_STREAM_TYPE[stream_type]
-        count = 0
-        if kodi_stream_index == -1:
-            # Kodi telling us "it's the last one"
-            iterator = list(reversed(self.xml[0][self.part]))
-            kodi_stream_index = 0
-        else:
-            iterator = self.xml[0][self.part]
-        # Kodi indexes differently than Plex
-        for stream in iterator:
-            if (stream.get('streamType') == stream_type and
-                    'key' in stream.attrib):
-                if count == kodi_stream_index:
-                    return stream.get('id')
-                count += 1
-        for stream in iterator:
-            if (stream.get('streamType') == stream_type and
-                    'key' not in stream.attrib):
-                if count == kodi_stream_index:
-                    return stream.get('id')
-                count += 1
+        if stream_type == 'audio':
+            return int(self.audio_streams[kodi_stream_index].get('id'))
+        elif stream_type == 'subtitle':
+            try:
+                return int(self.subtitle_streams[kodi_stream_index].get('id'))
+            except (IndexError, TypeError):
+                pass
 
     def kodi_stream_index(self, plex_stream_index, stream_type):
         """
-        Pass in the kodi_stream_index [int] in order to receive the Plex stream
-        index.
-
+        Pass in the plex_stream_index [int] in order to receive the Kodi stream
+        index [int].
             stream_type:    'video', 'audio', 'subtitle'
-
         Returns None if unsuccessful
         """
         if plex_stream_index is None:
             return
-        stream_type = v.PLEX_STREAM_TYPE_FROM_STREAM_TYPE[stream_type]
-        count = 0
-        streams = self.sorted_accessible_plex_subtitles(stream_type)
-        for stream in streams:
-            if utils.cast(int, stream.get('id')) == plex_stream_index:
-                return count
-            count += 1
+        for i, stream in enumerate(self._get_iterator(stream_type)):
+            if cast(int, stream.get('id')) == plex_stream_index:
+                return i
 
     def active_plex_stream_index(self, stream_type):
         """
         Returns the following tuple for the active stream on the Plex side:
-            (id [int], languageTag [str])
+            (Plex stream id [int], languageTag [str] or None)
         Returns None if no stream has been selected
         """
-        stream_type = v.PLEX_STREAM_TYPE_FROM_STREAM_TYPE[stream_type]
-        for stream in self.xml[0][self.part]:
-            if stream.get('streamType') == stream_type \
-                    and stream.get('selected') == '1':
-                return (utils.cast(int, stream.get('id')),
-                        stream.get('languageTag'))
+        for i, stream in enumerate(self._get_iterator(stream_type)):
+            if stream.get('selected') == '1':
+                return (int(stream.get('id')), stream.get('languageTag'))
 
-    def sorted_accessible_plex_subtitles(self, stream_type):
+    def on_kodi_subtitle_stream_change(self, kodi_stream_index, subs_enabled):
         """
-        Returns only the subtitles that Kodi can access when PKC Direct Paths
-        are used; i.e. Kodi has access to a video's directory.
-        NOT supported: additional subtitles downloaded using the Plex interface
+        Call this method if Kodi changed its subtitle and you want Plex to
+        know.
         """
-        # The playqueue response from the PMS does not contain a stream filename
-        # thanks Plex
-        if stream_type == '3':
-            streams = accessible_plex_subtitles(self.playmethod,
-                                                self.file,
-                                                self.xml[0][self.part])
+        if subs_enabled:
+            try:
+                plex_stream_index = int(self.subtitle_streams[kodi_stream_index].get('id'))
+            except (IndexError, TypeError):
+                LOG.debug('Kodi subtitle change detected to a sub %s that is '
+                          'NOT available on the Plex side', kodi_stream_index)
+                self.current_kodi_sub_stream = None
+                return
+            LOG.debug('Kodi subtitle change detected: telling Plex about '
+                      'switch to index %s, Plex stream id %s',
+                      kodi_stream_index, plex_stream_index)
+            self.current_kodi_sub_stream = kodi_stream_index
         else:
-            streams = [x for x in self.xml[0][self.part]
-                       if x.get('streamType') == stream_type]
-        return streams
+            plex_stream_index = 0
+            LOG.debug('Kodi subtitle has been deactivated, telling Plex')
+            self.current_kodi_sub_stream = False
+        PF.change_subtitle(plex_stream_index, self.api.part_id())
+
+    def on_kodi_audio_stream_change(self, kodi_stream_index):
+        """
+        Call this method if Kodi changed its audio stream and you want Plex to
+        know. kodi_stream_index [int]
+        """
+        plex_stream_index = int(self.audio_streams[kodi_stream_index].get('id'))
+        LOG.debug('Changing Plex audio stream to %s, Kodi index %s',
+                  plex_stream_index, kodi_stream_index)
+        PF.change_audio_stream(plex_stream_index, self.api.part_id())
+        self.current_kodi_audio_stream = kodi_stream_index
 
 
 def playlist_item_from_kodi(kodi_item):
@@ -315,7 +348,7 @@ def playlist_item_from_kodi(kodi_item):
         except IndexError:
             query = ''
         query = dict(utils.parse_qsl(query))
-        item.plex_id = utils.cast(int, query.get('plex_id'))
+        item.plex_id = cast(int, query.get('plex_id'))
         item.plex_type = query.get('itemType')
     LOG.debug('Made playlist item from Kodi: %s', item)
     return item
@@ -413,14 +446,15 @@ def playlist_item_from_xml(xml_video_element, kodi_id=None, kodi_type=None):
     item.guid = api.guid_html_escaped()
     item.playcount = api.viewcount()
     item.offset = api.resume_point()
-    item.xml = xml_video_element
+    item.api = api
     LOG.debug('Created new playlist item from xml: %s', item)
     return item
 
 
-def _get_playListVersion_from_xml(playlist, xml):
+def _update_playlist_version(playlist, xml):
     """
-    Takes a PMS xml as input to overwrite the playlist version (e.g. Plex
+    Takes a PMS xml (one level above the xml-depth where we're usually applying
+    API()) as input to overwrite the playlist version (e.g. Plex
     playQueueVersion).
 
     Raises PlaylistError if unsuccessful
@@ -441,18 +475,13 @@ def get_playlist_details_from_xml(playlist, xml):
     """
     if xml is None:
         raise PlaylistError('No playlist received for playlist %s' % playlist)
-    playlist.id = utils.cast(int,
-                             xml.get('%sID' % playlist.kind))
-    playlist.version = utils.cast(int,
-                                  xml.get('%sVersion' % playlist.kind))
-    playlist.shuffled = utils.cast(int,
-                                   xml.get('%sShuffled' % playlist.kind))
-    playlist.selectedItemID = utils.cast(int,
-                                         xml.get('%sSelectedItemID'
-                                                 % playlist.kind))
-    playlist.selectedItemOffset = utils.cast(int,
-                                             xml.get('%sSelectedItemOffset'
-                                                     % playlist.kind))
+    playlist.id = cast(int, xml.get('%sID' % playlist.kind))
+    playlist.version = cast(int, xml.get('%sVersion' % playlist.kind))
+    playlist.shuffled = cast(int, xml.get('%sShuffled' % playlist.kind))
+    playlist.selectedItemID = cast(int, xml.get('%sSelectedItemID'
+                                                % playlist.kind))
+    playlist.selectedItemOffset = cast(int, xml.get('%sSelectedItemOffset'
+                                                    % playlist.kind))
     LOG.debug('Updated playlist from xml: %s', playlist)
 
 
@@ -603,7 +632,7 @@ def add_item_to_plex_playqueue(playlist, pos, plex_id=None, kodi_item=None):
         raise PlaylistError('Could not add item %s to playlist %s'
                             % (kodi_item, playlist))
     api = API(xml[-1])
-    item.xml = xml[-1]
+    item.api = api
     item.id = api.item_id()
     item.guid = api.guid_html_escaped()
     item.offset = api.resume_point()
@@ -611,7 +640,7 @@ def add_item_to_plex_playqueue(playlist, pos, plex_id=None, kodi_item=None):
     playlist.items.append(item)
     if pos == len(playlist.items) - 1:
         # Item was added at the end
-        _get_playListVersion_from_xml(playlist, xml)
+        _update_playlist_version(playlist, xml)
     else:
         # Move the new item to the correct position
         move_playlist_item(playlist,
@@ -655,7 +684,7 @@ def add_item_to_kodi_playlist(playlist, pos, kodi_id=None, kodi_type=None,
             {'id': kodi_id, 'type': kodi_type, 'file': file})
         if item.plex_id is not None:
             xml = PF.GetPlexMetadata(item.plex_id)
-            item.xml = xml[-1]
+            item.api = API(xml[-1])
     playlist.items.insert(pos, item)
     return item
 
@@ -679,9 +708,10 @@ def move_playlist_item(playlist, before_pos, after_pos):
                playlist.id,
                playlist.items[before_pos].id,
                playlist.items[after_pos - 1].id)
-    # We need to increment the playlistVersion
-    _get_playListVersion_from_xml(
-        playlist, DU().downloadUrl(url, action_type="PUT"))
+    # Tell the PMS that we're moving items around
+    xml = DU().downloadUrl(url, action_type="PUT")
+    # We need to increment the playlist version for communicating with the PMS
+    _update_playlist_version(playlist, xml)
     # Move our item's position in our internal playlist
     playlist.items.insert(after_pos, playlist.items.pop(before_pos))
     LOG.debug('Done moving for %s', playlist)
@@ -729,7 +759,7 @@ def delete_playlist_item_from_PMS(playlist, pos):
                             playlist.repeat),
                            action_type="DELETE")
     del playlist.items[pos]
-    _get_playListVersion_from_xml(playlist, xml)
+    _update_playlist_version(playlist, xml)
 
 
 # Functions operating on the Kodi playlist objects ##########

@@ -5,8 +5,9 @@ Create and delete playlists on the Plex side of things
 """
 from logging import getLogger
 
-from .common import PlaylistError
 from . import pms, db
+from ..exceptions import PlaylistError
+
 ###############################################################################
 LOG = getLogger('PLEX.playlists.plex_pl')
 # Used for updating Plex playlists due to Kodi changes - Plex playlist

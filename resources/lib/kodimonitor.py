@@ -13,11 +13,13 @@ import xbmc
 
 from .plex_api import API
 from .plex_db import PlexDB
+from .kodi_db import KodiVideoDB
 from . import kodi_db
 from .downloadutils import DownloadUtils as DU
 from . import utils, timing, plex_functions as PF
 from . import json_rpc as js, playqueue as PQ, playlist_func as PL
 from . import backgroundthread, app, variables as v
+from . import exceptions
 
 LOG = getLogger('PLEX.kodimonitor')
 
@@ -28,7 +30,7 @@ class KodiMonitor(xbmc.Monitor):
     """
     def __init__(self):
         self._already_slept = False
-        self._switch_to_plex_streams = None
+        self._switched_to_plex_streams = True
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
@@ -66,7 +68,7 @@ class KodiMonitor(xbmc.Monitor):
                 self.PlayBackStart(data)
         elif method == 'Player.OnAVChange':
             with app.APP.lock_playqueues:
-                self.on_av_change()
+                self._on_av_change(data)
         elif method == "Player.OnStop":
             with app.APP.lock_playqueues:
                 _playback_cleanup(ended=data.get('end'))
@@ -85,7 +87,8 @@ class KodiMonitor(xbmc.Monitor):
             with app.APP.lock_playqueues:
                 self._playlist_onclear(data)
         elif method == "VideoLibrary.OnUpdate":
-            _videolibrary_onupdate(data)
+            with app.APP.lock_playqueues:
+                _videolibrary_onupdate(data)
         elif method == "VideoLibrary.OnRemove":
             pass
         elif method == "System.OnSleep":
@@ -178,7 +181,7 @@ class KodiMonitor(xbmc.Monitor):
         try:
             for i, item in enumerate(items):
                 PL.add_item_to_plex_playqueue(playqueue, i + 1, kodi_item=item)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.info('Could not build Plex playlist for: %s', items)
 
     def _json_item(self, playerid):
@@ -315,7 +318,7 @@ class KodiMonitor(xbmc.Monitor):
                 return
             try:
                 item = PL.init_plex_playqueue(playqueue, plex_id=plex_id)
-            except PL.PlaylistError:
+            except exceptions.PlaylistError:
                 LOG.info('Could not initialize the Plex playlist')
                 return
             item.file = path
@@ -340,8 +343,7 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/library/metadata/%s' % plex_id
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
-            api = API(item.xml)
-            status['intro_markers'] = api.intro_markers()
+            status['intro_markers'] = item.api.intro_markers()
         # Remember the currently playing item
         app.PLAYSTATE.item = item
         # Remember that this player has been active
@@ -356,60 +358,96 @@ class KodiMonitor(xbmc.Monitor):
         status['plex_type'] = plex_type
         status['playmethod'] = item.playmethod
         status['playcount'] = item.playcount
-        try:
-            status['external_player'] = app.APP.player.isExternalPlayer() == 1
-        except AttributeError:
-            # Kodi version < 17
-            pass
+        status['external_player'] = app.APP.player.isExternalPlayer() == 1
         LOG.debug('Set the player state: %s', status)
 
         # Workaround for the Kodi add-on Up Next
         if not app.SYNC.direct_paths:
             _notify_upnext(item)
-        self._switch_to_plex_streams = item
+        self._switched_to_plex_streams = False
 
-    def on_av_change(self):
+    def _on_av_change(self, data):
         """
         Will be called when Kodi has a video, audio or subtitle stream. Also
         happens when the stream changes.
+
+        Example data as returned by Kodi:
+            {'item': {'id': 5, 'type': 'movie'},
+             'player': {'playerid': 1, 'speed': 1}}
+
+        PICKING UP CHANGES ON SUBTITLES IS CURRENTLY BROKEN ON THE KODI SIDE!
+        Kodi subs will never change. Also see json_rpc.py
         """
-        if self._switch_to_plex_streams is not None:
-            self.switch_to_plex_streams(self._switch_to_plex_streams)
-            self._switch_to_plex_streams = None
+        playerid = data['player']['playerid']
+        if not playerid == v.KODI_VIDEO_PLAYER_ID:
+            # We're just messing with Kodi's videoplayer
+            return
+        if not self._switched_to_plex_streams:
+            # We need to switch to the Plex streams ONCE upon playback start
+            # after onavchange has been fired
+            self.switch_to_plex_streams()
+            self._switched_to_plex_streams = True
+        else:
+            item = app.PLAYSTATE.item
+            if item is None:
+                # Player might've quit
+                return
+            kodi_audio_stream = js.get_current_audio_stream_index(playerid)
+            sub_enabled = js.get_subtitle_enabled(playerid)
+            kodi_sub_stream = js.get_current_subtitle_stream_index(playerid)
+            # Audio
+            if kodi_audio_stream != item.current_kodi_audio_stream:
+                item.on_kodi_audio_stream_change(kodi_audio_stream)
+            # Subtitles - CURRENTLY BROKEN ON THE KODI SIDE!
+            # current_kodi_sub_stream may also be zero
+            subs_off = (None, False)
+            if ((sub_enabled and item.current_kodi_sub_stream in subs_off)
+                     or (not sub_enabled and item.current_kodi_sub_stream not in subs_off)
+                     or (kodi_sub_stream is not None
+                         and kodi_sub_stream != item.current_kodi_sub_stream)):
+                item.on_kodi_subtitle_stream_change(kodi_sub_stream,
+                                                    sub_enabled)
 
     @staticmethod
-    def switch_to_plex_streams(item):
+    def switch_to_plex_streams():
         """
         Override Kodi audio and subtitle streams with Plex PMS' selection
         """
+        item = app.PLAYSTATE.item
+        if item is None:
+            # Player might've quit
+            return
         for typus in ('audio', 'subtitle'):
             try:
                 plex_index, language_tag = item.active_plex_stream_index(typus)
             except TypeError:
-                if typus == 'subtitle':
-                    LOG.info('Deactivating Kodi subtitles because the PMS '
-                             'told us to not show any subtitles')
-                    app.APP.player.showSubtitles(False)
+                LOG.debug('Deactivating Kodi subtitles because the PMS '
+                          'told us to not show any subtitles')
+                app.APP.player.showSubtitles(False)
+                item.current_kodi_sub_stream = False
                 continue
-            LOG.info('The PMS wants to display %s stream with Plex id %s and '
-                     'languageTag %s',
-                     typus, plex_index, language_tag)
-            kodi_index = item.kodi_stream_index(plex_index,
-                                                typus)
+            LOG.debug('The PMS wants to display %s stream with Plex id %s and '
+                      'languageTag %s',
+                      typus, plex_index, language_tag)
+            kodi_index = item.kodi_stream_index(plex_index, typus)
             if kodi_index is None:
-                LOG.info('Leaving Kodi %s stream settings untouched since we '
-                         'could not parse Plex %s stream with id %s to a Kodi '
-                         'index', typus, typus, plex_index)
+                LOG.debug('Leaving Kodi %s stream settings untouched since we '
+                          'could not parse Plex %s stream with id %s to a Kodi'
+                          ' index', typus, typus, plex_index)
             else:
-                LOG.info('Switching to Kodi %s stream number %s because the '
-                         'PMS told us to show stream with Plex id %s',
-                         typus, kodi_index, plex_index)
+                LOG.debug('Switching to Kodi %s stream number %s because the '
+                          'PMS told us to show stream with Plex id %s',
+                          typus, kodi_index, plex_index)
                 # If we're choosing an "illegal" index, this function does
                 # need seem to fail nor log any errors
-                if typus == 'subtitle':
-                    app.APP.player.setSubtitleStream(kodi_index)
-                else:
+                if typus == 'audio':
                     app.APP.player.setAudioStream(kodi_index)
+                else:
+                    app.APP.player.setSubtitleStream(kodi_index)
+            if typus == 'audio':
+                item.current_kodi_audio_stream = kodi_index
+            else:
+                item.current_kodi_sub_stream = kodi_index
 
 
 def _playback_cleanup(ended=False):
@@ -585,11 +623,10 @@ def _next_episode(current_api):
                   current_api.grandparent_title())
         return
     try:
-        next_api = API(xml[counter + 1])
+        return API(xml[counter + 1])
     except IndexError:
         # Was the last episode
-        return
-    return next_api
+        pass
 
 
 def _complete_artwork_keys(info):
@@ -615,7 +652,7 @@ def _notify_upnext(item):
     """
     if not item.plex_type == v.PLEX_TYPE_EPISODE:
         return
-    this_api = API(item.xml)
+    this_api = item.api
     next_api = _next_episode(this_api)
     if next_api is None:
         return
@@ -651,17 +688,34 @@ def _videolibrary_onupdate(data):
     A specific Kodi library item has been updated. This seems to happen if the
     user marks an item as watched/unwatched or if playback of the item just
     stopped
+
+    2 kinds of messages possible, e.g.
+        Method: VideoLibrary.OnUpdate Data: ("Reset resume position" and also
+        fired just after stopping playback - BEFORE OnStop fires)
+            {'id': 1, 'type': 'movie'}
+        Method: VideoLibrary.OnUpdate Data: ("Mark as watched")
+            {'item': {'id': 1, 'type': 'movie'}, 'playcount': 1}
     """
-    playcount = data.get('playcount')
-    item = data.get('item')
-    if playcount is None or item is None:
-        return
+    item = data.get('item') if 'item' in data else data
     try:
         kodi_id = item['id']
         kodi_type = item['type']
     except (KeyError, TypeError):
-        LOG.info("Item is invalid for playstate update.")
+        LOG.debug("Item is invalid for a Plex playstate update")
         return
+    playcount = data.get('playcount')
+    if playcount is None:
+        # "Reset resume position"
+        # Kodi might set as watched or unwatched!
+        with KodiVideoDB(lock=False) as kodidb:
+            file_id = kodidb.file_id_from_id(kodi_id, kodi_type)
+            if file_id is None:
+                return
+            if kodidb.get_resume(file_id):
+                # We do have an existing bookmark entry - not toggling to
+                # either watched or unwatched on the Plex side
+                return
+            playcount = kodidb.get_playcount(file_id) or 0
     if app.PLAYSTATE.item and kodi_id == app.PLAYSTATE.item.kodi_id and \
             kodi_type == app.PLAYSTATE.item.kodi_type:
         # Kodi updates an item immediately after playback. Hence we do NOT

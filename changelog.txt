@@ -1,3 +1,18 @@
+version 3.5.0:
+- versions 3.4.5-3.4.7 for everyone
+
+version 3.4.7 (beta only):
+- Tell the PMS if a video's audio stream or potentially subtitle stream has changed. For subtitles, this functionality is broken due to a Kodi bug
+- Transcoding: Fix Plex burning-in subtitles when it should not
+- Large refactoring of playlist and playqueue code
+- Refactor usage of a media part's id
+
+version 3.4.6 (beta only):
+- Fix RecursionError if a video lies in a root directory
+
+version 3.4.5 (beta only):
+- Implement "Reset resume position" from the Kodi context menu
+
 version 3.4.4:
 - Initial compatibility with Kodi 20 Nexus. Keep in mind that development for Kodi Nexus has not even officially reached alpha stage - any issues you encounter are probably caused by that
 - version 3.4.3 for everyone

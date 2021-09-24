@@ -8,6 +8,7 @@ import xml.etree.ElementTree as etree
 from . import app
 from . import path_ops
 from . import variables as v
+from .exceptions import SubtitleError
 
 LOG = getLogger('PLEX.subtitles')
 
@@ -466,7 +467,3 @@ def external_subs_from_filesystem(dirname, filename):
 class DummySub(etree.Element):
     def __init__(self):
         super(DummySub, self).__init__('Stream-subtitle-dummy')
-
-
-class SubtitleError(Exception):
-    pass
