@@ -21,6 +21,7 @@ from . import playqueue as PQ
 from . import variables as v
 from . import backgroundthread
 from . import app
+from . import exceptions
 
 ###############################################################################
 
@@ -51,7 +52,7 @@ def update_playqueue_from_PMS(playqueue,
     with app.APP.lock_playqueues:
         try:
             xml = PL.get_PMS_playlist(playqueue, playqueue_id)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.error('Could now download playqueue %s', playqueue_id)
             return
         if playqueue.id == playqueue_id:
@@ -64,7 +65,7 @@ def update_playqueue_from_PMS(playqueue,
         # Get new metadata for the playqueue first
         try:
             PL.get_playlist_details_from_xml(playqueue, xml)
-        except PL.PlaylistError:
+        except exceptions.PlaylistError:
             LOG.error('Could not get playqueue ID %s', playqueue_id)
             return
         playqueue.repeat = 0 if not repeat else int(repeat)
