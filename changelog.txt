@@ -1,3 +1,10 @@
+version 2.14.4 (beta only):
+- Tell the PMS if a video's audio stream or potentially subtitle stream has changed. For subtitles, this functionality is broken due to a Kodi bug
+- Transcoding: Fix Plex burning-in subtitles when it should not
+- Fix logging if fanart.tv lookup fails: be less verbose
+- Large refactoring of playlist and playqueue code
+- Refactor usage of a media part's id
+
 version 2.14.3 (beta only):
 - Implement "Reset resume position" from the Kodi context menu
 
