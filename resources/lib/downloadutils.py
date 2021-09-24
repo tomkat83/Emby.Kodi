@@ -223,7 +223,11 @@ class DownloadUtils(object):
                 if r.status_code != 401:
                     self.count_unauthorized = 0
 
-            if r.status_code == 204:
+            if return_response is True:
+                # return the entire response object
+                return r
+
+            elif r.status_code == 204:
                 # No body in the response
                 # But read (empty) content to release connection back to pool
                 # (see requests: keep-alive documentation)
@@ -257,9 +261,6 @@ class DownloadUtils(object):
             elif r.status_code in (200, 201):
                 # 200: OK
                 # 201: Created
-                if return_response is True:
-                    # return the entire response object
-                    return r
                 try:
                     # xml response
                     r = utils.etree.fromstring(r.content)
