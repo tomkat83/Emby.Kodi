@@ -332,6 +332,58 @@ class PlaylistItem(object):
         PF.change_audio_stream(plex_stream_index, self.api.part_id())
         self.current_kodi_audio_stream = kodi_stream_index
 
+    def switch_to_plex_streams(self):
+        self.switch_to_plex_stream('audio')
+        self.switch_to_plex_stream('subtitle')
+
+    def switch_to_plex_stream(self, typus):
+        try:
+            plex_index, language_tag = self.active_plex_stream_index(typus)
+        except TypeError:
+            LOG.debug('Deactivating Kodi subtitles because the PMS '
+                      'told us to not show any subtitles')
+            app.APP.player.showSubtitles(False)
+            self.current_kodi_sub_stream = False
+            return
+        LOG.debug('The PMS wants to display %s stream with Plex id %s and '
+                  'languageTag %s', typus, plex_index, language_tag)
+        kodi_index = self.kodi_stream_index(plex_index, typus)
+        if kodi_index is None:
+            LOG.debug('Leaving Kodi %s stream settings untouched since we '
+                      'could not parse Plex %s stream with id %s to a Kodi'
+                      ' index', typus, typus, plex_index)
+        else:
+            LOG.debug('Switching to Kodi %s stream number %s because the '
+                      'PMS told us to show stream with Plex id %s',
+                      typus, kodi_index, plex_index)
+            # If we're choosing an "illegal" index, this function does
+            # need seem to fail nor log any errors
+            if typus == 'audio':
+                app.APP.player.setAudioStream(kodi_index)
+            else:
+                app.APP.player.setSubtitleStream(kodi_index)
+                app.APP.player.showSubtitles(True)
+        if typus == 'audio':
+            self.current_kodi_audio_stream = kodi_index
+        else:
+            self.current_kodi_sub_stream = kodi_index
+
+    def on_av_change(self, playerid):
+        kodi_audio_stream = js.get_current_audio_stream_index(playerid)
+        sub_enabled = js.get_subtitle_enabled(playerid)
+        kodi_sub_stream = js.get_current_subtitle_stream_index(playerid)
+        # Audio
+        if kodi_audio_stream != self.current_kodi_audio_stream:
+            self.on_kodi_audio_stream_change(kodi_audio_stream)
+        # Subtitles - CURRENTLY BROKEN ON THE KODI SIDE!
+        # current_kodi_sub_stream may also be zero
+        subs_off = (None, False)
+        if ((sub_enabled and self.current_kodi_sub_stream in subs_off)
+                 or (not sub_enabled and self.current_kodi_sub_stream not in subs_off)
+                 or (kodi_sub_stream is not None
+                     and kodi_sub_stream != self.current_kodi_sub_stream)):
+            self.on_kodi_subtitle_stream_change(kodi_sub_stream, sub_enabled)
+
 
 def playlist_item_from_kodi(kodi_item):
     """
