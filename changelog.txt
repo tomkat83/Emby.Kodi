@@ -1,3 +1,9 @@
+version 3.5.1 (beta only):
+- Refactor stream code and fix Kodi not activating subtitle when it should
+- Direct Paths: Fix TypeError: "element indices must be integers" on playback startup
+- Android: Fix broken Python multiprocessing module (a Kodi 19.2 bug) 
+- Fix logging if fanart.tv lookup fails: be less verbose
+
 version 3.5.0:
 - versions 3.4.5-3.4.7 for everyone
 
