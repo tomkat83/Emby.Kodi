@@ -220,12 +220,14 @@ class Artwork(object):
         else:
             # Not supported artwork
             return artworks
-        data = DU().downloadUrl(url, authenticate=False, timeout=15)
-        try:
-            data.get('test')
-        except AttributeError:
-            LOG.error('Could not download data from FanartTV')
+        data = DU().downloadUrl(url,
+                                authenticate=False,
+                                timeout=15,
+                                return_response=True)
+        if not data.ok:
+            LOG.debug('Could not download data from FanartTV')
             return artworks
+        data = data.json()
 
         fanart_tv_types = list(v.FANART_TV_TO_KODI_TYPE)
 

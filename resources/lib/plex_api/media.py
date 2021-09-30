@@ -357,16 +357,15 @@ class Media(object):
                                            filename,
                                            extension)
         response = DU().downloadUrl(url, return_response=True)
-        try:
-            response.status_code
-        except AttributeError:
+        if not response.ok:
             LOG.error('Could not temporarily download subtitle %s', url)
+            LOG.error('HTTP status: %s, message: %s',
+                      response.status_code, response.text)
             return
-        else:
-            LOG.debug('Writing temp subtitle to %s', path)
-            with open(path, 'wb') as f:
-                f.write(response.content)
-            return path
+        LOG.debug('Writing temp subtitle to %s', path)
+        with open(path, 'wb') as f:
+            f.write(response.content)
+        return path
 
     def validate_playurl(self, path, typus, force_check=False, folder=False,
                          omit_check=False):
