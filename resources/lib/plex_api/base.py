@@ -16,12 +16,15 @@ METADATA_PROVIDERS = (('imdb', utils.REGEX_IMDB),
                       ('tvdb', utils.REGEX_TVDB),
                       ('tmdb', utils.REGEX_TMDB),
                       ('anidb', utils.REGEX_ANIDB))
+
+
 class Base(object):
     """
     Processes a Plex media server's XML response
 
     xml: xml.etree.ElementTree element
     """
+
     def __init__(self, xml):
         self.xml = xml
         # which media part in the XML response shall we look at if several
