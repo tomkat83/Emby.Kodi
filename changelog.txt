@@ -1,3 +1,6 @@
+version 3.5.2:
+- version 3.5.1 for everyone
+
 version 3.5.1 (beta only):
 - Refactor stream code and fix Kodi not activating subtitle when it should
 - Direct Paths: Fix TypeError: "element indices must be integers" on playback startup
