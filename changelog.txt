@@ -1,3 +1,6 @@
+version 3.5.3:
+- Add playback settings to let the user choose whether Plex or Kodi provides the default audio or subtitle stream on playback start
+
 version 3.5.2:
 - version 3.5.1 for everyone
 
