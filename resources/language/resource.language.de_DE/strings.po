@@ -715,6 +715,21 @@ msgctxt "#30545"
 msgid "Force transcode pictures"
 msgstr "Bilder immer transkodieren"
 
+# PKC Settings - Playback
+msgctxt "#30546"
+msgid "Pick the first video if several versions are present"
+msgstr "Ersten Videostream wählen, wenn mehrere Versionen vorhanden sind"
+
+# PKC Settings - Playback
+msgctxt "#30547"
+msgid "Who picks the audio stream on playback start?"
+msgstr "Wer wählt den Audiotrack beim Start der Wiedergabe?"
+
+# PKC Settings - Playback
+msgctxt "#30548"
+msgid "Who picks subtitles on playback start?"
+msgstr "Wer wählt Untertitel beim Start der Wiedergabe?"
+
 # Welcome to Plex notification
 msgctxt "#33000"
 msgid "Welcome"
