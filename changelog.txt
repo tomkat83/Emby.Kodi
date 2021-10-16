@@ -1,3 +1,7 @@
+version 3.5.4:
+- Fix Receiving init() missing 1 required positional argument: ‘certification_country’
+- Update translations from Transifex
+
 version 3.5.3:
 - Add playback settings to let the user choose whether Plex or Kodi provides the default audio or subtitle stream on playback start
 
