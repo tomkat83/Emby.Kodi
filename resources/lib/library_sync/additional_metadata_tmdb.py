@@ -27,7 +27,13 @@ TMDB_SUPPORTED_IDS = ('tmdb', 'imdb')
 def get_tmdb_scraper(settings):
     language = settings.getSettingString('language')
     certcountry = settings.getSettingString('tmdbcertcountry')
-    return tmdb.TMDBMovieScraper(settings, language, certcountry)
+    # Simplify this in the future
+    # See https://github.com/croneter/PlexKodiConnect/issues/1657
+    search_language = settings.getSettingString('searchlanguage')
+    if search_language:
+        return tmdb.TMDBMovieScraper(settings, language, certcountry, search_language)
+    else:
+        return tmdb.TMDBMovieScraper(settings, language, certcountry)
 
 
 def get_tmdb_details(unique_ids):
