@@ -17,12 +17,15 @@ METADATA_PROVIDERS = (('imdb', utils.REGEX_IMDB),
                       ('tvdb', utils.REGEX_TVDB),
                       ('tmdb', utils.REGEX_TMDB),
                       ('anidb', utils.REGEX_ANIDB))
+
+
 class Base(object):
     """
     Processes a Plex media server's XML response
 
     xml: xml.etree.ElementTree element
     """
+
     def __init__(self, xml):
         self.xml = xml
         # which media part in the XML response shall we look at if several
@@ -254,7 +257,21 @@ class Base(object):
         Returns the media streams directly from the PMS xml.
         Mind to set self.mediastream and self.part before calling this method!
         """
-        return self.xml[self.mediastream][self.part]
+        try:
+            return self.xml[self.mediastream][self.part]
+        except TypeError:
+            # Direct Paths when we don't set mediastream and part
+            return self.xml[0][0]
+
+    def part_id(self):
+        """
+        Returns the unique id of the currently active part [int]
+        """
+        try:
+            return int(self.xml[self.mediastream][self.part].attrib['id'])
+        except TypeError:
+            # Direct Paths when we don't set mediastream and part
+            return int(self.xml[0][0].attrib['id'])
 
     def plot(self):
         """

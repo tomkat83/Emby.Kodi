@@ -1,3 +1,20 @@
+version 2.15.0:
+- versions 2.14.3-2.14.4 for everyone
+- Direct Paths: Fix TypeError: "element indices must be integers" on playback startup [backport]
+- Refactor stream code and fix Kodi not activating subtitle when it should [backport]
+- Add playback settings to let the user choose whether Plex or Kodi provides the default audio or subtitle stream on playback start [backport]
+- Update translations from Transifex [backport]
+
+version 2.14.4 (beta only):
+- Tell the PMS if a video's audio stream or potentially subtitle stream has changed. For subtitles, this functionality is broken due to a Kodi bug
+- Transcoding: Fix Plex burning-in subtitles when it should not
+- Fix logging if fanart.tv lookup fails: be less verbose
+- Large refactoring of playlist and playqueue code
+- Refactor usage of a media part's id
+
+version 2.14.3 (beta only):
+- Implement "Reset resume position" from the Kodi context menu
+
 version 2.14.2:
 - version 2.14.1 for everyone
 

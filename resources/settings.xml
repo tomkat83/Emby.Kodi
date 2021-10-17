@@ -114,6 +114,8 @@
         <setting id="trailerNumber" type="slider" label="39000" default="3" visible="eq(-2,true)" range="1,1,15" option="int" />
         <setting id="enableSkipIntro" type="bool" label="30525" default="true" /><!-- Enable skipping of intros -->
         <setting id="firstVideoStream" type="bool" label="30546" default="false" /><!-- Pick the first video if several versions are present -->
+        <setting id="audioStreamPick" type="enum" label="30547" values="Plex|Kodi" default="0" /><!-- Who picks the audio stream on playback start? -->
+        <setting id="subtitleStreamPick" type="enum" label="30548" values="Plex|Kodi" default="0" /><!-- Who picks subtitles on playback start? -->
 	    <setting id="ignoreSpecialsNextEpisodes" type="bool" label="30527" default="false" />
         <setting id="resumeJumpBack" type="slider" label="30521" default="10" range="0,1,120" option="int" visible="false"/>
         <setting type="sep" />

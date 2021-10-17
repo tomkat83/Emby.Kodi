@@ -4,17 +4,11 @@ import sqlite3
 from functools import wraps
 
 from . import variables as v, app
+from .exceptions import LockedDatabase
 
 DB_WRITE_ATTEMPTS = 100
 DB_WRITE_ATTEMPTS_TIMEOUT = 1  # in seconds
 DB_CONNECTION_TIMEOUT = 10
-
-
-class LockedDatabase(Exception):
-    """
-    Dedicated class to make sure we're not silently catching locked DBs.
-    """
-    pass
 
 
 def catch_operationalerrors(method):
