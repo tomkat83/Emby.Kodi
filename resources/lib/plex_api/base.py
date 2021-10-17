@@ -254,13 +254,21 @@ class Base(object):
         Returns the media streams directly from the PMS xml.
         Mind to set self.mediastream and self.part before calling this method!
         """
-        return self.xml[self.mediastream][self.part]
+        try:
+            return self.xml[self.mediastream][self.part]
+        except TypeError:
+            # Direct Paths when we don't set mediastream and part
+            return self.xml[0][0]
 
     def part_id(self):
         """
         Returns the unique id of the currently active part [int]
         """
-        return int(self.xml[self.mediastream][self.part].attrib['id'])
+        try:
+            return int(self.xml[self.mediastream][self.part].attrib['id'])
+        except TypeError:
+            # Direct Paths when we don't set mediastream and part
+            return int(self.xml[0][0].attrib['id'])
 
     def plot(self):
         """
