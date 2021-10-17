@@ -1,3 +1,6 @@
+version 3.5.5:
+- Lost patience with Kodi 19: drop use of Python multiprocessing entirely
+
 version 3.5.4:
 - Fix Receiving init() missing 1 required positional argument: ‘certification_country’
 - Update translations from Transifex
