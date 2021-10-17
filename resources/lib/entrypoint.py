@@ -247,12 +247,10 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
         widgets.KEY = key
     # Process all items to show
     all_items = mass_api(xml)
-    all_items = utils.process_method_on_list(widgets.generate_item, all_items)
-    all_items = utils.process_method_on_list(widgets.prepare_listitem,
-                                             all_items)
+    all_items = [widgets.generate_item(api) for api in all_items]
+    all_items = [widgets.prepare_listitem(item) for item in all_items]
     # fill that listing...
-    all_items = utils.process_method_on_list(widgets.create_listitem,
-                                             all_items)
+    all_items = [widgets.create_listitem(item) for item in all_items]
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), all_items, len(all_items))
     # end directory listing
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
