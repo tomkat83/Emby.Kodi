@@ -29,6 +29,7 @@ class KodiMonitor(xbmc.Monitor):
     """
     PKC implementation of the Kodi Monitor class. Invoke only once.
     """
+
     def __init__(self):
         self._already_slept = False
         self._switched_to_plex_streams = True
@@ -390,7 +391,10 @@ class KodiMonitor(xbmc.Monitor):
         if not self._switched_to_plex_streams:
             # We need to switch to the Plex streams ONCE upon playback start
             # after onavchange has been fired
-            item.switch_to_plex_streams()
+            if utils.settings('audioStreamPick') == '0':
+                item.switch_to_plex_stream('audio')
+            if utils.settings('subtitleStreamPick') == '0':
+                item.switch_to_plex_stream('subtitle')
             self._switched_to_plex_streams = True
         else:
             item.on_av_change(playerid)
