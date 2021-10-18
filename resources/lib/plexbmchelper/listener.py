@@ -62,6 +62,7 @@ class MyHandler(BaseHTTPRequestHandler):
         self.answer_request(1)
 
     def do_OPTIONS(self):
+        LOG.debug("Serving OPTIONS request...")
         self.send_response(200)
         self.send_header('Content-Length', '0')
         self.send_header('X-Plex-Client-Identifier', v.PKC_MACHINE_IDENTIFIER)
@@ -92,8 +93,8 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_header('Connection', "close")
             self.end_headers()
             self.wfile.write(body.encode('utf-8'))
-        except Exception:
-            pass
+        except Exception as exc:
+            LOG.debug('Exception encountered while responding: %s', exc)
 
     def answer_request(self, send_data):
         self.serverlist = self.server.client.getServerList()
@@ -106,10 +107,11 @@ class MyHandler(BaseHTTPRequestHandler):
         params = {}
         for key in paramarrays:
             params[key] = paramarrays[key][0]
-        LOG.debug("remote request_path: %s", request_path)
+        LOG.debug("remote request_path: %s, received from %s with headers: %s",
+                  request_path, self.client_address, self.headers.items())
         LOG.debug("params received from remote: %s", params)
         sub_mgr.update_command_id(self.headers.get(
-                'X-Plex-Client-Identifier', self.client_address[0]),
+            'X-Plex-Client-Identifier', self.client_address[0]),
             params.get('commandID'))
         if request_path == "version":
             self.response(

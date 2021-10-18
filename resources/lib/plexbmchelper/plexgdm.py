@@ -97,8 +97,8 @@ class plexgdm(object):
                                     % (self.client_header, self.client_data),
                                     self.client_register_group)
             log.debug('(Re-)registering PKC Plex Companion successful')
-        except Exception:
-            log.error("Unable to send registration message")
+        except Exception as exc:
+            log.error("Unable to send registration message. Error: %s", exc)
 
     def client_update(self):
         self.update_sock = socket.socket(socket.AF_INET,
