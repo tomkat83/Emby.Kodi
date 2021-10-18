@@ -29,7 +29,6 @@ def getXArgsDeviceInfo(options=None, include_token=True):
     """
     xargs = {
         'Accept': '*/*',
-        'Connection': 'keep-alive',
         "Content-Type": "application/x-www-form-urlencoded",
         # "Access-Control-Allow-Origin": "*",
         'Accept-Language': xbmc.getLanguage(xbmc.ISO_639_1),

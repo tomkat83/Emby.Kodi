@@ -107,18 +107,31 @@ class MyHandler(BaseHTTPRequestHandler):
         sub_mgr.update_command_id(self.headers.get(
             'X-Plex-Client-Identifier', self.client_address[0]),
             params.get('commandID'))
+
+        conntype = self.headers.get('Connection', '')
+        if conntype.lower() == 'keep-alive':
+            headers = {
+                'Connection': 'Keep-Alive',
+                'Keep-Alive': 'timeout=20'
+            }
+        else:
+            headers = {'Connection': 'Close'}
+
         if request_path == "version":
             self.response(
                 "PlexKodiConnect Plex Companion: Running\nVersion: %s"
-                % v.ADDON_VERSION)
+                % v.ADDON_VERSION,
+                headers)
         elif request_path == "verify":
-            self.response("XBMC JSON connection test:\n" + js.ping())
+            self.response("XBMC JSON connection test:\n" + js.ping(),
+                          headers)
         elif request_path == 'resources':
             self.response(
                 RESOURCES_XML.format(
                     title=v.DEVICENAME,
                     machineIdentifier=v.PKC_MACHINE_IDENTIFIER),
-                clientinfo.getXArgsDeviceInfo(include_token=False))
+                clientinfo.getXArgsDeviceInfo(options=headers,
+                                              include_token=False))
         elif request_path == 'player/timeline/poll':
             # Plex web does polling if connected to PKC via Companion
             # Only reply if there is indeed something playing
@@ -153,7 +166,7 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    })
+                    }.update(headers))
             elif not sub_mgr.stop_sent_to_web:
                 sub_mgr.stop_sent_to_web = True
                 LOG.debug('Signaling STOP to Plex Web')
@@ -167,7 +180,7 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    })
+                    }.update(headers))
             else:
                 # Fail connection with HTTP 500 error - has been open too long
                 self.response(
@@ -180,11 +193,13 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    },
+                    }.update(headers),
                     code=500)
         elif "/subscribe" in request_path:
-            self.response(v.COMPANION_OK_MESSAGE,
-                          clientinfo.getXArgsDeviceInfo(include_token=False))
+            headers['Content-Type'] = 'text/xml;charset=utf-8'
+            headers = clientinfo.getXArgsDeviceInfo(options=headers,
+                                                    include_token=False)
+            self.response(v.COMPANION_OK_MESSAGE, headers)
             protocol = params.get('protocol')
             host = self.client_address[0]
             port = params.get('port')
@@ -196,17 +211,19 @@ class MyHandler(BaseHTTPRequestHandler):
                                    uuid,
                                    command_id)
         elif "/unsubscribe" in request_path:
-            self.response(v.COMPANION_OK_MESSAGE,
-                          clientinfo.getXArgsDeviceInfo(include_token=False))
+            headers['Content-Type'] = 'text/xml;charset=utf-8'
+            headers = clientinfo.getXArgsDeviceInfo(options=headers,
+                                                    include_token=False)
+            self.response(v.COMPANION_OK_MESSAGE, headers)
             uuid = self.headers.get('X-Plex-Client-Identifier') \
                 or self.client_address[0]
             sub_mgr.remove_subscriber(uuid)
         else:
             # Throw it to companion.py
             companion.process_command(request_path, params)
-            headers = clientinfo.getXArgsDeviceInfo(include_token=False)
-            headers['Content-Type'] = 'text/xml'
-            self.response(XML_OK, headers)
+            headers['Content-Type'] = 'text/xml;charset=utf-8'
+            headers = clientinfo.getXArgsDeviceInfo(options=headers,
+                                                    include_token=False)
             self.response(v.COMPANION_OK_MESSAGE, headers)
 
 
