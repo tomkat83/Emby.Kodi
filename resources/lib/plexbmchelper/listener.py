@@ -78,7 +78,6 @@ class MyHandler(BaseHTTPRequestHandler):
             'x-plex-device-name, x-plex-platform, x-plex-product, accept, '
             'x-plex-device, x-plex-device-screen-resolution')
         self.end_headers()
-        self.wfile.close()
 
     def sendOK(self):
         self.send_response(200)
@@ -93,7 +92,6 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_header('Connection', "close")
             self.end_headers()
             self.wfile.write(body.encode('utf-8'))
-            self.wfile.close()
         except Exception:
             pass
 
