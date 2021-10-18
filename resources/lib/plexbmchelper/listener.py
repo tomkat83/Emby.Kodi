@@ -82,16 +82,13 @@ class MyHandler(BaseHTTPRequestHandler):
 
     def response(self, body, headers=None, code=200):
         headers = {} if headers is None else headers
-        try:
-            self.send_response(code)
-            for key in headers:
-                self.send_header(key, headers[key])
-            self.send_header('Content-Length', len(body))
-            self.end_headers()
-            if body:
-                self.wfile.write(body.encode('utf-8'))
-        except Exception as exc:
-            LOG.debug('Exception encountered while responding: %s', exc)
+        self.send_response(code)
+        for key in headers:
+            self.send_header(key, headers[key])
+        self.send_header('Content-Length', len(body))
+        self.end_headers()
+        if body:
+            self.wfile.write(body.encode('utf-8'))
 
     def answer_request(self, send_data):
         self.serverlist = self.server.client.getServerList()
