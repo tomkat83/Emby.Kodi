@@ -80,9 +80,6 @@ class MyHandler(BaseHTTPRequestHandler):
             'x-plex-device, x-plex-device-screen-resolution')
         self.end_headers()
 
-    def sendOK(self):
-        self.send_response(200)
-
     def response(self, body, headers=None, code=200):
         headers = {} if headers is None else headers
         try:
