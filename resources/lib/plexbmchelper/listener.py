@@ -90,9 +90,9 @@ class MyHandler(BaseHTTPRequestHandler):
             for key in headers:
                 self.send_header(key, headers[key])
             self.send_header('Content-Length', len(body))
-            self.send_header('Connection', "close")
             self.end_headers()
-            self.wfile.write(body.encode('utf-8'))
+            if body:
+                self.wfile.write(body.encode('utf-8'))
         except Exception as exc:
             LOG.debug('Exception encountered while responding: %s', exc)
 
