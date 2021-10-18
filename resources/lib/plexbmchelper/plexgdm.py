@@ -93,8 +93,8 @@ class plexgdm(object):
         try:
             log.debug("Sending registration data: HELLO %s\n%s"
                       % (self.client_header, self.client_data))
-            self.update_sock.sendto("HELLO %s\n%s"
-                                    % (self.client_header, self.client_data),
+            msg = 'HELLO {}\n{}'.format(self.client_header, self.client_data)
+            self.update_sock.sendto(msg.encode('utf-8'),
                                     self.client_register_group)
             log.debug('(Re-)registering PKC Plex Companion successful')
         except Exception as exc:
