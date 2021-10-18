@@ -181,9 +181,9 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Content-Type': 'text/xml;charset=utf-8'
                     }.update(headers))
             else:
-                # Fail connection with HTTP 500 error - has been open too long
+                # We're not playing anything yet, just reply with a 200
                 self.response(
-                    'Need to close this connection on the PKC side',
+                    msg,
                     {
                         'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
                         'X-Plex-Protocol': '1.0',
@@ -192,8 +192,7 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    }.update(headers),
-                    code=500)
+                    }.update(headers))
         elif "/subscribe" in request_path:
             headers['Content-Type'] = 'text/xml;charset=utf-8'
             headers = clientinfo.getXArgsDeviceInfo(options=headers,
