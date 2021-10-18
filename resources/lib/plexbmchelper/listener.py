@@ -5,8 +5,7 @@ Plex Companion listener
 """
 from logging import getLogger
 from re import sub
-from socketserver import ThreadingMixIn
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 from .. import utils, companion, json_rpc as js, clientinfo, variables as v
 from .. import app
@@ -227,12 +226,7 @@ class MyHandler(BaseHTTPRequestHandler):
             self.response(v.COMPANION_OK_MESSAGE, headers)
 
 
-class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
-    """
-    Using ThreadingMixIn Thread magic
-    """
-    daemon_threads = True
-
+class PKCHTTPServer(ThreadingHTTPServer):
     def __init__(self, client, subscription_manager, *args, **kwargs):
         """
         client: Class handle to plexgdm.plexgdm. We can thus ask for an up-to-
@@ -242,4 +236,4 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
         """
         self.client = client
         self.subscription_manager = subscription_manager
-        HTTPServer.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)

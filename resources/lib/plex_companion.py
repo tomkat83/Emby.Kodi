@@ -300,7 +300,7 @@ class PlexCompanion(backgroundthread.KillableThread):
             start_count = 0
             while True:
                 try:
-                    httpd = listener.ThreadedHTTPServer(
+                    httpd = listener.PKCHTTPServer(
                         client,
                         subscription_manager,
                         ('', v.COMPANION_PORT),
