@@ -210,7 +210,10 @@ class MyHandler(BaseHTTPRequestHandler):
         else:
             # Throw it to companion.py
             companion.process_command(request_path, params)
-            self.response('', clientinfo.getXArgsDeviceInfo(include_token=False))
+            headers = clientinfo.getXArgsDeviceInfo(include_token=False)
+            headers['Content-Type'] = 'text/xml'
+            self.response(XML_OK, headers)
+            self.response(v.COMPANION_OK_MESSAGE, headers)
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
