@@ -45,7 +45,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
         self.serverlist = []
-        BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def log_message(self, format, *args):
         '''
