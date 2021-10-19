@@ -376,6 +376,27 @@ class PlaylistItem(object):
                      and kodi_sub_stream != self.current_kodi_sub_stream)):
             self.on_kodi_subtitle_stream_change(kodi_sub_stream, sub_enabled)
 
+    def on_plex_stream_change(self, plex_data):
+        """
+        Call this method if Plex Companion wants to change streams
+        """
+        if 'audioStreamID' in plex_data:
+            plex_index = int(plex_data['audioStreamID'])
+            kodi_index = self.kodi_stream_index(plex_index, 'audio')
+            app.APP.player.setAudioStream(kodi_index)
+            self.current_kodi_audio_stream = kodi_index
+        if 'subtitleStreamID' in plex_data:
+            plex_index = int(plex_data['subtitleStreamID'])
+            if plex_index == 0:
+                app.APP.player.showSubtitles(False)
+                kodi_index = False
+            else:
+                kodi_index = self.kodi_stream_index(plex_index, 'subtitle')
+                if kodi_index:
+                    app.APP.player.setSubtitleStream(kodi_index)
+                    app.APP.player.showSubtitles(True)
+            self.current_kodi_sub_stream = kodi_index
+
 
 def playlist_item_from_kodi(kodi_item):
     """
