@@ -249,27 +249,10 @@ class SubscriptionMgr(object):
                 answ['token'] = playqueue.plex_transient_token
             # Process audio and subtitle streams
             if ptype == v.PLEX_PLAYLIST_TYPE_VIDEO:
-                strm_id = self._plex_stream_index(playerid, 'audio')
-                if strm_id:
-                    answ['audioStreamID'] = strm_id
-                else:
-                    LOG.error('We could not select a Plex audiostream')
-                strm_id = self._plex_stream_index(playerid, 'video')
-                if strm_id:
-                    answ['videoStreamID'] = strm_id
-                else:
-                    LOG.error('We could not select a Plex videostream')
-                if info['subtitleenabled']:
-                    try:
-                        strm_id = self._plex_stream_index(playerid, 'subtitle')
-                    except KeyError:
-                        # subtitleenabled can be True while currentsubtitle can
-                        # still be {}
-                        strm_id = None
-                    if strm_id is not None:
-                        # If None, then the subtitle is only present on Kodi
-                        # side
-                        answ['subtitleStreamID'] = strm_id
+                answ['videoStreamID'] = str(item.current_plex_video_stream)
+                answ['audioStreamID'] = str(item.current_plex_audio_stream)
+                # Mind the zero - meaning subs are deactivated
+                answ['subtitleStreamID'] = str(item.current_plex_sub_stream or 0)
             return answ
 
     def signal_stop(self):
@@ -284,22 +267,6 @@ class SubscriptionMgr(object):
             self._send_pms_notification(playerid,
                                         self.last_params,
                                         timeout=0.0001)
-
-    def _plex_stream_index(self, playerid, stream_type):
-        """
-        Returns the current Plex stream index [str] for the player playerid
-
-        stream_type: 'video', 'audio', 'subtitle'
-        """
-        playqueue = PQ.PLAYQUEUES[playerid]
-        info = app.PLAYSTATE.player_states[playerid]
-        position = self._get_correct_position(info, playqueue)
-        if info[STREAM_DETAILS[stream_type]] == -1:
-            kodi_stream_index = -1
-        else:
-            kodi_stream_index = info[STREAM_DETAILS[stream_type]]['index']
-        return playqueue.items[position].plex_stream_index(kodi_stream_index,
-                                                           stream_type)
 
     def update_command_id(self, uuid, command_id):
         """

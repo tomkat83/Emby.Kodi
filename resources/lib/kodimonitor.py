@@ -390,6 +390,8 @@ class KodiMonitor(xbmc.Monitor):
         if not self._switched_to_plex_streams:
             # We need to switch to the Plex streams ONCE upon playback start
             # after onavchange has been fired
+            item.init_kodi_streams()
+            item.switch_to_plex_stream('video')
             if utils.settings('audioStreamPick') == '0':
                 item.switch_to_plex_stream('audio')
             if utils.settings('subtitleStreamPick') == '0':
