@@ -5,8 +5,7 @@ Plex Companion listener
 """
 from logging import getLogger
 from re import sub
-from socketserver import ThreadingMixIn
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 from .. import utils, companion, json_rpc as js, clientinfo, variables as v
 from .. import app
@@ -45,7 +44,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
         self.serverlist = []
-        BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def log_message(self, format, *args):
         '''
@@ -62,6 +61,7 @@ class MyHandler(BaseHTTPRequestHandler):
         self.answer_request(1)
 
     def do_OPTIONS(self):
+        LOG.debug("Serving OPTIONS request...")
         self.send_response(200)
         self.send_header('Content-Length', '0')
         self.send_header('X-Plex-Client-Identifier', v.PKC_MACHINE_IDENTIFIER)
@@ -78,24 +78,16 @@ class MyHandler(BaseHTTPRequestHandler):
             'x-plex-device-name, x-plex-platform, x-plex-product, accept, '
             'x-plex-device, x-plex-device-screen-resolution')
         self.end_headers()
-        self.wfile.close()
-
-    def sendOK(self):
-        self.send_response(200)
 
     def response(self, body, headers=None, code=200):
         headers = {} if headers is None else headers
-        try:
-            self.send_response(code)
-            for key in headers:
-                self.send_header(key, headers[key])
-            self.send_header('Content-Length', len(body))
-            self.send_header('Connection', "close")
-            self.end_headers()
+        self.send_response(code)
+        for key in headers:
+            self.send_header(key, headers[key])
+        self.send_header('Content-Length', len(body))
+        self.end_headers()
+        if body:
             self.wfile.write(body.encode('utf-8'))
-            self.wfile.close()
-        except Exception:
-            pass
 
     def answer_request(self, send_data):
         self.serverlist = self.server.client.getServerList()
@@ -108,23 +100,37 @@ class MyHandler(BaseHTTPRequestHandler):
         params = {}
         for key in paramarrays:
             params[key] = paramarrays[key][0]
-        LOG.debug("remote request_path: %s", request_path)
+        LOG.debug("remote request_path: %s, received from %s with headers: %s",
+                  request_path, self.client_address, self.headers.items())
         LOG.debug("params received from remote: %s", params)
         sub_mgr.update_command_id(self.headers.get(
-                'X-Plex-Client-Identifier', self.client_address[0]),
+            'X-Plex-Client-Identifier', self.client_address[0]),
             params.get('commandID'))
+
+        conntype = self.headers.get('Connection', '')
+        if conntype.lower() == 'keep-alive':
+            headers = {
+                'Connection': 'Keep-Alive',
+                'Keep-Alive': 'timeout=20'
+            }
+        else:
+            headers = {'Connection': 'Close'}
+
         if request_path == "version":
             self.response(
                 "PlexKodiConnect Plex Companion: Running\nVersion: %s"
-                % v.ADDON_VERSION)
+                % v.ADDON_VERSION,
+                headers)
         elif request_path == "verify":
-            self.response("XBMC JSON connection test:\n" + js.ping())
+            self.response("XBMC JSON connection test:\n" + js.ping(),
+                          headers)
         elif request_path == 'resources':
             self.response(
                 RESOURCES_XML.format(
                     title=v.DEVICENAME,
                     machineIdentifier=v.PKC_MACHINE_IDENTIFIER),
-                clientinfo.getXArgsDeviceInfo(include_token=False))
+                clientinfo.getXArgsDeviceInfo(options=headers,
+                                              include_token=False))
         elif request_path == 'player/timeline/poll':
             # Plex web does polling if connected to PKC via Companion
             # Only reply if there is indeed something playing
@@ -159,7 +165,7 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    })
+                    }.update(headers))
             elif not sub_mgr.stop_sent_to_web:
                 sub_mgr.stop_sent_to_web = True
                 LOG.debug('Signaling STOP to Plex Web')
@@ -173,11 +179,11 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    })
+                    }.update(headers))
             else:
-                # Fail connection with HTTP 500 error - has been open too long
+                # We're not playing anything yet, just reply with a 200
                 self.response(
-                    'Need to close this connection on the PKC side',
+                    msg,
                     {
                         'X-Plex-Client-Identifier': v.PKC_MACHINE_IDENTIFIER,
                         'X-Plex-Protocol': '1.0',
@@ -186,11 +192,12 @@ class MyHandler(BaseHTTPRequestHandler):
                         'Access-Control-Expose-Headers':
                             'X-Plex-Client-Identifier',
                         'Content-Type': 'text/xml;charset=utf-8'
-                    },
-                    code=500)
+                    }.update(headers))
         elif "/subscribe" in request_path:
-            self.response(v.COMPANION_OK_MESSAGE,
-                          clientinfo.getXArgsDeviceInfo(include_token=False))
+            headers['Content-Type'] = 'text/xml;charset=utf-8'
+            headers = clientinfo.getXArgsDeviceInfo(options=headers,
+                                                    include_token=False)
+            self.response(v.COMPANION_OK_MESSAGE, headers)
             protocol = params.get('protocol')
             host = self.client_address[0]
             port = params.get('port')
@@ -202,23 +209,23 @@ class MyHandler(BaseHTTPRequestHandler):
                                    uuid,
                                    command_id)
         elif "/unsubscribe" in request_path:
-            self.response(v.COMPANION_OK_MESSAGE,
-                          clientinfo.getXArgsDeviceInfo(include_token=False))
+            headers['Content-Type'] = 'text/xml;charset=utf-8'
+            headers = clientinfo.getXArgsDeviceInfo(options=headers,
+                                                    include_token=False)
+            self.response(v.COMPANION_OK_MESSAGE, headers)
             uuid = self.headers.get('X-Plex-Client-Identifier') \
                 or self.client_address[0]
             sub_mgr.remove_subscriber(uuid)
         else:
             # Throw it to companion.py
             companion.process_command(request_path, params)
-            self.response('', clientinfo.getXArgsDeviceInfo(include_token=False))
+            headers['Content-Type'] = 'text/xml;charset=utf-8'
+            headers = clientinfo.getXArgsDeviceInfo(options=headers,
+                                                    include_token=False)
+            self.response(v.COMPANION_OK_MESSAGE, headers)
 
 
-class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
-    """
-    Using ThreadingMixIn Thread magic
-    """
-    daemon_threads = True
-
+class PKCHTTPServer(ThreadingHTTPServer):
     def __init__(self, client, subscription_manager, *args, **kwargs):
         """
         client: Class handle to plexgdm.plexgdm. We can thus ask for an up-to-
@@ -228,4 +235,4 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
         """
         self.client = client
         self.subscription_manager = subscription_manager
-        HTTPServer.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
