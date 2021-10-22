@@ -312,13 +312,16 @@ class PlaylistItem(object):
         Pass in the plex_stream_index [int] in order to receive the Kodi stream
         index [int].
             stream_type:    'video', 'audio', 'subtitle'
-        Returns None if unsuccessful
+        Raises ValueError if unsuccessful
         """
-        if plex_stream_index is None:
-            return
+        if not isinstance(plex_stream_index, int):
+            raise ValueError('%s plex_stream_index %s of type %s received' %
+                             (stream_type, plex_stream_index, type(plex_stream_index)))
         for i, stream in enumerate(self._get_iterator(stream_type)):
             if cast(int, stream.get('id')) == plex_stream_index:
                 return i
+        raise ValueError('No %s kodi_stream_index for plex_stream_index %s' %
+                         (stream_type, plex_stream_index))
 
     def active_plex_stream_index(self, stream_type):
         """
@@ -457,27 +460,26 @@ class PlaylistItem(object):
                      and kodi_sub_stream != self.current_kodi_sub_stream)):
             self.on_kodi_subtitle_stream_change(kodi_sub_stream, sub_enabled)
 
-    def on_plex_stream_change(self, plex_data):
+    def on_plex_stream_change(self, video_stream_id=None, audio_stream_id=None,
+                              subtitle_stream_id=None):
         """
-        Call this method if Plex Companion wants to change streams
+        Call this method if Plex Companion wants to change streams [ints]
         """
-        if 'audioStreamID' in plex_data:
-            plex_index = int(plex_data['audioStreamID'])
-            kodi_index = self.kodi_stream_index(plex_index, 'audio')
-            self._set_kodi_stream_if_different(kodi_index, 'audio')
-            self.current_kodi_audio_stream = kodi_index
-        if 'videoStreamID' in plex_data:
-            plex_index = int(plex_data['videoStreamID'])
-            kodi_index = self.kodi_stream_index(plex_index, 'video')
+        if video_stream_id is not None:
+            kodi_index = self.kodi_stream_index(video_stream_id, 'video')
             self._set_kodi_stream_if_different(kodi_index, 'video')
             self.current_kodi_video_stream = kodi_index
-        if 'subtitleStreamID' in plex_data:
-            plex_index = int(plex_data['subtitleStreamID'])
-            if plex_index == 0:
+        if audio_stream_id is not None:
+            kodi_index = self.kodi_stream_index(audio_stream_id, 'audio')
+            self._set_kodi_stream_if_different(kodi_index, 'audio')
+            self.current_kodi_audio_stream = kodi_index
+        if subtitle_stream_id is not None:
+            if subtitle_stream_id == 0:
                 app.APP.player.showSubtitles(False)
                 kodi_index = False
             else:
-                kodi_index = self.kodi_stream_index(plex_index, 'subtitle')
+                kodi_index = self.kodi_stream_index(subtitle_stream_id,
+                                                    'subtitle')
                 if kodi_index:
                     app.APP.player.setSubtitleStream(kodi_index)
                     app.APP.player.showSubtitles(True)

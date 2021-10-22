@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import sys
+
 import xbmc
 import xbmcvfs
 
@@ -34,7 +35,6 @@ WINDOW_PROPERTIES = (
 class Service(object):
     ws = None
     sync = None
-    plexcompanion = None
 
     def __init__(self):
         self._init_done = False
@@ -448,7 +448,11 @@ class Service(object):
         self.pms_ws = websocket_client.get_pms_websocketapp()
         self.alexa_ws = websocket_client.get_alexa_websocketapp()
         self.sync = sync.Sync()
-        self.plexcompanion = plex_companion.PlexCompanion()
+        self.companion_playstate_mgr = plex_companion.PlaystateMgr()
+        if utils.settings('plexCompanion') == 'true':
+            self.companion_listener = plex_companion.Listener(self.companion_playstate_mgr)
+        else:
+            self.companion_listener = None
         self.playqueue = playqueue.PlayqueueMonitor()
 
         # Main PKC program loop
@@ -548,7 +552,9 @@ class Service(object):
                 self.startup_completed = True
                 self.pms_ws.start()
                 self.sync.start()
-                self.plexcompanion.start()
+                self.companion_playstate_mgr.start()
+                if self.companion_listener is not None:
+                    self.companion_listener.start()
                 self.playqueue.start()
                 self.alexa_ws.start()
 
