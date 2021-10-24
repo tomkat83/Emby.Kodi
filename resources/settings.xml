@@ -114,6 +114,7 @@
 		<setting id="askCinema" type="bool" label="30519" default="false" visible="eq(-1,true)" subsetting="true" />
         <setting id="trailerNumber" type="slider" label="39000" default="3" visible="eq(-2,true)" range="1,1,15" option="int" />
         <setting id="enableSkipIntro" type="bool" label="30525" default="true" /><!-- Enable skipping of intros -->
+        <setting id="enableAutoSkipIntro" type="bool" label="39720" default="false" visible="eq(-1,true)" subsetting="true" /><!-- Enable auto skipping of intros -->
         <setting id="firstVideoStream" type="bool" label="30546" default="false" /><!-- Pick the first video if several versions are present -->
         <setting id="audioStreamPick" type="enum" label="30547" values="Plex|Kodi" default="0" /><!-- Who picks the audio stream on playback start? -->
         <setting id="subtitleStreamPick" type="enum" label="30548" values="Plex|Kodi" default="0" /><!-- Who picks subtitles on playback start? -->
@@ -142,7 +143,7 @@
 	</category>
 
 	<category label="30544"><!-- artwork -->
-        <setting id="usePlexArtwork" label="30502"  type="bool" default="true" /> <!-- Sync Plex artwork from the PMS -->   
+        <setting id="usePlexArtwork" label="30502"  type="bool" default="true" /> <!-- Sync Plex artwork from the PMS -->
 		<setting id="enableTextureCache" label="30512"  type="bool" default="true" visible="eq(-1,true)"/> <!-- Cache all artwork for a smooth Kodi experience -->
         <setting id="FanartTV" label="30539" type="bool" default="false" visible="eq(-2,true)"/><!-- Download additional art from FanArtTV -->
         <setting id="PreferKodiCollectionArt" label="30543" type="bool" default="true" visible="eq(-1,true) + eq(-3,true)" subsetting="true" /><!-- Prefer Kodi artwork for collections -->

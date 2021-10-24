@@ -3,7 +3,7 @@
 # Croneter None <croneter@gmail.com>, 2017
 # Goncalo Campos <gda_campos@hotmail.com>, 2018
 # Bruno Guerreiro <american.jesus.pt@gmail.com>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1677,3 +1677,8 @@ msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr ""
 "Substituir classificações do utilizador com numero de versões de média"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

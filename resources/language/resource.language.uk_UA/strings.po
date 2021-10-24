@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
 # Vlad Anisimov <uniss@ua.fm>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1691,3 +1691,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Замінити користувацький рейтинг лічильником версій елемента"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

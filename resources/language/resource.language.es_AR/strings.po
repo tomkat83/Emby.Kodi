@@ -1,7 +1,7 @@
 #  XBMC Media Center language file
 # Translators:
 # Croneter None <croneter@gmail.com>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1699,3 +1699,8 @@ msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr ""
 "Reemplazar valoraciones de usuario con cantidad de versiones de medios"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

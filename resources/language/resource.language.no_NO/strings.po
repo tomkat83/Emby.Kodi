@@ -3,7 +3,7 @@
 # Croneter None <croneter@gmail.com>, 2017
 # Jon Mjørud <jon.mjorud@gmail.com>, 2017
 # Kyb ntnu, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1677,3 +1677,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Erstatt rating med antall versjoner av media"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

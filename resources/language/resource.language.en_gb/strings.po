@@ -1139,12 +1139,12 @@ msgctxt "#39082"
 msgid "Direct Paths"
 msgstr ""
 
-# Dialog for manually entering PMS 
+# Dialog for manually entering PMS
 msgctxt "#39083"
 msgid "Enter PMS IP or URL"
 msgstr ""
 
-# Dialog for manually entering PMS 
+# Dialog for manually entering PMS
 msgctxt "#39084"
 msgid "Enter PMS port"
 msgstr ""
@@ -1500,4 +1500,9 @@ msgstr ""
 # In PKC Settings under Sync
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
+msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
 msgstr ""

@@ -3,7 +3,7 @@
 # Elixir59, 2019
 # Croneter None <croneter@gmail.com>, 2020
 # Raph Mell, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1719,3 +1719,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Remplacer les notes d'utilisateurs par le nombre de versions du média"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""
