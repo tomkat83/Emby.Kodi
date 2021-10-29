@@ -19,7 +19,6 @@ from . import variables as v
 from . import app
 from . import loghandler
 from . import backgroundthread
-from . import skip_plex_intro
 from .windows import userselect
 
 ###############################################################################
@@ -557,9 +556,6 @@ class Service(object):
                     self.companion_listener.start()
                 self.playqueue.start()
                 self.alexa_ws.start()
-
-            elif app.APP.is_playing:
-                skip_plex_intro.check()
 
             xbmc.sleep(200)
 
