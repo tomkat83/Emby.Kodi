@@ -31,7 +31,6 @@ class KodiMonitor(xbmc.Monitor):
 
     def __init__(self):
         self._already_slept = False
-        self._switched_to_plex_streams = True
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
@@ -365,7 +364,15 @@ class KodiMonitor(xbmc.Monitor):
         # Workaround for the Kodi add-on Up Next
         if not app.SYNC.direct_paths:
             _notify_upnext(item)
-        self._switched_to_plex_streams = False
+
+        # We need to switch to the Plex streams ONCE upon playback start
+        if playerid == v.KODI_VIDEO_PLAYER_ID:
+            item.init_kodi_streams()
+            item.switch_to_plex_stream('video')
+            if utils.settings('audioStreamPick') == '0':
+                item.switch_to_plex_stream('audio')
+            if utils.settings('subtitleStreamPick') == '0':
+                item.switch_to_plex_stream('subtitle')
 
     def _on_av_change(self, data):
         """
@@ -387,22 +394,7 @@ class KodiMonitor(xbmc.Monitor):
         if item is None:
             # Player might've quit
             return
-        if not self._switched_to_plex_streams:
-            # We need to switch to the Plex streams ONCE upon playback start
-            # after onavchange has been fired
-            # Wait a bit because JSON responses won't be ready otherwise
-            if app.APP.monitor.waitForAbort(2):
-                # In case PKC needs to quit
-                return
-            item.init_kodi_streams()
-            item.switch_to_plex_stream('video')
-            if utils.settings('audioStreamPick') == '0':
-                item.switch_to_plex_stream('audio')
-            if utils.settings('subtitleStreamPick') == '0':
-                item.switch_to_plex_stream('subtitle')
-            self._switched_to_plex_streams = True
-        else:
-            item.on_av_change(playerid)
+        item.on_av_change(playerid)
 
 
 def _playback_cleanup(ended=False):
