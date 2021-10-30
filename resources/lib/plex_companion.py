@@ -191,19 +191,7 @@ class PlexCompanion(backgroundthread.KillableThread):
         playqueue = PQ.get_playqueue_from_type(
             v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[data['type']])
         pos = js.get_position(playqueue.playlistid)
-        if 'audioStreamID' in data:
-            index = playqueue.items[pos].kodi_stream_index(
-                data['audioStreamID'], 'audio')
-            app.APP.player.setAudioStream(index)
-        elif 'subtitleStreamID' in data:
-            if data['subtitleStreamID'] == '0':
-                app.APP.player.showSubtitles(False)
-            else:
-                index = playqueue.items[pos].kodi_stream_index(
-                    data['subtitleStreamID'], 'subtitle')
-                app.APP.player.setSubtitleStream(index)
-        else:
-            LOG.error('Unknown setStreams command: %s', data)
+        playqueue.items[pos].on_plex_stream_change(data)
 
     @staticmethod
     def _process_refresh(data):
@@ -300,7 +288,7 @@ class PlexCompanion(backgroundthread.KillableThread):
             start_count = 0
             while True:
                 try:
-                    httpd = listener.ThreadedHTTPServer(
+                    httpd = listener.PKCHTTPServer(
                         client,
                         subscription_manager,
                         ('', v.COMPANION_PORT),

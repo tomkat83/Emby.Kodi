@@ -429,6 +429,15 @@ def get_current_audio_stream_index(playerid):
         'properties': ['currentaudiostream']})['result']['currentaudiostream']['index']
 
 
+def get_current_video_stream_index(playerid):
+    """
+    Returns the currently active video stream index [int]
+    """
+    return JsonRPC('Player.GetProperties').execute({
+        'playerid': playerid,
+        'properties': ['currentvideostream']})['result']['currentvideostream']['index']
+
+
 def get_current_subtitle_stream_index(playerid):
     """
     Returns the currently active subtitle stream index [int] or None if there

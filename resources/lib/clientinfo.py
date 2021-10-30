@@ -29,7 +29,6 @@ def getXArgsDeviceInfo(options=None, include_token=True):
     """
     xargs = {
         'Accept': '*/*',
-        'Connection': 'keep-alive',
         "Content-Type": "application/x-www-form-urlencoded",
         # "Access-Control-Allow-Origin": "*",
         'Accept-Language': xbmc.getLanguage(xbmc.ISO_639_1),
@@ -42,6 +41,8 @@ def getXArgsDeviceInfo(options=None, include_token=True):
         'X-Plex-Version': v.ADDON_VERSION,
         'X-Plex-Client-Identifier': getDeviceId(),
         'X-Plex-Provides': 'client,controller,player,pubsub-player',
+        'X-Plex-Protocol': '1.0',
+        'Cache-Control': 'no-cache'
     }
     if include_token and utils.window('pms_token'):
         xargs['X-Plex-Token'] = utils.window('pms_token')

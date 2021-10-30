@@ -611,6 +611,8 @@ class KodiVideoDB(common.KodiDBBase):
             identifier = 'idMovie'
         elif kodi_type == v.KODI_TYPE_EPISODE:
             identifier = 'idEpisode'
+        else:
+            return
         self.cursor.execute('SELECT idFile FROM %s WHERE %s = ? LIMIT 1'
                             % (kodi_type, identifier), (kodi_id, ))
         try:

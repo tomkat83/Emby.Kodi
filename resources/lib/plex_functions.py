@@ -1148,3 +1148,17 @@ def change_audio_stream(plex_stream_id, part_id):
     url = '{server}/library/parts/%s' % part_id
     return DU().downloadUrl(utils.extend_url(url, arguments),
                             action_type='PUT')
+
+
+def change_video_stream(plex_stream_id, part_id):
+    """
+    Tell the PMS to display another video stream
+    - We always do this for ALL parts of a video
+    """
+    arguments = {
+        'videoStreamID': plex_stream_id,
+        'allParts': 1
+    }
+    url = '{server}/library/parts/%s' % part_id
+    return DU().downloadUrl(utils.extend_url(url, arguments),
+                            action_type='PUT')
