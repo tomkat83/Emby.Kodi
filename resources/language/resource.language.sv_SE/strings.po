@@ -7,7 +7,7 @@
 # Nisse Karlsson <transifex@xcorp.at>, 2019
 # Ludwig Johnson <public@ludwigjohnson.se>, 2019
 # namob <boman.d@gmail.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1685,3 +1685,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Ersätt användarbetyg med antalet mediaobjekt"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

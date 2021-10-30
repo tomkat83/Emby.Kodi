@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from .windows.skip_intro import SkipIntroDialog
-from . import app, variables as v
+from . import app, utils, variables as v
 
 
 def skip_intro(intros):
@@ -20,7 +20,11 @@ def skip_intro(intros):
                                                     'default',
                                                     '1080i',
                                                     intro_end=end)
-        app.APP.skip_intro_dialog.show()
+
+        if utils.settings('enableAutoSkipIntro') == "true":
+            app.APP.skip_intro_dialog.seekTimeToIntroEnd()
+        else:
+            app.APP.skip_intro_dialog.show()
     elif not in_intro and app.APP.skip_intro_dialog is not None:
         app.APP.skip_intro_dialog.close()
         app.APP.skip_intro_dialog = None

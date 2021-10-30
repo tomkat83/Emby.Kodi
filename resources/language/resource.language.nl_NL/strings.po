@@ -5,7 +5,7 @@
 # Panja0 <panja0@protonmail.com>, 2019
 # Nick Corthals <corthals.nick@gmail.com>, 2019
 # Rick van Soest <r.vansoest@gmail.com>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1683,3 +1683,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Vervang ratings met aantal media versies"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

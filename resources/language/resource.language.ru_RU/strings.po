@@ -6,7 +6,7 @@
 # Alex Freit <alex.nx@mail.ru>, 2019
 # Vladimir Supranenok <stark_v@mail.ru>, 2019
 # Vlad Anisimov <uniss@ua.fm>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1691,3 +1691,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Заменить пользовательский рейтинг счетчиком версий элемента"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

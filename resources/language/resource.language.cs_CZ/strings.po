@@ -2,7 +2,7 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2017
 # Michal Kuncl <michal.kuncl@gmail.com>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1676,3 +1676,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Nahradit uživatelské hodnocení počtem verzí média"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""
