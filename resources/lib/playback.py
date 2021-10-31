@@ -12,8 +12,12 @@ import xbmc
 from .plex_api import API
 from .plex_db import PlexDB
 from .kodi_db import KodiVideoDB
-from . import plex_functions as PF, playlist_func as PL, playqueue as PQ
-from . import json_rpc as js, variables as v, utils, transfer
+from . import plex_functions as PF
+from . import playlist_func as PL
+from . import json_rpc as js
+from . import variables as v
+from . import utils
+from . import transfer
 from . import playback_decision, app
 from . import exceptions
 
@@ -74,20 +78,19 @@ def _playback_triage(plex_id, plex_type, path, resolve, resume):
         _ensure_resolve(abort=True)
         return
     with app.APP.lock_playqueues:
-        playqueue = PQ.get_playqueue_from_type(
-            v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[plex_type])
+        playqueue = app.PLAYQUEUES.from_plex_type(plex_type)
         try:
             pos = js.get_position(playqueue.playlistid)
         except KeyError:
             # Kodi bug - Playlist plays (not Playqueue) will ALWAYS be audio for
             # add-on paths
             LOG.debug('No position returned from player! Assuming playlist')
-            playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_AUDIO)
+            playqueue = app.PLAYQUEUES.audio
             try:
                 pos = js.get_position(playqueue.playlistid)
             except KeyError:
                 LOG.debug('Assuming video instead of audio playlist playback')
-                playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_VIDEO)
+                playqueue = app.PLAYQUEUES.video
                 try:
                     pos = js.get_position(playqueue.playlistid)
                 except KeyError:
@@ -159,7 +162,7 @@ def _playlist_playback(plex_id):
         return
     # Kodi bug: playqueue will ALWAYS be audio playqueue UNTIL playback
     # has actually started. Need to tell Kodimonitor
-    playqueue = PQ.get_playqueue_from_type(v.KODI_PLAYLIST_TYPE_AUDIO)
+    playqueue = app.PLAYQUEUES.audio
     playqueue.clear(kodi=False)
     # Set the flag for the potentially WRONG audio playlist so Kodimonitor
     # can pick up on it
@@ -499,8 +502,7 @@ def process_indirect(key, offset, resolve=True):
 
     api = API(xml[0])
     listitem = api.listitem(listitem=transfer.PKCListItem, resume=False)
-    playqueue = PQ.get_playqueue_from_type(
-        v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type])
+    playqueue = app.PLAYQUEUES.from_plex_type(api.plex_type)
     playqueue.clear()
     item = PL.playlist_item_from_xml(xml[0])
     item.offset = offset

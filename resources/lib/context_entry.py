@@ -6,8 +6,11 @@ import xbmcgui
 
 from .plex_api import API
 from .plex_db import PlexDB
-from . import context, plex_functions as PF, playqueue as PQ
-from . import utils, variables as v, app
+from . import context
+from . import plex_functions as PF
+from . import utils
+from . import variables as v
+from . import app
 
 ###############################################################################
 
@@ -137,8 +140,7 @@ class ContextMenu(object):
         """
         For using direct paths: Initiates playback using the PMS
         """
-        playqueue = PQ.get_playqueue_from_type(
-            v.KODI_PLAYLIST_TYPE_FROM_KODI_TYPE[self.kodi_type])
+        playqueue = app.PLAYQUEUES.from_kodi_type(self.kodi_type)
         playqueue.clear()
         app.PLAYSTATE.context_menu_play = True
         handle = self.api.fullpath(force_addon=True)[0]

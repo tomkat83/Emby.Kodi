@@ -5,13 +5,13 @@ import requests
 import xml.etree.ElementTree as etree
 
 from .common import proxy_headers, proxy_params, log_error
+from .playqueue import compare_playqueues
 
 from .. import json_rpc as js
 from .. import variables as v
 from .. import backgroundthread
 from .. import app
 from .. import timing
-from .. import playqueue as PQ
 from .. import skip_plex_intro
 
 
@@ -55,7 +55,7 @@ def get_correct_position(info, playqueue):
 def timeline_dict(playerid, typus):
     with app.APP.lock_playqueues:
         info = app.PLAYSTATE.player_states[playerid]
-        playqueue = PQ.PLAYQUEUES[playerid]
+        playqueue = app.PLAYQUEUES[playerid]
         position = get_correct_position(info, playqueue)
         try:
             item = playqueue.items[position]
@@ -354,7 +354,21 @@ class PlaystateMgr(backgroundthread.KillableThread):
                 self.close_requests_session()
                 if self.wait_while_suspended():
                     break
-            # We will only become active if there's Kodi playback going on
+            # Check for Kodi playlist changes first
+            with app.APP.lock_playqueues:
+                for playqueue in app.PLAYQUEUES:
+                    kodi_pl = js.playlist_get_items(playqueue.playlistid)
+                    if playqueue.old_kodi_pl != kodi_pl:
+                        if playqueue.id is None and (not app.SYNC.direct_paths or
+                                                     app.PLAYSTATE.context_menu_play):
+                            # Only initialize if directly fired up using direct
+                            # paths. Otherwise let default.py do its magic
+                            log.debug('Not yet initiating playback')
+                        else:
+                            # compare old and new playqueue
+                            compare_playqueues(playqueue, kodi_pl)
+                        playqueue.old_kodi_pl = list(kodi_pl)
+            # Then check for Kodi playback
             players = js.get_players()
             if not players and signaled_playback_stop:
                 self.sleep(1)

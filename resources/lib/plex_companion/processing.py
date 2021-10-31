@@ -14,7 +14,6 @@ from .. import plex_functions as PF
 from .. import playlist_func as PL
 from .. import playback
 from .. import json_rpc as js
-from .. import playqueue as PQ
 from .. import variables as v
 from .. import app
 from .. import exceptions
@@ -87,9 +86,8 @@ def process_playlist(containerKey, typus, key, offset, token):
     # Get the playqueue ID
     _, container_key, query = PF.ParseContainerKey(containerKey)
     try:
-        playqueue = PQ.get_playqueue_from_type(
-            v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[typus])
-    except KeyError:
+        playqueue = app.PLAYQUEUES.from_plex_type(typus)
+    except ValueError:
         # E.g. Plex web does not supply the media type
         # Still need to figure out the type (video vs. music vs. pix)
         xml = PF.GetPlexMetadata(key)
@@ -99,8 +97,7 @@ def process_playlist(containerKey, typus, key, offset, token):
             log.error('Could not download Plex metadata')
             return
         api = API(xml[0])
-        playqueue = PQ.get_playqueue_from_type(
-            v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[api.plex_type])
+        playqueue = app.PLAYQUEUES.from_plex_type(api.plex_type)
     if key:
         _, key, _ = PF.ParseContainerKey(key)
     update_playqueue_from_PMS(playqueue,
@@ -111,12 +108,12 @@ def process_playlist(containerKey, typus, key, offset, token):
                               start_plex_id=key)
 
 
-def process_streams(typus, video_stream_id, audio_stream_id, subtitle_stream_id):
+def process_streams(plex_type, video_stream_id, audio_stream_id,
+                    subtitle_stream_id):
     """
     Plex Companion client adjusted audio or subtitle stream
     """
-    playqueue = PQ.get_playqueue_from_type(
-        v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[typus])
+    playqueue = app.PLAYQUEUES.from_plex_type(plex_type)
     pos = js.get_position(playqueue.playlistid)
     playqueue.items[pos].on_plex_stream_change(video_stream_id,
                                                audio_stream_id,
@@ -135,12 +132,10 @@ def process_refresh(playqueue_id):
         plex_type = PL.get_plextype_from_xml(xml)
         if plex_type is None:
             return
-        playqueue = PQ.get_playqueue_from_type(
-            v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[plex_type])
+        playqueue = app.PLAYQUEUES.from_plex_type(plex_type)
         playqueue.clear()
         return
-    playqueue = PQ.get_playqueue_from_type(
-        v.KODI_PLAYLIST_TYPE_FROM_PLEX_TYPE[xml[0].attrib['type']])
+    playqueue = app.PLAYQUEUES.from_plex_type(xml[0].attrib['type'])
     update_playqueue_from_PMS(playqueue, playqueue_id)
 
 
@@ -155,7 +150,7 @@ def skip_to(playqueue_item_id, key):
               playqueue_item_id, plex_id)
     found = True
     for player in list(js.get_players().values()):
-        playqueue = PQ.PLAYQUEUES[player['playerid']]
+        playqueue = app.PLAYQUEUES[player['playerid']]
         for i, item in enumerate(playqueue.items):
             if item.id == playqueue_item_id:
                 found = True

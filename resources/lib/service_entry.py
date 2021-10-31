@@ -12,9 +12,8 @@ from . import kodimonitor
 from . import sync, library_sync
 from . import websocket_client
 from . import plex_companion
-from . import plex_functions as PF, playqueue as PQ
+from . import plex_functions as PF
 from . import playback_starter
-from . import playqueue
 from . import variables as v
 from . import app
 from . import loghandler
@@ -99,7 +98,6 @@ class Service(object):
         self.setup = None
         self.pms_ws = None
         self.alexa_ws = None
-        self.playqueue = None
         # Flags for other threads
         self.connection_check_running = False
         self.auth_running = False
@@ -436,8 +434,6 @@ class Service(object):
         app.init()
         app.APP.monitor = kodimonitor.KodiMonitor()
         app.APP.player = xbmc.Player()
-        # Initialize the PKC playqueues
-        PQ.init_playqueues()
 
         # Server auto-detect
         self.setup = initialsetup.InitialSetup()
@@ -452,7 +448,6 @@ class Service(object):
             self.companion_listener = plex_companion.Listener(self.companion_playstate_mgr)
         else:
             self.companion_listener = None
-        self.playqueue = playqueue.PlayqueueMonitor()
 
         # Main PKC program loop
         while not self.should_cancel():
@@ -554,7 +549,6 @@ class Service(object):
                 self.companion_playstate_mgr.start()
                 if self.companion_listener is not None:
                     self.companion_listener.start()
-                self.playqueue.start()
                 self.alexa_ws.start()
 
             xbmc.sleep(200)
