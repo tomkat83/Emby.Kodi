@@ -367,6 +367,11 @@ class KodiMonitor(xbmc.Monitor):
 
         # We need to switch to the Plex streams ONCE upon playback start
         if playerid == v.KODI_VIDEO_PLAYER_ID:
+            # The Kodi player takes forever to initialize all streams
+            # Especially subtitles, apparently. No way to tell when Kodi
+            # is done :-(
+            if app.APP.monitor.waitForAbort(5):
+                return
             item.init_kodi_streams()
             item.switch_to_plex_stream('video')
             if utils.settings('audioStreamPick') == '0':
