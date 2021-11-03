@@ -1,3 +1,10 @@
+version 3.5.9 (beta only):
+- Huge overhaul: completely new Plex Companion implementation. PKC is now available as a casting target for Plexamp. Includes refactoring of Skip Intro as well as Playqueues
+- Add auto skip intro functionality
+- Fix streams for videos not being set-up
+- Fix generating new unique device ID for PKC not working
+- Make PKC compatible with Python 3.6 again
+
 version 3.5.8:
 - Fix UnboundLocalError: local variable 'identifier' referenced before assignment
 - versions 3.5.6-3.5.7 for everyone
