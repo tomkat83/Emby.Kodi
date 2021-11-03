@@ -117,7 +117,8 @@ class Main(object):
             transfer.plex_command('choose_pms_server')
 
         elif mode == 'deviceid':
-            self.deviceid()
+            LOG.info('New PKC UUID / unique device id requested')
+            transfer.plex_command('generate_new_uuid')
 
         elif mode == 'fanart':
             LOG.info('User requested fanarttv refresh')
@@ -172,23 +173,6 @@ class Main(object):
         else:
             # Received a xbmcgui.ListItem()
             xbmcplugin.setResolvedUrl(HANDLE, True, result)
-
-    @staticmethod
-    def deviceid():
-        window = xbmcgui.Window(10000)
-        deviceId_old = window.getProperty('plex_client_Id')
-        from resources.lib import clientinfo
-        try:
-            deviceId = clientinfo.getDeviceId(reset=True)
-        except Exception as e:
-            LOG.error('Failed to generate a new device Id: %s' % e)
-            utils.messageDialog(utils.lang(29999), utils.lang(33032))
-        else:
-            LOG.info('Successfully removed old device ID: %s New deviceId:'
-                     '%s' % (deviceId_old, deviceId))
-            # 'Kodi will now restart to apply the changes'
-            utils.messageDialog(utils.lang(29999), utils.lang(33033))
-            xbmc.executebuiltin('RestartApp')
 
 
 if __name__ == '__main__':

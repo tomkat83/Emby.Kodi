@@ -994,8 +994,7 @@ class WindowProperty(object):
 
 class GlobalProperty(object):
     def __init__(self, prop, val='1', end=None):
-        import xbmcaddon
-        self._addonID = xbmcaddon.Addon().getAddonInfo('id')
+        self._addonID = 'plugin.video.plexkodiconnect'
         self.prop = prop
         self.val = val
         self.end = end

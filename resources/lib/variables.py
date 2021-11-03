@@ -21,7 +21,7 @@ MARK_PLAYED_AT = 0.9
 # watched?
 IGNORE_SECONDS_AT_START = 60
 
-_ADDON = Addon()
+_ADDON = Addon('plugin.video.plexkodiconnect')
 ADDON_NAME = 'PlexKodiConnect'
 ADDON_ID = 'plugin.video.plexkodiconnect'
 ADDON_VERSION = _ADDON.getAddonInfo('version')
