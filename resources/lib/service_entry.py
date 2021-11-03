@@ -498,6 +498,9 @@ class Service(object):
                 elif plex_command == 'EXIT-PKC':
                     LOG.info('Received command from another instance to quit')
                     app.APP.stop_pkc = True
+                elif plex_command == 'generate_new_uuid':
+                    LOG.info('Generating new UUID for PKC')
+                    clientinfo.getDeviceId(reset=True)
                 else:
                     raise RuntimeError('Unknown command: %s', plex_command)
                 if task:
