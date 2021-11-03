@@ -17,7 +17,7 @@ from .kodi_db import KodiVideoDB
 from . import kodi_db
 from .downloadutils import DownloadUtils as DU
 from . import utils, timing, plex_functions as PF
-from . import json_rpc as js, playqueue as PQ, playlist_func as PL
+from . import json_rpc as js, playlist_func as PL
 from . import backgroundthread, app, variables as v
 from . import exceptions
 
@@ -140,7 +140,7 @@ class KodiMonitor(xbmc.Monitor):
             u'playlistid': 1,
         }
         """
-        playqueue = PQ.PLAYQUEUES[data['playlistid']]
+        playqueue = app.PLAYQUEUES[data['playlistid']]
         if not playqueue.is_pkc_clear():
             playqueue.pkc_edit = True
             playqueue.clear(kodi=False)
@@ -256,7 +256,7 @@ class KodiMonitor(xbmc.Monitor):
                 if not playerid:
                     LOG.error('Coud not get playerid for data %s', data)
                     return
-        playqueue = PQ.PLAYQUEUES[playerid]
+        playqueue = app.PLAYQUEUES[playerid]
         info = js.get_player_props(playerid)
         if playqueue.kodi_playlist_playback:
             # Kodi will tell us the wrong position - of the playlist, not the
@@ -326,7 +326,7 @@ class KodiMonitor(xbmc.Monitor):
             container_key = None
             if info['playlistid'] != -1:
                 # -1 is Kodi's answer if there is no playlist
-                container_key = PQ.PLAYQUEUES[playerid].id
+                container_key = app.PLAYQUEUES[playerid].id
             if container_key is not None:
                 container_key = '/playQueues/%s' % container_key
             elif plex_id is not None:
@@ -367,6 +367,11 @@ class KodiMonitor(xbmc.Monitor):
 
         # We need to switch to the Plex streams ONCE upon playback start
         if playerid == v.KODI_VIDEO_PLAYER_ID:
+            # The Kodi player takes forever to initialize all streams
+            # Especially subtitles, apparently. No way to tell when Kodi
+            # is done :-(
+            if app.APP.monitor.waitForAbort(5):
+                return
             item.init_kodi_streams()
             item.switch_to_plex_stream('video')
             if utils.settings('audioStreamPick') == '0':

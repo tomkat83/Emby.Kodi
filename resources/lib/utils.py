@@ -556,6 +556,15 @@ def reset(ask_user=True):
     reboot_kodi()
 
 
+def log_xml(xml, logger):
+    """
+    Logs an etree xml
+    """
+    string = undefused_etree.tostring(xml, encoding='utf-8')
+    string = string.decode('utf-8')
+    logger('\n' + string)
+
+
 def compare_version(current, minimum):
     """
     Returns True if current is >= then minimum. False otherwise. Returns True

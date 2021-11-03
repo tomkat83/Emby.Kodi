@@ -32,8 +32,6 @@ def skip_intro(intros):
 
 def check():
     with app.APP.lock_playqueues:
-        if len(app.PLAYSTATE.active_players) != 1:
-            return
         playerid = list(app.PLAYSTATE.active_players)[0]
         intros = app.PLAYSTATE.player_states[playerid]['intro_markers']
     if not intros:

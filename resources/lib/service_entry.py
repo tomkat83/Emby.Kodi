@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import sys
+
 import xbmc
 import xbmcvfs
 
@@ -11,14 +12,12 @@ from . import kodimonitor
 from . import sync, library_sync
 from . import websocket_client
 from . import plex_companion
-from . import plex_functions as PF, playqueue as PQ
+from . import plex_functions as PF
 from . import playback_starter
-from . import playqueue
 from . import variables as v
 from . import app
 from . import loghandler
 from . import backgroundthread
-from . import skip_plex_intro
 from .windows import userselect
 
 ###############################################################################
@@ -34,7 +33,6 @@ WINDOW_PROPERTIES = (
 class Service(object):
     ws = None
     sync = None
-    plexcompanion = None
 
     def __init__(self):
         self._init_done = False
@@ -100,7 +98,6 @@ class Service(object):
         self.setup = None
         self.pms_ws = None
         self.alexa_ws = None
-        self.playqueue = None
         # Flags for other threads
         self.connection_check_running = False
         self.auth_running = False
@@ -437,8 +434,6 @@ class Service(object):
         app.init()
         app.APP.monitor = kodimonitor.KodiMonitor()
         app.APP.player = xbmc.Player()
-        # Initialize the PKC playqueues
-        PQ.init_playqueues()
 
         # Server auto-detect
         self.setup = initialsetup.InitialSetup()
@@ -448,8 +443,11 @@ class Service(object):
         self.pms_ws = websocket_client.get_pms_websocketapp()
         self.alexa_ws = websocket_client.get_alexa_websocketapp()
         self.sync = sync.Sync()
-        self.plexcompanion = plex_companion.PlexCompanion()
-        self.playqueue = playqueue.PlayqueueMonitor()
+        self.companion_playstate_mgr = plex_companion.PlaystateMgr()
+        if utils.settings('plexCompanion') == 'true':
+            self.companion_listener = plex_companion.Listener(self.companion_playstate_mgr)
+        else:
+            self.companion_listener = None
 
         # Main PKC program loop
         while not self.should_cancel():
@@ -548,12 +546,10 @@ class Service(object):
                 self.startup_completed = True
                 self.pms_ws.start()
                 self.sync.start()
-                self.plexcompanion.start()
-                self.playqueue.start()
+                self.companion_playstate_mgr.start()
+                if self.companion_listener is not None:
+                    self.companion_listener.start()
                 self.alexa_ws.start()
-
-            elif app.APP.is_playing:
-                skip_plex_intro.check()
 
             xbmc.sleep(200)
 

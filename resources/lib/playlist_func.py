@@ -22,117 +22,6 @@ from .subtitles import accessible_plex_subtitles
 LOG = getLogger('PLEX.playlist_func')
 
 
-class Playqueue_Object(object):
-    """
-    PKC object to represent PMS playQueues and Kodi playlist for queueing
-
-    playlistid = None     [int] Kodi playlist id (0, 1, 2)
-    type = None           [str] Kodi type: 'audio', 'video', 'picture'
-    kodi_pl = None        Kodi xbmc.PlayList object
-    items = []            [list] of Playlist_Items
-    id = None             [str] Plex playQueueID, unique Plex identifier
-    version = None        [int] Plex version of the playQueue
-    selectedItemID = None
-                          [str] Plex selectedItemID, playing element in queue
-    selectedItemOffset = None
-                          [str] Offset of the playing element in queue
-    shuffled = 0          [int] 0: not shuffled, 1: ??? 2: ???
-    repeat = 0            [int] 0: not repeated, 1: ??? 2: ???
-
-    If Companion playback is initiated by another user:
-    plex_transient_token = None
-    """
-    kind = 'playQueue'
-
-    def __init__(self):
-        self.id = None
-        self.type = None
-        self.playlistid = None
-        self.kodi_pl = None
-        self.items = []
-        self.version = None
-        self.selectedItemID = None
-        self.selectedItemOffset = None
-        self.shuffled = 0
-        self.repeat = 0
-        self.plex_transient_token = None
-        # Need a hack for detecting swaps of elements
-        self.old_kodi_pl = []
-        # Did PKC itself just change the playqueue so the PKC playqueue monitor
-        # should not pick up any changes?
-        self.pkc_edit = False
-        # Workaround to avoid endless loops of detecting PL clears
-        self._clear_list = []
-        # To keep track if Kodi playback was initiated from a Kodi playlist
-        # There are a couple of pitfalls, unfortunately...
-        self.kodi_playlist_playback = False
-
-    def __repr__(self):
-        answ = ("{{"
-                "'playlistid': {self.playlistid}, "
-                "'id': {self.id}, "
-                "'version': {self.version}, "
-                "'type': '{self.type}', "
-                "'selectedItemID': {self.selectedItemID}, "
-                "'selectedItemOffset': {self.selectedItemOffset}, "
-                "'shuffled': {self.shuffled}, "
-                "'repeat': {self.repeat}, "
-                "'kodi_playlist_playback': {self.kodi_playlist_playback}, "
-                "'pkc_edit': {self.pkc_edit}, ".format(self=self))
-        # Since list.__repr__ will return string, not unicode
-        return answ + "'items': {self.items}}}".format(self=self)
-
-    def is_pkc_clear(self):
-        """
-        Returns True if PKC has cleared the Kodi playqueue just recently.
-        Then this clear will be ignored from now on
-        """
-        try:
-            self._clear_list.pop()
-        except IndexError:
-            return False
-        else:
-            return True
-
-    def clear(self, kodi=True):
-        """
-        Resets the playlist object to an empty playlist.
-
-        Pass kodi=False in order to NOT clear the Kodi playqueue
-        """
-        # kodi monitor's on_clear method will only be called if there were some
-        # items to begin with
-        if kodi and self.kodi_pl.size() != 0:
-            self._clear_list.append(None)
-            self.kodi_pl.clear()  # Clear Kodi playlist object
-        self.items = []
-        self.id = None
-        self.version = None
-        self.selectedItemID = None
-        self.selectedItemOffset = None
-        self.shuffled = 0
-        self.repeat = 0
-        self.plex_transient_token = None
-        self.old_kodi_pl = []
-        self.kodi_playlist_playback = False
-        LOG.debug('Playlist cleared: %s', self)
-
-    def position_from_plex_id(self, plex_id):
-        """
-        Returns the position [int] for the very first item with plex_id [int]
-        (Plex seems uncapable of adding the same element multiple times to a
-        playqueue or playlist)
-
-        Raises KeyError if not found
-        """
-        for position, item in enumerate(self.items):
-            if item.plex_id == plex_id:
-                break
-        else:
-            raise KeyError('Did not find plex_id %s in %s', plex_id, self)
-        return position
-
-
 class PlaylistItem(object):
     """
     Object to fill our playqueues and playlists with.
@@ -281,14 +170,44 @@ class PlaylistItem(object):
         elif stream_type == 'video':
             return self.video_streams
 
+    @staticmethod
+    def _current_index(stream_type):
+        """
+        Kodi might tell us the wrong index for any stream after playback start
+        Get the correct one!
+        """
+        function = {
+            'audio': js.get_current_audio_stream_index,
+            'video': js.get_current_video_stream_index,
+            'subtitle': js.get_current_subtitle_stream_index
+        }[stream_type]
+        i = 0
+        while i < 30:
+            # Really annoying: Kodi might return wrong results directly after
+            # playback startup, e.g. a Kodi audio index of 1953718901 (!)
+            try:
+                index = function(v.KODI_VIDEO_PLAYER_ID)
+            except TypeError:
+                # No sensible reply yet
+                pass
+            else:
+                if index != 1953718901:
+                    # Correct result!
+                    return index
+            i += 1
+            app.APP.monitor.waitForAbort(0.1)
+        else:
+            raise RuntimeError('Kodi did not tell us the correct index for %s'
+                               % stream_type)
+
     def init_kodi_streams(self):
         """
         Initializes all streams after Kodi has started playing this video
         """
-        self.current_kodi_video_stream = js.get_current_video_stream_index(v.KODI_VIDEO_PLAYER_ID)
-        self.current_kodi_audio_stream = js.get_current_audio_stream_index(v.KODI_VIDEO_PLAYER_ID)
+        self.current_kodi_video_stream = self._current_index('video')
+        self.current_kodi_audio_stream = self._current_index('audio')
         self.current_kodi_sub_stream = False if not js.get_subtitle_enabled(v.KODI_VIDEO_PLAYER_ID) \
-            else js.get_current_subtitle_stream_index(v.KODI_VIDEO_PLAYER_ID)
+            else self._current_index('subtitle')
 
     def plex_stream_index(self, kodi_stream_index, stream_type):
         """
@@ -312,13 +231,16 @@ class PlaylistItem(object):
         Pass in the plex_stream_index [int] in order to receive the Kodi stream
         index [int].
             stream_type:    'video', 'audio', 'subtitle'
-        Returns None if unsuccessful
+        Raises ValueError if unsuccessful
         """
-        if plex_stream_index is None:
-            return
+        if not isinstance(plex_stream_index, int):
+            raise ValueError('%s plex_stream_index %s of type %s received' %
+                             (stream_type, plex_stream_index, type(plex_stream_index)))
         for i, stream in enumerate(self._get_iterator(stream_type)):
             if cast(int, stream.get('id')) == plex_stream_index:
                 return i
+        raise ValueError('No %s kodi_stream_index for plex_stream_index %s' %
+                         (stream_type, plex_stream_index))
 
     def active_plex_stream_index(self, stream_type):
         """
@@ -408,8 +330,10 @@ class PlaylistItem(object):
             return
         LOG.debug('The PMS wants to display %s stream with Plex id %s and '
                   'languageTag %s', typus, plex_index, language_tag)
-        kodi_index = self.kodi_stream_index(plex_index, typus)
-        if kodi_index is None:
+        try:
+            kodi_index = self.kodi_stream_index(plex_index, typus)
+        except ValueError:
+            kodi_index = None
             LOG.debug('Leaving Kodi %s stream settings untouched since we '
                       'could not parse Plex %s stream with id %s to a Kodi'
                       ' index', typus, typus, plex_index)
@@ -438,10 +362,28 @@ class PlaylistItem(object):
         Call this method if Kodi reports an "AV-Change"
         (event "Player.OnAVChange")
         """
-        kodi_video_stream = js.get_current_video_stream_index(playerid)
-        kodi_audio_stream = js.get_current_audio_stream_index(playerid)
+        i = 0
+        while i < 20:
+            # Really annoying: Kodi might return wrong results directly after
+            # playback startup, e.g. a Kodi audio index of 1953718901 (!)
+            kodi_video_stream = js.get_current_video_stream_index(playerid)
+            kodi_audio_stream = js.get_current_audio_stream_index(playerid)
+            if kodi_video_stream < len(self.video_streams) and kodi_audio_stream < len(self.audio_streams):
+                # Correct result!
+                break
+            i += 1
+            if app.APP.monitor.waitForAbort(0.1):
+                # Need to quit PKC
+                return
+        else:
+            LOG.error('Could not get sensible Kodi indices! kodi_video_stream '
+                      '%s, kodi_audio_stream %s',
+                      kodi_video_stream, kodi_audio_stream)
+            return
+        kodi_video_stream = self._current_index('video')
+        kodi_audio_stream = self._current_index('audio')
         sub_enabled = js.get_subtitle_enabled(playerid)
-        kodi_sub_stream = js.get_current_subtitle_stream_index(playerid)
+        kodi_sub_stream = self._current_index('subtitle')
         # Audio
         if kodi_audio_stream != self.current_kodi_audio_stream:
             self.on_kodi_audio_stream_change(kodi_audio_stream)
@@ -457,28 +399,43 @@ class PlaylistItem(object):
                      and kodi_sub_stream != self.current_kodi_sub_stream)):
             self.on_kodi_subtitle_stream_change(kodi_sub_stream, sub_enabled)
 
-    def on_plex_stream_change(self, plex_data):
+    def on_plex_stream_change(self, video_stream_id=None, audio_stream_id=None,
+                              subtitle_stream_id=None):
         """
-        Call this method if Plex Companion wants to change streams
+        Call this method if Plex Companion wants to change streams [ints]
         """
-        if 'audioStreamID' in plex_data:
-            plex_index = int(plex_data['audioStreamID'])
-            kodi_index = self.kodi_stream_index(plex_index, 'audio')
-            self._set_kodi_stream_if_different(kodi_index, 'audio')
-            self.current_kodi_audio_stream = kodi_index
-        if 'videoStreamID' in plex_data:
-            plex_index = int(plex_data['videoStreamID'])
-            kodi_index = self.kodi_stream_index(plex_index, 'video')
+        if video_stream_id is not None:
+            try:
+                kodi_index = self.kodi_stream_index(video_stream_id, 'video')
+            except ValueError:
+                LOG.error('Unexpected Plex video_stream_id %s, not changing '
+                          'the video stream!', video_stream_id)
+                return
             self._set_kodi_stream_if_different(kodi_index, 'video')
             self.current_kodi_video_stream = kodi_index
-        if 'subtitleStreamID' in plex_data:
-            plex_index = int(plex_data['subtitleStreamID'])
-            if plex_index == 0:
+        if audio_stream_id is not None:
+            try:
+                kodi_index = self.kodi_stream_index(audio_stream_id, 'audio')
+            except ValueError:
+                LOG.error('Unexpected Plex audio_stream_id %s, not changing '
+                          'the video stream!', audio_stream_id)
+                return
+            self._set_kodi_stream_if_different(kodi_index, 'audio')
+            self.current_kodi_audio_stream = kodi_index
+        if subtitle_stream_id is not None:
+            if subtitle_stream_id == 0:
                 app.APP.player.showSubtitles(False)
                 kodi_index = False
             else:
-                kodi_index = self.kodi_stream_index(plex_index, 'subtitle')
-                if kodi_index:
+                try:
+                    kodi_index = self.kodi_stream_index(subtitle_stream_id,
+                                                        'subtitle')
+                except ValueError:
+                    kodi_index = None
+                    LOG.debug('The PMS wanted to change subs, but we could not'
+                              ' match the sub with id %s to a Kodi sub',
+                              subtitle_stream_id)
+                else:
                     app.APP.player.setSubtitleStream(kodi_index)
                     app.APP.player.showSubtitles(True)
             self.current_kodi_sub_stream = kodi_index
