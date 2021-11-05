@@ -66,6 +66,9 @@ def timeline_dict(playerid, typus):
                 'type': typus,
                 'state': 'stopped'
             }
+        if typus == v.PLEX_PLAYLIST_TYPE_VIDEO and not item.streams_initialized:
+            # Not ready yet to send updates
+            raise TypeError()
         protocol, url, port = split_server_uri(app.CONN.server)
         status = 'paused' if int(info['speed']) == 0 else 'playing'
         duration = timing.kodi_time_to_millis(info['totaltime'])
@@ -115,6 +118,13 @@ def timeline_dict(playerid, typus):
             answ['token'] = playqueue.plex_transient_token
         # Process audio and subtitle streams
         if typus == v.PLEX_PLAYLIST_TYPE_VIDEO:
+            item.current_kodi_video_stream = info['currentvideostream']['index']
+            item.current_kodi_audio_stream = info['currentaudiostream']['index']
+            item.current_kodi_sub_stream_enabled = info['subtitleenabled']
+            try:
+                item.current_kodi_sub_stream = info['currentsubtitle']['index']
+            except KeyError:
+                item.current_kodi_sub_stream = None
             answ['videoStreamID'] = str(item.current_plex_video_stream)
             answ['audioStreamID'] = str(item.current_plex_audio_stream)
             # Mind the zero - meaning subs are deactivated
