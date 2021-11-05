@@ -247,6 +247,9 @@ class PlaylistItem(object):
         """
         Initializes all streams after Kodi has started playing this video
         """
+        if not app.PLAYSTATE.item == self:
+            # Already stopped playback or skipped to the next one
+            return
         self.init_kodi_streams()
         self.switch_to_plex_stream('video')
         if utils.settings('audioStreamPick') == '0':
