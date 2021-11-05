@@ -445,9 +445,9 @@ CONTENT_FROM_PLEX_TYPE = {
 # Plex profile for transcoding and direct streaming
 # Uses the empty Generic.xml at Plex Media Server/Resources/Profiles for any
 # Playback decisions
-PLATFORM = 'Generic'
+PLATFORM = 'Kodi'
 # Version seems to be irrelevant for the generic platform
-PLATFORM_VERSION = '1.0.0'
+PLATFORM_VERSION = KODILONGVERSION
 # Overrides (replace=true) any existing entries in generic.xml
 STREAMING_HEADERS = {
     'X-Plex-Client-Profile-Extra':

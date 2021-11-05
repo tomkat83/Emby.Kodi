@@ -25,7 +25,7 @@ def proxy_headers():
 def proxy_params():
     params = {
         'deviceClass': 'pc',
-        'protocolCapabilities': 'timeline,playback,navigation,playqueues',
+        'protocolCapabilities': 'timeline,playback,navigation,mirror,playqueues',
         'protocolVersion': 3
     }
     if app.ACCOUNT.pms_token:
