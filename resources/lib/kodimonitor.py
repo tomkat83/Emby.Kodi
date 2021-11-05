@@ -34,7 +34,6 @@ class KodiMonitor(xbmc.Monitor):
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
-            app.PLAYSTATE.old_player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
         LOG.info("Kodi monitor started.")
 
     def onScanStarted(self, library):
@@ -418,8 +417,6 @@ def _playback_cleanup(ended=False):
     app.CONN.plex_transient_token = None
     for playerid in app.PLAYSTATE.active_players:
         status = app.PLAYSTATE.player_states[playerid]
-        # Remember the last played item later
-        app.PLAYSTATE.old_player_states[playerid] = copy.deepcopy(status)
         # Stop transcoding
         if status['playmethod'] == v.PLAYBACK_METHOD_TRANSCODE:
             LOG.debug('Tell the PMS to stop transcoding')
