@@ -1,3 +1,6 @@
+version 3.5.11 (beta only):
+- Fix playback startup and AttributeError: 'bool' object has no attribute 'get'
+
 version 3.5.10 (beta only):
 - Tell the PMS and Plex Companion about any stream changes on the Kodi side
 
