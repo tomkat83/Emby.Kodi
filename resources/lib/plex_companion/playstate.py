@@ -12,7 +12,6 @@ from .. import variables as v
 from .. import backgroundthread
 from .. import app
 from .. import timing
-from .. import skip_plex_intro
 
 
 # Disable annoying requests warnings
@@ -408,12 +407,6 @@ class PlaystateMgr(backgroundthread.KillableThread):
                     else:
                         continue
                     signaled_playback_stop = False
-            try:
-                # Check whether an intro is currently running
-                skip_plex_intro.check()
-            except IndexError:
-                # Playback might have already stopped
-                pass
             # Send the playback progress info to the PMS
             self.pms_timeline(players, message)
             # Send the info to all Companion devices via the PMS
