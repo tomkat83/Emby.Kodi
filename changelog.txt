@@ -1,3 +1,8 @@
+version 3.5.12 (beta only):
+- Fix skip intro not working
+- Fix playback report not working due to an IndexError
+- Fix rare IndexError when trying to delete a playlist item
+
 version 3.5.11 (beta only):
 - Fix playback startup and AttributeError: 'bool' object has no attribute 'get'
 
