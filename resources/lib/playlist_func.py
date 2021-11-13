@@ -876,14 +876,18 @@ def delete_playlist_item_from_PMS(playlist, pos):
     Delete the item at position pos [int] on the Plex side and our playlists
     """
     LOG.debug('Deleting position %s for %s on the Plex side', pos, playlist)
-    xml = DU().downloadUrl("{server}/%ss/%s/items/%s?repeat=%s" %
-                           (playlist.kind,
-                            playlist.id,
-                            playlist.items[pos].id,
-                            playlist.repeat),
-                           action_type="DELETE")
-    del playlist.items[pos]
-    _update_playlist_version(playlist, xml)
+    try:
+        xml = DU().downloadUrl("{server}/%ss/%s/items/%s?repeat=%s" %
+                               (playlist.kind,
+                                playlist.id,
+                                playlist.items[pos].id,
+                                playlist.repeat),
+                               action_type="DELETE")
+    except IndexError:
+        raise PlaylistError('Position %s out of bound for %s' % (pos, playlist))
+    else:
+        del playlist.items[pos]
+        _update_playlist_version(playlist, xml)
 
 
 # Functions operating on the Kodi playlist objects ##########
