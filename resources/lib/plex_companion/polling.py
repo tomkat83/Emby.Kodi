@@ -18,7 +18,7 @@ requests.packages.urllib3.disable_warnings()
 # Timeout (connection timeout, read timeout)
 # The later is up to 20 seconds, if the PMS has nothing to tell us
 # THIS WILL PREVENT PKC FROM SHUTTING DOWN CORRECTLY
-TIMEOUT = (5.0, 3.0)
+TIMEOUT = (5.0, 4.0)
 
 # Max. timeout for the Listener: 2 ^ MAX_TIMEOUT
 # Corresponds to 2 ^ 7 = 128 seconds
