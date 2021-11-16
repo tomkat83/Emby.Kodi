@@ -1,3 +1,6 @@
+version 3.5.13 (beta only):
+- Fix Kodi getting blocked and losing PMS access e.g. due to cloudflare
+
 version 3.5.12 (beta only):
 - Fix skip intro not working
 - Fix playback report not working due to an IndexError
