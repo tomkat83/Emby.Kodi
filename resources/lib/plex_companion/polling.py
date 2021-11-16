@@ -18,7 +18,11 @@ requests.packages.urllib3.disable_warnings()
 # Timeout (connection timeout, read timeout)
 # The later is up to 20 seconds, if the PMS has nothing to tell us
 # THIS WILL PREVENT PKC FROM SHUTTING DOWN CORRECTLY
-TIMEOUT = (5.0, 3.0)
+TIMEOUT = (5.0, 4.0)
+
+# Max. timeout for the Listener: 2 ^ MAX_TIMEOUT
+# Corresponds to 2 ^ 7 = 128 seconds
+MAX_TIMEOUT = 7
 
 log = getLogger('PLEX.companion.listener')
 
@@ -34,6 +38,7 @@ class Listener(backgroundthread.KillableThread):
     def __init__(self, playstate_mgr):
         self.s = None
         self.playstate_mgr = playstate_mgr
+        self._sleep_timer = 0
         super().__init__()
 
     def _get_requests_session(self):
@@ -55,6 +60,19 @@ class Listener(backgroundthread.KillableThread):
             # meantime
             pass
         self.s = None
+
+    def _unauthorized(self):
+        """Puts this thread to sleep until e.g. a PMS changes wakes it up"""
+        log.warn('We are not authorized to poll the PMS (http error 401). '
+                 'Plex Companion will not work.')
+        self.suspend()
+
+    def _on_connection_error(self, req=None):
+        if req:
+            log_error(log.error, 'Error while contacting the PMS', req)
+        self.sleep(2 ^ self._sleep_timer)
+        if self._sleep_timer < MAX_TIMEOUT:
+            self._sleep_timer += 1
 
     def ok_message(self, command_id):
         url = f'{app.CONN.server}/player/proxy/response?commandID={command_id}'
@@ -129,27 +147,32 @@ class Listener(backgroundthread.KillableThread):
                 # No command received from the PMS - try again immediately
                 continue
             except requests.RequestException:
-                self.sleep(0.5)
+                self._on_connection_error()
                 continue
             except SystemExit:
                 # We need to quit PKC entirely
                 break
 
             # Sanity checks
-            if not req.ok:
-                log_error(log.error, 'Error while contacting the PMS', req)
-                self.sleep(0.5)
+            if req.status_code == 401:
+                # We can't reach a PMS that is not in the local LAN
+                # This might even lead to e.g. cloudflare blocking us, thinking
+                # we're staging a DOS attach
+                self._unauthorized()
                 continue
+            elif not req.ok:
+                self._on_connection_error(req)
+                continue
+            elif not ('content-type' in req.headers
+                    and 'xml' in req.headers['content-type']):
+                self._on_connection_error(req)
+                continue
+
             if not req.text:
                 # Means the connection timed-out (usually after 20 seconds),
                 # because there was no command from the PMS or a client to
                 # remote-control anything no the PKC-side
                 # Received an empty body, but still header Content-Type: xml
-                continue
-            if not ('content-type' in req.headers
-                    and 'xml' in req.headers['content-type']):
-                log_error(log.error, 'Unexpected answer from the PMS', req)
-                self.sleep(0.5)
                 continue
 
             # Parsing
@@ -160,8 +183,8 @@ class Listener(backgroundthread.KillableThread):
                     # We should always just get ONE command per message
                     raise IndexError()
             except (utils.ParseError, IndexError):
-                log_error(log.error, 'Could not parse the PMS xml:', req)
-                self.sleep(0.5)
+                log.error('Could not parse the PMS xml:')
+                self._on_connection_error()
                 continue
 
             # Do the work
@@ -170,3 +193,4 @@ class Listener(backgroundthread.KillableThread):
             self.playstate_mgr.check_subscriber(cmd)
             if process_proxy_xml(cmd):
                 self.ok_message(cmd.get('commandID'))
+            self._sleep_timer = 0
