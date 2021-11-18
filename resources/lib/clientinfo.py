@@ -51,6 +51,22 @@ def getXArgsDeviceInfo(options=None, include_token=True):
     return xargs
 
 
+def generate_device_id():
+    LOG.info("Generating a new deviceid.")
+    from uuid import uuid4
+    client_id = str(uuid4())
+    utils.settings('plex_client_Id', value=client_id)
+    v.PKC_MACHINE_IDENTIFIER = client_id
+    utils.window('plex_client_Id', value=client_id)
+    LOG.info("Unique device Id plex_client_Id generated: %s", client_id)
+    # IF WE EXIT KODI NOW, THE SETTING WON'T STICK!
+    # 'Kodi will now restart to apply the changes'
+    # utils.messageDialog(utils.lang(29999), utils.lang(33033))
+    # xbmc.executebuiltin('RestartApp')
+    utils.messageDialog(utils.lang(29999), 'Please restart Kodi now!')
+    return client_id
+
+
 def getDeviceId(reset=False):
     """
     Returns a unique Plex client id "X-Plex-Client-Identifier" from Kodi
@@ -60,28 +76,17 @@ def getDeviceId(reset=False):
     If id does not exist, create one and save in Kodi settings file.
     """
     if reset:
-        LOG.info("Generating a new deviceid.")
-        from uuid import uuid4
-        client_id = str(uuid4())
-        utils.settings('plex_client_Id', value=client_id)
-        v.PKC_MACHINE_IDENTIFIER = client_id
-        utils.window('plex_client_Id', value=client_id)
-        LOG.info("Unique device Id plex_client_Id generated: %s", client_id)
-        # IF WE EXIT KODI NOW, THE SETTING WON'T STICK!
-        # 'Kodi will now restart to apply the changes'
-        # utils.messageDialog(utils.lang(29999), utils.lang(33033))
-        # xbmc.executebuiltin('RestartApp')
-        utils.messageDialog(utils.lang(29999), 'Please restart Kodi now!')
-        return client_id
+        return generate_device_id()
 
     client_id = v.PKC_MACHINE_IDENTIFIER
     if client_id:
         return client_id
 
     client_id = utils.settings('plex_client_Id')
-    # Because Kodi appears to cache file settings!!
-    if client_id != "" and reset is False:
+    if client_id != "":
         v.PKC_MACHINE_IDENTIFIER = client_id
         utils.window('plex_client_Id', value=client_id)
         LOG.info("Unique device Id plex_client_Id loaded: %s", client_id)
         return client_id
+    else:
+        return generate_device_id()
