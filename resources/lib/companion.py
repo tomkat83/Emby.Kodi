@@ -80,6 +80,7 @@ def process_command(request_path, params):
             js.set_volume(int(params['volume']))
         else:
             LOG.error('Unknown parameters: %s', params)
+            return False
     elif request_path == "player/playback/play":
         js.play()
     elif request_path == "player/playback/pause":
@@ -119,3 +120,5 @@ def process_command(request_path, params):
         })
     else:
         LOG.error('Unknown request path: %s', request_path)
+        return False
+    return True

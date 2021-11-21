@@ -656,10 +656,6 @@ SORT_METHODS_ALBUMS = (
 )
 
 
-XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>\n'
-
-COMPANION_OK_MESSAGE = XML_HEADER + '<Response code="200" status="OK" />'
-
 PLEX_REPEAT_FROM_KODI_REPEAT = {
     'off': '0',
     'one': '1',
