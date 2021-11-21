@@ -1,33 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from logging import getLogger
+import logging
 import requests
 
-from .processing import process_proxy_xml
-from .common import proxy_headers, proxy_params, log_error
+from .processing import process_command
+from .common import communicate, log_error, create_requests_session, \
+    b_ok_message
 
 from .. import utils
 from .. import backgroundthread
 from .. import app
-from .. import variables as v
-
-# Disable annoying requests warnings
-import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
 
 # Timeout (connection timeout, read timeout)
 # The later is up to 20 seconds, if the PMS has nothing to tell us
 # THIS WILL PREVENT PKC FROM SHUTTING DOWN CORRECTLY
 TIMEOUT = (5.0, 4.0)
 
-# Max. timeout for the Listener: 2 ^ MAX_TIMEOUT
+# Max. timeout for the Polling: 2 ^ MAX_TIMEOUT
 # Corresponds to 2 ^ 7 = 128 seconds
 MAX_TIMEOUT = 7
 
-log = getLogger('PLEX.companion.listener')
+log = logging.getLogger('PLEX.companion.polling')
 
 
-class Listener(backgroundthread.KillableThread):
+class Polling(backgroundthread.KillableThread):
     """
     Opens a GET HTTP connection to the current PMS (that will time-out PMS-wise
     after ~20 seconds) and listens for any commands by the PMS. Listening
@@ -39,17 +35,13 @@ class Listener(backgroundthread.KillableThread):
         self.s = None
         self.playstate_mgr = playstate_mgr
         self._sleep_timer = 0
+        self.ok_msg = b_ok_message()
         super().__init__()
 
     def _get_requests_session(self):
         if self.s is None:
             log.debug('Creating new requests session')
-            self.s = requests.Session()
-            self.s.headers = proxy_headers()
-            self.s.verify = app.CONN.verify_ssl_cert
-            if app.CONN.ssl_cert_path:
-                self.s.cert = app.CONN.ssl_cert_path
-            self.s.params = proxy_params()
+            self.s = create_requests_session()
         return self.s
 
     def close_requests_session(self):
@@ -67,52 +59,24 @@ class Listener(backgroundthread.KillableThread):
                  'Plex Companion will not work.')
         self.suspend()
 
-    def _on_connection_error(self, req=None):
+    def _on_connection_error(self, req=None, error=None):
         if req:
             log_error(log.error, 'Error while contacting the PMS', req)
-        self.sleep(2 ^ self._sleep_timer)
+        if error:
+            log.error('Error encountered: %s: %s', type(error), error)
+        self.sleep(2 ** self._sleep_timer)
         if self._sleep_timer < MAX_TIMEOUT:
             self._sleep_timer += 1
 
     def ok_message(self, command_id):
         url = f'{app.CONN.server}/player/proxy/response?commandID={command_id}'
         try:
-            req = self.communicate(self.s.post,
-                                   url,
-                                   data=v.COMPANION_OK_MESSAGE.encode('utf-8'))
-        except (requests.RequestException, SystemExit):
+            req = communicate(self.s.post, url, data=self.ok_msg)
+        except (requests.RequestException, SystemExit) as error:
+            log.debug('Error replying with an OK message: %s', error)
             return
         if not req.ok:
-            log_error(log.error, 'Error replying OK', req)
-
-    @staticmethod
-    def communicate(method, url, **kwargs):
-        try:
-            req = method(url, **kwargs)
-        except requests.ConnectTimeout:
-            # The request timed out while trying to connect to the PMS
-            log.error('Requests ConnectionTimeout!')
-            raise
-        except requests.ReadTimeout:
-            # The PMS did not send any data in the allotted amount of time
-            log.error('Requests ReadTimeout!')
-            raise
-        except requests.TooManyRedirects:
-            log.error('TooManyRedirects error!')
-            raise
-        except requests.HTTPError as error:
-            log.error('HTTPError: %s', error)
-            raise
-        except requests.ConnectionError:
-            # Caused by PKC terminating the connection prematurely
-            # log.error('ConnectionError: %s', error)
-            raise
-        else:
-            req.encoding = 'utf-8'
-            # Access response content once in order to make sure to release the
-            # underlying sockets
-            req.content
-            return req
+            log_error(log.error, 'Error replying with OK message', req)
 
     def run(self):
         """
@@ -140,14 +104,19 @@ class Listener(backgroundthread.KillableThread):
             url = app.CONN.server + '/player/proxy/poll?timeout=1'
             self._get_requests_session()
             try:
-                req = self.communicate(self.s.get,
-                                       url,
-                                       timeout=TIMEOUT)
-            except requests.ConnectionError:
+                req = communicate(self.s.get, url, timeout=TIMEOUT)
+            except (requests.exceptions.ProxyError,
+                    requests.exceptions.SSLError) as error:
+                self._on_connection_error(req=None, error=error)
+                continue
+            except (requests.ConnectionError,
+                    requests.Timeout,
+                    requests.exceptions.ChunkedEncodingError):
+                # Expected due to timeout and the PMS not having to reply
                 # No command received from the PMS - try again immediately
                 continue
-            except requests.RequestException:
-                self._on_connection_error()
+            except requests.RequestException as error:
+                self._on_connection_error(req=None, error=error)
                 continue
             except SystemExit:
                 # We need to quit PKC entirely
@@ -161,11 +130,11 @@ class Listener(backgroundthread.KillableThread):
                 self._unauthorized()
                 continue
             elif not req.ok:
-                self._on_connection_error(req)
+                self._on_connection_error(req=req, error=None)
                 continue
             elif not ('content-type' in req.headers
                     and 'xml' in req.headers['content-type']):
-                self._on_connection_error(req)
+                self._on_connection_error(req=req, error=None)
                 continue
 
             if not req.text:
@@ -184,13 +153,13 @@ class Listener(backgroundthread.KillableThread):
                     raise IndexError()
             except (utils.ParseError, IndexError):
                 log.error('Could not parse the PMS xml:')
-                self._on_connection_error()
+                self._on_connection_error(req=req, error=None)
                 continue
 
             # Do the work
             log.debug('Received a Plex Companion command from the PMS:')
-            utils.log_xml(xml, log.debug)
+            utils.log_xml(xml, log.debug, logging.DEBUG)
             self.playstate_mgr.check_subscriber(cmd)
-            if process_proxy_xml(cmd):
+            if process_command(cmd):
                 self.ok_message(cmd.get('commandID'))
             self._sleep_timer = 0

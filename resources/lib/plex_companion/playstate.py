@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 import requests
-import xml.etree.ElementTree as etree
+from threading import Thread
 
-from .common import proxy_headers, proxy_params, log_error
+from .common import communicate, proxy_headers, proxy_params, log_error, \
+    UUIDStr, Subscriber, timeline, stopped_timeline
 from .playqueue import compare_playqueues
+from .webserver import ThreadedHTTPServer, CompanionHandlerClassFactory
+from .plexgdm import plexgdm
 
 from .. import json_rpc as js
 from .. import variables as v
@@ -22,159 +25,9 @@ log = getLogger('PLEX.companion.playstate')
 
 TIMEOUT = (5, 5)
 
-# What is Companion controllable?
-CONTROLLABLE = {
-    v.PLEX_PLAYLIST_TYPE_VIDEO: 'playPause,stop,volume,shuffle,audioStream,'
-        'subtitleStream,seekTo,skipPrevious,skipNext,'
-        'stepBack,stepForward',
-    v.PLEX_PLAYLIST_TYPE_AUDIO: 'playPause,stop,volume,shuffle,repeat,seekTo,'
-        'skipPrevious,skipNext,stepBack,stepForward',
-    v.PLEX_PLAYLIST_TYPE_PHOTO: 'playPause,stop,skipPrevious,skipNext'
-}
-
-
-def split_server_uri(server):
-    (protocol, url, port) = server.split(':')
-    url = url.replace('/', '')
-    return (protocol, url, port)
-
-
-def get_correct_position(info, playqueue):
-    """
-    Kodi tells us the PLAYLIST position, not PLAYQUEUE position, if the
-    user initiated playback of a playlist
-    """
-    if playqueue.kodi_playlist_playback:
-        position = 0
-    else:
-        position = info['position'] or 0
-    return position
-
-
-def timeline_dict(playerid, typus):
-    with app.APP.lock_playqueues:
-        info = app.PLAYSTATE.player_states[playerid]
-        playqueue = app.PLAYQUEUES[playerid]
-        position = get_correct_position(info, playqueue)
-        try:
-            item = playqueue.items[position]
-        except IndexError:
-            # E.g. for direct path playback for single item
-            return {
-                'controllable': CONTROLLABLE[typus],
-                'type': typus,
-                'state': 'stopped'
-            }
-        if typus == v.PLEX_PLAYLIST_TYPE_VIDEO and not item.streams_initialized:
-            # Not ready yet to send updates
-            raise TypeError()
-        protocol, url, port = split_server_uri(app.CONN.server)
-        status = 'paused' if int(info['speed']) == 0 else 'playing'
-        duration = timing.kodi_time_to_millis(info['totaltime'])
-        shuffle = '1' if info['shuffled'] else '0'
-        mute = '1' if info['muted'] is True else '0'
-        answ = {
-            'controllable': CONTROLLABLE[typus],
-            'protocol': protocol,
-            'address': url,
-            'port': port,
-            'machineIdentifier': app.CONN.machine_identifier,
-            'state': status,
-            'type': typus,
-            'itemType': typus,
-            'time': str(timing.kodi_time_to_millis(info['time'])),
-            'duration': str(duration),
-            'seekRange': '0-%s' % duration,
-            'shuffle': shuffle,
-            'repeat': v.PLEX_REPEAT_FROM_KODI_REPEAT[info['repeat']],
-            'volume': str(info['volume']),
-            'mute': mute,
-            'mediaIndex': '0',  # Still to implement
-            'partIndex': '0',
-            'partCount': '1',
-            'providerIdentifier': 'com.plexapp.plugins.library',
-        }
-        # Get the plex id from the PKC playqueue not info, as Kodi jumps to
-        # next playqueue element way BEFORE kodi monitor onplayback is
-        # called
-        if item.plex_id:
-            answ['key'] = '/library/metadata/%s' % item.plex_id
-            answ['ratingKey'] = str(item.plex_id)
-        # PlayQueue stuff
-        if info['container_key']:
-            answ['containerKey'] = info['container_key']
-        if (info['container_key'] is not None and
-                info['container_key'].startswith('/playQueues')):
-            answ['playQueueID'] = str(playqueue.id)
-            answ['playQueueVersion'] = str(playqueue.version)
-            answ['playQueueItemID'] = str(item.id)
-        if playqueue.items[position].guid:
-            answ['guid'] = item.guid
-        # Temp. token set?
-        if app.CONN.plex_transient_token:
-            answ['token'] = app.CONN.plex_transient_token
-        elif playqueue.plex_transient_token:
-            answ['token'] = playqueue.plex_transient_token
-        # Process audio and subtitle streams
-        if typus == v.PLEX_PLAYLIST_TYPE_VIDEO:
-            item.current_kodi_video_stream = info['currentvideostream']['index']
-            item.current_kodi_audio_stream = info['currentaudiostream']['index']
-            item.current_kodi_sub_stream_enabled = info['subtitleenabled']
-            try:
-                item.current_kodi_sub_stream = info['currentsubtitle']['index']
-            except KeyError:
-                item.current_kodi_sub_stream = None
-            answ['videoStreamID'] = str(item.current_plex_video_stream)
-            answ['audioStreamID'] = str(item.current_plex_audio_stream)
-            # Mind the zero - meaning subs are deactivated
-            answ['subtitleStreamID'] = str(item.current_plex_sub_stream or 0)
-        return answ
-
-
-def timeline(players):
-    """
-    Returns a timeline xml as str
-    (xml containing video, audio, photo player state)
-    """
-    xml = etree.Element('MediaContainer')
-    location = 'navigation'
-    for typus in (v.PLEX_PLAYLIST_TYPE_AUDIO,
-                  v.PLEX_PLAYLIST_TYPE_VIDEO,
-                  v.PLEX_PLAYLIST_TYPE_PHOTO):
-        player = players.get(v.KODI_PLAYLIST_TYPE_FROM_PLEX_PLAYLIST_TYPE[typus])
-        if player is None:
-            # Kodi player currently not actively playing, but stopped
-            timeline = {
-                'controllable': CONTROLLABLE[typus],
-                'type': typus,
-                'state': 'stopped'
-            }
-        else:
-            # Active Kodi player, i.e. video, audio or picture player
-            timeline = timeline_dict(player['playerid'], typus)
-            if typus in (v.PLEX_PLAYLIST_TYPE_VIDEO, v.PLEX_PLAYLIST_TYPE_PHOTO):
-                location = 'fullScreenVideo'
-        etree.SubElement(xml, 'Timeline', attrib=timeline)
-    xml.set('location', location)
-    return xml
-
-
-def stopped_timeline():
-    """
-    Returns an XML stating that all players have stopped playback
-    """
-    xml = etree.Element('MediaContainer', attrib={'location': 'navigation'})
-    for typus in (v.PLEX_PLAYLIST_TYPE_AUDIO,
-                  v.PLEX_PLAYLIST_TYPE_VIDEO,
-                  v.PLEX_PLAYLIST_TYPE_PHOTO):
-        # Kodi player currently not actively playing, but stopped
-        timeline = {
-            'controllable': CONTROLLABLE[typus],
-            'type': typus,
-            'state': 'stopped'
-        }
-        etree.SubElement(xml, 'Timeline', attrib=timeline)
-    return xml
+# How many seconds do we wait until we check again whether we are registered
+# as a GDM Plex Companion Client?
+GDM_COMPANION_CHECK = 120
 
 
 def update_player_info(players):
@@ -197,13 +50,34 @@ class PlaystateMgr(backgroundthread.KillableThread):
     """
     daemon = True
 
-    def __init__(self):
-        self._subscribed = False
-        self._command_id = None
+    def __init__(self, companion_enabled):
+        self.companion_enabled = companion_enabled
+        self.subscribers = dict()
         self.s = None
-        self.t = None
+        self.httpd = None
         self.stopped_timeline = stopped_timeline()
+        self.gdm = plexgdm()
         super().__init__()
+
+    def _start_webserver(self):
+        if self.httpd is None and self.companion_enabled:
+            log.debug('Starting PKC Companion webserver on port %s', v.COMPANION_PORT)
+            server_address = ('', v.COMPANION_PORT)
+            HandlerClass = CompanionHandlerClassFactory(self)
+            self.httpd = ThreadedHTTPServer(server_address, HandlerClass)
+            self.httpd.timeout = 10.0
+            t = Thread(target=self.httpd.serve_forever)
+            t.start()
+
+    def _stop_webserver(self):
+        if self.httpd is not None:
+            log.debug('Shutting down PKC Companion webserver')
+            try:
+                self.httpd.shutdown()
+            except AttributeError:
+                # Ensure thread-safety
+                pass
+            self.httpd = None
 
     def _get_requests_session(self):
         if self.s is None:
@@ -216,122 +90,94 @@ class PlaystateMgr(backgroundthread.KillableThread):
             self.s.params = proxy_params()
         return self.s
 
-    def _get_requests_session_companion(self):
-        if self.t is None:
-            log.debug('Creating new companion requests session')
-            self.t = requests.Session()
-            self.t.headers = proxy_headers()
-            self.t.verify = app.CONN.verify_ssl_cert
-            if app.CONN.ssl_cert_path:
-                self.t.cert = app.CONN.ssl_cert_path
-            self.t.params = proxy_params()
-        return self.t
+    def _close_requests_session(self):
+        if self.s is not None:
+            try:
+                self.s.close()
+            except AttributeError:
+                # "thread-safety" - Just in case s was set to None in the
+                # meantime
+                pass
+            self.s = None
 
-    def close_requests_session(self):
-        for session in (self.s, self.t):
-            if session is not None:
-                try:
-                    session.close()
-                except AttributeError:
-                    # "thread-safety" - Just in case s was set to None in the
-                    # meantime
-                    pass
-                session = None
-
-    @staticmethod
-    def communicate(method, url, **kwargs):
-        try:
-            # This will usually block until timeout is reached!
-            req = method(url, **kwargs)
-        except requests.ConnectTimeout:
-            # The request timed out while trying to connect to the PMS
-            log.error('Requests ConnectionTimeout!')
-            raise
-        except requests.ReadTimeout:
-            # The PMS did not send any data in the allotted amount of time
-            log.error('Requests ReadTimeout!')
-            raise
-        except requests.TooManyRedirects:
-            log.error('TooManyRedirects error!')
-            raise
-        except requests.HTTPError as error:
-            log.error('HTTPError: %s', error)
-            raise
-        except requests.ConnectionError as error:
-            log.error('ConnectionError: %s', error)
-            raise
-        req.encoding = 'utf-8'
-        # To make sure that we release the socket, need to access content once
-        req.content
-        return req
-
-    def _subscribe(self, cmd):
-        self._command_id = int(cmd.get('commandID'))
-        self._subscribed = True
-
-    def _unsubscribe(self):
-        self._subscribed = False
-        self._command_id = None
+    def close_connections(self):
+        """May also be called from another thread"""
+        self._stop_webserver()
+        self._close_requests_session()
+        self.subscribers = dict()
 
     def send_stop(self):
         """
         If we're still connected to a PMS, tells the PMS that playback stopped
         """
-        if app.CONN.online and app.ACCOUNT.authenticated:
-            # Only try to send something if we're connected
-            self.pms_timeline(dict(), self.stopped_timeline)
-            self.companion_timeline(self.stopped_timeline)
+        self.pms_timeline(None, self.stopped_timeline)
+        self.companion_timeline(self.stopped_timeline)
 
     def check_subscriber(self, cmd):
-        if cmd.get('path') == '/player/timeline/unsubscribe':
-            log.info('Stop Plex Companion subscription')
-            self._unsubscribe()
-        elif not self._subscribed:
-            log.info('Start Plex Companion subscription')
-            self._subscribe(cmd)
-        else:
+        if not cmd.get('clientIdentifier'):
+            return
+        uuid = UUIDStr(cmd.get('clientIdentifier'))
+        with app.APP.lock_subscriber:
+            if cmd.get('path') == '/player/timeline/unsubscribe':
+                if uuid in self.subscribers:
+                    log.debug('Stop Plex Companion subscription for %s', uuid)
+                    del self.subscribers[uuid]
+            elif uuid not in self.subscribers:
+                log.debug('Start new Plex Companion subscription for %s', uuid)
+                self.subscribers[uuid] = Subscriber(self, cmd=cmd)
+            else:
+                try:
+                    self.subscribers[uuid].command_id = int(cmd.get('commandID'))
+                except TypeError:
+                    pass
+
+    def subscribe(self, uuid, command_id, url):
+        log.debug('New Plex Companion subscriber %s: %s', uuid, url)
+        with app.APP.lock_subscriber:
+            self.subscribers[UUIDStr(uuid)] = Subscriber(self,
+                                                         cmd=None,
+                                                         uuid=uuid,
+                                                         command_id=command_id,
+                                                         url=url)
+
+    def unsubscribe(self, uuid):
+        log.debug('Unsubscribing Plex Companion client %s', uuid)
+        with app.APP.lock_subscriber:
             try:
-                self._command_id = int(cmd.get('commandID'))
-            except TypeError:
+                del self.subscribers[UUIDStr(uuid)]
+            except KeyError:
                 pass
 
+    def update_command_id(self, uuid, command_id):
+        with app.APP.lock_subscriber:
+            if uuid not in self.subscribers:
+                return False
+            self.subscribers[uuid].command_id = command_id
+        return True
+
     def companion_timeline(self, message):
-        if not self._subscribed:
-            return
-        url = f'{app.CONN.server}/player/proxy/timeline'
-        self._get_requests_session_companion()
-        self.t.params['commandID'] = self._command_id
-        message.set('commandID', str(self._command_id))
-        # Get the correct playstate
         state = 'stopped'
-        for timeline in message:
-            if timeline.get('state') != 'stopped':
-                state = timeline.get('state')
-        self.t.params['state'] = state
-        # Send update
-        try:
-            req = self.communicate(self.t.post,
-                                   url,
-                                   data=etree.tostring(message,
-                                                       encoding='utf-8'),
-                                   timeout=TIMEOUT)
-        except (requests.RequestException, SystemExit):
-            return
-        if not req.ok:
-            log_error(log.error, 'Unexpected Companion timeline', req)
+        for entry in message:
+            if entry.get('state') != 'stopped':
+                state = entry.get('state')
+        for subscriber in self.subscribers.values():
+            subscriber.send_timeline(message, state)
 
     def pms_timeline_per_player(self, playerid, message):
         """
-        Pass a really low timeout in seconds if shutting down Kodi and we don't
-        need the PMS' response
+        Sending the "normal", non-Companion playstate to the PMS works a bit
+        differently
         """
         url = f'{app.CONN.server}/:/timeline'
         self._get_requests_session()
         self.s.params.update(message[playerid].attrib)
         # Tell the PMS about our playstate progress
         try:
-            req = self.communicate(self.s.get, url, timeout=TIMEOUT)
-        except (requests.RequestException, SystemExit):
+            req = communicate(self.s.get, url, timeout=TIMEOUT)
+        except requests.RequestException as error:
+            log.error('Could not send the PMS timeline: %s', error)
+            return
+        except SystemExit:
             return
         if not req.ok:
             log_error(log.error, 'Failed reporting playback progress', req)
@@ -342,6 +188,12 @@ class PlaystateMgr(backgroundthread.KillableThread):
         for player in players.values():
             self.pms_timeline_per_player(player['playerid'], message)
 
+    def wait_while_suspended(self):
+        should_shutdown = super().wait_while_suspended()
+        if not should_shutdown:
+            self._start_webserver()
+        return should_shutdown
+
     def run(self):
         app.APP.register_thread(self)
         log.info("----===## Starting PlaystateMgr ##===----")
@@ -351,16 +203,18 @@ class PlaystateMgr(backgroundthread.KillableThread):
             # Make sure we're telling the PMS that playback will stop
             self.send_stop()
             # Cleanup
-            self.close_requests_session()
+            self.close_connections()
             app.APP.deregister_thread(self)
             log.info("----===## PlaystateMgr stopped ##===----")
 
     def _run(self):
         signaled_playback_stop = True
+        self._start_webserver()
+        self.gdm.start()
+        last_check = timing.unix_timestamp()
         while not self.should_cancel():
             if self.should_suspend():
-                self._unsubscribe()
-                self.close_requests_session()
+                self.close_connections()
                 if self.wait_while_suspended():
                     break
             # Check for Kodi playlist changes first
@@ -377,6 +231,11 @@ class PlaystateMgr(backgroundthread.KillableThread):
                             # compare old and new playqueue
                             compare_playqueues(playqueue, kodi_pl)
                         playqueue.old_kodi_pl = list(kodi_pl)
+            # Make sure we are registered as a player
+            now = timing.unix_timestamp()
+            if now - last_check > GDM_COMPANION_CHECK:
+                self.gdm.check_client_registration()
+                last_check = now
             # Then check for Kodi playback
             players = js.get_players()
             if not players and signaled_playback_stop:
@@ -384,8 +243,8 @@ class PlaystateMgr(backgroundthread.KillableThread):
                 continue
             elif not players:
                 # Playback has just stopped, need to tell Plex
-                signaled_playback_stop = True
                 self.send_stop()
+                signaled_playback_stop = True
                 self.sleep(1)
                 continue
             else:

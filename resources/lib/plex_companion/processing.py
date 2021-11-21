@@ -166,29 +166,39 @@ def skip_to(playqueue_item_id, key):
             log.error('Item not found to skip to')
 
 
-def process_proxy_xml(cmd):
+def convert_xml_to_params(xml):
+    new_params = dict(xml.attrib)
+    for key in xml.attrib:
+        if key.startswith('query'):
+            new_params[key[5].lower() + key[6:]] = xml.get(key)
+            del new_params[key]
+    return new_params
+
+
+def process_command(cmd=None, path=None, params=None):
     """cmd: a "Command" etree xml"""
-    path = cmd.get('path')
-    if (path == '/player/playback/playMedia'
-            and cmd.get('queryAddress') == 'node.plexapp.com'):
+    path = cmd.get('path') if cmd is not None else path
+    if not path.startswith('/'):
+        path = '/' + path
+    if params is None:
+        params = convert_xml_to_params(cmd)
+    if path == '/player/playback/playMedia' and \
+            params.get('address') == 'node.plexapp.com':
         process_node(cmd.get('queryKey'),
                      cmd.get('queryToken'),
                      cmd.get('queryOffset') or 0)
     elif path == '/player/playback/playMedia':
         with app.APP.lock_playqueues:
-            process_playlist(cmd.get('queryContainerKey'),
-                             cmd.get('queryType'),
-                             cmd.get('queryKey'),
-                             cmd.get('queryOffset'),
-                             cmd.get('queryToken'))
+            process_playlist(params.get('containerKey'),
+                             params.get('type'),
+                             params.get('key'),
+                             params.get('offset'),
+                             params.get('token'))
     elif path == '/player/playback/refreshPlayQueue':
         with app.APP.lock_playqueues:
-            process_refresh(cmd.get('queryPlayQueueID'))
+            process_refresh(params.get('playQueueID'))
     elif path == '/player/playback/setParameters':
-        if 'queryVolume' in cmd.attrib:
-            js.set_volume(int(cmd.get('queryVolume')))
-        else:
-            log.error('Unknown command: %s: %s', cmd.tag, cmd.attrib)
+        js.set_volume(int(params.get('volume')))
     elif path == '/player/playback/play':
         js.play()
     elif path == '/player/playback/pause':
@@ -196,7 +206,7 @@ def process_proxy_xml(cmd):
     elif path == '/player/playback/stop':
         js.stop()
     elif path == '/player/playback/seekTo':
-        js.seek_to(float(cmd.get('queryOffset', 0.0)) / 1000.0)
+        js.seek_to(float(params.get('offset', 0.0)) / 1000.0)
     elif path == '/player/playback/stepForward':
         js.smallforward()
     elif path == '/player/playback/stepBack':
@@ -206,7 +216,7 @@ def process_proxy_xml(cmd):
     elif path == '/player/playback/skipPrevious':
         js.skipprevious()
     elif path == '/player/playback/skipTo':
-        skip_to(cmd.get('queryPlayQueueItemID'), cmd.get('queryKey'))
+        skip_to(params.get('playQueueItemID'), params.get('key'))
     elif path == '/player/navigation/moveUp':
         js.input_up()
     elif path == '/player/navigation/moveDown':
@@ -222,15 +232,19 @@ def process_proxy_xml(cmd):
     elif path == '/player/navigation/back':
         js.input_back()
     elif path == '/player/playback/setStreams':
-        process_streams(cmd.get('queryType'),
-                        cast(int, cmd.get('queryVideoStreamID')),
-                        cast(int, cmd.get('queryAudioStreamID')),
-                        cast(int, cmd.get('querySubtitleStreamID')))
+        process_streams(params.get('queryType'),
+                        cast(int, params.get('videoStreamID')),
+                        cast(int, params.get('audioStreamID')),
+                        cast(int, params.get('subtitleStreamID')))
     elif path == '/player/timeline/subscribe':
         pass
     elif path == '/player/timeline/unsubscribe':
         pass
     else:
-        log.error('Unknown Plex companion path/command: %s: %s',
-                  cmd.tag, cmd.attrib)
+        if cmd is None:
+            log.error('Unknown request_path: %s with params %s', path, params)
+        else:
+            log.error('Unknown Plex companion path/command: %s: %s',
+                      cmd.tag, cmd.attrib)
+        return False
     return True

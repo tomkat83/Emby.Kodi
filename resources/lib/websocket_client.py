@@ -126,7 +126,6 @@ def on_error(ws, error):
                       ws.name, type(error), error)
         # Status = Error
         utils.settings(status, value=utils.lang(257))
-        raise RuntimeError
 
 
 def on_close(ws):

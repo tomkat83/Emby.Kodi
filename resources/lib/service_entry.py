@@ -444,11 +444,12 @@ class Service(object):
         self.pms_ws = websocket_client.get_pms_websocketapp()
         self.alexa_ws = websocket_client.get_alexa_websocketapp()
         self.sync = sync.Sync()
-        self.companion_playstate_mgr = plex_companion.PlaystateMgr()
+        self.companion_playstate_mgr = plex_companion.PlaystateMgr(
+            companion_enabled=utils.settings('plexCompanion') == 'true')
         if utils.settings('plexCompanion') == 'true':
-            self.companion_listener = plex_companion.Listener(self.companion_playstate_mgr)
+            self.companion_polling = plex_companion.Polling(self.companion_playstate_mgr)
         else:
-            self.companion_listener = None
+            self.companion_polling = None
 
         # Main PKC program loop
         while not self.should_cancel():
@@ -551,8 +552,8 @@ class Service(object):
                 self.pms_ws.start()
                 self.sync.start()
                 self.companion_playstate_mgr.start()
-                if self.companion_listener is not None:
-                    self.companion_listener.start()
+                if self.companion_polling is not None:
+                    self.companion_polling.start()
                 self.alexa_ws.start()
 
             elif app.APP.is_playing:
