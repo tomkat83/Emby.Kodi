@@ -1,3 +1,7 @@
+version 3.5.15 (beta only):
+- Re-add old Plex Companion mechanism as the new one sucks
+- Fix KeyError on playback startup
+
 version 3.5.14 (beta only):
 - Fix PKC not being able to connect to plex.tv after installation
 
