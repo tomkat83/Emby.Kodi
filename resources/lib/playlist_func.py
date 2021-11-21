@@ -230,7 +230,7 @@ class PlaylistItem(object):
             # playback startup, e.g. a Kodi audio index of 1953718901 (!)
             try:
                 index = function(self.playerid)
-            except (TypeError, IndexError):
+            except (TypeError, IndexError, KeyError):
                 # No sensible reply yet
                 pass
             else:
