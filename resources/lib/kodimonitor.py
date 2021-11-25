@@ -308,7 +308,7 @@ class KodiMonitor(xbmc.Monitor):
                     initialize = False
         if initialize:
             LOG.debug('Need to initialize Plex and PKC playqueue')
-            if not kodi_id or not kodi_type:
+            if not kodi_id or not kodi_type or not path:
                 kodi_id, kodi_type, path = self._json_item(playerid)
             plex_id, plex_type = self._get_ids(kodi_id, kodi_type, path)
             if not plex_id:
