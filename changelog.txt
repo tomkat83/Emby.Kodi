@@ -1,3 +1,6 @@
+version 3.5.16 (beta only):
+- Fix playback report for widget not working if direct paths are used
+
 version 3.5.15 (beta only):
 - Re-add old Plex Companion mechanism as the new one sucks
 - Fix KeyError on playback startup
