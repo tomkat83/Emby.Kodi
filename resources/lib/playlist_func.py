@@ -246,9 +246,13 @@ class PlaylistItem(object):
     def init_streams(self):
         """
         Initializes all streams after Kodi has started playing this video
+        WARNING: KODI TAKES FOREVER TO INITIALIZE STREAMS AFTER PLAYBACK
+        STARTUP. YOU WONT GET THE CORRECT NUMBER OFAUDIO AND SUB STREAMS RIGHT
+        AFTER STARTUP. Seems like you need to wait a couple of seconds
         """
         if not app.PLAYSTATE.item == self:
             # Already stopped playback or skipped to the next one
+            LOG.warn('Skipping init_streams!')
             return
         self.init_kodi_streams()
         self.switch_to_plex_stream('video')
