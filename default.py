@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-###############################################################################
 from builtins import object
 import logging
 from sys import argv
@@ -12,14 +10,9 @@ import xbmcplugin
 
 from resources.lib import entrypoint, utils, transfer, variables as v, loghandler
 
-###############################################################################
 
 loghandler.config()
 LOG = logging.getLogger('PLEX.default')
-
-###############################################################################
-
-HANDLE = int(argv[1])
 
 
 class Main(object):
@@ -158,21 +151,21 @@ class Main(object):
         """
         Start up playback_starter in main Python thread
         """
-        request = '%s&handle=%s' % (argv[2], HANDLE)
+        request = '%s&handle=%s' % (argv[2], int(argv[1]))
         # Put the request into the 'queue'
         transfer.plex_command('PLAY-%s' % request)
-        if HANDLE == -1:
+        if int(argv[1]) == -1:
             # Handle -1 received, not waiting for main thread
             return
         # Wait for the result from the main PKC thread
         result = transfer.wait_for_transfer(source='main')
         if result is True:
-            xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
+            xbmcplugin.setResolvedUrl(int(argv[1]), False, xbmcgui.ListItem())
             # Tell main thread that we're done
             transfer.send(True, target='main')
         else:
             # Received a xbmcgui.ListItem()
-            xbmcplugin.setResolvedUrl(HANDLE, True, result)
+            xbmcplugin.setResolvedUrl(int(argv[1]), True, result)
 
 
 if __name__ == '__main__':
