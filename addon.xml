@@ -20,6 +20,8 @@
       </item>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <!-- see e.g. https://github.com/xbmc/xbmc/pull/14136 -->
+    <reuselanguageinvoker>true</reuselanguageinvoker>
     <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>
