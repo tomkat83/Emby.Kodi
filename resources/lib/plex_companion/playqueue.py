@@ -66,8 +66,7 @@ def compare_playqueues(playqueue, new_kodi_playqueue):
                 # Kodi exit
                 return
             try:
-                if (old_item.file.startswith('plugin://') and
-                        not old_item.file.startswith(PLUGIN)):
+                if (old_item.file.startswith('plugin://') and not old_item.file.startswith(PLUGIN)):
                     # Ignore media by other addons
                     continue
             except AttributeError:
@@ -85,18 +84,18 @@ def compare_playqueues(playqueue, new_kodi_playqueue):
                 else:
                     identical = plex_id == old_item.plex_id
             if j == 0 and identical:
-                del old[j], index[j]
+                del old[0], index[0]
                 break
             elif identical:
                 log.debug('Playqueue item %s moved to position %s',
-                          i + j, i)
+                          index[j], i)
                 try:
-                    PL.move_playlist_item(playqueue, i + j, i)
+                    PL.move_playlist_item(playqueue, index[j], i)
                 except exceptions.PlaylistError:
                     log.error('Could not modify playqueue positions')
                     log.error('This is likely caused by mixing audio and '
                               'video tracks in the Kodi playqueue')
-                del old[j], index[j]
+                del old[j], index[i]
                 break
         else:
             log.debug('Detected new Kodi element at position %s: %s ',
