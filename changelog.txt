@@ -1,3 +1,8 @@
+version 3.5.17 (beta only):
+- Use addon.xml `reuselanguageinvoker` to turn add-on snappier
+- Fix detection of playqueue order. Thus fix PKC reporting back the playing of an old episode when using UpNext
+- Fix logging for playlist items not working correctly
+
 version 3.5.16 (beta only):
 - Fix playback report for widget not working if direct paths are used
 
