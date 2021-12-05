@@ -180,7 +180,7 @@ class PlaylistItem(object):
                 "'resume': {self.resume},"
                 "'offset': {self.offset}, "
                 "'force_transcode': {self.force_transcode}, "
-                "'part': {self.part}".format(self=self))
+                "'part': {self.part}}}".format(self=self))
 
     def _process_streams(self):
         """
