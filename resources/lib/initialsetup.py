@@ -526,7 +526,7 @@ class InitialSetup(object):
                                       force_create=True,
                                       top_element='sources') as xml:
                 changed = False
-                for extension in ('smb://', 'nfs://'):
+                for extension in ('smb://', 'nfs://', 'plugin://'):
                     root = xml.set_setting(['video'])
                     changed = self._add_sources(root, extension) or changed
                 if changed:
