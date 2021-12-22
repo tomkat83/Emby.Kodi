@@ -6,8 +6,10 @@ Processes Plex companion inputs from the plexbmchelper to Kodi commands
 from logging import getLogger
 from xbmc import Player
 
-from . import playqueue as PQ, plex_functions as PF
-from . import json_rpc as js, variables as v, app
+from . import plex_functions as PF
+from . import json_rpc as js
+from . import variables as v
+from . import app
 
 ###############################################################################
 
@@ -28,7 +30,7 @@ def skip_to(params):
               playqueue_item_id, plex_id)
     found = True
     for player in list(js.get_players().values()):
-        playqueue = PQ.PLAYQUEUES[player['playerid']]
+        playqueue = app.PLAYQUEUES[player['playerid']]
         for i, item in enumerate(playqueue.items):
             if item.id == playqueue_item_id:
                 found = True
@@ -78,6 +80,7 @@ def process_command(request_path, params):
             js.set_volume(int(params['volume']))
         else:
             LOG.error('Unknown parameters: %s', params)
+            return False
     elif request_path == "player/playback/play":
         js.play()
     elif request_path == "player/playback/pause":
@@ -117,3 +120,5 @@ def process_command(request_path, params):
         })
     else:
         LOG.error('Unknown request path: %s', request_path)
+        return False
+    return True

@@ -224,7 +224,7 @@ class Artwork(object):
                                 authenticate=False,
                                 timeout=15,
                                 return_response=True)
-        if not data.ok:
+        if data in (None, 401) or not data.ok:
             LOG.debug('Could not download data from FanartTV')
             return artworks
         data = data.json()

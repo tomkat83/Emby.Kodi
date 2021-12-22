@@ -17,7 +17,7 @@ from .kodi_db import KodiVideoDB
 from . import kodi_db
 from .downloadutils import DownloadUtils as DU
 from . import utils, timing, plex_functions as PF
-from . import json_rpc as js, playqueue as PQ, playlist_func as PL
+from . import json_rpc as js, playlist_func as PL
 from . import backgroundthread, app, variables as v
 from . import exceptions
 
@@ -31,11 +31,9 @@ class KodiMonitor(xbmc.Monitor):
 
     def __init__(self):
         self._already_slept = False
-        self._switched_to_plex_streams = True
         xbmc.Monitor.__init__(self)
         for playerid in app.PLAYSTATE.player_states:
             app.PLAYSTATE.player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
-            app.PLAYSTATE.old_player_states[playerid] = copy.deepcopy(app.PLAYSTATE.template)
         LOG.info("Kodi monitor started.")
 
     def onScanStarted(self, library):
@@ -141,7 +139,7 @@ class KodiMonitor(xbmc.Monitor):
             u'playlistid': 1,
         }
         """
-        playqueue = PQ.PLAYQUEUES[data['playlistid']]
+        playqueue = app.PLAYQUEUES[data['playlistid']]
         if not playqueue.is_pkc_clear():
             playqueue.pkc_edit = True
             playqueue.clear(kodi=False)
@@ -257,7 +255,7 @@ class KodiMonitor(xbmc.Monitor):
                 if not playerid:
                     LOG.error('Coud not get playerid for data %s', data)
                     return
-        playqueue = PQ.PLAYQUEUES[playerid]
+        playqueue = app.PLAYQUEUES[playerid]
         info = js.get_player_props(playerid)
         if playqueue.kodi_playlist_playback:
             # Kodi will tell us the wrong position - of the playlist, not the
@@ -310,7 +308,7 @@ class KodiMonitor(xbmc.Monitor):
                     initialize = False
         if initialize:
             LOG.debug('Need to initialize Plex and PKC playqueue')
-            if not kodi_id or not kodi_type:
+            if not kodi_id or not kodi_type or not path:
                 kodi_id, kodi_type, path = self._json_item(playerid)
             plex_id, plex_type = self._get_ids(kodi_id, kodi_type, path)
             if not plex_id:
@@ -327,7 +325,7 @@ class KodiMonitor(xbmc.Monitor):
             container_key = None
             if info['playlistid'] != -1:
                 # -1 is Kodi's answer if there is no playlist
-                container_key = PQ.PLAYQUEUES[playerid].id
+                container_key = app.PLAYQUEUES[playerid].id
             if container_key is not None:
                 container_key = '/playQueues/%s' % container_key
             elif plex_id is not None:
@@ -345,6 +343,9 @@ class KodiMonitor(xbmc.Monitor):
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
             status['intro_markers'] = item.api.intro_markers()
+        if item.playmethod is None and not path.startswith('plugin://'):
+            item.playmethod = v.PLAYBACK_METHOD_DIRECT_PATH
+        item.playerid = playerid
         # Remember the currently playing item
         app.PLAYSTATE.item = item
         # Remember that this player has been active
@@ -365,7 +366,10 @@ class KodiMonitor(xbmc.Monitor):
         # Workaround for the Kodi add-on Up Next
         if not app.SYNC.direct_paths:
             _notify_upnext(item)
-        self._switched_to_plex_streams = False
+
+        if playerid == v.KODI_VIDEO_PLAYER_ID:
+            task = InitVideoStreams(item)
+            backgroundthread.BGThreader.addTask(task)
 
     def _on_av_change(self, data):
         """
@@ -375,34 +379,8 @@ class KodiMonitor(xbmc.Monitor):
         Example data as returned by Kodi:
             {'item': {'id': 5, 'type': 'movie'},
              'player': {'playerid': 1, 'speed': 1}}
-
-        PICKING UP CHANGES ON SUBTITLES IS CURRENTLY BROKEN ON THE KODI SIDE!
-        Kodi subs will never change. Also see json_rpc.py
         """
-        playerid = data['player']['playerid']
-        if not playerid == v.KODI_VIDEO_PLAYER_ID:
-            # We're just messing with Kodi's videoplayer
-            return
-        item = app.PLAYSTATE.item
-        if item is None:
-            # Player might've quit
-            return
-        if not self._switched_to_plex_streams:
-            # We need to switch to the Plex streams ONCE upon playback start
-            # after onavchange has been fired
-            # Wait a bit because JSON responses won't be ready otherwise
-            if app.APP.monitor.waitForAbort(2):
-                # In case PKC needs to quit
-                return
-            item.init_kodi_streams()
-            item.switch_to_plex_stream('video')
-            if utils.settings('audioStreamPick') == '0':
-                item.switch_to_plex_stream('audio')
-            if utils.settings('subtitleStreamPick') == '0':
-                item.switch_to_plex_stream('subtitle')
-            self._switched_to_plex_streams = True
-        else:
-            item.on_av_change(playerid)
+        pass
 
 
 def _playback_cleanup(ended=False):
@@ -421,8 +399,6 @@ def _playback_cleanup(ended=False):
     app.CONN.plex_transient_token = None
     for playerid in app.PLAYSTATE.active_players:
         status = app.PLAYSTATE.player_states[playerid]
-        # Remember the last played item later
-        app.PLAYSTATE.old_player_states[playerid] = copy.deepcopy(status)
         # Stop transcoding
         if status['playmethod'] == v.PLAYBACK_METHOD_TRANSCODE:
             LOG.debug('Tell the PMS to stop transcoding')
@@ -688,3 +664,19 @@ def _videolibrary_onupdate(data):
         PF.scrobble(db_item['plex_id'], 'watched')
     else:
         PF.scrobble(db_item['plex_id'], 'unwatched')
+
+
+class InitVideoStreams(backgroundthread.Task):
+    """
+    The Kodi player takes forever to initialize all streams Especially
+    subtitles, apparently. No way to tell when Kodi is done :-(
+    """
+
+    def __init__(self, item):
+        self.item = item
+        super().__init__()
+
+    def run(self):
+        if app.APP.monitor.waitForAbort(5):
+            return
+        self.item.init_streams()

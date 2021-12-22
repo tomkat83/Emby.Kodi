@@ -3,7 +3,7 @@
 # Croneter None <croneter@gmail.com>, 2017
 # Tony Z <zj45499@gmail.com>, 2017
 # Jingen Chen <jingen.chen@gmail.com>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1601,4 +1601,9 @@ msgstr ""
 # In PKC Settings under Sync
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
+msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
 msgstr ""

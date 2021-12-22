@@ -2,7 +2,7 @@
 # Translators:
 # Croneter None <croneter@gmail.com>, 2019
 # Savage93 <savageistheking@gmail.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1712,3 +1712,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Felhasználói osztályzatok lecserélése a médiaverziók számára"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

@@ -126,7 +126,6 @@ def on_error(ws, error):
                       ws.name, type(error), error)
         # Status = Error
         utils.settings(status, value=utils.lang(257))
-        raise RuntimeError
 
 
 def on_close(ws):
@@ -198,14 +197,19 @@ class PlexWebSocketApp(websocket.WebSocketApp,
             log.exception('Exception of type %s occured: %s', type(err), err)
         finally:
             self.close()
-            # Status = Not connected
+            if self._enabled:
+                # Status = Not connected
+                message = utils.lang(15208)
+            else:
+                # Status = Disabled
+                message = utils.lang(24023)
             utils.settings(self.name + SETTINGS_STRING,
-                           value=utils.lang(15208))
+                           value=message)
             app.APP.deregister_thread(self)
             log.info("----===## %s stopped ##===----", self.name)
 
     def _run(self):
-        while not self.should_cancel():
+        while not self.should_cancel() and self._enabled:
             # In the event the server goes offline
             while self.should_suspend():
                 # We will be caught in this loop if either another thread
@@ -231,15 +235,12 @@ class PlexWebSocketApp(websocket.WebSocketApp,
 class PMSWebsocketApp(PlexWebSocketApp):
     name = 'pms_websocket'
 
+    def __init__(self, *args, **kwargs):
+        self._enabled = utils.settings('enableBackgroundSync') == 'true'
+        super().__init__(*args, **kwargs)
+
     def get_uri(self):
         return get_pms_uri()
-
-    def should_suspend(self):
-        """
-        Returns True if the thread needs to suspend.
-        """
-        return (self._suspended or
-                utils.settings('enableBackgroundSync') != 'true')
 
     def set_suspension_settings_status(self):
         if utils.settings('enableBackgroundSync') != 'true':
@@ -255,6 +256,10 @@ class PMSWebsocketApp(PlexWebSocketApp):
 class AlexaWebsocketApp(PlexWebSocketApp):
     name = 'alexa_websocket'
 
+    def __init__(self, *args, **kwargs):
+        self._enabled = utils.settings('enable_alexa') == 'true'
+        super().__init__(*args, **kwargs)
+
     def get_uri(self):
         return get_alexa_uri()
 
@@ -263,7 +268,6 @@ class AlexaWebsocketApp(PlexWebSocketApp):
         Returns True if the thread needs to suspend.
         """
         return self._suspended or \
-            utils.settings('enable_alexa') != 'true' or \
             app.ACCOUNT.restricted_user or \
             not app.ACCOUNT.plex_token
 

@@ -442,8 +442,6 @@ def get_current_subtitle_stream_index(playerid):
     """
     Returns the currently active subtitle stream index [int] or None if there
     are no subs
-    PICKING UP CHANGES ON SUBTITLES IS CURRENTLY BROKEN ON THE KODI SIDE! The
-    JSON reply won't change even though subtitles are changed :-(
     """
     try:
         return JsonRPC('Player.GetProperties').execute({
@@ -456,8 +454,6 @@ def get_current_subtitle_stream_index(playerid):
 def get_subtitle_enabled(playerid):
     """
     Returns True if a subtitle is currently enabled, False otherwise.
-    PICKING UP CHANGES ON SUBTITLES IS CURRENTLY BROKEN ON THE KODI SIDE! The
-    JSON reply won't change even though subtitles are changed :-(
     """
     return JsonRPC('Player.GetProperties').execute({
         'playerid': playerid,

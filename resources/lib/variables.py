@@ -21,7 +21,7 @@ MARK_PLAYED_AT = 0.9
 # watched?
 IGNORE_SECONDS_AT_START = 60
 
-_ADDON = Addon()
+_ADDON = Addon('plugin.video.plexkodiconnect')
 ADDON_NAME = 'PlexKodiConnect'
 ADDON_ID = 'plugin.video.plexkodiconnect'
 ADDON_VERSION = _ADDON.getAddonInfo('version')
@@ -30,8 +30,9 @@ ADDON_FOLDER = xbmcvfs.translatePath('special://home')
 ADDON_PROFILE = xbmcvfs.translatePath(_ADDON.getAddonInfo('profile'))
 
 # Used e.g. for json_rpc
-KODI_VIDEO_PLAYER_ID = 1
 KODI_AUDIO_PLAYER_ID = 0
+KODI_VIDEO_PLAYER_ID = 1
+KODI_PHOTO_PLAYER_ID = 2
 
 KODILANGUAGE = xbmc.getLanguage(xbmc.ISO_639_1)
 KODIVERSION = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
@@ -654,10 +655,6 @@ SORT_METHODS_ALBUMS = (
     'SORT_METHOD_ALBUM',
 )
 
-
-XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>\n'
-
-COMPANION_OK_MESSAGE = XML_HEADER + '<Response code="200" status="OK" />'
 
 PLEX_REPEAT_FROM_KODI_REPEAT = {
     'off': '0',

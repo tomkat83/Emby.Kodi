@@ -55,6 +55,7 @@ REGEX_PLEX_ID_FROM_URL = re.compile(r'''metadata%2F(\d+)''')
 SAFE_URL_CHARACTERS = "%/:=&?~#+!$,;'@()*[]"
 HTTP_DAV_FTP = re.compile(r'(http(s)?|dav(s)?|(s)?ftp)://((.+):(.+)@)?([\w\.]+)(:([\d]+))?/')
 
+
 def garbageCollect():
     gc.collect(2)
 
@@ -114,7 +115,7 @@ def settings(setting, value=None):
     """
     # We need to instantiate every single time to read changed variables!
     with SETTINGS_LOCK:
-        addon = xbmcaddon.Addon()
+        addon = xbmcaddon.Addon('plugin.video.plexkodiconnect')
         if value is not None:
             # Takes string or unicode by default!
             addon.setSetting(setting, value)
@@ -554,6 +555,17 @@ def reset(ask_user=True):
     # Wipe everything
     wipe_database()
     reboot_kodi()
+
+
+def log_xml(xml, logger, loglevel):
+    """
+    Logs an etree xml. Pass the loglevel for which logging will happen, e.g.
+    loglevel=logging.DEBUG
+    """
+    if LOG.isEnabledFor(loglevel):
+        string = undefused_etree.tostring(xml, encoding='utf8')
+        string = string.decode('utf-8')
+        logger('\n' + string)
 
 
 def compare_version(current, minimum):

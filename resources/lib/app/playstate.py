@@ -44,12 +44,6 @@ class PlayState(object):
             1: {},
             2: {}
         }
-        # The LAST playstate once playback is finished
-        self.old_player_states = {
-            0: {},
-            1: {},
-            2: {}
-        }
         self.played_info = {}
 
         # Currently playing PKC item, a PlaylistItem()

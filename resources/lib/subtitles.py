@@ -214,7 +214,8 @@ LANGUAGE_ISO_CODES = (
 
 
 def accessible_plex_subtitles(playmethod, playing_file, xml_streams):
-    if not playmethod == v.PLAYBACK_METHOD_DIRECT_PATH:
+    if playmethod not in (v.PLAYBACK_METHOD_DIRECT_PATH,
+                          v.PLAYBACK_METHOD_DIRECT_PLAY):
         # We can access all subtitles because we're downloading additional
         # external ones into the Kodi PKC add-on directory
         streams = []

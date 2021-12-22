@@ -4,7 +4,7 @@
 # Angela Calò <angycalo@libero.it>, 2018
 # Cristiano Bozzi <c.bozzi@nextworks.it>, 2018
 # Luigi Mantellini <luigi.mantellini@gmail.com>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1711,3 +1711,8 @@ msgid "Replace user ratings with number of media versions"
 msgstr ""
 "Sostituisci la valutazione contenuti con il numero delle versioni del "
 "contenuto disponibili"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

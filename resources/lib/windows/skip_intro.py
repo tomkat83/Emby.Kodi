@@ -36,12 +36,15 @@ class SkipIntroDialog(WindowXMLDialog):
             logger.debug('Closing dialog')
             WindowXMLDialog.close(self)
 
+    def seekTimeToIntroEnd(self):
+        logger.info('Skipping intro, seeking to %s', self.intro_end)
+        app.APP.player.seekTime(self.intro_end)
+
     def onClick(self, control_id):  # pylint: disable=invalid-name
         if self.intro_end and control_id == 3002:  # 3002 = Skip Intro button
             if app.APP.is_playing:
                 self.on_hold = True
-                logger.info('Skipping intro, seeking to %s', self.intro_end)
-                app.APP.player.seekTime(self.intro_end)
+                self.seekTimeToIntroEnd()
                 self.close()
 
     def onAction(self, action):  # pylint: disable=invalid-name

@@ -7,7 +7,7 @@
 # k irbymaker <hun010811@naver.com>, 2020
 # Croneter None <croneter@gmail.com>, 2021
 # so.o.bima <cjhamo@naver.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1632,3 +1632,8 @@ msgstr "사용자 지정 사용자 등급을 보유하고있는 미디어 항목
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "사용자 등급을 미디어 버전 수로 대체"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""

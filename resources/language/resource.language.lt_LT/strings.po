@@ -2,7 +2,7 @@
 # Translators:
 # tigriso1 <tigriso1@outlook.com>, 2019
 # Egidijus Mz <sixpilot80@yahoo.com>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PlexKodiConnect\n"
@@ -1697,3 +1697,8 @@ msgstr ""
 msgctxt "#39719"
 msgid "Replace user ratings with number of media versions"
 msgstr "Pakeiskite naudotojų reitingus medijos versijų skaičiumi"
+
+# PKC Settings - Playback
+msgctxt "#39720"
+msgid "Auto skip intro"
+msgstr ""
