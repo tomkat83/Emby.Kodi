@@ -4,8 +4,8 @@ from logging import getLogger
 import requests
 from threading import Thread
 
-from .common import communicate, proxy_headers, proxy_params, log_error, \
-    UUIDStr, Subscriber, timeline, stopped_timeline
+from .common import communicate, log_error, UUIDStr, Subscriber, timeline, \
+    stopped_timeline, create_requests_session
 from .playqueue import compare_playqueues
 from .webserver import ThreadedHTTPServer, CompanionHandlerClassFactory
 from .plexgdm import plexgdm
@@ -81,13 +81,7 @@ class PlaystateMgr(backgroundthread.KillableThread):
 
     def _get_requests_session(self):
         if self.s is None:
-            log.debug('Creating new requests session')
-            self.s = requests.Session()
-            self.s.headers = proxy_headers()
-            self.s.verify = app.CONN.verify_ssl_cert
-            if app.CONN.ssl_cert_path:
-                self.s.cert = app.CONN.ssl_cert_path
-            self.s.params = proxy_params()
+            self.s = create_requests_session()
         return self.s
 
     def _close_requests_session(self):
