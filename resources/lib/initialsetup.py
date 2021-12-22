@@ -5,7 +5,6 @@ from logging import getLogger
 from xbmc import executebuiltin
 
 from . import utils
-import xml.etree.ElementTree as etree
 from . import path_ops
 from . import migration
 from .downloadutils import DownloadUtils as DU, exceptions
@@ -14,6 +13,7 @@ from . import plex_tv
 from . import json_rpc as js
 from . import app
 from . import variables as v
+from . import sources
 
 ###############################################################################
 
@@ -454,31 +454,6 @@ class InitialSetup(object):
                   server['machineIdentifier'], server['ip'], server['port'],
                   server['scheme'])
 
-    @staticmethod
-    def _add_sources(root, extension):
-        changed = False
-        count = 2
-        for source in root.findall('.//path'):
-            if source.text == extension:
-                count -= 1
-            if count == 0:
-                # sources already set
-                break
-        else:
-            # Missing smb:// occurences, re-add.
-            changed = True
-            for _ in range(0, count):
-                source = etree.SubElement(root, 'source')
-                etree.SubElement(
-                    source,
-                    'name').text = "PlexKodiConnect Masterlock Hack"
-                etree.SubElement(
-                    source,
-                    'path',
-                    {'pathversion': "1"}).text = extension
-                etree.SubElement(source, 'allowsharing').text = "true"
-        return changed
-
     def setup(self):
         """
         Initial setup. Run once upon startup.
@@ -520,20 +495,7 @@ class InitialSetup(object):
         LOG.info('Current Kodi video memory cache in bytes: %s', cache)
         utils.settings('kodi_video_cache', value=cache)
 
-        # Hack to make PKC Kodi master lock compatible
-        try:
-            with utils.XmlKodiSetting('sources.xml',
-                                      force_create=True,
-                                      top_element='sources') as xml:
-                changed = False
-                for extension in ('smb://', 'nfs://'):
-                    root = xml.set_setting(['video'])
-                    changed = self._add_sources(root, extension) or changed
-                if changed:
-                    xml.write_xml = True
-                    reboot = True
-        except utils.ParseError:
-            pass
+        reboot = sources.pkc_sources_hack() or reboot
 
         # Do we need to migrate stuff?
         migration.check_migration()
