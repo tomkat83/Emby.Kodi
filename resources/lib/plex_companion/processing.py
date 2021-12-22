@@ -232,7 +232,7 @@ def process_command(cmd=None, path=None, params=None):
     elif path == '/player/navigation/back':
         js.input_back()
     elif path == '/player/playback/setStreams':
-        process_streams(params.get('queryType'),
+        process_streams(params.get('type'),
                         cast(int, params.get('videoStreamID')),
                         cast(int, params.get('audioStreamID')),
                         cast(int, params.get('subtitleStreamID')))
