@@ -357,6 +357,7 @@ class PlaylistItem(object):
         PF.change_video_stream(plex_stream_index, self.api.part_id())
 
     def _set_kodi_stream_if_different(self, kodi_index, typus):
+        """Will always activate subtitles."""
         if typus == 'video':
             current = js.get_current_video_stream_index(self.playerid)
             if current != kodi_index:
@@ -371,16 +372,32 @@ class PlaylistItem(object):
                 app.APP.player.setAudioStream(kodi_index)
             else:
                 LOG.debug('Not switching audio stream (no change)')
+        elif typus == 'subtitle':
+            current = js.get_current_subtitle_stream_index(self.playerid)
+            enabled = js.get_subtitle_enabled(self.playerid)
+            if current != kodi_index:
+                LOG.debug('Switching subtitle stream')
+                app.APP.player.setAudioStream(kodi_index)
+            else:
+                LOG.debug('Not switching subtitle stream (no change)')
+            if not enabled:
+                LOG.debug('Enabling subtitles')
+                app.APP.player.showSubtitles(True)
+        else:
+            raise RuntimeError('Unknown stream type %s' % typus)
 
     def switch_to_plex_stream(self, typus):
         try:
             plex_index, language_tag = self.active_plex_stream_index(typus)
         except TypeError:
+            # Only happens if Plex did not provide us with a suitable sub
+            # Meaning Plex tells us to deactivate subs
             LOG.debug('Deactivating Kodi subtitles because the PMS '
                       'told us to not show any subtitles')
             app.APP.player.showSubtitles(False)
             self._current_kodi_sub_stream_enabled = False
             return
+        # Rest: video, audio and activated subs
         LOG.debug('The PMS wants to display %s stream with Plex id %s and '
                   'languageTag %s', typus, plex_index, language_tag)
         try:
@@ -396,13 +413,7 @@ class PlaylistItem(object):
                       typus, kodi_index, plex_index)
             # If we're choosing an "illegal" index, this function does
             # need seem to fail nor log any errors
-            if typus == 'audio':
-                self._set_kodi_stream_if_different(kodi_index, 'audio')
-            elif typus == 'subtitle':
-                app.APP.player.setSubtitleStream(kodi_index)
-                app.APP.player.showSubtitles(True)
-            elif typus == 'video':
-                self._set_kodi_stream_if_different(kodi_index, 'video')
+            self._set_kodi_stream_if_different(kodi_index, typus)
         if typus == 'audio':
             self._current_kodi_audio_stream = kodi_index
         elif typus == 'subtitle':
