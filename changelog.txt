@@ -1,3 +1,11 @@
+version 3.6.0:
+- versions 3.5.9 - 3.5.17 for everyone
+- Fix media not showing up in the library if Kodi masterlock has been activated. Kodi bugfix is also necessary, hopefully coming with Kodi 19.4, otherwise switch to Kodi 19.1
+- Fix PKC sometimes selecting the wrong subtitle for direct paths
+- Fix additional artwork download crashing if there was no sensible reply
+- Fix PKC changing subtitles on playback start unnecessarily
+- Fix Plex Companion not able to switch streams
+
 version 3.5.17 (beta only):
 - Use addon.xml `reuselanguageinvoker` to turn add-on snappier
 - Fix detection of playqueue order. Thus fix PKC reporting back the playing of an old episode when using UpNext
