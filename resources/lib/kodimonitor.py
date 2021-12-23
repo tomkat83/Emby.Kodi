@@ -104,8 +104,6 @@ class KodiMonitor(xbmc.Monitor):
         elif method == "System.OnQuit":
             LOG.info('Kodi OnQuit detected - shutting down')
             app.APP.stop_pkc = True
-        elif method == 'Other.plugin.video.plexkodiconnect_play_action':
-            self._start_next_episode(data)
 
     def _playlist_onadd(self, data):
         """
@@ -204,18 +202,6 @@ class KodiMonitor(xbmc.Monitor):
         return (json_item.get('id'),
                 json_item.get('type'),
                 json_item.get('file'))
-
-    @staticmethod
-    def _start_next_episode(data):
-        """
-        Used for the add-on Upnext to start playback of the next episode
-        """
-        LOG.info('Upnext: Start playback of the next episode')
-        play_info = binascii.unhexlify(data[0])
-        play_info = json.loads(play_info)
-        app.APP.player.stop()
-        handle = 'RunPlugin(%s)' % play_info.get('handle')
-        xbmc.executebuiltin(handle)
 
     def PlayBackStart(self, data):
         """
@@ -362,10 +348,6 @@ class KodiMonitor(xbmc.Monitor):
         status['playcount'] = item.playcount
         status['external_player'] = app.APP.player.isExternalPlayer() == 1
         LOG.debug('Set the player state: %s', status)
-
-        # Workaround for the Kodi add-on Up Next
-        if not app.SYNC.direct_paths:
-            _notify_upnext(item)
 
         if playerid == v.KODI_VIDEO_PLAYER_ID:
             task = InitVideoStreams(item)
@@ -572,46 +554,6 @@ def _complete_artwork_keys(info):
                 'thumb'):
         if key not in info['art']:
             info['art'][key] = ''
-
-
-def _notify_upnext(item):
-    """
-    Signals to the Kodi add-on Upnext that there is another episode after this
-    one.
-    Needed for add-on paths in order to prevent crashes when Upnext does this
-    by itself
-    """
-    if not item.plex_type == v.PLEX_TYPE_EPISODE:
-        return
-    this_api = item.api
-    next_api = _next_episode(this_api)
-    if next_api is None:
-        return
-    info = {}
-    for key, api in (('current_episode', this_api),
-                     ('next_episode', next_api)):
-        info[key] = {
-            'episodeid': api.plex_id,
-            'tvshowid': api.grandparent_id(),
-            'title': api.title(),
-            'showtitle': api.grandparent_title(),
-            'plot': api.plot(),
-            'playcount': api.viewcount(),
-            'season': api.season_number(),
-            'episode': api.index(),
-            'firstaired': api.year(),
-            'rating': api.rating(),
-            'art': api.artwork(kodi_id=api.kodi_id,
-                               kodi_type=api.kodi_type,
-                               full_artwork=True)
-        }
-        _complete_artwork_keys(info[key])
-    info['play_info'] = {'handle': next_api.fullpath(force_addon=True)[0]}
-    sender = v.ADDON_ID
-    method = 'upnext_data'
-    data = binascii.hexlify(json.dumps(info).encode('utf-8'))
-    data = '\\"[\\"{0}\\"]\\"'.format(data)
-    xbmc.executebuiltin(f'NotifyAll({sender}, {method}, {data})')
 
 
 def _videolibrary_onupdate(data):
