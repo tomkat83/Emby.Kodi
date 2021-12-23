@@ -1,3 +1,6 @@
+version 3.6.1:
+- Fix Kodi add-on Up Next crashing by removing code that has become obsolete on the PKC-side #1750
+
 version 3.6.0:
 - versions 3.5.9 - 3.5.17 for everyone
 - Fix media not showing up in the library if Kodi masterlock has been activated. Kodi bugfix is also necessary, hopefully coming with Kodi 19.4, otherwise switch to Kodi 19.1
