@@ -322,6 +322,7 @@ class KodiMonitor(xbmc.Monitor):
             kodi_type = item.kodi_type
             plex_id = item.plex_id
             plex_type = item.plex_type
+            path = item.file
             if playqueue.id:
                 container_key = '/playQueues/%s' % playqueue.id
             else:
@@ -329,7 +330,7 @@ class KodiMonitor(xbmc.Monitor):
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
             status['intro_markers'] = item.api.intro_markers()
-        if item.playmethod is None and not path.startswith('plugin://'):
+        if item.playmethod is None and path and not path.startswith('plugin://'):
             item.playmethod = v.PLAYBACK_METHOD_DIRECT_PATH
         item.playerid = playerid
         # Remember the currently playing item
