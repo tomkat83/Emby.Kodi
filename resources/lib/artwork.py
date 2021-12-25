@@ -99,11 +99,15 @@ def cache_url(url, should_suspend=None):
     sleeptime = 0
     while True:
         try:
+            # Make sure that no proxy is used for our calls to Kodi's webserver
+            # at localhost See
+            # https://github.com/croneter/PlexKodiConnect/issues/1732
             requests.head(
                 url=f'http://{app.CONN.webserver_username}:{app.CONN.webserver_password}@{app.CONN.webserver_host}:{app.CONN.webserver_port}/image/image://{url}',
                 auth=(app.CONN.webserver_username,
                       app.CONN.webserver_password),
-                timeout=TIMEOUT)
+                timeout=TIMEOUT,
+                proxies={'http': None, 'https': None})
         except requests.Timeout:
             # We don't need the result, only trigger Kodi to start the
             # download. All is well
