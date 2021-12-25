@@ -1,3 +1,7 @@
+version 3.6.2:
+- Fix playback report not working and AttributeError: 'NoneType' object has no attribute 'startswith' #1755
+- Make sure that no proxy is used for artwork caching for calls to Kodi's webserver at localhost #1754
+
 version 3.6.1:
 - Fix Kodi add-on Up Next crashing by removing code that has become obsolete on the PKC-side #1750
 
