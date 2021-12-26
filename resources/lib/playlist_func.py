@@ -474,13 +474,13 @@ def playlist_item_from_kodi(kodi_item):
     item = PlaylistItem()
     item.kodi_id = kodi_item.get('id')
     item.kodi_type = kodi_item.get('type')
+    item.file = kodi_item.get('file')
     if item.kodi_id:
         with PlexDB(lock=False) as plexdb:
             db_item = plexdb.item_by_kodi_id(kodi_item['id'], kodi_item['type'])
         if db_item:
             item.plex_id = db_item['plex_id']
             item.plex_type = db_item['plex_type']
-    item.file = kodi_item.get('file')
     if item.plex_id is None and item.file is not None:
         try:
             query = item.file.split('?', 1)[1]
@@ -653,6 +653,7 @@ def init_plex_playqueue(playlist, plex_id=None, kodi_item=None):
     Returns the first PKC playlist item or raises PlaylistError
     """
     LOG.debug('Initializing the playqueue on the Plex side: %s', playlist)
+    kodi_item = kodi_item or {}
     verify_kodi_item(plex_id, kodi_item)
     playlist.clear(kodi=False)
     try:
@@ -673,7 +674,10 @@ def init_plex_playqueue(playlist, plex_id=None, kodi_item=None):
             raise PlaylistError('Did not receive a valid xml from the PMS')
         get_playlist_details_from_xml(playlist, xml)
         # Need to get the details for the playlist item
-        item = playlist_item_from_xml(xml[0])
+        item = playlist_item_from_xml(xml[0],
+                                      kodi_id=kodi_item.get('id'),
+                                      kodi_type=kodi_item.get('type'))
+        item.file = kodi_item.get('file')
     except (KeyError, IndexError, TypeError):
         LOG.error('Could not init Plex playlist: plex_id %s, kodi_item %s',
                   plex_id, kodi_item)
