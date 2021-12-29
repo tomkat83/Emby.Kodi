@@ -377,7 +377,7 @@ class PlaylistItem(object):
             enabled = js.get_subtitle_enabled(self.playerid)
             if current != kodi_index:
                 LOG.debug('Switching subtitle stream')
-                app.APP.player.setAudioStream(kodi_index)
+                app.APP.player.setSubtitleStream(kodi_index)
             else:
                 LOG.debug('Not switching subtitle stream (no change)')
             if not enabled:
