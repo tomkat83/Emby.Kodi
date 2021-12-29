@@ -1,3 +1,6 @@
+version 3.6.3:
+- Fix PKC not picking the correct Plex subtitle #1760
+
 version 3.6.2:
 - Fix playback report not working and AttributeError: 'NoneType' object has no attribute 'startswith' #1755
 - Make sure that no proxy is used for artwork caching for calls to Kodi's webserver at localhost #1754
