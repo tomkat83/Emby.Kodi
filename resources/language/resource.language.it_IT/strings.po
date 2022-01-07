@@ -616,7 +616,7 @@ msgstr "Mostra l'avanzamento dello stato di lettura e dei dati utente"
 # PKC Settings - Sync Options
 msgctxt "#30524"
 msgid "Select Plex libraries to sync"
-msgstr "Seleziona le librerie Plex da sincronizzazare"
+msgstr "Seleziona le librerie Plex da sincronizzare"
 
 # PKC Settings - Playback
 msgctxt "#30525"
