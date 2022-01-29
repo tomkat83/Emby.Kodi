@@ -246,7 +246,7 @@ class PlaystateMgr(backgroundthread.KillableThread):
                 update_player_info(players)
                 try:
                     message = timeline(players)
-                except TypeError:
+                except (TypeError, IndexError):
                     # We haven't had a chance to set the kodi_stream_index for
                     # the currently playing item. Just skip for now
                     self.sleep(1)
