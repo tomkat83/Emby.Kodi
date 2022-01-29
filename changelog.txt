@@ -1,3 +1,7 @@
+version 3.6.4 (beta only):
+- Fix IndexError and playback progress not being reported to the PMS
+- Optimize code to avoid a database lookup when adding a playlist item
+
 version 3.6.3:
 - Fix PKC not picking the correct Plex subtitle #1760
 
