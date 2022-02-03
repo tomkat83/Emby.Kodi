@@ -253,6 +253,14 @@ class KodiVideoDB(common.KodiDBBase):
             except sqlite3.IntegrityError:
                 LOG.info('IntegrityError: skipping entry %s for table %s',
                          entry_id, link_table)
+            except Exception as exc:
+                # On some systems, sqlite3.IntegrityError is not caught!
+                # Ugly workaround for
+                # https://github.com/croneter/PlexKodiConnect/issues/1777
+                if exc.args[0] and 'UNIQUE constraint failed:' not in exc.args[0]:
+                    raise
+                LOG.info('IntegrityError 2: skipping entry %s for table %s',
+                         entry_id, link_table)
         # Delete all outdated references in the link table. Also check whether
         # we need to delete orphaned entries in the master table
         for entry_id in outdated_entries:
@@ -344,6 +352,12 @@ class KodiVideoDB(common.KodiDBBase):
                 except sqlite3.IntegrityError:
                     # With Kodi, an actor may have only one role, unlike Plex
                     pass
+                except Exception as exc:
+                    # On some systems, sqlite3.IntegrityError is not caught!
+                    # Ugly workaround for
+                    # https://github.com/croneter/PlexKodiConnect/issues/1777
+                    if exc.args[0] and 'UNIQUE constraint failed:' not in exc.args[0]:
+                        raise
         else:
             for person in people_list:
                 # Make sure the person entry in table actor exists:
@@ -355,6 +369,12 @@ class KodiVideoDB(common.KodiDBBase):
                 except sqlite3.IntegrityError:
                     # Again, Kodi may have only one person assigned to a role
                     pass
+                except Exception as exc:
+                    # On some systems, sqlite3.IntegrityError is not caught!
+                    # Ugly workaround for
+                    # https://github.com/croneter/PlexKodiConnect/issues/1777
+                    if exc.args[0] and 'UNIQUE constraint failed:' not in exc.args[0]:
+                        raise
 
     def modify_people(self, kodi_id, kodi_type, people=None):
         """
