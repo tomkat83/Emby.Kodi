@@ -1,3 +1,6 @@
+version 3.6.7:
+- Another attempt at: Android: Fix IntegrityError during sync, caused by a screwed up Python environment #1793
+
 version 3.6.6:
 - Android: Fix IntegrityError during sync, caused by a screwed up Python environment #1790
 
