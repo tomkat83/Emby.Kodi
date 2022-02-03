@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from logging import getLogger
-from sqlite3 import IntegrityError
+import sqlite3
 
 from . import common
 from .. import db, path_ops, timing, variables as v
@@ -250,7 +250,7 @@ class KodiVideoDB(common.KodiDBBase):
             try:
                 self.cursor.execute('INSERT INTO %s VALUES (?, ?, ?)' % link_table,
                                     (entry_id, kodi_id, kodi_type))
-            except IntegrityError:
+            except sqlite3.IntegrityError:
                 LOG.info('IntegrityError: skipping entry %s for table %s',
                          entry_id, link_table)
         # Delete all outdated references in the link table. Also check whether
@@ -341,7 +341,7 @@ class KodiVideoDB(common.KodiDBBase):
                     self.cursor.execute('INSERT INTO actor_link VALUES (?, ?, ?, ?, ?)',
                                         (actor_id, kodi_id, kodi_type,
                                          person[2], person[3]))
-                except IntegrityError:
+                except sqlite3.IntegrityError:
                     # With Kodi, an actor may have only one role, unlike Plex
                     pass
         else:
@@ -352,7 +352,7 @@ class KodiVideoDB(common.KodiDBBase):
                 try:
                     self.cursor.execute('INSERT INTO %s_link VALUES (?, ?, ?)' % kind,
                                         (actor_id, kodi_id, kodi_type))
-                except IntegrityError:
+                except sqlite3.IntegrityError:
                     # Again, Kodi may have only one person assigned to a role
                     pass
 
