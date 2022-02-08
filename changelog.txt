@@ -1,3 +1,6 @@
+version 3.6.9 (beta only):
+- Fix PKC reporting Kodi TV/PVR playback as the last Plex item being played again #1801
+
 version 3.6.8 (beta only):
 - Attempt to fix Android 11 with Experience 9 crashing #1798
 
