@@ -241,6 +241,10 @@ class PlaystateMgr(backgroundthread.KillableThread):
                 signaled_playback_stop = True
                 self.sleep(1)
                 continue
+            elif not app.PLAYSTATE.item:
+                # Not a Plex item currently playing
+                self.sleep(1)
+                continue
             else:
                 # Update the playstate info, such as playback progress
                 update_player_info(players)

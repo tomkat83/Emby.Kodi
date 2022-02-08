@@ -216,13 +216,16 @@ class KodiMonitor(xbmc.Monitor):
         # Get the type of media we're playing
         try:
             playerid = data['player']['playerid']
+            kodi_id = data['item'].get('id')
+            kodi_type = data['item'].get('type')
+            path = data['item'].get('file')
         except (TypeError, KeyError):
             LOG.info('Aborting playback report - item invalid for updates %s',
                      data)
             return
-        kodi_id = data['item'].get('id') if 'item' in data else None
-        kodi_type = data['item'].get('type') if 'item' in data else None
-        path = data['item'].get('file') if 'item' in data else None
+        if data['item'].get('channeltype') == 'tv':
+            LOG.info('TV playback detected, aborting Plex playback report')
+            return
         if playerid == -1:
             # Kodi might return -1 for "last player"
             # Getting the playerid is really a PITA
