@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from logging import getLogger
-import sqlite3
 
 from . import common
 from .. import db, path_ops, timing, variables as v
@@ -250,14 +249,13 @@ class KodiVideoDB(common.KodiDBBase):
             try:
                 self.cursor.execute('INSERT INTO %s VALUES (?, ?, ?)' % link_table,
                                     (entry_id, kodi_id, kodi_type))
-            except sqlite3.IntegrityError:
-                LOG.info('IntegrityError: skipping entry %s for table %s',
-                         entry_id, link_table)
             except Exception as exc:
-                # On some systems, sqlite3.IntegrityError is not caught!
-                # Ugly workaround for
+                # Bug with e.g. Nvidia Shield, Android 11 and Experience 9
+                # Directly catching sqlite3.IntegrityError here does NOT
+                # work and can even lead to Kodi crashing
+                # https://github.com/croneter/PlexKodiConnect/issues/1796
                 # https://github.com/croneter/PlexKodiConnect/issues/1777
-                if exc.args[0] and 'UNIQUE constraint failed:' not in exc.args[0]:
+                if exc.args and 'UNIQUE constraint failed:' not in exc.args[0]:
                     raise
                 LOG.info('IntegrityError 2: skipping entry %s for table %s',
                          entry_id, link_table)
@@ -349,14 +347,14 @@ class KodiVideoDB(common.KodiDBBase):
                     self.cursor.execute('INSERT INTO actor_link VALUES (?, ?, ?, ?, ?)',
                                         (actor_id, kodi_id, kodi_type,
                                          person[2], person[3]))
-                except sqlite3.IntegrityError:
-                    # With Kodi, an actor may have only one role, unlike Plex
-                    pass
                 except Exception as exc:
-                    # On some systems, sqlite3.IntegrityError is not caught!
-                    # Ugly workaround for
+                    # With Kodi, an actor may have only one role, unlike Plex
+                    # Bug with e.g. Nvidia Shield, Android 11 and Experience 9
+                    # Directly catching sqlite3.IntegrityError here does NOT
+                    # work and can even lead to Kodi crashing
+                    # https://github.com/croneter/PlexKodiConnect/issues/1796
                     # https://github.com/croneter/PlexKodiConnect/issues/1777
-                    if exc.args[0] and 'UNIQUE constraint failed:' not in exc.args[0]:
+                    if exc.args and 'UNIQUE constraint failed:' not in exc.args[0]:
                         raise
         else:
             for person in people_list:
@@ -366,14 +364,14 @@ class KodiVideoDB(common.KodiDBBase):
                 try:
                     self.cursor.execute('INSERT INTO %s_link VALUES (?, ?, ?)' % kind,
                                         (actor_id, kodi_id, kodi_type))
-                except sqlite3.IntegrityError:
-                    # Again, Kodi may have only one person assigned to a role
-                    pass
                 except Exception as exc:
-                    # On some systems, sqlite3.IntegrityError is not caught!
-                    # Ugly workaround for
+                    # Again, Kodi may have only one person assigned to a role
+                    # Bug with e.g. Nvidia Shield, Android 11 and Experience 9
+                    # Directly catching sqlite3.IntegrityError here does NOT
+                    # work and can even lead to Kodi crashing
+                    # https://github.com/croneter/PlexKodiConnect/issues/1796
                     # https://github.com/croneter/PlexKodiConnect/issues/1777
-                    if exc.args[0] and 'UNIQUE constraint failed:' not in exc.args[0]:
+                    if exc.args and 'UNIQUE constraint failed:' not in exc.args[0]:
                         raise
 
     def modify_people(self, kodi_id, kodi_type, people=None):
