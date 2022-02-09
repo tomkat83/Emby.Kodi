@@ -1,3 +1,6 @@
+version 3.6.10:
+- versions 3.6.8 and 3.6.9 for everyone
+
 version 3.6.9 (beta only):
 - Fix PKC reporting Kodi TV/PVR playback as the last Plex item being played again #1801
 
