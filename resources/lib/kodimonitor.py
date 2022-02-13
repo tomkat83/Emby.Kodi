@@ -6,8 +6,6 @@ PKC Kodi Monitoring implementation
 from logging import getLogger
 from json import loads
 import copy
-import json
-import binascii
 
 import xbmc
 
