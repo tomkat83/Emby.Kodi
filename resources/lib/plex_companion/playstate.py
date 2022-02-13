@@ -5,7 +5,7 @@ import requests
 from threading import Thread
 
 from .common import communicate, log_error, UUIDStr, Subscriber, timeline, \
-    stopped_timeline, create_requests_session
+    stopped_timeline, create_requests_session, proxy_params
 from .playqueue import compare_playqueues
 from .webserver import ThreadedHTTPServer, CompanionHandlerClassFactory
 from .plexgdm import plexgdm
@@ -164,10 +164,14 @@ class PlaystateMgr(backgroundthread.KillableThread):
         """
         url = f'{app.CONN.server}/:/timeline'
         self._get_requests_session()
-        self.s.params.update(message[playerid].attrib)
+        params = proxy_params()
+        params.update(message[playerid].attrib)
         # Tell the PMS about our playstate progress
         try:
-            req = communicate(self.s.get, url, timeout=TIMEOUT)
+            req = communicate(self.s.get,
+                              url,
+                              timeout=TIMEOUT,
+                              params=params)
         except requests.RequestException as error:
             log.error('Could not send the PMS timeline: %s', error)
             return
