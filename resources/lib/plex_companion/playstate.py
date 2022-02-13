@@ -57,6 +57,12 @@ class PlaystateMgr(backgroundthread.KillableThread):
         self.httpd = None
         self.stopped_timeline = stopped_timeline()
         self.gdm = plexgdm()
+        msg = stopped_timeline()
+        self.last_pms_msg = {
+            0: msg[0].attrib,
+            1: msg[1].attrib,
+            2: msg[2].attrib
+        }
         super().__init__()
 
     def _start_webserver(self):
@@ -164,8 +170,13 @@ class PlaystateMgr(backgroundthread.KillableThread):
         """
         url = f'{app.CONN.server}/:/timeline'
         self._get_requests_session()
-        params = proxy_params()
-        params.update(message[playerid].attrib)
+        if message[playerid].attrib.get('state') != 'stopped':
+            params = proxy_params()
+            params.update(message[playerid].attrib)
+            self.last_pms_msg[playerid] = params
+        else:
+            self.last_pms_msg[playerid].update({'state': 'stopped'})
+            params = self.last_pms_msg[playerid]
         # Tell the PMS about our playstate progress
         try:
             req = communicate(self.s.get,
