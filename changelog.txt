@@ -1,3 +1,6 @@
+version 3.6.12:
+- version 3.6.11 for everyone
+
 version 3.6.11 (beta only):
 - Fix PKC telling the PMS it's playing the last video instead of the currently playing trailer #1806
 
