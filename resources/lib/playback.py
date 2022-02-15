@@ -126,7 +126,7 @@ def _playback_triage(plex_id, plex_type, path, resolve, resume):
             initiate = True
         else:
             if item.plex_id != plex_id:
-                LOG.debug('Received new plex_id%s, expected %s',
+                LOG.debug('Received new plex_id %s, expected %s',
                           plex_id, item.plex_id)
                 initiate = True
             else:
