@@ -102,9 +102,10 @@ class PlaystateMgr(backgroundthread.KillableThread):
 
     def close_connections(self):
         """May also be called from another thread"""
-        self._stop_webserver()
-        self._close_requests_session()
-        self.subscribers = dict()
+        with app.APP.lock_subscriber:
+            self._stop_webserver()
+            self._close_requests_session()
+            self.subscribers = dict()
 
     def send_stop(self):
         """
@@ -160,8 +161,9 @@ class PlaystateMgr(backgroundthread.KillableThread):
         for entry in message:
             if entry.get('state') != 'stopped':
                 state = entry.get('state')
-        for subscriber in self.subscribers.values():
-            subscriber.send_timeline(message, state)
+        with app.APP.lock_subscriber:
+            for subscriber in self.subscribers.values():
+                subscriber.send_timeline(message, state)
 
     def pms_timeline_per_player(self, playerid, message):
         """
