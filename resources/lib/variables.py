@@ -94,7 +94,7 @@ MIN_DB_VERSION = '3.2.1'
 # Supported databases - version numbers in tuples should decrease
 SUPPORTED_VIDEO_DB = {
     19: (119, ),
-    20: (119, ),
+    20: (119, 120),
 }
 SUPPORTED_MUSIC_DB = {
     19: (82, ),
