@@ -21,6 +21,9 @@ from . import exceptions
 
 LOG = getLogger('PLEX.kodimonitor')
 
+WAIT_BEFORE_INIT_STREAMS = 6
+ADDITIONAL_WAIT_BEFORE_INIT_STREAMS = 10
+
 
 class KodiMonitor(xbmc.Monitor):
     """
@@ -621,6 +624,19 @@ class InitVideoStreams(backgroundthread.Task):
         super().__init__()
 
     def run(self):
-        if app.APP.monitor.waitForAbort(5):
+        if app.APP.monitor.waitForAbort(WAIT_BEFORE_INIT_STREAMS):
             return
-        self.item.init_streams()
+        i = 0
+        while True:
+            try:
+                self.item.init_streams()
+            except Exception as err:
+                i += 1
+                if app.APP.monitor.waitForAbort(1):
+                    return
+                if i > ADDITIONAL_WAIT_BEFORE_INIT_STREAMS:
+                    LOG.error('Exception encountered while init streams:')
+                    LOG.error(err)
+                    return
+            else:
+                break
