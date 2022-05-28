@@ -92,9 +92,10 @@ PKC_MACHINE_IDENTIFIER = None
 MIN_DB_VERSION = '3.2.1'
 
 # Supported databases - version numbers in tuples should decrease
+# See https://github.com/xbmc/xbmc/blob/master/xbmc/video/VideoDatabase.cpp
 SUPPORTED_VIDEO_DB = {
     19: (119, ),
-    20: (119, ),
+    20: (119, 120, 121),
 }
 SUPPORTED_MUSIC_DB = {
     19: (82, ),

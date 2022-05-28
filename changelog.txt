@@ -1,3 +1,13 @@
+version 3.6.14:
+- Make PKC compatible with latest Kodi Nexus #1840
+- Fix TypeError: 'NoneType' object is not subscriptable on playback start #1839
+- version 3.6.13 for everyone
+
+version 3.6.13 (beta only):
+- Fix TypeError: 'NoneType' object is not subscriptable on playback start #1823
+- Add initial, experimental support for latest Nexus nightly, video DB version bump 120 #1824
+- Fix RuntimeError: dictionary changed size during iteration if Plex Companion subscribers change #1825
+
 version 3.6.12:
 - version 3.6.11 for everyone
 

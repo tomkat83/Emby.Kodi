@@ -261,6 +261,7 @@ class PlaylistItem(object):
         if utils.settings('subtitleStreamPick') == '0':
             self.switch_to_plex_stream('subtitle')
         self.streams_initialized = True
+        LOG.debug('Successfully initialized streams')
 
     def init_kodi_streams(self):
         self._current_kodi_video_stream = self._current_index('video')
