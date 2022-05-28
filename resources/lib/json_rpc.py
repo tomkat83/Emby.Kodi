@@ -447,7 +447,7 @@ def get_current_subtitle_stream_index(playerid):
         return JsonRPC('Player.GetProperties').execute({
             'playerid': playerid,
             'properties': ['currentsubtitle', ]})['result']['currentsubtitle']['index']
-    except KeyError:
+    except (KeyError, TypeError):
         pass
 
 
