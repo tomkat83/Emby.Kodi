@@ -1,7 +1,11 @@
-[![Kodi Leia stable version](https://img.shields.io/badge/Kodi_Leia_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.STABLE.zip) 
-[![Kodi Leia beta version](https://img.shields.io/badge/Kodi_Leia_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.BETA.zip)
-[![Kodi Matrix beta version](https://img.shields.io/badge/Kodi_Matrix_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.BETA.zip)
+[![Kodi Nexus stable version](https://img.shields.io/badge/Kodi_Nexus_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Nexus.STABLE.zip)
+[![Kodi Nexus beta version](https://img.shields.io/badge/Kodi_Nexus_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Nexus.BETA.zip)  
 
+[![Kodi Matrix stable version](https://img.shields.io/badge/Kodi_Matrix_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.STABLE.zip)
+[![Kodi Matrix beta version](https://img.shields.io/badge/Kodi_Matrix_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.BETA.zip)  
+
+[![Kodi Leia stable version](https://img.shields.io/badge/Kodi_Leia_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.STABLE.zip) 
+[![Kodi Leia beta version](https://img.shields.io/badge/Kodi_Leia_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.BETA.zip)  
 
 [![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
