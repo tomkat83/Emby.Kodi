@@ -98,8 +98,8 @@ I'm not in any way affiliated with Plex. Thank you very much for a small donatio
 
 
 ### Request a New Feature
+Kindly leave a detailed description as a new [GitHub issue](https://github.com/croneter/PlexKodiConnect/issues). 
 
-[![Feature Requests](http://feathub.com/croneter/PlexKodiConnect?format=svg)](http://feathub.com/croneter/PlexKodiConnect)
 
 ### Issues and Bugs
 
