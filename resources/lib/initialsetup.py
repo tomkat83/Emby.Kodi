@@ -493,10 +493,11 @@ class InitialSetup(object):
                                       top_element='advancedsettings') as xml:
                 # Get current Kodi video cache setting
                 cache = xml.get_setting(['cache', 'memorysize'])
-                # Disable foreground "Loading media information from files"
-                # (still used by Kodi, even though the Wiki says otherwise)
-                xml.set_setting(['musiclibrary', 'backgroundupdate'],
-                                value='true')
+                if utils.settings('enableMusic') == 'true':
+                    # Disable foreground "Loading media information from files"
+                    # (still used by Kodi, even though the Wiki says otherwise)
+                    xml.set_setting(['musiclibrary', 'backgroundupdate'],
+                                    value='true')
                 cleanonupdate = xml.get_setting(
                     ['videolibrary', 'cleanonupdate']) == 'true'
                 if utils.settings('useDirectPaths') != '1':
