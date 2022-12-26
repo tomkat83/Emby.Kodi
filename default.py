@@ -62,11 +62,7 @@ class Main(object):
             # Hack so we can store this path in the Kodi DB
             handle = ('plugin://%s?mode=extras&plex_id=%s'
                       % (v.ADDON_ID, params.get('plex_id')))
-            if xbmcgui.getCurrentWindowId() == 10025:
-                # Video Window
-                xbmc.executebuiltin('Container.Update(\"%s\")' % handle)
-            else:
-                xbmc.executebuiltin('ActivateWindow(videos, \"%s\")' % handle)
+            xbmc.executebuiltin('ActivateWindow(videos,\"%s\",return)' % handle)
 
         elif mode == 'extras':
             entrypoint.extras(plex_id=params.get('plex_id'))
