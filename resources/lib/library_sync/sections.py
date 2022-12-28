@@ -330,26 +330,18 @@ class Section(object):
         for node in nodes.NODE_TYPES[self.section_type]:
             self._build_node(*node)
 
-    def _build_node(self, node_type, node_name, args, content, pms_node):
+    def _build_node(self, node_type, node_name, args, content):
         self.content = content
         node_name = node_name.format(self=self)
-        if pms_node:
-            # Do NOT write a Kodi video library xml - can't use type="filter"
-            # to point back to plugin://plugin.video.plexkodiconnect
-            xml = nodes.node_pms(self, node_name, args)
-            args.pop('folder', None)
-            path = self.addon_path(args)
-        else:
-            # Write a Kodi video library xml
-            xml_name = '%s_%s.xml' % (self.section_id, node_type)
-            path = path_ops.path.join(self.path, xml_name)
-            if not path_ops.exists(path):
-                # Let's use Kodi's logic to sort/filter the Kodi library
-                xml = getattr(nodes, 'node_%s' % node_type)(self, node_name)
-                self._write_xml(xml, xml_name)
-            path = 'library://video/Plex-%s/%s' % (self.section_id, xml_name)
+        # Write a Kodi video library xml
+        xml_name = '%s_%s.xml' % (self.section_id, node_type)
+        path = path_ops.path.join(self.path, xml_name)
+        if not path_ops.exists(path):
+            xml = getattr(nodes, 'node_%s' % node_type)(self, node_name, args)
+            self._write_xml(xml, xml_name)
+        path = 'library://video/Plex-%s/%s' % (self.section_id, xml_name)
         self.order += 1
-        self._window_node(path, node_name, node_type, pms_node)
+        self._window_node(path, node_name, node_type)
 
     def _write_xml(self, xml, xml_name):
         LOG.debug('Creating xml for section %s: %s', self.name, xml_name)
@@ -371,13 +363,13 @@ class Section(object):
         utils.indent(xml)
         etree.ElementTree(xml).write(self.playlist_path, encoding='utf-8')
 
-    def _window_node(self, path, node_name, node_type, pms_node):
+    def _window_node(self, path, node_name, node_type):
         """
         Will save this section's node to the Kodi window variables
 
         Uses the same conventions/logic as Emby for Kodi does
         """
-        if pms_node or not self.sync_to_kodi:
+        if not self.sync_to_kodi:
             # Check: elif node_type in ('browse', 'homevideos', 'photos'):
             window_path = path
         elif self.section_type == v.PLEX_TYPE_ARTIST:

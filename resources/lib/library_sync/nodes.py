@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import urllib.request, urllib.parse, urllib.error
-import copy
 
 import xml.etree.ElementTree as etree
 from .. import variables as v, utils
@@ -10,11 +9,12 @@ ICON_PATH = 'special://home/addons/plugin.video.plexkodiconnect/icon.png'
 RECOMMENDED_SCORE_LOWER_BOUND = 7
 
 # Logic of the following nodes:
+# Note that node_type will be used to construct the nodes library xml by the
+# function node_<node_type> below
 # (node_type,
 #  label/node name,
 #  args for PKC add-on callback,
 #  Kodi "content",
-#  Bool: does this node's xml even point back to PKC add-on callback?
 #  )
 NODE_TYPES = {
     v.PLEX_TYPE_MOVIE: (
@@ -25,13 +25,11 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/onDeck',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         True),
+         v.CONTENT_TYPE_MOVIE),
         ('ondeck',
          utils.lang(39502),  # "PKC On Deck (faster)"
          {},
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('recent',
          utils.lang(30174),  # "Recently Added"
          {
@@ -39,8 +37,7 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/recentlyAdded',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('all',
          '{self.name}',  # We're using this section's name
          {
@@ -48,8 +45,7 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/all',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('recommended',
          utils.lang(30230),  # "Recommended"
          {
@@ -58,8 +54,7 @@ NODE_TYPES = {
                       % urllib.parse.urlencode({'sort': 'rating:desc'})),
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('genres',
          utils.lang(135),  # "Genres"
          {
@@ -67,8 +62,7 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/genre',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('sets',
          utils.lang(39501),  # "Collections"
          {
@@ -76,8 +70,7 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/collection',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('random',
          utils.lang(30227),  # "Random"
          {
@@ -86,8 +79,7 @@ NODE_TYPES = {
                       % urllib.parse.urlencode({'sort': 'random'})),
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('lastplayed',
          utils.lang(568),  # "Last played"
          {
@@ -95,41 +87,35 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/recentlyViewed',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         False),
+         v.CONTENT_TYPE_MOVIE),
         ('browse',
          utils.lang(39702),  # "Browse by folder"
          {
               'mode': 'browseplex',
               'key': '/library/sections/{self.section_id}/folder',
               'plex_type': '{self.section_type}',
-              'section_id': '{self.section_id}',
-              'folder': True
+              'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_MOVIE,
-         True),
+         v.CONTENT_TYPE_MOVIE),
         ('more',
          utils.lang(22082),  # "More..."
          {
               'mode': 'browseplex',
               'key': '/library/sections/{self.section_id}',
-              'section_id': '{self.section_id}',
-              'folder': True
+              'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_FILE,
-         True),
+         v.CONTENT_TYPE_FILE),
     ),
     ###########################################################
     v.PLEX_TYPE_SHOW: (
-        ('ondeck',
+        ('plex_ondeck',
          utils.lang(39500),  # "On Deck"
          {
               'mode': 'browseplex',
               'key': '/library/sections/{self.section_id}/onDeck',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_EPISODE,
-         True),
+         v.CONTENT_TYPE_EPISODE),
         ('recent',
          utils.lang(30174),  # "Recently Added"
          {
@@ -137,8 +123,7 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/recentlyAdded',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_EPISODE,
-         False),
+         v.CONTENT_TYPE_EPISODE),
         ('all',
          '{self.name}',  # We're using this section's name
          {
@@ -146,8 +131,7 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/all',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_SHOW,
-         False),
+         v.CONTENT_TYPE_SHOW),
         ('recommended',
          utils.lang(30230),  # "Recommended"
          {
@@ -156,8 +140,7 @@ NODE_TYPES = {
                       % urllib.parse.urlencode({'sort': 'rating:desc'})),
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_SHOW,
-         False),
+         v.CONTENT_TYPE_SHOW),
         ('genres',
          utils.lang(135),  # "Genres"
          {
@@ -165,17 +148,15 @@ NODE_TYPES = {
               'key': '/library/sections/{self.section_id}/genre',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_SHOW,
-         False),
-        ('sets',
+         v.CONTENT_TYPE_SHOW),
+        ('plex_sets',
          utils.lang(39501),  # "Collections"
          {
               'mode': 'browseplex',
               'key': '/library/sections/{self.section_id}/collection',
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_SHOW,
-         True),  # There are no sets/collections for shows with Kodi
+         v.CONTENT_TYPE_SHOW),  # There are no sets/collections for shows with Kodi
         ('random',
          utils.lang(30227),  # "Random"
          {
@@ -184,8 +165,7 @@ NODE_TYPES = {
                       % urllib.parse.urlencode({'sort': 'random'})),
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_SHOW,
-         False),
+         v.CONTENT_TYPE_SHOW),
         ('lastplayed',
          utils.lang(568),  # "Last played"
          {
@@ -194,57 +174,28 @@ NODE_TYPES = {
                       % urllib.parse.urlencode({'type': v.PLEX_TYPE_NUMBER_FROM_PLEX_TYPE[v.PLEX_TYPE_EPISODE]})),
               'section_id': '{self.section_id}'
          },
-         v.CONTENT_TYPE_EPISODE,
-         False),
+         v.CONTENT_TYPE_EPISODE),
         ('browse',
          utils.lang(39702),  # "Browse by folder"
          {
               'mode': 'browseplex',
               'key': '/library/sections/{self.section_id}/folder',
               'section_id': '{self.section_id}',
-              'folder': True
          },
-         v.CONTENT_TYPE_EPISODE,
-         True),
+         v.CONTENT_TYPE_EPISODE),
         ('more',
          utils.lang(22082),  # "More..."
          {
               'mode': 'browseplex',
               'key': '/library/sections/{self.section_id}',
               'section_id': '{self.section_id}',
-              'folder': True
          },
-         v.CONTENT_TYPE_FILE,
-         True),
+         v.CONTENT_TYPE_FILE),
     ),
 }
 
 
-def node_pms(section, node_name, args):
-    """
-    Nodes where the logic resides with the PMS - we're NOT building an
-    xml that filters and sorts, but point to PKC add-on path
-
-    Be sure to set args['folder'] = True if the listing is a folder and does
-    not contain playable elements like movies, episodes or tracks
-    """
-    if 'folder' in args:
-        args = copy.deepcopy(args)
-        args.pop('folder')
-        folder = True
-    else:
-        folder = False
-    xml = etree.Element('node',
-                        attrib={'order': str(section.order),
-                                'type': 'folder' if folder else 'filter'})
-    etree.SubElement(xml, 'label').text = node_name
-    etree.SubElement(xml, 'icon').text = ICON_PATH
-    etree.SubElement(xml, 'content').text = section.content
-    etree.SubElement(xml, 'path').text = section.addon_path(args)
-    return xml
-
-
-def node_ondeck(section, node_name):
+def node_ondeck(section, node_name, args=None):
     """
     For movies only - returns in-progress movies sorted by last played
     """
@@ -267,7 +218,7 @@ def node_ondeck(section, node_name):
     return xml
 
 
-def node_recent(section, node_name):
+def node_recent(section, node_name, args=None):
     xml = etree.Element('node',
                         attrib={'order': str(section.order),
                                 'type': 'filter'})
@@ -297,7 +248,7 @@ def node_recent(section, node_name):
     return xml
 
 
-def node_all(section, node_name):
+def node_all(section, node_name, args=None):
     xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
@@ -314,7 +265,7 @@ def node_all(section, node_name):
     return xml
 
 
-def node_recommended(section, node_name):
+def node_recommended(section, node_name, args=None):
     xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
@@ -335,7 +286,7 @@ def node_recommended(section, node_name):
     return xml
 
 
-def node_genres(section, node_name):
+def node_genres(section, node_name, args=None):
     xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
@@ -353,7 +304,7 @@ def node_genres(section, node_name):
     return xml
 
 
-def node_sets(section, node_name):
+def node_sets(section, node_name, args=None):
     xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
@@ -372,7 +323,7 @@ def node_sets(section, node_name):
     return xml
 
 
-def node_random(section, node_name):
+def node_random(section, node_name, args=None):
     xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
@@ -390,7 +341,7 @@ def node_random(section, node_name):
     return xml
 
 
-def node_lastplayed(section, node_name):
+def node_lastplayed(section, node_name, args=None):
     xml = etree.Element('node', attrib={'order': str(section.order),
                                         'type': 'filter'})
     etree.SubElement(xml, 'match').text = 'all'
@@ -409,3 +360,34 @@ def node_lastplayed(section, node_name):
                      attrib={'direction':
                              'descending'}).text = 'lastplayed'
     return xml
+
+
+def _folder_template(section, node_name, args):
+    """
+    Template for type=folder, see https://kodi.wiki/view/Video_nodes
+    Idea is that the path points back to plugin://...
+    """
+    xml = etree.Element('node',
+                        attrib={'order': str(section.order),
+                                'type': 'folder'})
+    etree.SubElement(xml, 'label').text = node_name
+    etree.SubElement(xml, 'icon').text = ICON_PATH
+    etree.SubElement(xml, 'content').text = section.content
+    etree.SubElement(xml, 'path').text = section.addon_path(args)
+    return xml
+
+
+def node_plex_ondeck(section, node_name, args):
+    return _folder_template(section, node_name, args)
+
+
+def node_browse(section, node_name, args):
+    return _folder_template(section, node_name, args)
+
+
+def node_more(section, node_name, args):
+    return _folder_template(section, node_name, args)
+
+
+def node_plex_sets(section, node_name, args):
+    return _folder_template(section, node_name, args)
