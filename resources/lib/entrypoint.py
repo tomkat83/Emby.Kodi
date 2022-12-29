@@ -27,6 +27,15 @@ from .library_sync.nodes import NODE_TYPES
 LOG = getLogger('PLEX.entrypoint')
 
 
+class ListingException(Exception):
+    """
+    Exception raised if something went wrong and we need to fail gracefully on
+    the Kodi side of things when trying to list add-on content.
+    I.e.: make sure to call xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    """
+    pass
+
+
 def guess_video_or_audio():
     """
     Returns either 'video', 'audio' or 'image', based how the user navigated to
@@ -56,15 +65,13 @@ def guess_video_or_audio():
         content_type = 'audio'
     elif xbmc.getCondVisibility('Container.Content(pictures)'):
         content_type = 'image'
-    LOG.debug('Guessed content type: %s', content_type)
     return content_type
 
 
 def _wait_for_auth():
     """
-    Call to be sure that PKC is authenticated, e.g. for widgets on Kodi startup.
-    Will wait for at most 30s, then fail if not authenticated. Will set
-    xbmcplugin.endOfDirectory(int(argv[1]), False) if failed
+    Call to be sure that PKC is authenticated, e.g. for widgets on Kodi startup
+    Will wait for at most 30s, then raise a ListingException if not authorized.
 
     WARNING - this will potentially stall the shutdown of Kodi since we cannot
     poll xbmc.Monitor().abortRequested() or waitForAbort()
@@ -77,10 +84,8 @@ def _wait_for_auth():
         counter += 1
         if counter == startupdelay:
             LOG.error('Aborting view, we were not authenticated for PMS')
-            xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
-            return False
+            raise ListingException
         xbmc.sleep(100)
-    return True
 
 
 def directory_item(label, path, folder=True):
@@ -103,7 +108,7 @@ def show_main_menu(content_type=None):
     Shows the main PKC menu listing with all libraries, Channel, settings, etc.
     """
     content_type = content_type or guess_video_or_audio()
-    LOG.debug('Do main listing for %s', content_type)
+    LOG.debug('Do main listing for content_type %s', content_type)
     xbmcplugin.setContent(int(sys.argv[1]), v.CONTENT_TYPE_FILE)
     # Get nodes from the window props
     totalnodes = int(utils.window('Plex.nodes.total') or 0)
@@ -159,7 +164,6 @@ def show_main_menu(content_type=None):
     directory_item(utils.lang(39201), "plugin://%s?mode=settings" % v.ADDON_ID)
     directory_item(utils.lang(39204),
                    "plugin://%s?mode=manualsync" % v.ADDON_ID)
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def show_section(section_index):
@@ -182,7 +186,6 @@ def show_section(section_index):
         label = utils.window('%s.%s.title' % (node, node_type))
         path = utils.window('%s.%s.index' % (node, node_type))
         directory_item(label, path)
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
@@ -196,7 +199,6 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
     except IndexError:
         LOG.info('xml received from the PMS is empty: %s, %s',
                  xml.tag, xml.attrib)
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
         return
     api = API(xml[0])
     # Determine content type for Kodi's Container.content
@@ -254,7 +256,6 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), all_items, len(all_items))
     # end directory listing
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-    xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
 
 
 def get_video_files(plex_id, params):
@@ -278,16 +279,15 @@ def get_video_files(plex_id, params):
 
     if plex_id is None:
         LOG.info('No Plex ID found, abort getting Extras')
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]))
-    if not _wait_for_auth():
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+        raise ListingException
+    _wait_for_auth()
     app.init(entrypoint=True)
     item = PF.GetPlexMetadata(plex_id)
     try:
         path = item[0][0][0].attrib['file']
     except (TypeError, IndexError, AttributeError, KeyError):
         LOG.error('Could not get file path for item %s', plex_id)
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        raise ListingException
     # Assign network protocol
     if path.startswith('\\\\'):
         path = path.replace('\\\\', 'smb://')
@@ -297,57 +297,54 @@ def get_video_files(plex_id, params):
         path = path.replace('\\', '\\\\')
     # Directory only, get rid of filename
     path = path.replace(path_ops.path.basename(path), '')
-    if path_ops.exists(path):
-        for root, dirs, files in path_ops.walk(path):
-            for directory in dirs:
-                item_path = path_ops.path.join(root, directory)
-                listitem = ListItem(item_path, path=item_path)
-                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                            url=item_path,
-                                            listitem=listitem,
-                                            isFolder=True)
-            for file in files:
-                item_path = path_ops.path.join(root, file)
-                listitem = ListItem(item_path, path=item_path)
-                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                            url=file,
-                                            listitem=listitem)
-            break
-    else:
-        LOG.error('Kodi cannot access folder %s', path)
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    if not path_ops.exists(path):
+        LOG.error('get_video_files: Kodi cannot access folder %s', path)
+        raise ListingException
+    for root, dirs, files in path_ops.walk(path):
+        for directory in dirs:
+            item_path = path_ops.path.join(root, directory)
+            listitem = ListItem(item_path, path=item_path)
+            xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                        url=item_path,
+                                        listitem=listitem,
+                                        isFolder=True)
+        for file in files:
+            item_path = path_ops.path.join(root, file)
+            listitem = ListItem(item_path, path=item_path)
+            xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                        url=file,
+                                        listitem=listitem)
+        break
 
 
-@utils.catch_exceptions(warnuser=False)
 def extra_fanart(plex_id, plex_path):
     """
     Get extrafanart for listitem
     will be called by skinhelper script to get the extrafanart
     for tvshows we get the plex_id just from the path
     """
-    LOG.debug('Called with plex_id: %s, plex_path: %s', plex_id, plex_path)
+    LOG.debug('extra_fanart alled with plex_id: %s, plex_path: %s',
+              plex_id, plex_path)
     if not plex_id:
         if "plugin.video.plexkodiconnect" in plex_path:
             plex_id = plex_path.split("/")[-2]
     if not plex_id:
-        LOG.error('Could not get a plex_id, aborting')
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        LOG.error('extra_fanart: Could not get a plex_id, aborting')
+        raise ListingException
 
     # We need to store the images locally for this to work
     # because of the caching system in xbmc
     fanart_dir = path_ops.translate_path("special://thumbnails/plex/%s/"
                                          % plex_id)
-    if not _wait_for_auth():
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    _wait_for_auth()
     if not path_ops.exists(fanart_dir):
         # Download the images to the cache directory
         path_ops.makedirs(fanart_dir)
         app.init(entrypoint=True)
         xml = PF.GetPlexMetadata(plex_id)
-        if xml is None:
+        if xml in (None, 401):
             LOG.error('Could not download metadata for %s', plex_id)
-            return xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
+            raise ListingException
         api = API(xml[0])
         backdrops = api.artwork()['Backdrop']
         for count, backdrop in enumerate(backdrops):
@@ -370,7 +367,6 @@ def extra_fanart(plex_id, plex_path):
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                             url=art_file,
                                             listitem=listitem)
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def playlists(content_type):
@@ -379,13 +375,12 @@ def playlists(content_type):
     content_type: 'audio', 'video'
     """
     LOG.debug('Listing Plex playlists for content type %s', content_type)
-    if not _wait_for_auth():
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    _wait_for_auth()
     app.init(entrypoint=True)
     from .playlists.pms import all_playlists
     xml = all_playlists()
     if xml is None:
-        return xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
+        raise ListingException
     if content_type is not None:
         # This will be skipped if user selects a widget
         # Buggy xml.remove(child) requires reversed()
@@ -404,15 +399,14 @@ def hub(content_type):
     """
     content_type = content_type or guess_video_or_audio()
     LOG.debug('Showing Plex Hub entries for %s', content_type)
-    if not _wait_for_auth():
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    _wait_for_auth()
     app.init(entrypoint=True)
     xml = PF.get_plex_hub()
     try:
-        xml.attrib
-    except AttributeError:
+        xml[0].attrib
+    except (TypeError, IndexError, AttributeError):
         LOG.error('Could not get Plex hub listing')
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+        raise ListingException
     # We need to make sure that only entries that WORK are displayed
     # WARNING: using xml.remove(child) in for-loop requires traversing from
     # the end!
@@ -447,7 +441,6 @@ def hub(content_type):
                 xml.insert(i + 1, pkc_cont_watching)
                 break
     # END HACK ##################
-
     show_listing(xml)
 
 
@@ -455,22 +448,22 @@ def watchlater():
     """
     Listing for plex.tv Watch Later section (if signed in to plex.tv)
     """
-    if not _wait_for_auth():
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    _wait_for_auth()
     if utils.window('plex_token') == '':
         LOG.error('No watch later - not signed in to plex.tv')
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+        raise ListingException
     if utils.window('plex_restricteduser') == 'true':
         LOG.error('No watch later - restricted user')
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
-
+        raise ListingException
     app.init(entrypoint=True)
     xml = DU().downloadUrl('https://plex.tv/pms/playlists/queue/all',
                            authenticate=False,
                            headerOptions={'X-Plex-Token': utils.window('plex_token')})
-    if xml in (None, 401):
+    try:
+        xml[0].attrib
+    except (TypeError, IndexError, AttributeError):
         LOG.error('Could not download watch later list from plex.tv')
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+        raise ListingException
     show_listing(xml)
 
 
@@ -485,9 +478,7 @@ def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
     LOG.debug('Browsing to key %s, section %s, plex_type: %s, synched: %s, '
               'prompt "%s", args %s', key, section_id, plex_type, synched,
               prompt, args)
-    if not _wait_for_auth():
-        xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
-        return
+    _wait_for_auth()
     app.init(entrypoint=True)
     args = args or {}
     if query:
@@ -495,8 +486,8 @@ def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
     elif prompt:
         prompt = utils.dialog('input', prompt)
         if prompt is None:
-            # User cancelled
-            return
+            LOG.debug('User cancelled prompt for browse_plex')
+            raise ListingException
         prompt = prompt.strip()
         args['query'] = prompt
     xml = DU().downloadUrl(utils.extend_url('{server}%s' % key, args))
@@ -505,7 +496,7 @@ def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
     except (TypeError, IndexError, AttributeError):
         LOG.error('Could not browse to key %s, section %s',
                   key, section_id)
-        return
+        raise ListingException
     if xml[0].tag == 'Hub':
         # E.g. when hitting the endpoint '/hubs/search'
         answ = etree.Element(xml.tag, attrib=xml.attrib)
@@ -529,15 +520,15 @@ def extras(plex_id):
     """
     Lists all extras for plex_id
     """
-    if not _wait_for_auth():
-        return xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    LOG.debug('Showing extras')
+    _wait_for_auth()
     app.init(entrypoint=True)
     xml = PF.GetPlexMetadata(plex_id)
     try:
         xml[0].attrib
     except (TypeError, IndexError, KeyError):
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
-        return
+        LOG.error('Could not get extras for Plex id %s', plex_id)
+        raise ListingException
     extras = API(xml[0]).extras()
     if extras is None:
         return
