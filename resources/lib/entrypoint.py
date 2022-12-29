@@ -112,6 +112,12 @@ def show_main_menu(content_type=None):
     xbmcplugin.setContent(int(sys.argv[1]), v.CONTENT_TYPE_FILE)
     # Get nodes from the window props
     totalnodes = int(utils.window('Plex.nodes.total') or 0)
+    # Plex Hub
+    path = 'plugin://%s?mode=hub' % v.ADDON_ID
+    if content_type:
+        path += '&content_type=%s' % content_type
+    directory_item('Plex Hub', path)
+    # Entries for sections, if the content type matches
     for i in range(totalnodes):
         path = utils.window('Plex.nodes.%s.index' % i)
         if not path:
@@ -143,11 +149,6 @@ def show_main_menu(content_type=None):
         if content_type:
             path += '&content_type=%s' % content_type
         directory_item(utils.lang(136), path)
-    # Plex Hub
-    path = 'plugin://%s?mode=hub' % v.ADDON_ID
-    if content_type:
-        path += '&content_type=%s' % content_type
-    directory_item('Plex Hub', path)
     # Plex Search "Search"
     directory_item(utils.lang(137), "plugin://%s?mode=search" % v.ADDON_ID)
     # Plex Watch later
