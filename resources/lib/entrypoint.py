@@ -492,12 +492,11 @@ def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
         args['query'] = prompt
     xml = DU().downloadUrl(utils.extend_url('{server}%s' % key, args))
     try:
-        xml[0].attrib
-    except (TypeError, IndexError, AttributeError):
-        LOG.error('Could not browse to key %s, section %s',
-                  key, section_id)
+        xml.attrib
+    except AttributeError:
+        LOG.error('Could not browse to key %s, section %s', key, section_id)
         raise ListingException
-    if xml[0].tag == 'Hub':
+    if len(xml) > 0 and xml[0].tag == 'Hub':
         # E.g. when hitting the endpoint '/hubs/search'
         answ = etree.Element(xml.tag, attrib=xml.attrib)
         for hub in xml:
