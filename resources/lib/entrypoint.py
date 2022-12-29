@@ -178,7 +178,7 @@ def show_section(section_index):
     content = utils.window('%s.type' % node)
     plex_type = v.PLEX_TYPE_MOVIE if content == v.CONTENT_TYPE_MOVIE \
         else v.PLEX_TYPE_SHOW
-    for node_type, _, _, _, _ in NODE_TYPES[plex_type]:
+    for node_type, *_ in NODE_TYPES[plex_type]:
         label = utils.window('%s.%s.title' % (node, node_type))
         path = utils.window('%s.%s.index' % (node, node_type))
         directory_item(label, path)

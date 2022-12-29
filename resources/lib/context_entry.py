@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 import xbmc
-import xbmcgui
 
 from .plex_api import API
 from .plex_db import PlexDB
@@ -153,8 +152,4 @@ class ContextMenu(object):
         """
         handle = ('plugin://plugin.video.plexkodiconnect?mode=extras&plex_id=%s'
                   % self.plex_id)
-        if xbmcgui.getCurrentWindowId() == 10025:
-            # Video Window
-            xbmc.executebuiltin('Container.Update(\"%s\")' % handle)
-        else:
-            xbmc.executebuiltin('ActivateWindow(videos, \"%s\")' % handle)
+        xbmc.executebuiltin('ActivateWindow(videos,\"%s\",return)' % handle)
