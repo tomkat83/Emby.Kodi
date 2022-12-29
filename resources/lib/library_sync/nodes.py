@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlencode
 
 import xml.etree.ElementTree as etree
 from .. import variables as v, utils
@@ -51,7 +51,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.parse.urlencode({'sort': 'rating:desc'})),
+                      % urlencode({'sort': 'rating:desc'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_MOVIE),
@@ -76,7 +76,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.parse.urlencode({'sort': 'random'})),
+                      % urlencode({'sort': 'random'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_MOVIE),
@@ -137,7 +137,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.parse.urlencode({'sort': 'rating:desc'})),
+                      % urlencode({'sort': 'rating:desc'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_SHOW),
@@ -162,7 +162,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}&%s'
-                      % urllib.parse.urlencode({'sort': 'random'})),
+                      % urlencode({'sort': 'random'})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_SHOW),
@@ -171,7 +171,7 @@ NODE_TYPES = {
          {
               'mode': 'browseplex',
               'key': ('/library/sections/{self.section_id}/recentlyViewed&%s'
-                      % urllib.parse.urlencode({'type': v.PLEX_TYPE_NUMBER_FROM_PLEX_TYPE[v.PLEX_TYPE_EPISODE]})),
+                      % urlencode({'type': v.PLEX_TYPE_NUMBER_FROM_PLEX_TYPE[v.PLEX_TYPE_EPISODE]})),
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_EPISODE),
