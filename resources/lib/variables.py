@@ -96,14 +96,17 @@ MIN_DB_VERSION = '3.2.1'
 SUPPORTED_VIDEO_DB = {
     19: (119, ),
     20: (119, 120, 121),
+    21: (121, ),
 }
 SUPPORTED_MUSIC_DB = {
     19: (82, ),
     20: (82, ),
+    21: (82, ),
 }
 SUPPORTED_TEXTURE_DB = {
     19: (13, ),
     20: (13, ),
+    21: (13, ),
 }
 DB_VIDEO_VERSION = None
 DB_VIDEO_PATH = None
