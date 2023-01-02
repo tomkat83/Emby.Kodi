@@ -90,6 +90,10 @@ class Service(object):
         for prop in WINDOW_PROPERTIES:
             utils.window(prop, clear=True)
 
+        # Show a dedicated context menu entry for "Extras"?
+        utils.window('plex_context_show_extras',
+                     value=utils.settings('plex_context_show_extras'))
+
         clientinfo.getDeviceId()
 
         self.startup_completed = False

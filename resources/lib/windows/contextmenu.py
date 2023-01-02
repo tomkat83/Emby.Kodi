@@ -1,15 +1,12 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from logging import getLogger
 import xbmcgui
 
-from . import utils
-from . import path_ops
-from . import variables as v
+from .. import utils
+from .. import path_ops
+from .. import variables as v
 
-###############################################################################
-
-LOG = getLogger('PLEX.context')
+log = getLogger('PLEX.context.dialog')
 
 ACTION_PARENT_DIR = 9
 ACTION_PREVIOUS_MENU = 10
@@ -19,10 +16,8 @@ ACTION_MOUSE_LEFT_CLICK = 100
 LIST = 155
 USER_IMAGE = 150
 
-###############################################################################
 
-
-class ContextMenu(xbmcgui.WindowXMLDialog):
+class ContextMenuDialog(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         self._options = []
         self.selected_option = None
@@ -45,7 +40,7 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
         if utils.window('plexAvatar'):
             self.getControl(USER_IMAGE).setImage(utils.window('plexAvatar'))
         height = 479 + (len(self._options) * 55)
-        LOG.debug("options: %s", self._options)
+        log.debug("options: %s", self._options)
         self.list_ = self.getControl(LIST)
         for option in self._options:
             self.list_.addItem(self._add_listitem(option))
@@ -60,7 +55,7 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
             if self.getFocusId() == LIST:
                 option = self.list_.getSelectedItem()
                 self.selected_option = option.getLabel()
-                LOG.info('option selected: %s', self.selected_option)
+                log.info('option selected: %s', self.selected_option)
                 self.close()
 
     def _add_editcontrol(self, x, y, height, width, password=None):

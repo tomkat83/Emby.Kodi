@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 
-from . import utils, playback, context_entry, transfer, backgroundthread
+from . import utils, playback, transfer, backgroundthread
+from .contextmenu import menu
 
 ###############################################################################
 
@@ -50,6 +51,6 @@ class PlaybackTask(backgroundthread.Task):
                                       params['offset'],
                                       resolve=resolve)
         elif mode == 'context_menu':
-            context_entry.ContextMenu(kodi_id=params.get('kodi_id'),
-                                      kodi_type=params.get('kodi_type'))
+            menu.ContextMenu(kodi_id=params.get('kodi_id'),
+                             kodi_type=params.get('kodi_type'))
         LOG.debug('Finished PlaybackTask')
