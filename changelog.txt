@@ -1,3 +1,15 @@
+version 3.7.0 (beta only):
+- WARNING: you might need to re-set some of your Kodi widgets pointing to PlexKodiConnect video nodes
+- Initial compatibility with Kodi 21 Omega. Nexus remains strongly recommended! #1901
+- Add PKC setting in "Appearance Tweaks" for dedicated context menu entry "Extras" for movies and TV shows #1899
+- Fix navigating back from Extras listing #1890
+- Fix wheel of death when navigating: refactor add-on entrypoint #1894
+- Move entry for Plex Hub to first position in PKC add-on menu #1897
+- Allow for empty listings when navigating Plex menus #1896
+- Fix FileExistsError when user deleted video library nodes #1895
+- Only enable background music refresh if user chose to sync Plex music #1889
+- Update readme
+
 version 3.6.14:
 - Make PKC compatible with latest Kodi Nexus #1840
 - Fix TypeError: 'NoneType' object is not subscriptable on playback start #1839
