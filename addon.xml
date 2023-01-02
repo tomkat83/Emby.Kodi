@@ -12,12 +12,22 @@
   </extension>
   <extension point="xbmc.service" library="service.py" start="login">
   </extension>
-  <extension point="kodi.context.item" library="contextmenu.py">
-      <item>
-        <label>30401</label>
-              <description>30416</description>
-              <visible>[!IsEmpty(ListItem.DBID) + !StringCompare(ListItem.DBID,-1) | !IsEmpty(ListItem.Property(plexid))]</visible>
+  <extension point="kodi.context.item">
+    <menu id="kodi.core.main">
+      <item library="context_extras.py">
+        <!-- Extras -->
+        <label>30235</label>
+        <visible>[String.IsEqual(Window(10000).Property(plex_context_show_extras),true) + [[[String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,tvshow)] + !String.IsEmpty(ListItem.DBID)] | !String.IsEmpty(ListItem.Property(plexid))]]</visible>
+        <!-- [String.IsEqual(Window(10000).Property(plex_context_show_extras)) -->
       </item>
+      <item library="context_menu.py">
+        <!-- Plex options --> 
+        <label>30401</label>
+        <!-- Settings for the Plex Server -->
+        <description>30416</description>
+        <visible>[[!String.IsEmpty(ListItem.DBID) + !String.IsEqual(ListItem.DBID,-1)] | !String.IsEmpty(ListItem.Property(plexid))]</visible>
+      </item>
+    </menu>
   </extension>
   <extension point="xbmc.addon.metadata">
     <!-- see e.g. https://github.com/xbmc/xbmc/pull/14136 -->

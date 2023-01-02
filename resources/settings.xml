@@ -167,6 +167,7 @@
 	-->
 
 	<category label="39073"><!-- Appearance Tweaks -->
+        <setting id="plex_context_show_extras" type="bool" label="39058" default="true" /><!-- Show 'Extras' in Kodi context menu (reboot Kodi) -->
         <setting label="[COLOR yellow]$ADDON[plugin.video.plexkodiconnect 39085][/COLOR]" type="action" action="RunPlugin(plugin://plugin.video.plexkodiconnect?mode=refreshplaylist)" option="close" /><!-- Reload Kodi node files to apply all the settings below -->
         <setting id="widgetLimit" type="slider" label="39077" default="30" range="10,10,100" option="int" /><!-- Maximum number of videos to show in widgets -->
         <setting type="lsep" />
