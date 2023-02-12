@@ -57,6 +57,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 - [Skip intros](https://support.plex.tv/articles/skip-content/)
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
+- If Plex did not provide a trailer, automatically get one using the Kodi add-on [The Movie Database](https://kodi.wiki/view/Add-on:The_Movie_Database)
 - [Plex Watch Later / Plex It!](https://support.plex.tv/hc/en-us/sections/200211783-Plex-It-)
 - [Plex Companion](https://support.plex.tv/hc/en-us/sections/200276908-Plex-Companion): fling Plex media (or anything else) from other Plex devices to PlexKodiConnect
 - Automatically sync Plex playlists to Kodi playlists and vice-versa

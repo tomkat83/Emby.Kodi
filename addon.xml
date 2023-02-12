@@ -7,6 +7,7 @@
     <import addon="script.module.six" />
     <import addon="plugin.video.plexkodiconnect.movies" version="2.1.3" />
     <import addon="plugin.video.plexkodiconnect.tvshows" version="2.1.3" />
+    <import addon="metadata.themoviedb.org.python" version="1.3.1" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video audio image</provides>
