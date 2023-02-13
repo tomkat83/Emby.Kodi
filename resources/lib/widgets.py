@@ -168,6 +168,7 @@ def _generate_content(api):
                 'plotoutline': api.tagline(),
                 'premiered': api.premiere_date(),  # '2018-10-12'
                 'rating': api.rating(),  # [float]
+                'ratingtype': api.ratingtype(), # [str] image location
                 'season': api.season_number(),
                 'sorttitle': api.sorttitle(),  # 'Titans (2018)'
                 'studio': api.studios(),
