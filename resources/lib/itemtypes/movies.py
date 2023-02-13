@@ -238,7 +238,7 @@ class Movie(ItemBase):
     def _process_collections(self, api, tags, kodi_id, section_id, children):
         for _, set_name in api.collections():
             tags.append(set_name)
-        for plex_set_id, set_name in api.collections(): 
+        for plex_set_id, set_name in api.collections():
             set_api = None
             # Add any sets from Plex collection tags
             kodi_set_id = self.kodidb.create_collection(set_name)
