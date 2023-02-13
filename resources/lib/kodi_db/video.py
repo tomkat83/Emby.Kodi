@@ -539,12 +539,14 @@ class KodiVideoDB(common.KodiDBBase):
             self.cursor.execute('''
                 INSERT OR REPLACE INTO streamdetails(
                     idFile, iStreamType, strVideoCodec, fVideoAspect,
-                    iVideoWidth, iVideoHeight, iVideoDuration ,strStereoMode)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    iVideoWidth, iVideoHeight, iVideoDuration ,strStereoMode,
+                    strHdrType)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ''', (fileid, 0, videotrack['codec'],
                       videotrack['aspect'], videotrack['width'],
                       videotrack['height'], runtime,
-                      videotrack['video3DFormat']))
+                      videotrack['video3DFormat'],
+                      videotrack['hdr']))
         for audiotrack in streamdetails['audio']:
             self.cursor.execute('''
                 INSERT OR REPLACE INTO streamdetails(
