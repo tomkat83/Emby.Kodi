@@ -178,7 +178,7 @@ class Media(object):
                     elif "arib-std-b67" in colorTrc:
                         track['hdr'] = "hlg"
                     else:
-                        track['hdr'] = None                    
+                        track['hdr'] = None
                     if (cast(bool,stream.get('DOVIPresent'))):
                         track['hdr'] = "dolbyvision"
                     videotracks.append(track)
