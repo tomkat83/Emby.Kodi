@@ -361,7 +361,7 @@ class Base(object):
         if "rotten" in rtype:
             rtype = "tomatometerallaudience"
         elif "imdb" in rtype:
-            rtype = "imdb" 
+            rtype = "imdb"
         elif "tmdb" in rtype:
             rtype = "themoviedb"           
         elif "tvdb" in rtype:
