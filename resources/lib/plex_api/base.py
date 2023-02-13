@@ -363,13 +363,13 @@ class Base(object):
         elif "imdb" in rtype:
             rtype = "imdb"
         elif "tmdb" in rtype:
-            rtype = "themoviedb"           
+            rtype = "themoviedb"
         elif "tvdb" in rtype:
             rtype = "tvdb"
         elif "trakt" in rtype:
-            rtype = "trakt"  
+            rtype = "trakt"
         elif "metacritic" in rtype:
-            rtype = "metacritic"            
+            rtype = "metacritic"
         else:
             rtype = "default"
         return rtype
