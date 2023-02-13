@@ -172,6 +172,15 @@ class Media(object):
                                            stream.get('aspectRatio') or aspect)
                     track['duration'] = self.runtime()
                     track['video3DFormat'] = None
+                    colorTrc = stream.get('colorTrc',"").lower()
+                    if "smpte2084" in colorTrc:
+                        track['hdr'] = "hdr10"
+                    elif "arib-std-b67" in colorTrc:
+                        track['hdr'] = "hlg"
+                    else:
+                        track['hdr'] = None                    
+                    if (cast(bool,stream.get('DOVIPresent'))):
+                        track['hdr'] = "dolbyvision"
                     videotracks.append(track)
                 elif media_type == 2:  # Audio streams
                     if 'codec' in stream.attrib:

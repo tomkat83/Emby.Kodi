@@ -353,6 +353,26 @@ class Base(object):
         """
         return cast(float, self.xml.get('audienceRating',
                                         self.xml.get('rating'))) or 0.0
+    def ratingtype(self):
+        """
+        Returns the kodi rating type after parsing the rating image link from plex
+        """
+        rtype = self.xml.get('audienceRatingImage',"")
+        if "rotten" in rtype:
+            rtype = "tomatometerallaudience"
+        elif "imdb" in rtype:
+            rtype = "imdb" 
+        elif "tmdb" in rtype:
+            rtype = "themoviedb"           
+        elif "tvdb" in rtype:
+            rtype = "tvdb"
+        elif "trakt" in rtype:
+            rtype = "trakt"  
+        elif "metacritic" in rtype:
+            rtype = "metacritic"            
+        else:
+            rtype = "default"
+        return rtype
 
     def votecount(self):
         """
