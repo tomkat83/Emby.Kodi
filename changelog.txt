@@ -1,3 +1,6 @@
+version 3.7.1:
+- version 3.7.0 for everyone
+
 version 3.7.0 (beta only):
 - WARNING: you might need to re-set some of your Kodi widgets pointing to PlexKodiConnect video nodes
 - Initial compatibility with Kodi 21 Omega. Nexus remains strongly recommended! #1901
