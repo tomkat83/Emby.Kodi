@@ -1,3 +1,7 @@
+version 3.7.2 (beta only):
+- You will need to manually reset the Kodi database in the PKC settings under Advanced
+- Correctly map the Plex ratings to the Kodi ones; sync the Plex HDR tag to Kodi #1917 (thanks @JCalvi)
+
 version 3.7.1:
 - version 3.7.0 for everyone
 
