@@ -1019,6 +1019,11 @@ msgid "Customize Paths"
 msgstr ""
 
 # PKC Settings - Appearance Tweaks
+msgctxt "#39058"
+msgid "Show 'Extras' in Kodi context menu (reboot Kodi)"
+msgstr ""
+
+# PKC Settings - Appearance Tweaks
 msgctxt "#39059"
 msgid "Recently Added: Append show title to episode"
 msgstr ""

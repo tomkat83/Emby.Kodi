@@ -31,4 +31,10 @@ def check_migration():
             plexdb.cursor.execute(query)
             # Index will be automatically recreated on next PKC startup
 
+    if not utils.compare_version(last_migration, '3.7.0'):
+        LOG.info('Migrating to version 3.7.0')
+        from .library_sync import sections
+        sections.delete_videonode_files()
+        utils.reboot_kodi()
+
     utils.settings('last_migrated_PKC_version', value=v.ADDON_VERSION)

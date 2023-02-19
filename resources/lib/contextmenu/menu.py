@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 import xbmc
-import xbmcgui
 
-from .plex_api import API
-from .plex_db import PlexDB
-from . import context
-from . import plex_functions as PF
-from . import utils
-from . import variables as v
-from . import app
+from .common import plex_id_from_listitem
+
+from ..windows import contextmenu as dialog
+
+from ..plex_api import API
+from .. import plex_functions as PF
+from .. import utils
+from .. import variables as v
+from .. import app
 
 ###############################################################################
 
-LOG = getLogger('PLEX.context_entry')
+LOG = getLogger('PLEX.context.menu')
 
 OPTIONS = {
     'Refresh': utils.lang(30410),
@@ -44,7 +45,7 @@ class ContextMenu(object):
         """
         self.kodi_id = kodi_id
         self.kodi_type = kodi_type
-        self.plex_id = self._get_plex_id(self.kodi_id, self.kodi_type)
+        self.plex_id = plex_id_from_listitem()
         if self.kodi_type:
             self.plex_type = v.PLEX_TYPE_FROM_KODI_TYPE[self.kodi_type]
         else:
@@ -63,23 +64,15 @@ class ContextMenu(object):
         if self._select_menu():
             self._action_menu()
 
-    @staticmethod
-    def _get_plex_id(kodi_id, kodi_type):
-        plex_id = xbmc.getInfoLabel('ListItem.Property(plexid)') or None
-        if not plex_id and kodi_id and kodi_type:
-            with PlexDB() as plexdb:
-                item = plexdb.item_by_kodi_id(kodi_id, kodi_type)
-            if item:
-                plex_id = item['plex_id']
-        return plex_id
-
     def _select_menu(self):
         """
         Display select dialog
         """
         options = []
         # if user uses direct paths, give option to initiate playback via PMS
-        if self.api and self.api.extras():
+        if (utils.window('plex_context_show_extras') != 'true'
+                and self.api
+                and self.api.extras()):
             options.append(OPTIONS['Extras'])
         if app.SYNC.direct_paths and self.kodi_type in v.KODI_VIDEOTYPES:
             options.append(OPTIONS['PMS_Play'])
@@ -92,7 +85,7 @@ class ContextMenu(object):
             options.append(OPTIONS['Delete'])
         # Addon settings
         options.append(OPTIONS['Addon'])
-        context_menu = context.ContextMenu(
+        context_menu = dialog.ContextMenuDialog(
             "script-plex-context.xml",
             v.ADDON_PATH,
             "default",
@@ -153,8 +146,4 @@ class ContextMenu(object):
         """
         handle = ('plugin://plugin.video.plexkodiconnect?mode=extras&plex_id=%s'
                   % self.plex_id)
-        if xbmcgui.getCurrentWindowId() == 10025:
-            # Video Window
-            xbmc.executebuiltin('Container.Update(\"%s\")' % handle)
-        else:
-            xbmc.executebuiltin('ActivateWindow(videos, \"%s\")' % handle)
+        xbmc.executebuiltin('ActivateWindow(videos,\"%s\",return)' % handle)
