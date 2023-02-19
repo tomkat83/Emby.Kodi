@@ -34,7 +34,7 @@ class PlayState(object):
         'playmethod': None,
         'playcount': None,
         'external_player': False,  # bool - xbmc.Player().isExternalPlayer()
-        'intro_markers': [],
+        'markers': [],
     }
 
     def __init__(self):

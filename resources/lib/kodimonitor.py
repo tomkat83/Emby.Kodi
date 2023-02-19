@@ -333,7 +333,8 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/library/metadata/%s' % plex_id
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
-            status['intro_markers'] = item.api.intro_markers()
+            status['markers'] = item.api.markers()
+            status['final_marker'] = item.api.final_marker()
         if item.playmethod is None and path and not path.startswith('plugin://'):
             item.playmethod = v.PLAYBACK_METHOD_DIRECT_PATH
         item.playerid = playerid
@@ -378,9 +379,9 @@ def _playback_cleanup(ended=False):
     """
     LOG.debug('playback_cleanup called. Active players: %s',
               app.PLAYSTATE.active_players)
-    if app.APP.skip_intro_dialog:
-        app.APP.skip_intro_dialog.close()
-        app.APP.skip_intro_dialog = None
+    if app.APP.skip_markers_dialog:
+        app.APP.skip_markers_dialog.close()
+        app.APP.skip_markers_dialog = None
     # We might have saved a transient token from a user flinging media via
     # Companion (if we could not use the playqueue to store the token)
     app.CONN.plex_transient_token = None
@@ -419,48 +420,7 @@ def _record_playstate(status, ended):
         # Item not (yet) in Kodi library
         LOG.debug('No playstate update due to Plex id not found: %s', status)
         return
-    totaltime = float(timing.kodi_time_to_millis(status['totaltime'])) / 1000
-    if status['external_player']:
-        # video has either been entirely watched - or not.
-        # "ended" won't work, need a workaround
-        ended = _external_player_correct_plex_watch_count(db_item)
-        if ended:
-            progress = 0.99
-            time = v.IGNORE_SECONDS_AT_START + 1
-        else:
-            progress = 0.0
-            time = 0.0
-    else:
-        if ended:
-            progress = 0.99
-            time = v.IGNORE_SECONDS_AT_START + 1
-        else:
-            time = float(timing.kodi_time_to_millis(status['time'])) / 1000
-            try:
-                progress = time / totaltime
-            except ZeroDivisionError:
-                progress = 0.0
-            LOG.debug('Playback progress %s (%s of %s seconds)',
-                      progress, time, totaltime)
-    playcount = status['playcount']
-    last_played = timing.kodi_now()
-    if playcount is None:
-        LOG.debug('playcount not found, looking it up in the Kodi DB')
-        with kodi_db.KodiVideoDB() as kodidb:
-            playcount = kodidb.get_playcount(db_item['kodi_fileid'])
-        playcount = 0 if playcount is None else playcount
-    if time < v.IGNORE_SECONDS_AT_START:
-        LOG.debug('Ignoring playback less than %s seconds',
-                  v.IGNORE_SECONDS_AT_START)
-        # Annoying Plex bug - it'll reset an already watched video to unwatched
-        playcount = None
-        last_played = None
-        time = 0
-    elif progress >= v.MARK_PLAYED_AT:
-        LOG.debug('Recording entirely played video since progress > %s',
-                  v.MARK_PLAYED_AT)
-        playcount += 1
-        time = 0
+    time, totaltime, playcount, last_played = _playback_progress(status, ended, db_item)
     with kodi_db.KodiVideoDB() as kodidb:
         kodidb.set_resume(db_item['kodi_fileid'],
                           time,
@@ -474,13 +434,69 @@ def _record_playstate(status, ended):
                               totaltime,
                               playcount,
                               last_played)
-    # Hack to force "in progress" widget to appear if it wasn't visible before
     if (app.APP.force_reload_skin and
             xbmc.getCondVisibility('Window.IsVisible(Home.xml)')):
+        # Hack to force "in progress" widget to appear if it wasn't visible before
         LOG.debug('Refreshing skin to update widgets')
         xbmc.executebuiltin('ReloadSkin()')
+    else:
+        xbmc.executebuiltin('Container.Refresh')
     task = backgroundthread.FunctionAsTask(_clean_file_table, None)
     backgroundthread.BGThreader.addTasksToFront([task])
+
+
+def _playback_progress(status, ended, db_item):
+    totaltime = float(timing.kodi_time_to_millis(status['totaltime'])) / 1000
+    progress = 0.0
+    last_played = timing.kodi_now()
+    playcount = status['playcount']
+    if playcount is None:
+        LOG.debug('playcount not found, looking it up in the Kodi DB')
+        with kodi_db.KodiVideoDB() as kodidb:
+            playcount = kodidb.get_playcount(db_item['kodi_fileid'])
+        playcount = 0 if playcount is None else playcount
+    if status['external_player']:
+        # video has either been entirely watched - or not.
+        # "ended" won't work, need a workaround
+        ended = _external_player_correct_plex_watch_count(db_item)
+    else:
+        time = float(timing.kodi_time_to_millis(status['time'])) / 1000
+        LOG.debug('Playtime: %s', time)
+        if status['final_marker']:
+            LOG.debug('Plex told us there are credits starting at %s',
+                      status['final_marker'])
+            # Credits will show when video is done - if we're not in the
+            # credits, the video is not done
+            if time >= status['final_marker']:
+                ended = True
+            else:
+                ended = False
+        if not ended and not status['final_marker']:
+            # Plex does not know when the video is actually done
+            try:
+                progress = time / totaltime
+            except ZeroDivisionError:
+                pass
+    if time < v.IGNORE_SECONDS_AT_START:
+        LOG.debug('Ignoring playback less than %s seconds',
+                  v.IGNORE_SECONDS_AT_START)
+        # Annoying Plex bug - it'll reset an already watched video to unwatched
+        playcount = None
+        last_played = None
+        time = 0
+    elif ended:
+        LOG.debug('Video has been played completely')
+        playcount += 1
+        time = 0
+        progress = 100
+    elif progress >= v.MARK_PLAYED_AT:
+        LOG.debug('Recording entirely played video since progress %s > %s',
+                  progress, v.MARK_PLAYED_AT)
+        playcount += 1
+        time = 0
+    LOG.debug('Playback progress %s (%s of %s seconds), playcount %s',
+              progress, time, totaltime, playcount)
+    return time, totaltime, playcount, last_played
 
 
 def _external_player_correct_plex_watch_count(db_item):
