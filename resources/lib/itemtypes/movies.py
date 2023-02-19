@@ -93,7 +93,7 @@ class Movie(ItemBase):
                 self.kodidb.remove_file(old_kodi_fileid)
             rating_id = self.kodidb.update_ratings(kodi_id,
                                                    v.KODI_TYPE_MOVIE,
-                                                   "default",
+                                                   api.ratingtype(),
                                                    api.rating(),
                                                    api.votecount())
             unique_id = self.update_provider_ids(api, kodi_id)
@@ -111,7 +111,7 @@ class Movie(ItemBase):
                                            api.date_created())
             rating_id = self.kodidb.add_ratings(kodi_id,
                                                 v.KODI_TYPE_MOVIE,
-                                                "default",
+                                                api.ratingtype(),
                                                 api.rating(),
                                                 api.votecount())
             unique_id = self.add_provider_ids(api, kodi_id)
@@ -238,7 +238,7 @@ class Movie(ItemBase):
     def _process_collections(self, api, tags, kodi_id, section_id, children):
         for _, set_name in api.collections():
             tags.append(set_name)
-        for plex_set_id, set_name in api.collections(): 
+        for plex_set_id, set_name in api.collections():
             set_api = None
             # Add any sets from Plex collection tags
             kodi_set_id = self.kodidb.create_collection(set_name)

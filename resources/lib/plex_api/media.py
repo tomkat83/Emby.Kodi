@@ -172,13 +172,23 @@ class Media(object):
                                            stream.get('aspectRatio') or aspect)
                     track['duration'] = self.runtime()
                     track['video3DFormat'] = None
+                    if (cast(bool, stream.get('DOVIPresent'))):
+                        track['hdr'] = 'dolbyvision'
+                    else:
+                        color_track = stream.get('colorTrc', '').lower()
+                        if 'smpte2084' in color_track:
+                            track['hdr'] = 'hdr10'
+                        elif 'arib-std-b67' in color_track:
+                            track['hdr'] = 'hlg'
+                        else:
+                            track['hdr'] = None
                     videotracks.append(track)
                 elif media_type == 2:  # Audio streams
                     if 'codec' in stream.attrib:
                         track['codec'] = stream.get('codec').lower()
-                        if ("dca" in track['codec'] and
-                                "ma" in stream.get('profile', '').lower()):
-                            track['codec'] = "dtshd_ma"
+                        if ('dca' in track['codec'] and
+                                'ma' in stream.get('profile', '').lower()):
+                            track['codec'] = 'dtshd_ma'
                     track['channels'] = cast(int, stream.get('channels'))
                     # 'unknown' if we cannot get language
                     track['language'] = stream.get('languageCode',

@@ -190,7 +190,7 @@ class Show(TvShowMixin, ItemBase):
             # update new ratings Kodi 17
             rating_id = self.kodidb.update_ratings(kodi_id,
                                                    v.KODI_TYPE_SHOW,
-                                                   "default",
+                                                   api.ratingtype(),
                                                    api.rating(),
                                                    api.votecount())
             unique_id = self._prioritize_provider_id(
@@ -221,7 +221,7 @@ class Show(TvShowMixin, ItemBase):
             self.kodidb.add_showlinkpath(kodi_id, kodi_pathid)
             rating_id = self.kodidb.add_ratings(kodi_id,
                                                 v.KODI_TYPE_SHOW,
-                                                "default",
+                                                api.ratingtype(),
                                                 api.rating(),
                                                 api.votecount())
             unique_id = self._prioritize_provider_id(
@@ -453,7 +453,7 @@ class Episode(TvShowMixin, ItemBase):
                     self.kodidb.remove_file(old_kodi_fileid_2)
             ratingid = self.kodidb.update_ratings(kodi_id,
                                                   v.KODI_TYPE_EPISODE,
-                                                  "default",
+                                                  api.ratingtype(),
                                                   api.rating(),
                                                   api.votecount())
             unique_id = self._prioritize_provider_id(
@@ -522,7 +522,7 @@ class Episode(TvShowMixin, ItemBase):
 
             rating_id = self.kodidb.add_ratings(kodi_id,
                                                 v.KODI_TYPE_EPISODE,
-                                                "default",
+                                                api.ratingtype(),
                                                 api.rating(),
                                                 api.votecount())
             unique_id = self._prioritize_provider_id(
