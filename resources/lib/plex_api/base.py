@@ -364,7 +364,7 @@ class Base(object):
             rtype = 'tomatometerallaudience'
         elif 'imdb' in rtype:
             rtype = 'imdb'
-        elif 'tmdb' in rtype:
+        elif 'themoviedb' in rtype:
             rtype = 'themoviedb'
         elif 'tvdb' in rtype:
             rtype = 'tvdb'
