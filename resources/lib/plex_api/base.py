@@ -356,24 +356,27 @@ class Base(object):
 
     def ratingtype(self):
         """
-        Returns the kodi rating type after parsing the rating image link from
-        plex
+        Returns the ratingtype [str] first from 'audienceRatingImage' (audience)
+        if that fails, from ratingImage (critic).
+        Returns 'default' if both are not found
         """
-        rtype = self.xml.get('audienceRatingImage', '')
-        if 'rotten' in rtype:
+        #catch-all
+        rtype = 'default'
+        #audience ratings
+        rtypea = self.xml.get('audienceRatingImage', '')
+        #critic ratings - fallback if no audience ratings
+        rtypec = self.xml.get('ratingImage', '')
+
+        if 'rotten' in rtypea:
             rtype = 'tomatometerallaudience'
-        elif 'imdb' in rtype:
+        elif 'imdb' in rtypea:
             rtype = 'imdb'
-        elif 'themoviedb' in rtype:
+        elif 'themoviedb' in rtypea:
             rtype = 'themoviedb'
-        elif 'tvdb' in rtype:
+        elif 'tvdb' in rtypea:
             rtype = 'tvdb'
-        elif 'trakt' in rtype:
-            rtype = 'trakt'
-        elif 'metacritic' in rtype:
-            rtype = 'metacritic'
-        else:
-            rtype = 'default'
+        elif 'rotten' in rtypec:
+            rtype = 'tomatometerallcritics'
         return rtype
 
     def votecount(self):
