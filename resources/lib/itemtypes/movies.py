@@ -91,11 +91,7 @@ class Movie(ItemBase):
                                               api.date_created())
             if file_id != old_kodi_fileid:
                 self.kodidb.remove_file(old_kodi_fileid)
-            rating_id = self.kodidb.update_ratings(kodi_id,
-                                                   v.KODI_TYPE_MOVIE,
-                                                   api.ratingtype(),
-                                                   api.rating(),
-                                                   api.votecount())
+
             unique_id = self.update_provider_ids(api, kodi_id)
             self.kodidb.modify_people(kodi_id,
                                       v.KODI_TYPE_MOVIE,
@@ -109,11 +105,7 @@ class Movie(ItemBase):
             file_id = self.kodidb.add_file(filename,
                                            kodi_pathid,
                                            api.date_created())
-            rating_id = self.kodidb.add_ratings(kodi_id,
-                                                v.KODI_TYPE_MOVIE,
-                                                api.ratingtype(),
-                                                api.rating(),
-                                                api.votecount())
+
             unique_id = self.add_provider_ids(api, kodi_id)
             self.kodidb.add_people(kodi_id,
                                    v.KODI_TYPE_MOVIE,
@@ -124,6 +116,14 @@ class Movie(ItemBase):
                                         v.KODI_TYPE_MOVIE)
 
         unique_id = self._prioritize_provider_id(unique_id)
+
+        # Add/Update Kodi's rating table
+        rating_id = self.kodidb.update_ratings(kodi_id,
+                                               v.KODI_TYPE_MOVIE,
+                                               api.ratingtype(),
+                                               api.rating(),
+                                               api.votecount())
+
 
         # Update Kodi's main entry
         self.kodidb.add_movie(kodi_id,

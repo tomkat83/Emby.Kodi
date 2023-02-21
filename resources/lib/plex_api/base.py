@@ -347,8 +347,8 @@ class Base(object):
 
     def rating(self):
         """
-        Returns the rating [float] first from 'audienceRating', if that fails
-        from 'rating'.
+        Returns the rating [float] first from 'audienceRating' (audience)
+        if that fails, from 'rating' (critic).
         Returns 0.0 if both are not found
         """
         return cast(float, self.xml.get('audienceRating',

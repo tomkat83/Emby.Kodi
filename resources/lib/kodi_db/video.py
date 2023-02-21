@@ -850,30 +850,19 @@ class KodiVideoDB(common.KodiDBBase):
     @db.catch_operationalerrors
     def update_ratings(self, *args):
         """
-        Feed with media_id, media_type, rating_type, rating, votes, rating_id
+        Adds or Updates a rating in the Kodi rating table
+        Feed with media_id, media_type, rating_type, rating, votes
         """
+        #Remove rows to be updated, matching or default rating types
         self.cursor.execute('''
-            INSERT OR REPLACE INTO
+            DELETE FROM rating
+            WHERE media_id = ? AND media_type = ? AND (rating_type = ? OR rating_type = 'default')
+            ''',(args[0], args[1], args[2]))
+
+        # Insert the new data
+        self.cursor.execute('''
+            INSERT INTO
             rating(media_id, media_type, rating_type, rating, votes)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (args))
-        return self.cursor.lastrowid
-
-    @db.catch_operationalerrors
-    def add_ratings(self, *args):
-        """
-        feed with:
-            media_id, media_type, rating_type, rating, votes
-
-        rating_type = 'default'
-        """
-        self.cursor.execute('''
-            INSERT INTO rating(
-                media_id,
-                media_type,
-                rating_type,
-                rating,
-                votes)
             VALUES (?, ?, ?, ?, ?)
         ''', (args))
         return self.cursor.lastrowid

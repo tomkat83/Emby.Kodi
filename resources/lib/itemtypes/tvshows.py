@@ -184,15 +184,18 @@ class Show(TvShowMixin, ItemBase):
         kodi_pathid = self.kodidb.add_path(path,
                                            date_added=api.date_created(),
                                            id_parent_path=toppathid)
+
+        # Add/Update Kodi's rating table
+        rating_id = self.kodidb.update_ratings(kodi_id,
+                                               v.KODI_TYPE_SHOW,
+                                               api.ratingtype(),
+                                               api.rating(),
+                                               api.votecount())
         # UPDATE THE TVSHOW #####
         if update_item:
             LOG.info("UPDATE tvshow plex_id: %s - %s", plex_id, api.title())
             # update new ratings Kodi 17
-            rating_id = self.kodidb.update_ratings(kodi_id,
-                                                   v.KODI_TYPE_SHOW,
-                                                   api.ratingtype(),
-                                                   api.rating(),
-                                                   api.votecount())
+
             unique_id = self._prioritize_provider_id(
                 self.update_provider_ids(api, kodi_id))
             self.kodidb.modify_people(kodi_id,
@@ -219,11 +222,7 @@ class Show(TvShowMixin, ItemBase):
             LOG.info("ADD tvshow plex_id: %s - %s", plex_id, api.title())
             # Link the path
             self.kodidb.add_showlinkpath(kodi_id, kodi_pathid)
-            rating_id = self.kodidb.add_ratings(kodi_id,
-                                                v.KODI_TYPE_SHOW,
-                                                api.ratingtype(),
-                                                api.rating(),
-                                                api.votecount())
+
             unique_id = self._prioritize_provider_id(
                 self.add_provider_ids(api, kodi_id))
             self.kodidb.add_people(kodi_id,
@@ -434,6 +433,13 @@ class Episode(TvShowMixin, ItemBase):
             # so WITH plex show id!
             kodi_pathid_2 = self.kodidb.add_path(path_2)
 
+        # Add/Update Kodi's rating table
+        rating_id = self.kodidb.update_ratings(kodi_id,
+                                               v.KODI_TYPE_EPISODE,
+                                               api.ratingtype(),
+                                               api.rating(),
+                                               api.votecount())
+
         # UPDATE THE EPISODE #####
         if update_item:
             LOG.info("UPDATE episode plex_id: %s - %s", plex_id, api.title())
@@ -451,11 +457,7 @@ class Episode(TvShowMixin, ItemBase):
                 self.kodidb.remove_file(old_kodi_fileid)
                 if not app.SYNC.direct_paths:
                     self.kodidb.remove_file(old_kodi_fileid_2)
-            ratingid = self.kodidb.update_ratings(kodi_id,
-                                                  v.KODI_TYPE_EPISODE,
-                                                  api.ratingtype(),
-                                                  api.rating(),
-                                                  api.votecount())
+
             unique_id = self._prioritize_provider_id(
                 self.update_provider_ids(api, kodi_id))
             self.kodidb.modify_people(kodi_id,
@@ -467,7 +469,7 @@ class Episode(TvShowMixin, ItemBase):
                                            v.KODI_TYPE_EPISODE)
             self.kodidb.update_episode(api.title(),
                                        api.plot(),
-                                       ratingid,
+                                       rating_id,
                                        api.list_to_string(api.writers()),
                                        api.premiere_date(),
                                        api.runtime(),
@@ -520,11 +522,6 @@ class Episode(TvShowMixin, ItemBase):
             else:
                 kodi_fileid_2 = None
 
-            rating_id = self.kodidb.add_ratings(kodi_id,
-                                                v.KODI_TYPE_EPISODE,
-                                                api.ratingtype(),
-                                                api.rating(),
-                                                api.votecount())
             unique_id = self._prioritize_provider_id(
                 self.add_provider_ids(api, kodi_id))
             self.kodidb.add_people(kodi_id,
