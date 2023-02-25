@@ -864,8 +864,13 @@ class KodiVideoDB(common.KodiDBBase):
         """
         Feed with media_id, media_type, rating_type, rating, votes, rating_id
         """
+        # Delete existing entries first
         self.cursor.execute('''
-            INSERT OR REPLACE INTO
+            DELETE FROM rating WHERE media_id = ? AND media_type = ?
+        ''', (args[0], args[1]))
+        # Then add the new one
+        self.cursor.execute('''
+            INSERT INTO
             rating(media_id, media_type, rating_type, rating, votes)
             VALUES (?, ?, ?, ?, ?)
         ''', (args))
