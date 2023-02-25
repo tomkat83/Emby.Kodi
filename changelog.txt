@@ -1,3 +1,9 @@
+version 3.7.3 (beta only):
+- Support for skipping credits. If Plex detected end credits, videos will now only be marked as watched if the end credits have been reached #1926
+- Fix rating matching #1930 (thanks @JCalvi)
+- Kodi Matrix: Fix sync not working (introduced in commit 664a68c30fe4bca9e191acad2b2aa8850859b0ba) #1931
+- Fix ratings being appended to Kodi table instead of being replaced when a video item is updated #1933
+
 version 3.7.2 (beta only):
 - You will need to manually reset the Kodi database in the PKC settings under Advanced
 - Correctly map the Plex ratings to the Kodi ones; sync the Plex HDR tag to Kodi #1917 (thanks @JCalvi)
