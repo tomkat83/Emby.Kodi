@@ -536,17 +536,29 @@ class KodiVideoDB(common.KodiDBBase):
         if not streamdetails:
             return
         for videotrack in streamdetails['video']:
-            self.cursor.execute('''
-                INSERT OR REPLACE INTO streamdetails(
-                    idFile, iStreamType, strVideoCodec, fVideoAspect,
-                    iVideoWidth, iVideoHeight, iVideoDuration ,strStereoMode,
-                    strHdrType)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (fileid, 0, videotrack['codec'],
-                      videotrack['aspect'], videotrack['width'],
-                      videotrack['height'], runtime,
-                      videotrack['video3DFormat'],
-                      videotrack['hdr']))
+            if v.KODIVERSION < 20:
+                self.cursor.execute('''
+                    INSERT OR REPLACE INTO streamdetails(
+                        idFile, iStreamType, strVideoCodec, fVideoAspect,
+                        iVideoWidth, iVideoHeight, iVideoDuration,
+                        strStereoMode)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (fileid, 0, videotrack['codec'],
+                          videotrack['aspect'], videotrack['width'],
+                          videotrack['height'], runtime,
+                          videotrack['video3DFormat']))
+            else:
+                self.cursor.execute('''
+                    INSERT OR REPLACE INTO streamdetails(
+                        idFile, iStreamType, strVideoCodec, fVideoAspect,
+                        iVideoWidth, iVideoHeight, iVideoDuration,
+                        strStereoMode, strHdrType)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (fileid, 0, videotrack['codec'],
+                          videotrack['aspect'], videotrack['width'],
+                          videotrack['height'], runtime,
+                          videotrack['video3DFormat'],
+                          videotrack['hdr']))
         for audiotrack in streamdetails['audio']:
             self.cursor.execute('''
                 INSERT OR REPLACE INTO streamdetails(
