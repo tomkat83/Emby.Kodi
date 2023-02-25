@@ -50,8 +50,8 @@ class App(object):
             self.metadata_thread = None
             # Instance of ImageCachingThread()
             self.caching_thread = None
-            # Dialog to skip intro
-            self.skip_intro_dialog = None
+            # Dialog to skip markers such as intros and credits
+            self.skip_markers_dialog = None
 
     @property
     def is_playing(self):

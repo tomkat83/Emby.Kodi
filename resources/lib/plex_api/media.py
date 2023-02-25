@@ -46,15 +46,25 @@ class Media(object):
             value = self.xml[0][self.part].get(key)
         return value
 
-    def intro_markers(self):
+    def markers(self):
         """
-        Returns a list of tuples with floats (startTimeOffset, endTimeOffset)
-        in Koditime or an empty list.
-        Each entry represents an (episode) intro that Plex detected and that
-        can be skipped
+        Returns a list of tuples (startTimeOffset [float], endTimeOffset
+        [float], marker type [str, currently 'intro' or 'credits'], final
+        [bool]) in Koditime or an empty list. Each entry represents an
+        (episode) intro or credit that Plex detected and that can be skipped to
+        endTimeOffset. If final is set to True, this means that the marker is
+        located at the end of the video
         """
         self._scan_children()
-        return self._intro_markers
+        return self._markers
+
+    def final_marker(self):
+        """
+        Returns the starting time of the marker where the flag 'final' is set
+        to '1', meaning the credits are at the end of the video and thus signal
+        that the video has indeed ended
+        """
+        return max(x[3] for x in self.markers())
 
     def video_codec(self):
         """
