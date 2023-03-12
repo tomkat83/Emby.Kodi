@@ -1,3 +1,6 @@
+version 3.7.4 (beta only):
+- Initial compatibility with Kodi 21 Omega #1940
+
 version 3.7.3 (beta only):
 - Support for skipping credits. If Plex detected end credits, videos will now only be marked as watched if the end credits have been reached #1926
 - Fix rating matching #1930 (thanks @JCalvi)
