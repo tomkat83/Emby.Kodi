@@ -62,9 +62,14 @@ class Media(object):
         """
         Returns the starting time of the marker where the flag 'final' is set
         to '1', meaning the credits are at the end of the video and thus signal
-        that the video has indeed ended
+        that the video has indeed ended. Returns None if no markers have been
+        set by Plex.
         """
-        return max(x[3] for x in self.markers())
+        try:
+            return max(x[3] for x in self.markers())
+        except ValueError:
+            # In case no markers have been set by Plex and we have an empty []
+            pass
 
     def video_codec(self):
         """
