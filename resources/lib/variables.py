@@ -689,7 +689,7 @@ def database_paths():
     unsupported version
     '''
     # Check Kodi version first
-    if KODIVERSION not in (19, 20):
+    if KODIVERSION not in (19, 20, 21):
         raise RuntimeError('Kodiversion %s not supported by PKC' % KODIVERSION)
 
     database_path = xbmcvfs.translatePath('special://database')
