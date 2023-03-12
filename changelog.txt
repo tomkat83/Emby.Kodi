@@ -1,3 +1,6 @@
+version 3.7.5 (beta only):
+Fix playback report not working if no markers for intros and credits is present #1942
+
 version 3.7.4 (beta only):
 - Initial compatibility with Kodi 21 Omega #1940
 
