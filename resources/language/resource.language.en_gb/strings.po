@@ -600,6 +600,11 @@ msgctxt "#30529"
 msgid "Startup delay (in seconds)"
 msgstr ""
 
+# PKC. Message displayed when playback is showing commercials
+msgctxt "#30530"
+msgid "Skip commercials"
+msgstr ""
+
 msgctxt "#30531"
 msgid "Enable new content notification"
 msgstr ""
