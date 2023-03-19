@@ -1,5 +1,10 @@
+version 3.7.6 (beta only):
+- Support for skipping commercials #1946
+- Use Plex PMS settings in order to decide whether a video was fully played or not (e.g. based on first or last credits marker). Restart Kodi if you make any changes to the PMS settings. #1949
+- Fix to show in-progress videos in widgets if PKC decided they're partially watched but Kodi thinks they're completely watched #1951
+
 version 3.7.5 (beta only):
-Fix playback report not working if no markers for intros and credits is present #1942
+- Fix playback report not working if no markers for intros and credits is present #1942
 
 version 3.7.4 (beta only):
 - Initial compatibility with Kodi 21 Omega #1940
