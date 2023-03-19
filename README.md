@@ -58,7 +58,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 
 - Support for Kodi 18 Leia, Kodi 19 Matrix, Kodi 20 Nexus
 - Preliminary support for Kodi 21 Omega. Keep in mind that development for  Omega has not even officially reached alpha stage - any issues you encounter are probably caused by that
-- [Skip intros](https://support.plex.tv/articles/skip-content/) and [skip credits](https://support.plex.tv/articles/credits-detection/)
+- [Skip commercials/advertisements](https://support.plex.tv/articles/115003944134-removing-commercials/), [skip intros](https://support.plex.tv/articles/skip-content/) and [skip credits](https://support.plex.tv/articles/credits-detection/)
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
 - If Plex did not provide a trailer, automatically get one using the Kodi add-on [The Movie Database](https://kodi.wiki/view/Add-on:The_Movie_Database)
