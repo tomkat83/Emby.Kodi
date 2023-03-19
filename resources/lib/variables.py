@@ -17,6 +17,12 @@ from . import path_ops
 # Percent of playback progress for watching item as partially watched. Anything
 # more and item will NOT be marked as partially, but fully watched
 MARK_PLAYED_AT = 0.9
+# Decide whether to use end credits markers
+# 0:at selected threshold percentage
+# 1:at final credits marker position
+# 2:at first credits marker position
+# 3:earliest between threshold percent and first credits marker
+LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR = 3
 # How many seconds of playback do we ignore before marking an item as partially
 # watched?
 IGNORE_SECONDS_AT_START = 60

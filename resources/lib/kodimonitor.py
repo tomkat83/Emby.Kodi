@@ -334,7 +334,8 @@ class KodiMonitor(xbmc.Monitor):
         # Mechanik for Plex skip intro feature
         if utils.settings('enableSkipIntro') == 'true':
             status['markers'] = item.api.markers()
-            status['final_marker'] = item.api.final_marker()
+            status['first_credits_marker'] = item.api.first_credits_marker()
+            status['final_credits_marker'] = item.api.final_credits_marker()
         if item.playmethod is None and path and not path.startswith('plugin://'):
             item.playmethod = v.PLAYBACK_METHOD_DIRECT_PATH
         item.playerid = playerid
@@ -446,55 +447,63 @@ def _record_playstate(status, ended):
 
 
 def _playback_progress(status, ended, db_item):
+    LOG.debug('First credits marker: %s', status['first_credits_marker'])
+    LOG.debug('Last credits marker: %s', status['final_credits_marker'])
+    LOG.debug('Using PMS setting LibraryVideoPlayedAtBehaviour=%s',
+              v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR)
     totaltime = float(timing.kodi_time_to_millis(status['totaltime'])) / 1000
-    progress = 0.0
+    # Safety net should we ever get 0
+    totaltime = totaltime or 0.000001
     last_played = timing.kodi_now()
     playcount = status['playcount']
     if playcount is None:
         LOG.debug('playcount not found, looking it up in the Kodi DB')
         with kodi_db.KodiVideoDB() as kodidb:
-            playcount = kodidb.get_playcount(db_item['kodi_fileid'])
-        playcount = 0 if playcount is None else playcount
+            playcount = kodidb.get_playcount(db_item['kodi_fileid']) or 0
     if status['external_player']:
         # video has either been entirely watched - or not.
         # "ended" won't work, need a workaround
         ended = _external_player_correct_plex_watch_count(db_item)
+        time = 0.0
+        progress = 0.0
     else:
         time = float(timing.kodi_time_to_millis(status['time'])) / 1000
-        LOG.debug('Playtime: %s', time)
-        if status['final_marker']:
-            LOG.debug('Plex told us there are credits starting at %s',
-                      status['final_marker'])
-            # Credits will show when video is done - if we're not in the
-            # credits, the video is not done
-            if time >= status['final_marker']:
-                ended = True
-            else:
-                ended = False
-        if not ended and not status['final_marker']:
-            # Plex does not know when the video is actually done
-            try:
-                progress = time / totaltime
-            except ZeroDivisionError:
-                pass
-    if time < v.IGNORE_SECONDS_AT_START:
+        progress = time / totaltime
+        LOG.debug('time %s, totaltime %s, progress %s, MARK_PLAYED_AT %s',
+                  time, totaltime, progress, v.MARK_PLAYED_AT)
+        # If there is no first credits marker, use the last credits
+        first = status['first_credits_marker'] or status['final_credits_marker']
+        last = status['final_credits_marker']
+        # Decide on whether video ended - based on the PMS setting
+        if v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR == 3 \
+                and first \
+                and first[0] / totaltime < v.MARK_PLAYED_AT:
+            # "earliest between threshold percent and first credits marker"
+            ended = True if time >= first[0] else False
+        elif v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR == 1 and last:
+            # "at final credits marker position"
+            ended = True if time >= last[0] else False
+        elif v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR == 2 and first:
+            # "at first credits marker position"
+            ended = True if time >= first[0] else False
+        else:
+            # use threshold, corresponds to
+            # v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR = 0
+            ended = True if progress >= v.MARK_PLAYED_AT else False
+        LOG.debug('Deduced that video has ended: %s', ended)
+    if ended:
+        playcount += 1
+        time = 0.0
+        progress = 100.0
+    elif not status['external_player'] and time < v.IGNORE_SECONDS_AT_START:
         LOG.debug('Ignoring playback less than %s seconds',
                   v.IGNORE_SECONDS_AT_START)
         # Annoying Plex bug - it'll reset an already watched video to unwatched
         playcount = None
         last_played = None
-        time = 0
-    elif ended:
-        LOG.debug('Video has been played completely')
-        playcount += 1
-        time = 0
-        progress = 100
-    elif progress >= v.MARK_PLAYED_AT:
-        LOG.debug('Recording entirely played video since progress %s > %s',
-                  progress, v.MARK_PLAYED_AT)
-        playcount += 1
-        time = 0
-    LOG.debug('Playback progress %s (%s of %s seconds), playcount %s',
+        time = 0.0
+        progress = 0.0
+    LOG.debug('Resulting playback progress %s (%s of %s seconds) playcount %s',
               progress, time, totaltime, playcount)
     return time, totaltime, playcount, last_played
 

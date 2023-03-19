@@ -49,26 +49,47 @@ class Media(object):
     def markers(self):
         """
         Returns a list of tuples (startTimeOffset [float], endTimeOffset
-        [float], marker type [str, currently 'intro' or 'credits'], final
-        [bool]) in Koditime or an empty list. Each entry represents an
-        (episode) intro or credit that Plex detected and that can be skipped to
-        endTimeOffset. If final is set to True, this means that the marker is
-        located at the end of the video
+        [float], marker type [str, 'intro', 'credits' or 'commercials'], final
+        credits [bool]) in Koditime or an empty list. Each entry represents an
+        intro, credit or commercial that Plex detected and that can be skipped
+        to endTimeOffset. If final is set to True, this means that the marker
+        is located at the end of the video
         """
         self._scan_children()
         return self._markers
 
-    def final_marker(self):
+    def first_credits_marker(self):
         """
-        Returns the starting time of the marker where the flag 'final' is set
-        to '1', meaning the credits are at the end of the video and thus signal
-        that the video has indeed ended. Returns None if no markers have been
-        set by Plex.
+        Returns the tuple (startTimeOffset [float], endTimeOffset[float],
+        marker type [str, 'intro', 'credits' or 'commercials'], final credits
+        [bool]) in Koditime of the marker where Plex did NOT set the
+        flag 'final' to to '1' (=final credit is set to False) and with the
+        minimal startTimeOffset.
+        Returns None if there is e.g. only a final credit. Or no credit.
         """
         try:
-            return max(x[3] for x in self.markers())
+            markers = [x for x in self.markers()
+                       if x[2] == 'credits' and not x[3]]
+            return min(markers, key=lambda marker: marker[0])
         except ValueError:
-            # In case no markers have been set by Plex and we have an empty []
+            # No none-final markers found or no credits
+            pass
+
+    def final_credits_marker(self):
+        """
+        Returns the tuple (startTimeOffset [float], endTimeOffset[float],
+        marker type [str, 'intro', 'credits' or 'commercials'], final credits
+        [bool]) in Koditime of the marker where Plex set the flag 'final' to
+        to '1', meaning the credits are at the end of the video and thus signal
+        that the video has indeed ended (=final credit is set to True).
+        Will ONLY return the first appearance of a final marker should Plex
+        have set more than 1 final marker.
+        Returns None if no markers have been set by Plex.
+        """
+        try:
+            return [x for x in self.markers()
+                    if x[2] == 'credits' and x[3]][0]
+        except IndexError:
             pass
 
     def video_codec(self):

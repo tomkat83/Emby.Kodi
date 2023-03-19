@@ -525,16 +525,10 @@ class Base(object):
             elif child.tag == 'Marker':
                 start = cast(float, child.get('startTimeOffset'))
                 end = cast(float, child.get('endTimeOffset'))
-                typus = child.get('type')
-                if None in (start, end, typus):
-                    # Safety net if PMS xml is not as expected
-                    continue
-                final_credits_start = start / 1000.0 if child.get('final') == '1' \
-                    else 0.0
                 self._markers.append((start / 1000.0,
                                       end / 1000.0,
-                                      typus,
-                                      final_credits_start))
+                                      child.get('type'),
+                                      child.get('final') == '1'))
         # Plex Movie agent (legacy) or "normal" Plex tv show agent
         if not self._guids:
             guid = self.xml.get('guid')
