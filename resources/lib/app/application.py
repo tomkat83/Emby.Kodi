@@ -17,7 +17,6 @@ class App(object):
     """
     def __init__(self, entrypoint=False):
         self.fetch_pms_item_number = None
-        self.force_reload_skin = None
         # All thread instances
         self.threads = []
         if entrypoint:
@@ -164,9 +163,6 @@ class App(object):
     def reload(self):
         # Number of items to fetch and display in widgets
         self.fetch_pms_item_number = int(utils.settings('fetch_pms_item_number'))
-        # Hack to force Kodi widget for "in progress" to show up if it was empty
-        # before
-        self.force_reload_skin = utils.settings('forceReloadSkinOnPlaybackStop') == 'true'
 
     def load_entrypoint(self):
         self.fetch_pms_item_number = int(utils.settings('fetch_pms_item_number'))

@@ -13,7 +13,7 @@ from . import path_ops
 # Paths are in unicode, otherwise Windows will throw fits
 # For any file operations with KODI function, use encoded strings!
 
-
+# PLEX SETTINGS
 # Percent of playback progress for watching item as partially watched. Anything
 # more and item will NOT be marked as partially, but fully watched
 MARK_PLAYED_AT = 0.9
@@ -25,7 +25,15 @@ MARK_PLAYED_AT = 0.9
 LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR = 3
 # How many seconds of playback do we ignore before marking an item as partially
 # watched?
+# This setting cannot (yet) be changed in the PMS settings
 IGNORE_SECONDS_AT_START = 60
+# Corresponding KODI SETTINGS
+# for playback and marking a video as watched
+# For default values listed here see
+# https://kodi.wiki/view/HOW-TO:Modify_automatic_watch_and_resume_points
+KODI_IGNOREPERCENTATEND = 0.08
+KODI_PLAYCOUNTMINIMUMPERCENT = 0.9
+KODI_IGNORESECONDSATSTART = 180
 
 _ADDON = Addon('plugin.video.plexkodiconnect')
 ADDON_NAME = 'PlexKodiConnect'
