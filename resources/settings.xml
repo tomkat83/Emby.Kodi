@@ -183,7 +183,6 @@
         <setting id="MovieShowWatched" type="bool" label="39066" default="true" /><!--Recently Added: Also show already watched episodes-->
         <setting type="sep" />
         <setting type="lsep" label="30022" /><!-- Advanced -->
-        <setting id="forceReloadSkinOnPlaybackStop" type="bool" label="39065" default="false" /><!-- Force-refresh Kodi skin on stopping playback -->
 	</category>
 
 	<category label="30022"><!-- Advanced -->

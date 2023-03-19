@@ -528,12 +528,19 @@ class InitialSetup(object):
                     # Only do this for add-on paths
                     xml.set_setting(['videolibrary', 'cleanonupdate'],
                                     value='false')
-                # Set completely watched point same as plex (and not 92%)
-                xml.set_setting(['video', 'ignorepercentatend'], value='10')
-                xml.set_setting(['video', 'playcountminimumpercent'],
-                                value='90')
-                xml.set_setting(['video', 'ignoresecondsatstart'],
-                                value='60')
+                # Get settings for in-progress / marked watched
+                if xml.get_setting(['video',
+                                   'ignorepercentatend']) is not None:
+                    v.KODI_IGNOREPERCENTATEND = float(
+                        xml.get_setting(['video', 'ignorepercentatend']).text) / 100.0
+                if xml.get_setting(['video',
+                                   'playcountminimumpercent']) is not None:
+                    v.KODI_PLAYCOUNTMINIMUMPERCENT = float(
+                        xml.get_setting(['video', 'playcountminimumpercent']).text) / 100.0
+                if xml.get_setting(['video',
+                                   'ignoresecondsatstart']) is not None:
+                    v.KODI_IGNORESECONDSATSTART = int(
+                        xml.get_setting(['video', 'ignoresecondsatstart']).text)
                 reboot = xml.write_xml
         except utils.ParseError:
             cache = None

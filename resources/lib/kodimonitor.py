@@ -421,7 +421,7 @@ def _record_playstate(status, ended):
         # Item not (yet) in Kodi library
         LOG.debug('No playstate update due to Plex id not found: %s', status)
         return
-    time, totaltime, playcount, last_played = _playback_progress(status, ended, db_item)
+    time, totaltime, playcount, last_played, reload_skin = _playback_progress(status, ended, db_item)
     with kodi_db.KodiVideoDB() as kodidb:
         kodidb.set_resume(db_item['kodi_fileid'],
                           time,
@@ -435,10 +435,7 @@ def _record_playstate(status, ended):
                               totaltime,
                               playcount,
                               last_played)
-    if (app.APP.force_reload_skin and
-            xbmc.getCondVisibility('Window.IsVisible(Home.xml)')):
-        # Hack to force "in progress" widget to appear if it wasn't visible before
-        LOG.debug('Refreshing skin to update widgets')
+    if reload_skin:
         xbmc.executebuiltin('ReloadSkin()')
     else:
         xbmc.executebuiltin('Container.Refresh')
@@ -451,10 +448,17 @@ def _playback_progress(status, ended, db_item):
     LOG.debug('Last credits marker: %s', status['final_credits_marker'])
     LOG.debug('Using PMS setting LibraryVideoPlayedAtBehaviour=%s',
               v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR)
+    LOG.debug('Kodi advancedsettings: playcountminimumpercent=%s, '
+              'ignoresecondsatstart=%s, '
+              'ignorepercentatend=%s',
+              v.KODI_PLAYCOUNTMINIMUMPERCENT,
+              v.KODI_IGNORESECONDSATSTART,
+              v.KODI_IGNOREPERCENTATEND)
     totaltime = float(timing.kodi_time_to_millis(status['totaltime'])) / 1000
     # Safety net should we ever get 0
     totaltime = totaltime or 0.000001
     last_played = timing.kodi_now()
+    reload_skin = False
     playcount = status['playcount']
     if playcount is None:
         LOG.debug('playcount not found, looking it up in the Kodi DB')
@@ -491,6 +495,13 @@ def _playback_progress(status, ended, db_item):
             # v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR = 0
             ended = True if progress >= v.MARK_PLAYED_AT else False
         LOG.debug('Deduced that video has ended: %s', ended)
+        # Did we reach a different decision than Kodi and must thus reload
+        # the skin to reflect that?
+        if not ended and progress > v.KODI_PLAYCOUNTMINIMUMPERCENT:
+            reload_skin = True
+        elif time > v.IGNORE_SECONDS_AT_START \
+                and time < v.KODI_IGNORESECONDSATSTART:
+            reload_skin = True
     if ended:
         playcount += 1
         time = 0.0
@@ -505,7 +516,9 @@ def _playback_progress(status, ended, db_item):
         progress = 0.0
     LOG.debug('Resulting playback progress %s (%s of %s seconds) playcount %s',
               progress, time, totaltime, playcount)
-    return time, totaltime, playcount, last_played
+    LOG.debug('Force-reload skin to force Kodi to show in-progress video: %s',
+              reload_skin)
+    return time, totaltime, playcount, last_played, reload_skin
 
 
 def _external_player_correct_plex_watch_count(db_item):
