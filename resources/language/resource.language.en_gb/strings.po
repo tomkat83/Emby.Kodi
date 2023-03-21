@@ -602,7 +602,7 @@ msgstr ""
 
 # PKC. Message displayed when playback is showing commercials
 msgctxt "#30530"
-msgid "Skip commercials"
+msgid "Skip commercial"
 msgstr ""
 
 msgctxt "#30531"

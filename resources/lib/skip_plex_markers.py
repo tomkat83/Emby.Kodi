@@ -9,7 +9,7 @@ from . import app, utils, variables as v
 MARKERS = {
     'intro': utils.lang(30525),  # Skip intro
     'credits': utils.lang(30526),  # Skip credits
-    'commercials': utils.lang(30530)  # Skip commercials
+    'commercial': utils.lang(30530)  # Skip commercial
 }
 
 
