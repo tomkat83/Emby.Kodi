@@ -1,3 +1,6 @@
+version 3.8.0:
+- version 3.7.2-3.7.7 for everyone
+
 version 3.7.7 (beta only):
 - Skip commercial: fix KeyError #1955
 
