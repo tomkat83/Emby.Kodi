@@ -28,7 +28,7 @@
                         <itemgap>10</itemgap>
                         <align>right</align>
                         <control type="button" id="3002">
-                            <label>$ADDON[plugin.video.plexkodiconnect 30525]</label>
+                            <label>$INFO[Window.Property(marker_message)]</label>
                             <height>40</height>
                             <width min="50">auto</width>
                             <font>font20_title</font>

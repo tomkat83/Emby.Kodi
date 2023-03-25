@@ -536,15 +536,29 @@ class KodiVideoDB(common.KodiDBBase):
         if not streamdetails:
             return
         for videotrack in streamdetails['video']:
-            self.cursor.execute('''
-                INSERT OR REPLACE INTO streamdetails(
-                    idFile, iStreamType, strVideoCodec, fVideoAspect,
-                    iVideoWidth, iVideoHeight, iVideoDuration ,strStereoMode)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (fileid, 0, videotrack['codec'],
-                      videotrack['aspect'], videotrack['width'],
-                      videotrack['height'], runtime,
-                      videotrack['video3DFormat']))
+            if v.KODIVERSION < 20:
+                self.cursor.execute('''
+                    INSERT OR REPLACE INTO streamdetails(
+                        idFile, iStreamType, strVideoCodec, fVideoAspect,
+                        iVideoWidth, iVideoHeight, iVideoDuration,
+                        strStereoMode)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (fileid, 0, videotrack['codec'],
+                          videotrack['aspect'], videotrack['width'],
+                          videotrack['height'], runtime,
+                          videotrack['video3DFormat']))
+            else:
+                self.cursor.execute('''
+                    INSERT OR REPLACE INTO streamdetails(
+                        idFile, iStreamType, strVideoCodec, fVideoAspect,
+                        iVideoWidth, iVideoHeight, iVideoDuration,
+                        strStereoMode, strHdrType)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (fileid, 0, videotrack['codec'],
+                          videotrack['aspect'], videotrack['width'],
+                          videotrack['height'], runtime,
+                          videotrack['video3DFormat'],
+                          videotrack['hdr']))
         for audiotrack in streamdetails['audio']:
             self.cursor.execute('''
                 INSERT OR REPLACE INTO streamdetails(
@@ -850,8 +864,13 @@ class KodiVideoDB(common.KodiDBBase):
         """
         Feed with media_id, media_type, rating_type, rating, votes, rating_id
         """
+        # Delete existing entries first
         self.cursor.execute('''
-            INSERT OR REPLACE INTO
+            DELETE FROM rating WHERE media_id = ? AND media_type = ?
+        ''', (args[0], args[1]))
+        # Then add the new one
+        self.cursor.execute('''
+            INSERT INTO
             rating(media_id, media_type, rating_type, rating, votes)
             VALUES (?, ?, ?, ?, ?)
         ''', (args))

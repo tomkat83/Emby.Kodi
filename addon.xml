@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.7.1" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.8.0" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -103,7 +103,34 @@
     <summary lang="ko_KR">Plex를 Kodi에 기본 통합</summary>
     <description lang="ko_KR">Kodi를 Plex Media Server에 연결합니다. 이 플러그인은 Plex로 모든 비디오를 관리하고 Kodi로는 관리하지 않는다고 가정합니다. Kodi 비디오 및 음악 데이터베이스에 이미 저장된 데이터가 손실 될 수 있습니다 (이 플러그인이 직접 변경하므로). 자신의 책임하에 사용하십시오!</description>
     <disclaimer lang="ko_KR">자신의 책임하에 사용</disclaimer>
-    <news>version 3.7.1:
+    <news>version 3.8.0:
+- version 3.7.2-3.7.7 for everyone
+
+version 3.7.7 (beta only):
+- Skip commercial: fix KeyError #1955
+
+version 3.7.6 (beta only):
+- Support for skipping commercials #1946
+- Use Plex PMS settings in order to decide whether a video was fully played or not (e.g. based on first or last credits marker). Restart Kodi if you make any changes to the PMS settings. #1949
+- Fix to show in-progress videos in widgets if PKC decided they're partially watched but Kodi thinks they're completely watched #1951
+
+version 3.7.5 (beta only):
+- Fix playback report not working if no markers for intros and credits is present #1942
+
+version 3.7.4 (beta only):
+- Initial compatibility with Kodi 21 Omega #1940
+
+version 3.7.3 (beta only):
+- Support for skipping credits. If Plex detected end credits, videos will now only be marked as watched if the end credits have been reached #1926
+- Fix rating matching #1930 (thanks @JCalvi)
+- Kodi Matrix: Fix sync not working (introduced in commit 664a68c30fe4bca9e191acad2b2aa8850859b0ba) #1931
+- Fix ratings being appended to Kodi table instead of being replaced when a video item is updated #1933
+
+version 3.7.2 (beta only):
+- You will need to manually reset the Kodi database in the PKC settings under Advanced
+- Correctly map the Plex ratings to the Kodi ones; sync the Plex HDR tag to Kodi #1917 (thanks @JCalvi)
+
+version 3.7.1:
 - version 3.7.0 for everyone
 
 version 3.7.0 (beta only):

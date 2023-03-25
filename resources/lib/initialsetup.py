@@ -63,10 +63,33 @@ class InitialSetup(object):
             LOG.error('Could not get PMS settings for %s', url)
             return
         for entry in xml:
-            if entry.attrib.get('id', '') == 'allowMediaDeletion':
+            typus = entry.get('id')
+            if typus == 'allowMediaDeletion':
                 value = 'true' if entry.get('value', '1') == '1' else 'false'
                 utils.settings('plex_allows_mediaDeletion', value=value)
                 utils.window('plex_allows_mediaDeletion', value=value)
+                LOG.info('Using PMS setting allowMediaDeletion=%s',
+                         value)
+            elif typus == 'LibraryVideoPlayedThreshold':
+                # Set the progress percentage for video playback at which point
+                # the video will be marked as played
+                value = int(entry.get('value'))
+                LOG.info('Using PMS setting LibraryVideoPlayedThreshold=%s',
+                         value)
+                v.MARK_PLAYED_AT = value / 100.0
+            elif typus == 'LibraryVideoPlayedAtBehaviour':
+                # Decide whether to use end credits markers to determine
+                # the 'played' state of video items. When markers are not
+                # available the selected threshold percentage will be used.
+                # enumValues=
+                # 0:at selected threshold percentage
+                # 1:at final credits marker position
+                # 2:at first credits marker position
+                # 3:earliest between threshold percent and first credits marker
+                value = int(entry.get('value'))
+                LOG.info('Using PMS setting LibraryVideoPlayedAtBehaviour=%s',
+                         value)
+                v.LIBRARY_VIDEO_PLAYED_AT_BEHAVIOUR = value
 
     @staticmethod
     def enter_new_pms_address():
@@ -505,12 +528,19 @@ class InitialSetup(object):
                     # Only do this for add-on paths
                     xml.set_setting(['videolibrary', 'cleanonupdate'],
                                     value='false')
-                # Set completely watched point same as plex (and not 92%)
-                xml.set_setting(['video', 'ignorepercentatend'], value='10')
-                xml.set_setting(['video', 'playcountminimumpercent'],
-                                value='90')
-                xml.set_setting(['video', 'ignoresecondsatstart'],
-                                value='60')
+                # Get settings for in-progress / marked watched
+                if xml.get_setting(['video',
+                                   'ignorepercentatend']) is not None:
+                    v.KODI_IGNOREPERCENTATEND = float(
+                        xml.get_setting(['video', 'ignorepercentatend']).text) / 100.0
+                if xml.get_setting(['video',
+                                   'playcountminimumpercent']) is not None:
+                    v.KODI_PLAYCOUNTMINIMUMPERCENT = float(
+                        xml.get_setting(['video', 'playcountminimumpercent']).text) / 100.0
+                if xml.get_setting(['video',
+                                   'ignoresecondsatstart']) is not None:
+                    v.KODI_IGNORESECONDSATSTART = int(
+                        xml.get_setting(['video', 'ignoresecondsatstart']).text)
                 reboot = xml.write_xml
         except utils.ParseError:
             cache = None

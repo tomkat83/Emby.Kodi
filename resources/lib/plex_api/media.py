@@ -46,15 +46,51 @@ class Media(object):
             value = self.xml[0][self.part].get(key)
         return value
 
-    def intro_markers(self):
+    def markers(self):
         """
-        Returns a list of tuples with floats (startTimeOffset, endTimeOffset)
-        in Koditime or an empty list.
-        Each entry represents an (episode) intro that Plex detected and that
-        can be skipped
+        Returns a list of tuples (startTimeOffset [float], endTimeOffset
+        [float], marker type [str, 'intro', 'credits' or 'commercials'], final
+        credits [bool]) in Koditime or an empty list. Each entry represents an
+        intro, credit or commercial that Plex detected and that can be skipped
+        to endTimeOffset. If final is set to True, this means that the marker
+        is located at the end of the video
         """
         self._scan_children()
-        return self._intro_markers
+        return self._markers
+
+    def first_credits_marker(self):
+        """
+        Returns the tuple (startTimeOffset [float], endTimeOffset[float],
+        marker type [str, 'intro', 'credits' or 'commercials'], final credits
+        [bool]) in Koditime of the marker where Plex did NOT set the
+        flag 'final' to to '1' (=final credit is set to False) and with the
+        minimal startTimeOffset.
+        Returns None if there is e.g. only a final credit. Or no credit.
+        """
+        try:
+            markers = [x for x in self.markers()
+                       if x[2] == 'credits' and not x[3]]
+            return min(markers, key=lambda marker: marker[0])
+        except ValueError:
+            # No none-final markers found or no credits
+            pass
+
+    def final_credits_marker(self):
+        """
+        Returns the tuple (startTimeOffset [float], endTimeOffset[float],
+        marker type [str, 'intro', 'credits' or 'commercials'], final credits
+        [bool]) in Koditime of the marker where Plex set the flag 'final' to
+        to '1', meaning the credits are at the end of the video and thus signal
+        that the video has indeed ended (=final credit is set to True).
+        Will ONLY return the first appearance of a final marker should Plex
+        have set more than 1 final marker.
+        Returns None if no markers have been set by Plex.
+        """
+        try:
+            return [x for x in self.markers()
+                    if x[2] == 'credits' and x[3]][0]
+        except IndexError:
+            pass
 
     def video_codec(self):
         """
@@ -172,13 +208,23 @@ class Media(object):
                                            stream.get('aspectRatio') or aspect)
                     track['duration'] = self.runtime()
                     track['video3DFormat'] = None
+                    if (cast(bool, stream.get('DOVIPresent'))):
+                        track['hdr'] = 'dolbyvision'
+                    else:
+                        color_track = stream.get('colorTrc', '').lower()
+                        if 'smpte2084' in color_track:
+                            track['hdr'] = 'hdr10'
+                        elif 'arib-std-b67' in color_track:
+                            track['hdr'] = 'hlg'
+                        else:
+                            track['hdr'] = None
                     videotracks.append(track)
                 elif media_type == 2:  # Audio streams
                     if 'codec' in stream.attrib:
                         track['codec'] = stream.get('codec').lower()
-                        if ("dca" in track['codec'] and
-                                "ma" in stream.get('profile', '').lower()):
-                            track['codec'] = "dtshd_ma"
+                        if ('dca' in track['codec'] and
+                                'ma' in stream.get('profile', '').lower()):
+                            track['codec'] = 'dtshd_ma'
                     track['channels'] = cast(int, stream.get('channels'))
                     # 'unknown' if we cannot get language
                     track['language'] = stream.get('languageCode',

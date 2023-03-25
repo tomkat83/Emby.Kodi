@@ -45,7 +45,7 @@ class Base(object):
         self._writers = []
         self._producers = []
         self._locations = []
-        self._intro_markers = []
+        self._markers = []
         self._guids = {}
         self._coll_match = None
         # Plex DB attributes
@@ -354,6 +354,28 @@ class Base(object):
         return cast(float, self.xml.get('audienceRating',
                                         self.xml.get('rating'))) or 0.0
 
+    def ratingtype(self):
+        """
+        Returns the ratingtype [str] first from 'audienceRatingImage'
+        (audience) if that fails, from ratingImage (critic). Returns 'default'
+        if both are not found
+        """
+        rtype = 'default'
+        # audience ratings
+        rtypea = self.xml.get('audienceRatingImage', '')
+        if 'rotten' in rtypea:
+            rtype = 'tomatometerallaudience'
+        elif 'imdb' in rtypea:
+            rtype = 'imdb'
+        elif 'themoviedb' in rtypea:
+            rtype = 'themoviedb'
+        elif 'tvdb' in rtypea:
+            rtype = 'tvdb'
+        elif 'rotten' in self.xml.get('ratingImage', ''):
+            # critic ratings - fallback if no audience ratings
+            rtype = 'tomatometerallcritics'
+        return rtype
+
     def votecount(self):
         """
         Not implemented by Plex yet - returns None
@@ -500,14 +522,13 @@ class Base(object):
                 guid = child.get('id')
                 guid = guid.split('://', 1)
                 self._guids[guid[0]] = guid[1]
-            elif child.tag == 'Marker' and child.get('type') == 'intro':
-                intro = (cast(float, child.get('startTimeOffset')),
-                         cast(float, child.get('endTimeOffset')))
-                if None in intro:
-                    # Safety net if PMS xml is not as expected
-                    continue
-                intro = (intro[0] / 1000.0, intro[1] / 1000.0)
-                self._intro_markers.append(intro)
+            elif child.tag == 'Marker':
+                start = cast(float, child.get('startTimeOffset'))
+                end = cast(float, child.get('endTimeOffset'))
+                self._markers.append((start / 1000.0,
+                                      end / 1000.0,
+                                      child.get('type'),
+                                      child.get('final') == '1'))
         # Plex Movie agent (legacy) or "normal" Plex tv show agent
         if not self._guids:
             guid = self.xml.get('guid')

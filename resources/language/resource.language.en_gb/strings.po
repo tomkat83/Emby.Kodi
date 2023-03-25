@@ -576,9 +576,14 @@ msgctxt "#30524"
 msgid "Select Plex libraries to sync"
 msgstr ""
 
-# PKC Settings - Playback
+# PKC Settings - Playback. Message displayed when playback is showing intro
 msgctxt "#30525"
 msgid "Skip intro"
+msgstr ""
+
+# PKC. Message displayed when playback is showing credits
+msgctxt "#30526"
+msgid "Skip credits"
 msgstr ""
 
 # PKC Settings - Playback
@@ -593,6 +598,11 @@ msgstr ""
 # PKC Settings - Advanced
 msgctxt "#30529"
 msgid "Startup delay (in seconds)"
+msgstr ""
+
+# PKC. Message displayed when playback is showing commercials
+msgctxt "#30530"
+msgid "Skip commercial"
 msgstr ""
 
 msgctxt "#30531"
@@ -1051,11 +1061,6 @@ msgstr ""
 # PKC Settings - Appearance Tweaks
 msgctxt "#39064"
 msgid "Recently Added: Also show already watched episodes"
-msgstr ""
-
-# PKC Settings - Appearance Tweaks
-msgctxt "#39065"
-msgid "Force-refresh Kodi skin on stopping playback"
 msgstr ""
 
 # PKC Settings - Appearance Tweaks
