@@ -723,7 +723,5 @@ def database_paths():
                 setattr(thismodule, actual_path, path)
                 break
 
-    if (DB_VIDEO_VERSION is None or
-            DB_MUSIC_VERSION is None or
-            DB_TEXTURE_VERSION is None):
+    if None in (DB_VIDEO_VERSION, DB_MUSIC_VERSION, DB_TEXTURE_VERSION):
         raise RuntimeError('Kodi database versions not supported by PKC')
