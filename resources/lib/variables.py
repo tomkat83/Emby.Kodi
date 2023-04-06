@@ -105,7 +105,7 @@ PKC_MACHINE_IDENTIFIER = None
 # Minimal PKC version needed for the Kodi database - otherwise need to recreate
 MIN_DB_VERSION = '3.2.1'
 
-# Supported databases - version numbers in tuples should decrease
+# Supported databases
 # See https://github.com/xbmc/xbmc/blob/master/xbmc/video/VideoDatabase.cpp
 SUPPORTED_VIDEO_DB = {
     19: (119, ),
@@ -715,7 +715,7 @@ def database_paths():
              ('Textures%s.db', SUPPORTED_TEXTURE_DB,
               'DB_TEXTURE_VERSION', 'DB_TEXTURE_PATH'))
     for string, versions, actual_version, actual_path in types:
-        for version in versions[KODIVERSION]:
+        for version in sorted(versions[KODIVERSION], reverse=True):
             file = string % version
             path = path_ops.path.join(database_path, file)
             if path_ops.exists(path):
