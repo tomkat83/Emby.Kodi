@@ -110,7 +110,7 @@ MIN_DB_VERSION = '3.2.1'
 SUPPORTED_VIDEO_DB = {
     19: (119, ),
     20: (119, 120, 121),
-    21: (121, ),
+    21: (121, 122, ),
 }
 SUPPORTED_MUSIC_DB = {
     19: (82, ),
