@@ -115,7 +115,7 @@ SUPPORTED_VIDEO_DB = {
 SUPPORTED_MUSIC_DB = {
     19: (82, ),
     20: (82, ),
-    21: (82, ),
+    21: (82, 83, ),
 }
 SUPPORTED_TEXTURE_DB = {
     19: (13, ),
