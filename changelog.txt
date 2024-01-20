@@ -1,3 +1,6 @@
+version 3.8.4 (beta only):
+- Don't be so strict when checking for compatibility: always select the database file with highest version number #2015
+
 version 3.8.3:
 - version 3.8.2 for everyone
 
