@@ -3,6 +3,7 @@
 import os
 import sys
 import platform
+import re
 
 import xbmc
 import xbmcvfs
@@ -105,23 +106,6 @@ PKC_MACHINE_IDENTIFIER = None
 # Minimal PKC version needed for the Kodi database - otherwise need to recreate
 MIN_DB_VERSION = '3.2.1'
 
-# Supported databases
-# See https://github.com/xbmc/xbmc/blob/master/xbmc/video/VideoDatabase.cpp
-SUPPORTED_VIDEO_DB = {
-    19: (119, ),
-    20: (119, 120, 121),
-    21: (121, 122, 123, 124, ),
-}
-SUPPORTED_MUSIC_DB = {
-    19: (82, ),
-    20: (82, ),
-    21: (82, 83, ),
-}
-SUPPORTED_TEXTURE_DB = {
-    19: (13, ),
-    20: (13, ),
-    21: (13, ),
-}
 DB_VIDEO_VERSION = None
 DB_VIDEO_PATH = None
 DB_MUSIC_VERSION = None
@@ -695,33 +679,40 @@ PLEX_STREAM_TYPE_FROM_STREAM_TYPE = {
 M3U_ENCODING = sys.getfilesystemencoding()
 
 
+def _find_latest_db(db_kind_regex):
+    '''
+    Returns the tuple (filepath [str], version [int]) for the regex
+    db_kind_regex with the highest version number at the end.
+    '''
+    database_path = xbmcvfs.translatePath('special://database')
+    matches = []
+    for root, dirs, files in path_ops.walk(database_path):
+        for file in files:
+            match = re.search(db_kind_regex, file, re.IGNORECASE)
+            if not match:
+                continue
+            matches.append((path_ops.path.join(root, file),
+                            int(match.group(1))))
+    if not matches:
+        raise RuntimeError(f'Database {db_kind_regex} not found in {files}')
+    return max(matches, key=lambda x: x[1])
+
+
 def database_paths():
     '''
-    Set the Kodi database paths - PKC will choose the HIGHEST available and
-    supported database version for the current Kodi version.
-    Will raise a RuntimeError if the DBs are not found or of a wrong,
-    unsupported version
+    Set the Kodi database paths - PKC will choose the HIGHEST available
+    database version. You should thus never downgrade Kodi.
+    Will raise RuntimeError if the current Kodi version is not supported or
+    if a certain DB is not found.
     '''
-    # Check Kodi version first
     if KODIVERSION not in (19, 20, 21):
-        raise RuntimeError('Kodiversion %s not supported by PKC' % KODIVERSION)
+        raise RuntimeError(f'Kodiversion {KODIVERSION} not supported by PKC')
 
-    database_path = xbmcvfs.translatePath('special://database')
     thismodule = sys.modules[__name__]
-    types = (('MyVideos%s.db', SUPPORTED_VIDEO_DB,
-              'DB_VIDEO_VERSION', 'DB_VIDEO_PATH'),
-             ('MyMusic%s.db', SUPPORTED_MUSIC_DB,
-              'DB_MUSIC_VERSION', 'DB_MUSIC_PATH'),
-             ('Textures%s.db', SUPPORTED_TEXTURE_DB,
-              'DB_TEXTURE_VERSION', 'DB_TEXTURE_PATH'))
-    for string, versions, actual_version, actual_path in types:
-        for version in sorted(versions[KODIVERSION], reverse=True):
-            file = string % version
-            path = path_ops.path.join(database_path, file)
-            if path_ops.exists(path):
-                setattr(thismodule, actual_version, version)
-                setattr(thismodule, actual_path, path)
-                break
-
-    if None in (DB_VIDEO_VERSION, DB_MUSIC_VERSION, DB_TEXTURE_VERSION):
-        raise RuntimeError('Kodi database versions not supported by PKC')
+    types = ((r'^MyVideos(\d+)\.db$', 'DB_VIDEO_PATH', 'DB_VIDEO_VERSION'),
+             (r'^MyMusic(\d+)\.db$', 'DB_MUSIC_PATH', 'DB_MUSIC_VERSION'),
+             (r'^Textures(\d+)\.db$', 'DB_TEXTURE_PATH', 'DB_TEXTURE_VERSION'))
+    for regex, pathstring, versionstring in types:
+        db_path, db_version = _find_latest_db(regex)
+        setattr(thismodule, pathstring, db_path)
+        setattr(thismodule, versionstring, db_version)
