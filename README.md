@@ -12,8 +12,7 @@
 [![Forum](https://img.shields.io/badge/forum-plex-orange.svg?maxAge=60&style=flat)](https://forums.plex.tv/discussion/210023/plexkodiconnect-let-kodi-talk-to-your-plex)
 [![Donate](https://img.shields.io/badge/donate-kofi-blue.svg)](https://ko-fi.com/A8182EB)
 
-[![GitHub issues](https://img.shields.io/github/issues/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/pulls) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a66870f19ced4fb98f94d9fd56e34e87)](https://www.codacy.com/app/croneter/PlexKodiConnect?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=croneter/PlexKodiConnect&amp;utm_campaign=Badge_Grade)
-
+[![GitHub issues](https://img.shields.io/github/issues/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/croneter/PlexKodiConnect.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/pulls)
 
 # PlexKodiConnect (PKC)
 **Combine the best frontend media player Kodi with the best multimedia backend server Plex**
@@ -57,7 +56,7 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 ### PKC Features
 
 - Support for Kodi 18 Leia, Kodi 19 Matrix, Kodi 20 Nexus
-- Preliminary support for Kodi 21 Omega. Keep in mind that development for  Omega has not even officially reached alpha stage - any issues you encounter are probably caused by that
+- Preliminary support for Kodi 21 Omega. Keep in mind that development for Omega has only reached beta state - any issues you encounter are probably caused by that. Please do not use nightly versions as they tend to break stuff.
 - [Skip commercials/advertisements](https://support.plex.tv/articles/115003944134-removing-commercials/), [skip intros](https://support.plex.tv/articles/skip-content/) and [skip credits](https://support.plex.tv/articles/credits-detection/)
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
