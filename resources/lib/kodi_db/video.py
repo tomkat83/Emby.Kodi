@@ -1060,9 +1060,22 @@ class KodiVideoDB(common.KodiDBBase):
                  ?, ?, ?, ?)
         ''', (args))
 
+        self.cursor.execute(
+            '''
+            INSERT INTO videoversion(
+                idFile,
+                idMedia,
+                media_type,
+                itemType,
+                idType)
+            VALUES
+                (?, ?, ?, ?, ?)
+        ''', (args[1], args[0], "movie", "0", 40400))
+
     @db.catch_operationalerrors
     def remove_movie(self, kodi_id):
         self.cursor.execute('DELETE FROM movie WHERE idMovie = ?', (kodi_id,))
+        self.cursor.execute('DELETE FROM videoversion WHERE idMedia = ?', (kodi_id,))
 
     @db.catch_operationalerrors
     def update_userrating(self, kodi_id, kodi_type, userrating):
