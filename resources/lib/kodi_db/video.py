@@ -1099,7 +1099,7 @@ class KodiVideoDB(common.KodiDBBase):
             identifier = 'idShow'
         self.cursor.execute('''UPDATE %s SET userrating = ? WHERE ? = ?''' % table,
                             (userrating, identifier, kodi_id))
-    
+
     @db.catch_operationalerrors
     def has_video_version_table(self):
         self.cursor.execute('SELECT COUNT(name) FROM sqlite_master WHERE type=\'table\' AND name=\'videoversion\'')
