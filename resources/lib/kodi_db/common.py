@@ -6,7 +6,7 @@ from .. import db, path_ops
 
 KODIDB_LOCK = Lock()
 # Names of tables we generally leave untouched and e.g. don't wipe
-UNTOUCHED_TABLES = ('version', 'versiontagscan')
+UNTOUCHED_TABLES = ('version', 'versiontagscan', 'videoversiontype')
 
 
 class KodiDBBase(object):

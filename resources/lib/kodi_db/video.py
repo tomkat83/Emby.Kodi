@@ -1060,9 +1060,25 @@ class KodiVideoDB(common.KodiDBBase):
                  ?, ?, ?, ?)
         ''', (args))
 
+        if self.has_video_version_table():
+            self.cursor.execute(
+                '''
+                INSERT OR REPLACE INTO videoversion(
+                    idFile,
+                    idMedia,
+                    media_type,
+                    itemType,
+                    idType)
+                VALUES
+                    (?, ?, ?, ?, ?)
+            ''', (args[1], args[0], "movie", "0", 40400))
+
     @db.catch_operationalerrors
     def remove_movie(self, kodi_id):
         self.cursor.execute('DELETE FROM movie WHERE idMovie = ?', (kodi_id,))
+
+        if self.has_video_version_table():
+            self.cursor.execute('DELETE FROM videoversion WHERE idMedia = ?', (kodi_id,))
 
     @db.catch_operationalerrors
     def update_userrating(self, kodi_id, kodi_type, userrating):
@@ -1083,3 +1099,8 @@ class KodiVideoDB(common.KodiDBBase):
             identifier = 'idShow'
         self.cursor.execute('''UPDATE %s SET userrating = ? WHERE ? = ?''' % table,
                             (userrating, identifier, kodi_id))
+
+    @db.catch_operationalerrors
+    def has_video_version_table(self):
+        self.cursor.execute('SELECT COUNT(name) FROM sqlite_master WHERE type=\'table\' AND name=\'videoversion\'')
+        return self.cursor.fetchone()[0] == 1
