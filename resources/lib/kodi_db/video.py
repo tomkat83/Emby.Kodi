@@ -1063,7 +1063,7 @@ class KodiVideoDB(common.KodiDBBase):
         if self.has_video_version_table():
             self.cursor.execute(
                 '''
-                INSERT INTO videoversion(
+                INSERT OR REPLACE INTO videoversion(
                     idFile,
                     idMedia,
                     media_type,
