@@ -24,6 +24,7 @@ class KodiDBBase(object):
         self.cursor = self.kodiconn.cursor() if self.kodiconn else None
         self.artconn = artconn
         self.artcursor = self.artconn.cursor() if self.artconn else None
+        self._has_video_version_table = None
 
     def __enter__(self):
         if self.lock:
