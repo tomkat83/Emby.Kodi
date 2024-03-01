@@ -1,3 +1,9 @@
+version 3.8.5 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Kodi Nexus Beta 3 and beyond: fix movies not showing up (thanks @Spacetech) #2028
+- Kodi Nexus Beta 3 and beyond: fix missing dependencies upon first installation #2029
+- Prevent excessive library refreshes when browsing libraries in Plex Web (thanks @Spacetech) #2027
+
 version 3.8.4 (beta only):
 - Don't be so strict when checking for compatibility: always select the database file with highest version number #2015
 
