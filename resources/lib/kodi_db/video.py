@@ -1060,7 +1060,7 @@ class KodiVideoDB(common.KodiDBBase):
                  ?, ?, ?, ?)
         ''', (args))
 
-        if self.has_video_version_table():
+        if self.has_video_version_table:
             self.cursor.execute(
                 '''
                 INSERT OR REPLACE INTO videoversion(
@@ -1077,7 +1077,7 @@ class KodiVideoDB(common.KodiDBBase):
     def remove_movie(self, kodi_id):
         self.cursor.execute('DELETE FROM movie WHERE idMovie = ?', (kodi_id,))
 
-        if self.has_video_version_table():
+        if self.has_video_version_table:
             self.cursor.execute('DELETE FROM videoversion WHERE idMedia = ?', (kodi_id,))
 
     @db.catch_operationalerrors
@@ -1100,7 +1100,28 @@ class KodiVideoDB(common.KodiDBBase):
         self.cursor.execute('''UPDATE %s SET userrating = ? WHERE ? = ?''' % table,
                             (userrating, identifier, kodi_id))
 
-    @db.catch_operationalerrors
+    @property
     def has_video_version_table(self):
+        if self._has_video_version_table is None:
+            self._check_video_version_table_consistancy()
+        return self._has_video_version_table
+
+    @db.catch_operationalerrors
+    def _check_video_version_table_consistancy(self):
+        self._has_video_version_table = False
+        # Check whether videoversion table exists
         self.cursor.execute('SELECT COUNT(name) FROM sqlite_master WHERE type=\'table\' AND name=\'videoversion\'')
-        return self.cursor.fetchone()[0] == 1
+        if not self.cursor.fetchone()[0] == 1:
+            return
+        # Check whether all needed columns for table videoversion actually exist
+        self.cursor.execute('PRAGMA table_info(videoversion)')
+        columns = self.cursor.fetchall()
+        needed_columns = (
+            'idFile',
+            'idMedia',
+            'media_type',
+            'itemType',
+            'idType'
+        )
+        self._has_video_version_table = all(column in columns
+                                            for column in needed_columns)
