@@ -1,3 +1,6 @@
+version 3.8.6 (beta only):
+- Kodi Nexus: Fix SQlite-Error if not using exactly Nexus Beta 3 #2031
+
 version 3.8.5 (beta only):
 - WARNING: You will need to reset the Kodi database!
 - Kodi Nexus Beta 3 and beyond: fix movies not showing up (thanks @Spacetech) #2028
