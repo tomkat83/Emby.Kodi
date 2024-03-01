@@ -331,11 +331,14 @@ class KodiMonitor(xbmc.Monitor):
                 container_key = '/playQueues/%s' % playqueue.id
             else:
                 container_key = '/library/metadata/%s' % plex_id
-        # Mechanik for Plex skip intro feature
-        if utils.settings('enableSkipIntro') == 'true':
+        # Mechanik for Plex skip intro/credits/commercials feature
+        if utils.settings('enableSkipIntro') == 'true' \
+                or utils.settings('enableSkipCredits') == 'true' \
+                or utils.settings('enableSkipCommercials') == 'true':
             status['markers'] = item.api.markers()
-            status['first_credits_marker'] = item.api.first_credits_marker()
-            status['final_credits_marker'] = item.api.final_credits_marker()
+            if utils.settings('enableSkipCredits') == 'true':
+                status['first_credits_marker'] = item.api.first_credits_marker()
+                status['final_credits_marker'] = item.api.final_credits_marker()
         if item.playmethod is None and path and not path.startswith('plugin://'):
             item.playmethod = v.PLAYBACK_METHOD_DIRECT_PATH
         item.playerid = playerid
