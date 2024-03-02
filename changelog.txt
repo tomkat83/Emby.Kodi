@@ -1,3 +1,7 @@
+version 3.8.8 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Fix changelog: Omega instead of Nexus #2036
+
 version 3.8.7 (beta only):
 - Kodi Omega: new attempt to fix movies not showing up #2034
 - Separate intro / credit / commercial skip settings (thanks @Spacetech) #2033
