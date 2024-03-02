@@ -1116,12 +1116,11 @@ class KodiVideoDB(common.KodiDBBase):
         # Check whether all needed columns for table videoversion actually exist
         self.cursor.execute('PRAGMA table_info(videoversion)')
         columns = self.cursor.fetchall()
-        needed_columns = (
-            'idFile',
-            'idMedia',
-            'media_type',
-            'itemType',
-            'idType'
-        )
-        self._has_video_version_table = all(column in columns
-                                            for column in needed_columns)
+        needed_columns =[
+            (0, 'idFile', 'INTEGER', 0, None, 1),
+            (1, 'idMedia', 'INTEGER', 0, None, 0),
+            (2, 'media_type', 'TEXT', 0, None, 0),
+            (3, 'itemType', 'INTEGER', 0, None, 0),
+            (4, 'idType', 'INTEGER', 0, None, 0)
+        ]
+        self._has_video_version_table = columns == needed_columns
