@@ -1,3 +1,7 @@
+version 3.8.7 (beta only):
+- Kodi Nexus: new attempt to fix movies not showing up #2034
+- Separate intro / credit / commercial skip settings (thanks @Spacetech) #2033
+
 version 3.8.6 (beta only):
 - Kodi Nexus: Fix SQlite-Error if not using exactly Nexus Beta 3 #2031
 
