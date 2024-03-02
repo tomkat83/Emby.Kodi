@@ -1516,3 +1516,13 @@ msgstr ""
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39721"
+msgid "Auto skip credits"
+msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39722"
+msgid "Auto skip commercials"
+msgstr ""

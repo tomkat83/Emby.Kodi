@@ -7,11 +7,10 @@ from . import app, utils, variables as v
 # Supported types of markers that can be skipped; values here will be
 # displayed to the user when skipping is available
 MARKERS = {
-    'intro': utils.lang(30525),  # Skip intro
-    'credits': utils.lang(30526),  # Skip credits
-    'commercial': utils.lang(30530)  # Skip commercial
+    'intro': (utils.lang(30525), 'enableSkipIntro', 'enableAutoSkipIntro'), # Skip intro
+    'credits': (utils.lang(30526), 'enableSkipCredits', 'enableAutoSkipCredits'),  # Skip credits
+    'commercial': (utils.lang(30530), 'enableSkipCommercials', 'enableAutoSkipCommercials'),  # Skip commercial
 }
-
 
 def skip_markers(markers):
     try:
@@ -20,8 +19,10 @@ def skip_markers(markers):
         # XBMC is not playing any media file yet
         return
     within_marker = False
+    marker_definition = None
     for start, end, typus, _ in markers:
-        if start <= progress < end:
+        marker_definition = MARKERS[typus]
+        if utils.settings(marker_definition[1]) == "true" and start <= progress < end:
             within_marker = True
             break
     if within_marker and app.APP.skip_markers_dialog is None:
@@ -32,9 +33,9 @@ def skip_markers(markers):
             v.ADDON_PATH,
             'default',
             '1080i',
-            marker_message=MARKERS[typus],
+            marker_message=marker_definition[0],
             marker_end=end)
-        if utils.settings('enableAutoSkipIntro') == "true":
+        if utils.settings(marker_definition[2]) == "true":
             app.APP.skip_markers_dialog.seekTimeToEnd()
         else:
             app.APP.skip_markers_dialog.show()
