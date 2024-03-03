@@ -229,7 +229,8 @@ class Sync(backgroundthread.KillableThread):
                     # this once a while (otherwise, potentially many screen
                     # refreshes lead to flickering)
                     if (library_sync.WEBSOCKET_MESSAGES and
-                            now - last_websocket_processing > 5):
+                            now - last_websocket_processing > 5 and
+                            (utils.settings('delayBackgroundSyncWhilePlaying') == "false" or not app.APP.is_playing_video)):
                         last_websocket_processing = now
                         library_sync.process_websocket_messages()
                     # See if there is a PMS message we need to handle
