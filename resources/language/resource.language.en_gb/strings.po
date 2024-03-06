@@ -1231,6 +1231,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr ""
 
+msgctxt "#39212"
+msgid "Watchlist"
+msgstr ""
+
 # Error message pop-up if {0} cannot be contacted. {0} will be replaced by e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"

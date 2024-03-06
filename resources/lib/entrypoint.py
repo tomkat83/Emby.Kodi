@@ -151,10 +151,12 @@ def show_main_menu(content_type=None):
         directory_item(utils.lang(136), path)
     # Plex Search "Search"
     directory_item(utils.lang(137), "plugin://%s?mode=search" % v.ADDON_ID)
-    # Plex Watch later
+    # Plex Watch later and Watchlist
     if content_type not in ('image', 'audio'):
         directory_item(utils.lang(39211),
                        "plugin://%s?mode=watchlater" % v.ADDON_ID)
+        directory_item(utils.lang(39212),
+                       "plugin://%s?mode=watchlist" % v.ADDON_ID)
     # Plex Channels
     directory_item(utils.lang(30173), "plugin://%s?mode=channels" % v.ADDON_ID)
     # Plex user switch
@@ -250,6 +252,11 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
         widgets.KEY = key
     # Process all items to show
     all_items = mass_api(xml)
+
+    if key == "watchlist":
+        # filter out items that are not in the kodi db (items that will not be playable)
+        all_items = [item for item in all_items if item.kodi_id is not None]
+
     all_items = [widgets.generate_item(api) for api in all_items]
     all_items = [widgets.prepare_listitem(item) for item in all_items]
     # fill that listing...
@@ -466,6 +473,29 @@ def watchlater():
         LOG.error('Could not download watch later list from plex.tv')
         raise ListingException
     show_listing(xml)
+
+
+def watchlist():
+    """
+    Listing for plex.tv Watchlist section (if signed in to plex.tv)
+    """
+    _wait_for_auth()
+    if utils.window('plex_token') == '':
+        LOG.error('No watchlist - not signed in to plex.tv')
+        raise ListingException
+    if utils.window('plex_restricteduser') == 'true':
+        LOG.error('No watchlist - restricted user')
+        raise ListingException
+    app.init(entrypoint=True)
+    xml = DU().downloadUrl('https://metadata.provider.plex.tv/library/sections/watchlist/all',
+                           authenticate=False,
+                           headerOptions={'X-Plex-Token': utils.window('plex_token')})  
+    try:
+        xml[0].attrib
+    except (TypeError, IndexError, AttributeError):
+        LOG.error('Could not download watch list list from plex.tv')
+        raise ListingException
+    show_listing(xml, None, None, False, "watchlist")
 
 
 def browse_plex(key=None, plex_type=None, section_id=None, synched=True,

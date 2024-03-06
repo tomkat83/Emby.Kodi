@@ -86,6 +86,8 @@ def triage(mode, params, path, arguments, itemid):
             entrypoint.show_section(params.get('section_index'))
         elif mode == 'watchlater':
             entrypoint.watchlater()
+        elif mode == 'watchlist':
+            entrypoint.watchlist()
         elif mode == 'channels':
             entrypoint.browse_plex(key='/channels/all')
         elif mode == 'search':
