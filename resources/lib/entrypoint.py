@@ -489,7 +489,7 @@ def watchlist():
     app.init(entrypoint=True)
     xml = DU().downloadUrl('https://metadata.provider.plex.tv/library/sections/watchlist/all',
                            authenticate=False,
-                           headerOptions={'X-Plex-Token': utils.window('plex_token')})  
+                           headerOptions={'X-Plex-Token': utils.window('plex_token')})
     try:
         xml[0].attrib
     except (TypeError, IndexError, AttributeError):

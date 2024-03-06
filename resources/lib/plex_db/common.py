@@ -119,7 +119,7 @@ class PlexDBBase(object):
         else:
             pass
         return answ
-    
+
     def item_by_kodi_id(self, kodi_id, kodi_type):
         """
         """
