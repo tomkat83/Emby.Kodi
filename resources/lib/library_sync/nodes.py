@@ -88,6 +88,14 @@ NODE_TYPES = {
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_MOVIE),
+        ('watchlist',
+         utils.lang(39212),  # "Watchlist"
+         {
+              'mode': 'watchlist',
+              'key': '/library/sections/{self.section_id}/watchlist',
+              'section_id': '{self.section_id}'
+         },
+         v.CONTENT_TYPE_MOVIE),
         ('browse',
          utils.lang(39702),  # "Browse by folder"
          {
@@ -175,6 +183,14 @@ NODE_TYPES = {
               'section_id': '{self.section_id}'
          },
          v.CONTENT_TYPE_EPISODE),
+        ('watchlist',
+         utils.lang(39212),  # "Watchlist"
+         {
+              'mode': 'watchlist',
+              'key': '/library/sections/{self.section_id}/watchlist',
+              'section_id': '{self.section_id}'
+         },
+         v.CONTENT_TYPE_SHOW),
         ('browse',
          utils.lang(39702),  # "Browse by folder"
          {
@@ -391,3 +407,8 @@ def node_more(section, node_name, args):
 
 def node_plex_sets(section, node_name, args):
     return _folder_template(section, node_name, args)
+
+
+def node_watchlist(section, node_name, args):
+    return _folder_template(section, node_name, args)
+

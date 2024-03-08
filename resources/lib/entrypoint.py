@@ -205,7 +205,7 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
         return
     api = API(xml[0])
     # Determine content type for Kodi's Container.content
-    if key == '/hubs/home/continueWatching':
+    if key == '/hubs/home/continueWatching' or key == 'watchlist':
         # Mix of movies and episodes
         plex_type = v.PLEX_TYPE_VIDEO
     elif key == '/hubs/home/recentlyAdded?type=2':
@@ -256,6 +256,10 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
     if key == "watchlist":
         # filter out items that are not in the kodi db (items that will not be playable)
         all_items = [item for item in all_items if item.kodi_id is not None]
+
+        # filter out items in the wrong section id when it's specified
+        if section_id is not None:
+            all_items = [item for item in all_items if item.section_id == utils.cast(int, section_id)]
 
     all_items = [widgets.generate_item(api) for api in all_items]
     all_items = [widgets.prepare_listitem(item) for item in all_items]
@@ -475,7 +479,7 @@ def watchlater():
     show_listing(xml)
 
 
-def watchlist():
+def watchlist(section_id=None):
     """
     Listing for plex.tv Watchlist section (if signed in to plex.tv)
     """
@@ -495,7 +499,7 @@ def watchlist():
     except (TypeError, IndexError, AttributeError):
         LOG.error('Could not download watch list list from plex.tv')
         raise ListingException
-    show_listing(xml, None, None, False, "watchlist")
+    show_listing(xml, None, section_id, False, "watchlist")
 
 
 def browse_plex(key=None, plex_type=None, section_id=None, synched=True,
