@@ -85,6 +85,13 @@ class Base(object):
         return cast(int, self.xml.get('ratingKey'))
 
     @property
+    def plex_guid(self):
+        """
+        Returns the Plex guid as unicode or None
+        """
+        return self.xml.get('guid')
+
+    @property
     def fast_key(self):
         """
         Returns the 'fastKey' as unicode or None
@@ -163,11 +170,18 @@ class Base(object):
         if self.plex_type == v.PLEX_TYPE_CLIP:
             # Clips won't ever be synched to Kodi
             return
+        remap_keys = False
         if plexdb:
             db_item = plexdb.item_by_id(self.plex_id, self.plex_type)
+            if not db_item and self.plex_guid is not None:
+                db_item = plexdb.item_by_guid(self.plex_guid, self.plex_type)
+                remap_keys = True
         else:
             with PlexDB(lock=False) as plexdb:
                 db_item = plexdb.item_by_id(self.plex_id, self.plex_type)
+                if not db_item and self.plex_guid is not None:
+                    db_item = plexdb.item_by_guid(self.plex_guid, self.plex_type)
+                    remap_keys = True
         if not db_item:
             return
         self._section_id = db_item['section_id']
@@ -180,6 +194,10 @@ class Base(object):
             self._kodi_pathid = db_item['kodi_pathid']
         if 'fanart_synced' in db_item:
             self._fanart_synced = db_item['fanart_synced']
+        if remap_keys:
+            # update keys to correctly point to the local plex server
+            self.xml.set('key', '/library/metadata/%s' % db_item["plex_id"])
+            self.xml.set('ratingKey', db_item["plex_id"])
 
     def path_and_plex_id(self):
         """
