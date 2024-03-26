@@ -1,3 +1,27 @@
+version 3.9.0:
+- WARNING: You will need to reset the Kodi database!
+- versions 3.8.4-3.8.8 for everyone
+
+version 3.8.8 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Fix changelog: Omega instead of Nexus #2036
+
+version 3.8.7 (beta only):
+- Kodi Omega: new attempt to fix movies not showing up #2034
+- Separate intro / credit / commercial skip settings (thanks @Spacetech) #2033
+
+version 3.8.6 (beta only):
+- Kodi Omega: Fix SQlite-Error if not using exactly Omega Beta 3 #2031
+
+version 3.8.5 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Kodi Omega Beta 3 and beyond: fix movies not showing up (thanks @Spacetech) #2028
+- Kodi Omega Beta 3 and beyond: fix missing dependencies upon first installation #2029
+- Prevent excessive library refreshes when browsing libraries in Plex Web (thanks @Spacetech) #2027
+
+version 3.8.4 (beta only):
+- Don't be so strict when checking for compatibility: always select the database file with highest version number #2015
+
 version 3.8.3:
 - version 3.8.2 for everyone
 

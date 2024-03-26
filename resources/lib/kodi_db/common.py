@@ -6,7 +6,7 @@ from .. import db, path_ops
 
 KODIDB_LOCK = Lock()
 # Names of tables we generally leave untouched and e.g. don't wipe
-UNTOUCHED_TABLES = ('version', 'versiontagscan')
+UNTOUCHED_TABLES = ('version', 'versiontagscan', 'videoversiontype')
 
 
 class KodiDBBase(object):
@@ -24,6 +24,7 @@ class KodiDBBase(object):
         self.cursor = self.kodiconn.cursor() if self.kodiconn else None
         self.artconn = artconn
         self.artcursor = self.artconn.cursor() if self.artconn else None
+        self._has_video_version_table = None
 
     def __enter__(self):
         if self.lock:

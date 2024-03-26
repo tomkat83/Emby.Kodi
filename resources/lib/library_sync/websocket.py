@@ -205,6 +205,9 @@ def store_activity_message(data):
         elif message['Activity']['type'] != 'library.refresh.items':
             # Not the type of message relevant for us
             continue
+        elif message['Activity']['Context']['refreshed'] != True:
+            # The item was scanned but not actually refreshed
+            continue
         plex_id = PF.GetPlexKeyNumber(message['Activity']['Context']['key'])[1]
         if not plex_id:
             # Likely a Plex id like /library/metadata/3/children
