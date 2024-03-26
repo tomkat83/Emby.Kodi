@@ -878,6 +878,11 @@ msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr ""
 
+# PKC Settings - Sync
+msgctxt "#39027"
+msgid "Delay background sync while media is playing"
+msgstr ""
+
 # Pop-up on initial sync
 msgctxt "#39028"
 msgid "CAUTION! If you choose \"Native\" mode , you might loose access to certain Plex features such as: Plex trailers and transcoding options. ALL Plex shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or \\\\myNAS/mymovie.mkv)!"
