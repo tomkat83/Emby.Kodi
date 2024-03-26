@@ -1,3 +1,8 @@
+version 3.9.1 (beta only):
+- Add support for Plex Watchlist (thanks @Spacetech) #2041
+- Use InfoTagVideo to set list item data (thanks @Spacetech) #2040
+- New setting: Allow delaying background sync while playing videos (thanks @Spacetech) #2039
+
 version 3.9.0:
 - WARNING: You will need to reset the Kodi database!
 - versions 3.8.4-3.8.8 for everyone
