@@ -41,12 +41,7 @@ Unfortunately, the PKC Kodi repository had to move because it stopped working (t
 * [**Credits**](#credits)
 
 ### Download and Installation
-
-Install PKC via the PlexKodiConnect Kodi repository download button just below (do NOT use the standard GitHub download!). Alternatively, add [https://croneter.github.io/pkc-source](https://croneter.github.io/pkc-source) as a new Kodi `Web server directory (HTTPS)` source. See the [github wiki installation manual](https://github.com/croneter/PlexKodiConnect/wiki/Installation) for a detailed guide. Please use the stable version except if you really know what you're doing. Kodi will update PKC automatically. 
-
-| Stable version | Beta version |
-|----------------|--------------|
-| [![stable version](https://img.shields.io/badge/stable_version-latest-blue.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/stable/repository.plexkodiconnect/repository.plexkodiconnect-1.0.2.zip)  | [![beta version](https://img.shields.io/badge/beta_version-latest-red.svg?maxAge=60&style=flat) ](https://github.com/croneter/binary_repo/raw/master/beta/repository.plexkodiconnectbeta/repository.plexkodiconnectbeta-1.0.2.zip) |
+See here for detailed instructions: [Installation](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 
 ### Warning
 Use at your own risk! This plugin assumes that you manage all your videos with Plex (and none with Kodi). You might lose data already stored in the Kodi video and music databases as this plugin directly changes them. Don't worry if you want Plex to manage all your media (like you should ;-)). 
