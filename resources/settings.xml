@@ -78,7 +78,7 @@
         <setting type="lsep" label="39052" /><!-- Background Sync -->
         <setting id="enableBackgroundSync" type="bool" label="39026" default="true" visible="true"/>
         <setting id="backgroundsync_saftyMargin" type="slider" label="39051" default="5" option="int" range="5,1,300" visible="eq(-1,true)" subsetting="true" />
-        <setting id="delayBackgroundSyncWhilePlaying" type="bool" label="39027" default="false" visible="eq(-2,true)"/>
+        <setting id="delayBackgroundSyncWhilePlaying" type="bool" label="39027" default="true" visible="eq(-2,true)"/>
         <setting type="sep" />
         <setting type="lsep" label="30538" /><!-- Manual complete reset of Kodi database necessary, see "Advanced" -->
         <setting id="showExtrasInsteadOfTrailer" type="bool" label="30514" default="false" /><!-- Show all Plex extras instead of immediately playing trailers -->
