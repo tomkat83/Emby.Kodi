@@ -31,6 +31,8 @@ def skip_markers(markers, markers_hidden):
             del markers_hidden[typus]
     if within_marker is not None:
         if within_marker in markers_hidden:
+            # the user did not click the button within the enableAutoHideSkipTime time
+            # so it was hidden. don't show this marker
             return
 
         if app.APP.skip_markers_dialog is None:
