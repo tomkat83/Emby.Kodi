@@ -1,3 +1,8 @@
+version 3.9.2 (beta only):
+- Fix getVideoInfoTag error (thanks @Spacetech) #2052
+- Automatically hide the skip button after some time (thanks @Spacetech) #2053
+- Force a database reset, necessary due to #2041 #2054
+
 version 3.9.1 (beta only):
 - Add support for Plex Watchlist (thanks @Spacetech) #2041
 - Use InfoTagVideo to set list item data (thanks @Spacetech) #2040
