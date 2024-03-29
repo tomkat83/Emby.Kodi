@@ -35,6 +35,7 @@ class PlayState(object):
         'playcount': None,
         'external_player': False,  # bool - xbmc.Player().isExternalPlayer()
         'markers': [],
+        'markers_hidden': {},
         'first_credits_marker': None,
         'final_credits_marker': None
     }

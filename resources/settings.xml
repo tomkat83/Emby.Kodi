@@ -120,6 +120,8 @@
         <setting id="enableAutoSkipCredits" type="bool" label="39721" default="false" visible="eq(-1,true)" subsetting="true" /><!-- Enable auto skipping of credits -->
         <setting id="enableSkipCommercials" type="bool" label="30530" default="true" /><!-- Enable skipping of commercials -->
         <setting id="enableAutoSkipCommercials" type="bool" label="39722" default="false" visible="eq(-1,true)" subsetting="true" /><!-- Enable auto skipping of commercials -->
+        <setting id="enableAutoHideSkip" type="bool" label="39723" default="true" /><!-- Enable hiding skip button after some time -->
+        <setting id="enableAutoHideSkipTime" type="slider" label="39724" option="int" range="1,1,60" default="10" visible="eq(-1,true)" subsetting="true" /><!-- Seconds til the skip button should be hidden-->
         <setting id="firstVideoStream" type="bool" label="30546" default="false" /><!-- Pick the first video if several versions are present -->
         <setting id="audioStreamPick" type="enum" label="30547" values="Plex|Kodi" default="0" /><!-- Who picks the audio stream on playback start? -->
         <setting id="subtitleStreamPick" type="enum" label="30548" values="Plex|Kodi" default="0" /><!-- Who picks subtitles on playback start? -->
