@@ -336,6 +336,7 @@ class KodiMonitor(xbmc.Monitor):
                 or utils.settings('enableSkipCredits') == 'true' \
                 or utils.settings('enableSkipCommercials') == 'true':
             status['markers'] = item.api.markers()
+            status['markers_hidden'] = {}
             if utils.settings('enableSkipCredits') == 'true':
                 status['first_credits_marker'] = item.api.first_credits_marker()
                 status['final_credits_marker'] = item.api.final_credits_marker()

@@ -1535,3 +1535,13 @@ msgstr ""
 msgctxt "#39722"
 msgid "Auto skip commercials"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39723"
+msgid "Auto hide skip button"
+msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39724"
+msgid "Seconds until skip button is hidden"
+msgstr ""
