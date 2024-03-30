@@ -46,6 +46,7 @@ class Base(object):
         self._producers = []
         self._locations = []
         self._markers = []
+        self._labels = []
         self._guids = {}
         self._coll_match = None
         # Plex DB attributes
@@ -547,6 +548,8 @@ class Base(object):
                                       end / 1000.0,
                                       child.get('type'),
                                       child.get('final') == '1'))
+            elif child.tag == 'Label':
+                self._labels.append(child.get('tag'))
         # Plex Movie agent (legacy) or "normal" Plex tv show agent
         if not self._guids:
             guid = self.xml.get('guid')
@@ -647,6 +650,13 @@ class Base(object):
             'director': [(x, ) for x in self._directors],
             'writer': [(x, ) for x in self._writers]
         }
+
+    def labels(self):
+        """
+        Returns a list of labels found
+        """
+        self._scan_children()
+        return self._labels
 
     def extras(self):
         """

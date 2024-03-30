@@ -176,7 +176,7 @@ def _generate_content(api):
                 'season': api.season_number(),
                 'sorttitle': api.sorttitle(),  # 'Titans (2018)'
                 'studio': api.studios(),
-                'tag': [],  # List of tags this item belongs to
+                'tag': api.labels(),  # List of tags this item belongs to
                 'tagline': api.tagline(),
                 'thumbnail': '',  # e.g. 'image://https%3a%2f%2fassets.tv'
                 'title': api.title(),  # 'Titans (2018)'
@@ -522,6 +522,7 @@ def create_listitem(item, as_tuple=True, offscreen=True,
                 "sorttitle": item.get("sorttitle"),
                 "duration": item.get("duration"),
                 "studio": item.get("studio"),
+                "tag": item.get("tag"),
                 "tagline": item.get("tagline"),
                 "writer": item.get("writer"),
                 "tvshowtitle": item.get("tvshowtitle"),

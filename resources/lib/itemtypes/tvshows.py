@@ -249,8 +249,9 @@ class Show(TvShowMixin, ItemBase):
         self.kodidb.modify_genres(kodi_id, v.KODI_TYPE_SHOW, api.genres())
         # Process studios
         self.kodidb.modify_studios(kodi_id, v.KODI_TYPE_SHOW, api.studios())
-        # Process tags: view, PMS collection tags
+        # Process tags: section, PMS labels, PMS collection tags
         tags = [section_name]
+        tags.extend(api.labels())
         tags.extend([i for _, i in api.collections()])
         self.kodidb.modify_tags(kodi_id, v.KODI_TYPE_SHOW, tags)
         self.plexdb.add_show(plex_id=plex_id,
