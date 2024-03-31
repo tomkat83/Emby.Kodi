@@ -261,7 +261,7 @@ class Service(object):
             plex_item = plexdb.item_by_kodi_id(kodi_id, kodi_type)
             if not plex_item:
                 return False
-            
+
             plex_guid = plex_item['plex_guid']
             if not plex_guid:
                 return False
@@ -278,7 +278,7 @@ class Service(object):
 
         if watchlist_plex_guid is None:
             return False
-    
+
         # ratingKey query param accepts the last section in the plex_guid
         watchlist_rating_key = watchlist_plex_guid.split('/')[-1]
 
