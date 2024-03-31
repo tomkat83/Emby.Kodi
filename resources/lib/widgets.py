@@ -249,7 +249,7 @@ def _generate_content(api):
     return item
 
 
-def prepare_listitem(item):
+def prepare_listitem(item, listing_key = None):
     """helper to convert kodi output from json api to compatible format for
     listitems"""
     try:
@@ -315,6 +315,9 @@ def prepare_listitem(item):
         properties["DBTYPE"] = item["type"]
         properties["type"] = item["type"]
         properties["path"] = item.get("file")
+
+        if listing_key is not None:
+            properties["LISTINGKEY"] = listing_key
 
         # cast
         list_cast = []
