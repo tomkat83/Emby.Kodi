@@ -16,7 +16,7 @@ def main():
     args = {
         'kodi_id': kodi_id,
         'kodi_type': kodi_type
-    }    
+    }
     window = Window(10000)
     while window.getProperty('plexkodiconnect.command'):
         sleep(20)

@@ -254,7 +254,7 @@ class Service(object):
         kodi_type = params.get('kodi_type')
 
         LOG.info('watchlist_modify %s %s %s', api_type, kodi_id, kodi_type)
-        
+
         watchlist_plex_guid = None
 
         with plex_db.PlexDB(lock=False) as plexdb:
