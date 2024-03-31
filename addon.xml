@@ -14,6 +14,16 @@
   </extension>
   <extension point="kodi.context.item">
     <menu id="kodi.core.main">
+      <item library="context_watchlist_add.py">
+        <!-- Add to Plex Watchlist --> 
+        <label>30402</label>
+        <visible>[[[String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,tvshow) | String.IsEqual(ListItem.DBTYPE,season) | String.IsEqual(ListItem.DBTYPE,episode)] + !String.IsEmpty(ListItem.DBID)] + !String.IsEqual(ListItem.Property(LISTINGKEY),watchlist)]</visible>
+      </item>
+      <item library="context_watchlist_remove.py">
+        <!-- Remove from Plex Watchlist --> 
+        <label>30403</label>
+        <visible>[[[String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,tvshow)] + !String.IsEmpty(ListItem.DBID)] + String.IsEqual(ListItem.Property(LISTINGKEY),watchlist)]</visible>
+      </item>
       <item library="context_extras.py">
         <!-- Extras -->
         <label>30235</label>

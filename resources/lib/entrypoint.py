@@ -262,7 +262,7 @@ def show_listing(xml, plex_type=None, section_id=None, synched=True, key=None):
             all_items = [item for item in all_items if item.section_id == utils.cast(int, section_id)]
 
     all_items = [widgets.generate_item(api) for api in all_items]
-    all_items = [widgets.prepare_listitem(item) for item in all_items]
+    all_items = [widgets.prepare_listitem(item, key) for item in all_items]
     # fill that listing...
     all_items = [widgets.create_listitem(item) for item in all_items]
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), all_items, len(all_items))

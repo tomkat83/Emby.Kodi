@@ -410,6 +410,16 @@ msgid "Plex options"
 msgstr ""
 
 # contextmenu entry
+msgctxt "#30402"
+msgid "Add to Plex Watchlist"
+msgstr ""
+
+# contextmenu entry
+msgctxt "#30403"
+msgid "Remove from Plex Watchlist"
+msgstr ""
+
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr ""
