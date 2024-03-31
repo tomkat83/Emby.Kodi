@@ -43,7 +43,7 @@ class MetadataThread(backgroundthread.KillableThread):
     def _process_in_batches(self, item_getter, processor, plex_type):
         offset = 0
         while True:
-            with PlexDB() as plexdb:
+            with PlexDB(lock=False) as plexdb:
                 # Keep DB connection open only for a short period of time!
                 if self.refresh:
                     # Simply grab every single item if we want to refresh

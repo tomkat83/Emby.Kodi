@@ -157,7 +157,7 @@ class KodiMonitor(xbmc.Monitor):
         if not kodi_id and kodi_type and path:
             kodi_id, _ = kodi_db.kodiid_from_filename(path, kodi_type)
         if kodi_id:
-            with PlexDB() as plexdb:
+            with PlexDB(lock=False) as plexdb:
                 db_item = plexdb.item_by_kodi_id(kodi_id, kodi_type)
             if db_item:
                 plex_id = db_item['plex_id']
@@ -419,7 +419,7 @@ def _record_playstate(status, ended):
     if status['plex_type'] not in v.PLEX_VIDEOTYPES:
         LOG.debug('Not messing with non-video entries')
         return
-    with PlexDB() as plexdb:
+    with PlexDB(lock=False) as plexdb:
         db_item = plexdb.item_by_id(status['plex_id'], status['plex_type'])
     if not db_item:
         # Item not (yet) in Kodi library
@@ -466,7 +466,7 @@ def _playback_progress(status, ended, db_item):
     playcount = status['playcount']
     if playcount is None:
         LOG.debug('playcount not found, looking it up in the Kodi DB')
-        with kodi_db.KodiVideoDB() as kodidb:
+        with kodi_db.KodiVideoDB(lock=False) as kodidb:
             playcount = kodidb.get_playcount(db_item['kodi_fileid']) or 0
     if status['external_player']:
         # video has either been entirely watched - or not.
@@ -535,7 +535,7 @@ def _external_player_correct_plex_watch_count(db_item):
     playcountminimumtime set in playercorefactory.xml)
     See https://kodi.wiki/view/External_players
     """
-    with kodi_db.KodiVideoDB() as kodidb:
+    with kodi_db.KodiVideoDB(lock=False) as kodidb:
         playcount = kodidb.get_playcount(db_item['kodi_fileid'])
     LOG.debug('External player detected. Playcount: %s', playcount)
     PF.scrobble(db_item['plex_id'], 'watched' if playcount else 'unwatched')

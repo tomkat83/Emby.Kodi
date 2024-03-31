@@ -22,7 +22,7 @@ def plex_playlist_ids():
     """
     Returns a list of all Plex ids of the playlists already in our DB
     """
-    with PlexDB() as plexdb:
+    with PlexDB(lock=False) as plexdb:
         return list(plexdb.playlist_ids())
 
 
@@ -30,7 +30,7 @@ def kodi_playlist_paths():
     """
     Returns a list of all Kodi playlist paths of the playlists already synced
     """
-    with PlexDB() as plexdb:
+    with PlexDB(lock=False) as plexdb:
         return list(plexdb.kodi_playlist_paths())
 
 
@@ -53,7 +53,7 @@ def get_playlist(path=None, plex_id=None):
     Returns the playlist as a Playlist for either the plex_id or path
     """
     playlist = Playlist()
-    with PlexDB() as plexdb:
+    with PlexDB(lock=False) as plexdb:
         playlist = plexdb.playlist(playlist, plex_id, path)
     return playlist
 
@@ -62,7 +62,7 @@ def get_all_kodi_playlist_paths():
     """
     Returns a list with all paths for the playlists on the Kodi side
     """
-    with PlexDB() as plexdb:
+    with PlexDB(lock=False) as plexdb:
         paths = list(plexdb.all_kodi_paths())
     return paths
 
@@ -112,7 +112,7 @@ def m3u_to_plex_ids(playlist):
                                                       db_type=playlist.kodi_type)
             if not kodi_id:
                 continue
-            with PlexDB() as plexdb:
+            with PlexDB(lock=False) as plexdb:
                 item = plexdb.item_by_kodi_id(kodi_id, kodi_type)
             if item:
                 plex_ids.append(item['plex_id'])
