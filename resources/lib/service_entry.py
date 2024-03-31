@@ -248,12 +248,12 @@ class Service(object):
     def watchlist_remove(self, raw_params):
         return self.watchlist_modify('removeFromWatchlist', raw_params)
 
-    def watchlist_modify(self, type, raw_params):
+    def watchlist_modify(self, api_type, raw_params):
         params = dict(utils.parse_qsl(raw_params))
         kodi_id = params.get('kodi_id')
         kodi_type = params.get('kodi_type')
-        
-        LOG.info('watchlist_modify %s %s %s', type, kodi_id, kodi_type)
+
+        LOG.info('watchlist_modify %s %s %s', api_type, kodi_id, kodi_type)
         
         watchlist_plex_guid = None
 
@@ -282,7 +282,7 @@ class Service(object):
         # ratingKey query param accepts the last section in the plex_guid
         watchlist_rating_key = watchlist_plex_guid.split('/')[-1]
 
-        downloadutils.DownloadUtils().downloadUrl('https://discover.provider.plex.tv/actions/%s?ratingKey=%s' % (type, watchlist_rating_key),
+        downloadutils.DownloadUtils().downloadUrl('https://discover.provider.plex.tv/actions/%s?ratingKey=%s' % (api_type, watchlist_rating_key),
             action_type = 'PUT',
             authenticate=False,
             headerOptions={'X-Plex-Token': utils.window('plex_token')})
