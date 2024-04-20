@@ -649,7 +649,7 @@ def _sync_from_pms(pick_libraries):
         if api.plex_type in v.UNSUPPORTED_PLEX_TYPES:
             continue
         sections.append(Section(index=i, xml_element=xml_element))
-    with PlexDB() as plexdb:
+    with PlexDB(lock=False) as plexdb:
         for section_db in plexdb.all_sections():
             old_sections.append(Section(section_db_element=section_db))
     # Update our latest PMS sections with info saved in the PMS DB

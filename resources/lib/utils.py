@@ -475,7 +475,7 @@ def wipe_database(reboot=True):
         from .playlists import remove_synced_playlists
         remove_synced_playlists()
     try:
-        with plex_db.PlexDB() as plexdb:
+        with plex_db.PlexDB(lock=False) as plexdb:
             if plexdb.songs_have_been_synced():
                 LOG.info('Detected that music has also been synced - wiping music')
                 music = True
