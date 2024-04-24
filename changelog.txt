@@ -1,3 +1,6 @@
+version 3.9.5 (beta only):
+- Fix sync crashing with "plex_guid is not defined" #2072
+
 version 3.9.4 (beta only):
 - WARNING: You will need to reset the Kodi database!
 - Fix certain movie elements suddenly duplicating in library #2070
