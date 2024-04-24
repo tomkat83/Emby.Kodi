@@ -570,7 +570,7 @@ class Episode(TvShowMixin, ItemBase):
                                        api.viewcount(),
                                        api.lastplayed())
             self.plexdb.add_episode(plex_id=plex_id,
-                                    plex_guid=plex_guid,
+                                    plex_guid=api.plex_guid,
                                     checksum=api.checksum(),
                                     section_id=section_id,
                                     show_id=api.show_id(),
