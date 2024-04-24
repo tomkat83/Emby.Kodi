@@ -49,5 +49,5 @@ def mass_api(xml, check_by_guid=False):
     else:
         with PlexDB(lock=False) as plexdb:
             for api in apis:
-                api.check_db(plexdb=plexdb, check_by_guid=False)
+                api.check_db(plexdb=plexdb)
         return apis
