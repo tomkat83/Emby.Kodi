@@ -55,9 +55,10 @@ class Movies(object):
                             (plex_id, ))
         return self.entry_to_movie(self.cursor.fetchone())
 
-    def movie_by_guid(self, plex_guid):
+    def movies_by_guid(self, plex_guid):
         """
-        Returns the show info as a tuple for the TV show with plex_guid:
+        Returns a list of movies or an empty list, each list element looking
+        like this:
             plex_id INTEGER PRIMARY KEY ASC,
             plex_guid TEXT,
             checksum INTEGER UNIQUE,
@@ -69,10 +70,10 @@ class Movies(object):
             last_sync INTEGER
         """
         if plex_guid is None:
-            return
-        self.cursor.execute('SELECT * FROM movie WHERE plex_guid = ? LIMIT 1',
+            return list()
+        self.cursor.execute('SELECT * FROM movie WHERE plex_guid = ?',
                             (plex_guid, ))
-        return self.entry_to_movie(self.cursor.fetchone())
+        return list(self.entry_to_movie(x) for x in self.cursor.fetchall())
 
     @staticmethod
     def entry_to_movie(entry):
