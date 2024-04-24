@@ -38,7 +38,6 @@ class Movie(ItemBase):
                       section_id or api.library_section_id())
             return
         plex_id = api.plex_id
-        plex_guid = api.plex_guid
         movie = self.plexdb.movie(plex_id)
         if movie:
             update_item = True
@@ -171,7 +170,7 @@ class Movie(ItemBase):
                                api.viewcount(),
                                api.lastplayed())
         self.plexdb.add_movie(plex_id=plex_id,
-                              plex_guid=plex_guid,
+                              plex_guid=api.plex_guid,
                               checksum=api.checksum(),
                               section_id=section_id,
                               kodi_id=kodi_id,
