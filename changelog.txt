@@ -1,3 +1,7 @@
+version 3.9.4 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Fix certain movie elements suddenly duplicating in library #2070
+
 version 3.9.3 (beta only):
 - Add Watchlist context menu commands (thanks @Spacetech) #2060
 - Sync Plex Labels (thanks @Spacetech) #2058
