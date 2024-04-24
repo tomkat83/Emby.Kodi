@@ -1,3 +1,6 @@
+version 3.9.6 (beta only):
+- Fix Base.check_db() got an unexpected keyword argument 'check_by_guid' #2074
+
 version 3.9.5 (beta only):
 - Fix sync crashing with "plex_guid is not defined" #2072
 
