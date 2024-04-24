@@ -88,7 +88,10 @@ class Base(object):
     @property
     def plex_guid(self):
         """
-        Returns the Plex guid as unicode or None
+        Returns the Plex guid as unicode or None. Note that you can get
+        SEVERAL plex_ids per Plex guid as you have unique Plex id's per
+        edition (e.g. director's cut, normal cut, ...) but potentially
+        only a single guid per "movie" encompassing all editions
         """
         return self.xml.get('guid')
 
