@@ -117,9 +117,10 @@ class TVShows(object):
                             (plex_id, ))
         return self.entry_to_show(self.cursor.fetchone())
 
-    def show_by_guid(self, plex_guid):
+    def shows_by_guid(self, plex_guid):
         """
-        Returns the show info as a tuple for the TV show with plex_guid:
+        Returns a list of shows or an empty list, each element being a 
+        dictionary looking like this:
             plex_id INTEGER PRIMARY KEY ASC,
             plex_guid TEXT,
             checksum INTEGER UNIQUE,
@@ -130,10 +131,10 @@ class TVShows(object):
             last_sync INTEGER
         """
         if plex_guid is None:
-            return
-        self.cursor.execute('SELECT * FROM show WHERE plex_guid = ? LIMIT 1',
+            return list()
+        self.cursor.execute('SELECT * FROM show WHERE plex_guid = ?',
                             (plex_guid, ))
-        return self.entry_to_show(self.cursor.fetchone())
+        return list(self.entry_to_show(x) for x in self.cursor.fetchall())
 
     def season(self, plex_id):
         """
@@ -154,9 +155,10 @@ class TVShows(object):
                             (plex_id, ))
         return self.entry_to_season(self.cursor.fetchone())
 
-    def season_by_guid(self, plex_guid):
+    def seasons_by_guid(self, plex_guid):
         """
-        Returns the show info as a tuple for the TV show with plex_guid:
+        Returns a list of seasons or an empty list, with each list element
+        being a dictionary looking like this:
             plex_id INTEGER PRIMARY KEY,
             plex_guid TEXT,
             checksum INTEGER UNIQUE,
@@ -168,10 +170,10 @@ class TVShows(object):
             last_sync INTEGER
         """
         if plex_guid is None:
-            return
-        self.cursor.execute('SELECT * FROM season WHERE plex_guid = ? LIMIT 1',
+            return list()
+        self.cursor.execute('SELECT * FROM season WHERE plex_guid = ?',
                             (plex_guid, ))
-        return self.entry_to_season(self.cursor.fetchone())
+        return list(self.entry_to_season(x) for x in self.cursor.fetchall())
 
     def episode(self, plex_id):
         if plex_id is None:
@@ -180,12 +182,32 @@ class TVShows(object):
                             (plex_id, ))
         return self.entry_to_episode(self.cursor.fetchone())
 
-    def episode_by_guid(self, plex_guid):
+    def episodes_by_guid(self, plex_guid):
+        """
+        Returns a list of episodes or an empty list, each list element being
+        a dictionary with the following keys:
+            plex_type
+            kodi_type
+            plex_id
+            plex_guid
+            checksum
+            section_id
+            show_id
+            grandparent_id
+            season_id
+            parent_id
+            kodi_id
+            kodi_fileid
+            kodi_fileid_2
+            kodi_pathid
+            fanart_synced
+            last_sync
+        """
         if plex_guid is None:
-            return
-        self.cursor.execute('SELECT * FROM episode WHERE plex_guid = ? LIMIT 1',
+            return list()
+        self.cursor.execute('SELECT * FROM episode WHERE plex_guid = ?',
                             (plex_guid, ))
-        return self.entry_to_episode(self.cursor.fetchone())
+        return list(self.entry_to_episode(x) for x in self.cursor.fetchall())
 
     @staticmethod
     def entry_to_episode(entry):

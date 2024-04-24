@@ -92,27 +92,27 @@ class PlexDBBase(object):
                     break
         return answ
 
-    def item_by_guid(self, plex_guid, plex_type=None):
+    def items_by_guid(self, plex_guid, plex_type=None):
         """
-        Returns the item for plex_guid or None.
+        Returns a list of items for plex_guid or an empty list.
         Supply with the correct plex_type to speed up lookup
         """
-        answ = None
+        answ = list()
         if plex_type == v.PLEX_TYPE_MOVIE:
-            answ = self.movie_by_guid(plex_guid)
+            answ = self.movies_by_guid(plex_guid)
         elif plex_type == v.PLEX_TYPE_EPISODE:
-            answ = self.episode_by_guid(plex_guid)
+            answ = self.episodes_by_guid(plex_guid)
         elif plex_type == v.PLEX_TYPE_SHOW:
-            answ = self.show_by_guid(plex_guid)
+            answ = self.shows_by_guid(plex_guid)
         elif plex_type == v.PLEX_TYPE_SEASON:
-            answ = self.season_by_guid(plex_guid)
+            answ = self.seasons_by_guid(plex_guid)
         elif plex_type is None:
             # SLOW - lookup plex_id in all our tables
             for kind in (v.PLEX_TYPE_MOVIE,
                          v.PLEX_TYPE_EPISODE,
                          v.PLEX_TYPE_SHOW,
                          v.PLEX_TYPE_SEASON):
-                method = getattr(self, kind + "_by_guid")
+                method = getattr(self, kind + "s_by_guid")
                 answ = method(plex_guid)
                 if answ:
                     break
