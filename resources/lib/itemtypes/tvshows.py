@@ -248,11 +248,13 @@ class Show(TvShowMixin, ItemBase):
         self.kodidb.modify_genres(kodi_id, v.KODI_TYPE_SHOW, api.genres())
         # Process studios
         self.kodidb.modify_studios(kodi_id, v.KODI_TYPE_SHOW, api.studios())
-        # Process tags: view, PMS collection tags
+        # Process tags: section, PMS labels, PMS collection tags
         tags = [section_name]
+        tags.extend(api.labels())
         tags.extend([i for _, i in api.collections()])
         self.kodidb.modify_tags(kodi_id, v.KODI_TYPE_SHOW, tags)
         self.plexdb.add_show(plex_id=plex_id,
+                             plex_guid=api.plex_guid,
                              checksum=api.checksum(),
                              section_id=section_id,
                              kodi_id=kodi_id,
@@ -340,6 +342,7 @@ class Season(TvShowMixin, ItemBase):
                                         kodi_id,
                                         v.KODI_TYPE_SEASON)
         self.plexdb.add_season(plex_id=plex_id,
+                               plex_guid=api.plex_guid,
                                checksum=api.checksum(),
                                section_id=section_id,
                                show_id=show_id,
@@ -496,6 +499,7 @@ class Episode(TvShowMixin, ItemBase):
                                        api.viewcount(),
                                        api.lastplayed())
             self.plexdb.add_episode(plex_id=plex_id,
+                                    plex_guid=api.plex_guid,
                                     checksum=api.checksum(),
                                     section_id=section_id,
                                     show_id=api.show_id(),
@@ -566,6 +570,7 @@ class Episode(TvShowMixin, ItemBase):
                                        api.viewcount(),
                                        api.lastplayed())
             self.plexdb.add_episode(plex_id=plex_id,
+                                    plex_guid=api.plex_guid,
                                     checksum=api.checksum(),
                                     section_id=section_id,
                                     show_id=api.show_id(),

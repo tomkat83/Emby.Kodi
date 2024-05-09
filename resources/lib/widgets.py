@@ -25,6 +25,10 @@ SYNCHED = True
 # Need to chain the PMS keys
 KEY = None
 
+# use getVideoInfoTag to set some list item properties
+USE_TAGS = v.KODIVERSION >= 20
+# properties that should be set by tag methods
+TAG_PROPERTIES = ("resumetime", "totaltime")
 
 def get_clean_image(image):
     '''
@@ -172,7 +176,7 @@ def _generate_content(api):
                 'season': api.season_number(),
                 'sorttitle': api.sorttitle(),  # 'Titans (2018)'
                 'studio': api.studios(),
-                'tag': [],  # List of tags this item belongs to
+                'tag': api.labels(),  # List of tags this item belongs to
                 'tagline': api.tagline(),
                 'thumbnail': '',  # e.g. 'image://https%3a%2f%2fassets.tv'
                 'title': api.title(),  # 'Titans (2018)'
@@ -245,7 +249,7 @@ def _generate_content(api):
     return item
 
 
-def prepare_listitem(item):
+def prepare_listitem(item, listing_key = None):
     """helper to convert kodi output from json api to compatible format for
     listitems"""
     try:
@@ -311,6 +315,9 @@ def prepare_listitem(item):
         properties["DBTYPE"] = item["type"]
         properties["type"] = item["type"]
         properties["path"] = item.get("file")
+
+        if listing_key is not None:
+            properties["LISTINGKEY"] = listing_key
 
         # cast
         list_cast = []
@@ -468,6 +475,9 @@ def create_listitem(item, as_tuple=True, offscreen=True,
                     listitem=xbmcgui.ListItem):
     """helper to create a kodi listitem from kodi compatible dict with mediainfo"""
     try:
+        # PKCListItem does not implement getVideoInfoTag
+        use_tags_for_item = USE_TAGS and listitem == xbmcgui.ListItem
+
         liz = listitem(
             label=item.get("label", ""),
             label2=item.get("label2", ""),
@@ -488,7 +498,9 @@ def create_listitem(item, as_tuple=True, offscreen=True,
 
         # extra properties
         for key, value in item["extraproperties"].items():
-            liz.setProperty(key, value)
+            # some Video properties should be set via tags on newer kodi versions
+            if nodetype != "Video" or not use_tags_for_item or key not in TAG_PROPERTIES:
+                liz.setProperty(key, value)
 
         # video infolabels
         if nodetype == "Video":
@@ -513,6 +525,7 @@ def create_listitem(item, as_tuple=True, offscreen=True,
                 "sorttitle": item.get("sorttitle"),
                 "duration": item.get("duration"),
                 "studio": item.get("studio"),
+                "tag": item.get("tag"),
                 "tagline": item.get("tagline"),
                 "writer": item.get("writer"),
                 "tvshowtitle": item.get("tvshowtitle"),
@@ -533,14 +546,25 @@ def create_listitem(item, as_tuple=True, offscreen=True,
 
             # streamdetails
             if item.get("streamdetails"):
-                liz.addStreamInfo("video", item["streamdetails"].get("video", {}))
-                liz.addStreamInfo("audio", item["streamdetails"].get("audio", {}))
-                liz.addStreamInfo("subtitle", item["streamdetails"].get("subtitle", {}))
+                if use_tags_for_item:
+                    tags = liz.getVideoInfoTag()
+                    tags.addVideoStream(_create_VideoStreamDetail(item["streamdetails"].get("video", {})))
+                    tags.addAudioStream(_create_AudioStreamDetail(item["streamdetails"].get("audio", {})))
+                    tags.addSubtitleStream(_create_SubtitleStreamDetail(item["streamdetails"].get("subtitle", {})))
+
+                else:
+                    liz.addStreamInfo("video", item["streamdetails"].get("video", {}))
+                    liz.addStreamInfo("audio", item["streamdetails"].get("audio", {}))
+                    liz.addStreamInfo("subtitle", item["streamdetails"].get("subtitle", {}))
 
             if "dateadded" in item:
                 infolabels["dateadded"] = item["dateadded"]
             if "date" in item:
                 infolabels["date"] = item["date"]
+
+            if use_tags_for_item and "resumetime" in item["extraproperties"] and "totaltime" in item["extraproperties"]:
+                tags = liz.getVideoInfoTag()
+                tags.setResumePoint(float(item["extraproperties"].get("resumetime")), float(item["extraproperties"].get("totaltime")));
 
         # music infolabels
         elif nodetype == 'Music':
@@ -581,7 +605,107 @@ def create_listitem(item, as_tuple=True, offscreen=True,
             infolabels["lastplayed"] = item["lastplayed"]
 
         # assign the infolabels
-        liz.setInfo(type=nodetype, infoLabels=infolabels)
+        if use_tags_for_item and nodetype == "Video":
+            # filter out None valued properties
+            infolabels = {k: v for k, v in infolabels.items() if v is not None}
+
+            tags = liz.getVideoInfoTag() # type: xbmc.InfoTagVideo
+
+            if "dbid" in infolabels:
+                tags.setDbId(int(infolabels["dbid"]))
+            if "year" in infolabels:
+                tags.setYear(int(infolabels["year"]))
+            if "episode" in infolabels:
+                tags.setEpisode(int(infolabels["episode"]))
+            if "season" in infolabels:
+                tags.setSeason(int(infolabels["season"]))
+            if "top250" in infolabels:
+                tags.setTop250(int(infolabels["top250"]))
+            if "tracknumber" in infolabels:
+                tags.setTrackNumber(int(infolabels["tracknumber"]))
+            if "rating" in infolabels:
+                tags.setRating(float(infolabels["rating"]))
+            if "playcount" in infolabels:
+                tags.setPlaycount(int(infolabels["playcount"]))
+            if "cast" in infolabels:
+                actors = []
+
+                for actor_name in infolabels["cast"]:
+                    actors.append(xbmc.Actor(actor_name))
+
+                tags.setCast(actors)
+            if "castandrole" in infolabels:
+                actors = []
+
+                for actor in infolabels["castandrole"]:
+                    actors.append(xbmc.Actor(actor[0], actor[1]))
+
+                tags.setCast(actors)
+            if "artist" in infolabels:
+                tags.setArtists(infolabels["artist"])
+            if "genre" in infolabels:
+                tags.setGenres(infolabels["genre"].split(" / "))
+            if "country" in infolabels:
+                tags.setCountries(infolabels["country"])
+            if "director" in infolabels:
+                tags.setDirectors(infolabels["director"].split(" / "))
+            if "mpaa" in infolabels:
+                tags.setMpaa(str(infolabels["mpaa"]))
+            if "plot" in infolabels:
+                tags.setPlot(str(infolabels["plot"]))
+            if "plotoutline" in infolabels:
+                tags.setPlotOutline(str(infolabels["plotoutline"]))
+            if "title" in infolabels:
+                tags.setTitle(str(infolabels["title"]))
+            if "originaltitle" in infolabels:
+                tags.setOriginalTitle(str(infolabels["originaltitle"]))
+            if "sorttitle" in infolabels:
+                tags.setSortTitle(str(infolabels["sorttitle"]))
+            if "duration" in infolabels:
+                tags.setDuration(int(infolabels["duration"]))
+            if "studio" in infolabels:
+                tags.setStudios(infolabels["studio"].split(" / "))
+            if "tagline" in infolabels:
+                tags.setTagLine(str(infolabels["tagline"]))
+            if "writer" in infolabels:
+                tags.setWriters(infolabels["writer"].split(" / "))
+            if "tvshowtitle" in infolabels:
+                tags.setTvShowTitle(str(infolabels["tvshowtitle"]))
+            if "premiered" in infolabels:
+                tags.setPremiered(str(infolabels["premiered"]))
+            if "status" in infolabels:
+                tags.setTvShowStatus(str(infolabels["status"]))
+            if "set" in infolabels:
+                tags.setSet(str(infolabels["set"]))
+            if "setoverview" in infolabels:
+                tags.setSetOverview(str(infolabels["setoverview"]))
+            if "tag" in infolabels:
+                tags.setTags(infolabels["tag"])
+            if "imdbnumber" in infolabels:
+                tags.setIMDBNumber(str(infolabels["imdbnumber"]))
+            if "code" in infolabels:
+                tags.setProductionCode(str(infolabels["code"]))
+            if "aired" in infolabels:
+                tags.setFirstAired(str(infolabels["aired"]))
+            if "lastplayed" in infolabels:
+                tags.setLastPlayed(str(infolabels["lastplayed"]))
+            if "album" in infolabels:
+                tags.setAlbum(str(infolabels["album"]))
+            if "votes" in infolabels:
+                tags.setVotes(int(infolabels["votes"]))
+            if "trailer" in infolabels:
+                tags.setTrailer(str(infolabels["trailer"]))
+            if "path" in infolabels:
+                tags.setPath(str(infolabels["path"]))
+            if "filenameandpath" in infolabels:
+                tags.setFilenameAndPath(str(infolabels["filenameandpath"]))
+            if "dateadded" in infolabels:
+                tags.setDateAdded(str(infolabels["dateadded"]))
+            if "mediatype" in infolabels:
+                tags.setMediaType(str(infolabels["mediatype"]))
+
+        else:
+            liz.setInfo(type=nodetype, infoLabels=infolabels)
 
         # artwork
         liz.setArt(item.get("art", {}))
@@ -626,3 +750,51 @@ def create_main_entry(item):
         'type': '',
         'IsPlayable': 'false'
     }
+
+
+def _create_VideoStreamDetail(stream):
+    '''Creates a VideoStreamDetail object from a video stream'''
+    stream_detail = xbmc.VideoStreamDetail()
+
+    if "codec" in stream:
+        stream_detail.setCodec(str(stream["codec"]))
+    if "aspect" in stream:
+        stream_detail.setAspect(round(stream["aspect"], 2))
+    if "width" in stream:
+        stream_detail.setWidth(int(stream["width"]))
+    if "height" in stream:
+        stream_detail.setHeight(int(stream["height"]))
+    if "duration" in stream:
+        stream_detail.setDuration(int(stream["duration"]))
+    if "stereomode" in stream:
+        stream_detail.setStereoMode(str(stream["stereomode"]))
+    if "language" in stream:
+        stream_detail.setLanguage(str(stream["language"]))
+    if "hdrtype" in stream:
+        stream_detail.setHDRType(str(stream["hdrtype"]))
+
+    return stream_detail
+
+
+def _create_AudioStreamDetail(stream):
+    '''Creates a AudioStreamDetail object from an audio stream'''
+    stream_detail = xbmc.AudioStreamDetail()
+
+    if "channels" in stream:
+        stream_detail.setChannels(int(stream["channels"]))
+    if "codec" in stream:
+        stream_detail.setCodec(str(stream["codec"]))
+    if "language" in stream:
+        stream_detail.setLanguage(str(stream["language"]))
+
+    return stream_detail
+
+
+def _create_SubtitleStreamDetail(stream):
+    '''Creates a SubtitleStreamDetail object from a subtitle stream'''
+    stream_detail = xbmc.SubtitleStreamDetail()
+
+    if "language" in stream:
+        stream_detail.setLanguage(str(stream["language"]))
+
+    return stream_detail

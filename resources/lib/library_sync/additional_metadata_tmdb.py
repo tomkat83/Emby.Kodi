@@ -48,13 +48,13 @@ def get_tmdb_details(unique_ids):
 def process_trailers(plex_id, plex_type, refresh=False):
     done = True
     try:
-        with PlexDB() as plexdb:
+        with PlexDB(lock=False) as plexdb:
             db_item = plexdb.item_by_id(plex_id, plex_type)
         if not db_item:
             logger.error('Could not get Kodi id for %s %s', plex_type, plex_id)
             done = False
             return
-        with KodiVideoDB() as kodidb:
+        with KodiVideoDB(lock=False) as kodidb:
             trailer = kodidb.get_trailer(db_item['kodi_id'],
                                          db_item['kodi_type'])
         if trailer and (trailer.startswith(f'plugin://{v.ADDON_ID}') or
@@ -103,14 +103,14 @@ def process_fanart(plex_id, plex_type, refresh=False):
     done = True
     try:
         artworks = None
-        with PlexDB() as plexdb:
+        with PlexDB(lock=False) as plexdb:
             db_item = plexdb.item_by_id(plex_id, plex_type)
         if not db_item:
             logger.error('Could not get Kodi id for %s %s', plex_type, plex_id)
             done = False
             return
         if not refresh:
-            with KodiVideoDB() as kodidb:
+            with KodiVideoDB(lock=False) as kodidb:
                 artworks = kodidb.get_art(db_item['kodi_id'],
                                           db_item['kodi_type'])
             # Check if we even need to get additional art

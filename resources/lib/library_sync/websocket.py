@@ -205,7 +205,8 @@ def store_activity_message(data):
         elif message['Activity']['type'] != 'library.refresh.items':
             # Not the type of message relevant for us
             continue
-        elif message['Activity']['Context']['refreshed'] != True:
+        elif message['Activity']['Context'].get('refreshed') is not None and \
+                message['Activity']['Context']['refreshed'] == False:
             # The item was scanned but not actually refreshed
             continue
         plex_id = PF.GetPlexKeyNumber(message['Activity']['Context']['key'])[1]
@@ -368,6 +369,6 @@ def cache_artwork(plex_id, plex_type, kodi_id=None, kodi_type=None):
             LOG.error('Could not retrieve Plex db info for %s', plex_id)
             return
         kodi_id, kodi_type = item['kodi_id'], item['kodi_type']
-    with kodi_db.KODIDB_FROM_PLEXTYPE[plex_type]() as kodidb:
+    with kodi_db.KODIDB_FROM_PLEXTYPE[plex_type](lock=False) as kodidb:
         for url in kodidb.art_urls(kodi_id, kodi_type):
             artwork.cache_url(url)

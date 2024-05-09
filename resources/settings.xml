@@ -78,6 +78,7 @@
         <setting type="lsep" label="39052" /><!-- Background Sync -->
         <setting id="enableBackgroundSync" type="bool" label="39026" default="true" visible="true"/>
         <setting id="backgroundsync_saftyMargin" type="slider" label="39051" default="5" option="int" range="5,1,300" visible="eq(-1,true)" subsetting="true" />
+        <setting id="delayBackgroundSyncWhilePlaying" type="bool" label="39027" default="true" visible="eq(-2,true)"/>
         <setting type="sep" />
         <setting type="lsep" label="30538" /><!-- Manual complete reset of Kodi database necessary, see "Advanced" -->
         <setting id="showExtrasInsteadOfTrailer" type="bool" label="30514" default="false" /><!-- Show all Plex extras instead of immediately playing trailers -->
@@ -119,6 +120,8 @@
         <setting id="enableAutoSkipCredits" type="bool" label="39721" default="false" visible="eq(-1,true)" subsetting="true" /><!-- Enable auto skipping of credits -->
         <setting id="enableSkipCommercials" type="bool" label="30530" default="true" /><!-- Enable skipping of commercials -->
         <setting id="enableAutoSkipCommercials" type="bool" label="39722" default="false" visible="eq(-1,true)" subsetting="true" /><!-- Enable auto skipping of commercials -->
+        <setting id="enableAutoHideSkip" type="bool" label="39723" default="true" /><!-- Enable hiding skip button after some time -->
+        <setting id="enableAutoHideSkipTime" type="slider" label="39724" option="int" range="1,1,60" default="10" visible="eq(-1,true)" subsetting="true" /><!-- Seconds til the skip button should be hidden-->
         <setting id="firstVideoStream" type="bool" label="30546" default="false" /><!-- Pick the first video if several versions are present -->
         <setting id="audioStreamPick" type="enum" label="30547" values="Plex|Kodi" default="0" /><!-- Who picks the audio stream on playback start? -->
         <setting id="subtitleStreamPick" type="enum" label="30548" values="Plex|Kodi" default="0" /><!-- Who picks subtitles on playback start? -->

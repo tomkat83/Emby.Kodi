@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from logging import getLogger
 from .. import utils, variables as v, app
 
+
+LOG = getLogger('PLEX.api.file')
 
 def _transcode_image_path(key, AuthToken, path, width, height):
     """
@@ -121,10 +124,15 @@ class File(object):
         key = self.xml.get('fastKey')
         if not key:
             key = self.xml.get('key')
-            if old_key:
-                key = '%s/%s' % (old_key, key)
-            elif not key.startswith('/'):
-                key = '/library/sections/%s/%s' % (section_id, key)
+            LOG.debug('directory_path. section_id: %s, key: %s, old_key: %s', section_id, key, old_key)
+            # the key returned by plex might be an absolute path, ex: "/library/sections/1/folder?parent=3030"
+            # we should directly use the key if it starts with a slash
+            if not key.startswith('/'):
+                if old_key:
+                    key = '%s/%s' % (old_key, key)
+                else:
+                    key = '/library/sections/%s/%s' % (section_id, key)
+                LOG.debug('directory_path. browseplex key will be "%s"', key)
         params = {
             'mode': 'browseplex',
             'key': key

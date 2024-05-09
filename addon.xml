@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.9.0" provider-name="croneter">
+<addon  id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="3.10.0" provider-name="croneter">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0" />
@@ -14,6 +14,16 @@
   </extension>
   <extension point="kodi.context.item">
     <menu id="kodi.core.main">
+      <item library="context_watchlist_add.py">
+        <!-- Add to Plex Watchlist --> 
+        <label>30402</label>
+        <visible>[[[String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,tvshow) | String.IsEqual(ListItem.DBTYPE,season) | String.IsEqual(ListItem.DBTYPE,episode)] + !String.IsEmpty(ListItem.DBID)] + !String.IsEqual(ListItem.Property(LISTINGKEY),watchlist)]</visible>
+      </item>
+      <item library="context_watchlist_remove.py">
+        <!-- Remove from Plex Watchlist --> 
+        <label>30403</label>
+        <visible>[[[String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,tvshow)] + !String.IsEmpty(ListItem.DBID)] + String.IsEqual(ListItem.Property(LISTINGKEY),watchlist)]</visible>
+      </item>
       <item library="context_extras.py">
         <!-- Extras -->
         <label>30235</label>
@@ -103,7 +113,37 @@
     <summary lang="ko_KR">Plex를 Kodi에 기본 통합</summary>
     <description lang="ko_KR">Kodi를 Plex Media Server에 연결합니다. 이 플러그인은 Plex로 모든 비디오를 관리하고 Kodi로는 관리하지 않는다고 가정합니다. Kodi 비디오 및 음악 데이터베이스에 이미 저장된 데이터가 손실 될 수 있습니다 (이 플러그인이 직접 변경하므로). 자신의 책임하에 사용하십시오!</description>
     <disclaimer lang="ko_KR">자신의 책임하에 사용</disclaimer>
-    <news>version 3.9.0:
+    <news>version 3.10.0:
+- WARNING: You will need to reset the Kodi database!
+- Versions 3.9.1-3.9.6 for everyone
+
+version 3.9.6 (beta only):
+- Fix Base.check_db() got an unexpected keyword argument 'check_by_guid' #2074
+
+version 3.9.5 (beta only):
+- Fix sync crashing with "plex_guid is not defined" #2072
+
+version 3.9.4 (beta only):
+- WARNING: You will need to reset the Kodi database!
+- Fix certain movie elements suddenly duplicating in library #2070
+
+version 3.9.3 (beta only):
+- Add Watchlist context menu commands (thanks @Spacetech) #2060
+- Sync Plex Labels (thanks @Spacetech) #2058
+- Fix nested folder navigation (thanks @Spacetech) #2063
+- Reduce database locking (thanks @Spacetech) #2061
+
+version 3.9.2 (beta only):
+- Fix getVideoInfoTag error (thanks @Spacetech) #2052
+- Automatically hide the skip button after some time (thanks @Spacetech) #2053
+- Force a database reset, necessary due to #2041 #2054
+
+version 3.9.1 (beta only):
+- Add support for Plex Watchlist (thanks @Spacetech) #2041
+- Use InfoTagVideo to set list item data (thanks @Spacetech) #2040
+- New setting: Allow delaying background sync while playing videos (thanks @Spacetech) #2039
+
+version 3.9.0:
 - WARNING: You will need to reset the Kodi database!
 - versions 3.8.4-3.8.8 for everyone
 

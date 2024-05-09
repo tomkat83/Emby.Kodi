@@ -410,6 +410,16 @@ msgid "Plex options"
 msgstr ""
 
 # contextmenu entry
+msgctxt "#30402"
+msgid "Add to Plex Watchlist"
+msgstr ""
+
+# contextmenu entry
+msgctxt "#30403"
+msgid "Remove from Plex Watchlist"
+msgstr ""
+
+# contextmenu entry
 msgctxt "#30405"
 msgid "Add to Plex favorites"
 msgstr ""
@@ -878,6 +888,11 @@ msgctxt "#39026"
 msgid "Enable constant background sync"
 msgstr ""
 
+# PKC Settings - Sync
+msgctxt "#39027"
+msgid "Delay background sync while media is playing"
+msgstr ""
+
 # Pop-up on initial sync
 msgctxt "#39028"
 msgid "CAUTION! If you choose \"Native\" mode , you might loose access to certain Plex features such as: Plex trailers and transcoding options. ALL Plex shares need to use direct paths (e.g. smb://myNAS/mymovie.mkv or \\\\myNAS/mymovie.mkv)!"
@@ -1231,6 +1246,10 @@ msgctxt "#39211"
 msgid "Watch later"
 msgstr ""
 
+msgctxt "#39212"
+msgid "Watchlist"
+msgstr ""
+
 # Error message pop-up if {0} cannot be contacted. {0} will be replaced by e.g. the PMS' name
 msgctxt "#39213"
 msgid "{0} offline"
@@ -1525,4 +1544,14 @@ msgstr ""
 # PKC Settings - Playback
 msgctxt "#39722"
 msgid "Auto skip commercials"
+msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39723"
+msgid "Auto hide skip button"
+msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39724"
+msgid "Seconds until skip button is hidden"
 msgstr ""

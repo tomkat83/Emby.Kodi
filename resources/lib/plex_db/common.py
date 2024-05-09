@@ -92,6 +92,32 @@ class PlexDBBase(object):
                     break
         return answ
 
+    def items_by_guid(self, plex_guid, plex_type=None):
+        """
+        Returns a list of items for plex_guid or an empty list.
+        Supply with the correct plex_type to speed up lookup
+        """
+        answ = list()
+        if plex_type == v.PLEX_TYPE_MOVIE:
+            answ = self.movies_by_guid(plex_guid)
+        elif plex_type == v.PLEX_TYPE_EPISODE:
+            answ = self.episodes_by_guid(plex_guid)
+        elif plex_type == v.PLEX_TYPE_SHOW:
+            answ = self.shows_by_guid(plex_guid)
+        elif plex_type == v.PLEX_TYPE_SEASON:
+            answ = self.seasons_by_guid(plex_guid)
+        elif plex_type is None:
+            # SLOW - lookup plex_id in all our tables
+            for kind in (v.PLEX_TYPE_MOVIE,
+                         v.PLEX_TYPE_EPISODE,
+                         v.PLEX_TYPE_SHOW,
+                         v.PLEX_TYPE_SEASON):
+                method = getattr(self, kind + "s_by_guid")
+                answ = method(plex_guid)
+                if answ:
+                    break
+        return answ
+
     def item_by_kodi_id(self, kodi_id, kodi_type):
         """
         """
@@ -223,6 +249,7 @@ def initialize():
             plexdb.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS movie(
                     plex_id INTEGER PRIMARY KEY,
+                    plex_guid TEXT,
                     checksum INTEGER UNIQUE,
                     section_id INTEGER,
                     kodi_id INTEGER,
@@ -235,6 +262,7 @@ def initialize():
             plexdb.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS show(
                     plex_id INTEGER PRIMARY KEY,
+                    plex_guid TEXT,
                     checksum INTEGER UNIQUE,
                     section_id INTEGER,
                     kodi_id INTEGER,
@@ -245,6 +273,7 @@ def initialize():
             plexdb.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS season(
                     plex_id INTEGER PRIMARY KEY,
+                    plex_guid TEXT,
                     checksum INTEGER UNIQUE,
                     section_id INTEGER,
                     show_id INTEGER,
@@ -256,6 +285,7 @@ def initialize():
             plexdb.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS episode(
                     plex_id INTEGER PRIMARY KEY,
+                    plex_guid TEXT,
                     checksum INTEGER UNIQUE,
                     section_id INTEGER,
                     show_id INTEGER,
@@ -313,12 +343,16 @@ def initialize():
             commands = (
                 'CREATE INDEX IF NOT EXISTS ix_movie_1 ON movie (last_sync)',
                 'CREATE UNIQUE INDEX IF NOT EXISTS ix_movie_2 ON movie (kodi_id)',
+                'CREATE INDEX IF NOT EXISTS ix_movie_3 ON movie (plex_guid)',
                 'CREATE INDEX IF NOT EXISTS ix_show_1 ON show (last_sync)',
                 'CREATE UNIQUE INDEX IF NOT EXISTS ix_show_2 ON show (kodi_id)',
+                'CREATE INDEX IF NOT EXISTS ix_show_3 ON show (plex_guid)',
                 'CREATE INDEX IF NOT EXISTS ix_season_1 ON season (last_sync)',
                 'CREATE UNIQUE INDEX IF NOT EXISTS ix_season_2 ON season (kodi_id)',
+                'CREATE INDEX IF NOT EXISTS ix_season_3 ON season (plex_guid)',
                 'CREATE INDEX IF NOT EXISTS ix_episode_1 ON episode (last_sync)',
                 'CREATE UNIQUE INDEX IF NOT EXISTS ix_episode_2 ON episode (kodi_id)',
+                'CREATE INDEX IF NOT EXISTS ix_episode_3 ON season (plex_guid)',
                 'CREATE INDEX IF NOT EXISTS ix_artist_1 ON artist (last_sync)',
                 'CREATE UNIQUE INDEX IF NOT EXISTS ix_artist_2 ON artist (kodi_id)',
                 'CREATE INDEX IF NOT EXISTS ix_album_1 ON album (last_sync)',

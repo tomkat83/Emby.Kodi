@@ -46,6 +46,7 @@ class Base(object):
         self._producers = []
         self._locations = []
         self._markers = []
+        self._labels = []
         self._guids = {}
         self._coll_match = None
         # Plex DB attributes
@@ -83,6 +84,16 @@ class Base(object):
         Returns the Plex ratingKey as an integer or None
         """
         return cast(int, self.xml.get('ratingKey'))
+
+    @property
+    def plex_guid(self):
+        """
+        Returns the Plex guid as unicode or None. Note that you can get
+        SEVERAL plex_ids per Plex guid as you have unique Plex id's per
+        edition (e.g. director's cut, normal cut, ...) but potentially
+        only a single guid per "movie" encompassing all editions
+        """
+        return self.xml.get('guid')
 
     @property
     def fast_key(self):
@@ -180,6 +191,21 @@ class Base(object):
             self._kodi_pathid = db_item['kodi_pathid']
         if 'fanart_synced' in db_item:
             self._fanart_synced = db_item['fanart_synced']
+
+    def check_by_guid(self, plexdb=None):
+        """
+        Returns a list of db_items synced to Kodi by using the Plex guid or an
+        empty list. There can be several items matching a single guid, e.g.
+        movie editions.
+        """
+        if self.plex_guid is None:
+            return list()
+        if plexdb:
+            db_items = plexdb.items_by_guid(self.plex_guid, self.plex_type)
+        else:
+            with PlexDB(lock=False) as plexdb:
+                db_items = plexdb.items_by_guid(self.plex_guid, self.plex_type)
+        return db_items
 
     def path_and_plex_id(self):
         """
@@ -529,6 +555,8 @@ class Base(object):
                                       end / 1000.0,
                                       child.get('type'),
                                       child.get('final') == '1'))
+            elif child.tag == 'Label':
+                self._labels.append(child.get('tag'))
         # Plex Movie agent (legacy) or "normal" Plex tv show agent
         if not self._guids:
             guid = self.xml.get('guid')
@@ -629,6 +657,13 @@ class Base(object):
             'director': [(x, ) for x in self._directors],
             'writer': [(x, ) for x in self._writers]
         }
+
+    def labels(self):
+        """
+        Returns a list of labels found
+        """
+        self._scan_children()
+        return self._labels
 
     def extras(self):
         """

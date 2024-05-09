@@ -12,37 +12,57 @@ MARKERS = {
     'commercial': (utils.lang(30530), 'enableSkipCommercials', 'enableAutoSkipCommercials'),  # Skip commercial
 }
 
-def skip_markers(markers):
+def skip_markers(markers, markers_hidden):
     try:
         progress = app.APP.player.getTime()
     except RuntimeError:
         # XBMC is not playing any media file yet
         return
-    within_marker = False
+    within_marker = None
     marker_definition = None
     for start, end, typus, _ in markers:
         marker_definition = MARKERS[typus]
         if utils.settings(marker_definition[1]) == "true" and start <= progress < end:
-            within_marker = True
+            within_marker = typus
             break
-    if within_marker and app.APP.skip_markers_dialog is None:
-        # WARNING: This Dialog only seems to work if called from the main
-        # thread. Otherwise, onClick and onAction won't work
-        app.APP.skip_markers_dialog = SkipMarkerDialog(
-            'script-plex-skip_marker.xml',
-            v.ADDON_PATH,
-            'default',
-            '1080i',
-            marker_message=marker_definition[0],
-            marker_end=end)
-        if utils.settings(marker_definition[2]) == "true":
-            app.APP.skip_markers_dialog.seekTimeToEnd()
-        else:
-            app.APP.skip_markers_dialog.show()
-    elif not within_marker and app.APP.skip_markers_dialog is not None:
+        elif typus in markers_hidden:
+            # reset the marker when escaping its time window
+            # this allows the skip button to show again if you rewind
+            del markers_hidden[typus]
+    if within_marker is not None:
+        if within_marker in markers_hidden:
+            # the user did not click the button within the enableAutoHideSkipTime time
+            # so it was hidden. don't show this marker
+            return
+
+        if app.APP.skip_markers_dialog is None:
+            # WARNING: This Dialog only seems to work if called from the main
+            # thread. Otherwise, onClick and onAction won't work
+            app.APP.skip_markers_dialog = SkipMarkerDialog(
+                'script-plex-skip_marker.xml',
+                v.ADDON_PATH,
+                'default',
+                '1080i',
+                marker_message=marker_definition[0],
+                marker_end=end,
+                creation_time=progress)
+            if utils.settings(marker_definition[2]) == "true":
+                app.APP.skip_markers_dialog.seekTimeToEnd()
+            else:
+                app.APP.skip_markers_dialog.show()
+
+        elif utils.settings("enableAutoHideSkip") == "true" and \
+            app.APP.skip_markers_dialog.creation_time is not None and \
+            (progress - app.APP.skip_markers_dialog.creation_time) > int(utils.settings("enableAutoHideSkipTime")):
+            # the dialog has been open for more than X seconds, so close it and
+            # mark it as hidden so it won't show up again within the start/end window
+            markers_hidden[within_marker] = True
+            app.APP.skip_markers_dialog.close()
+            app.APP.skip_markers_dialog = None
+
+    elif app.APP.skip_markers_dialog is not None:
         app.APP.skip_markers_dialog.close()
         app.APP.skip_markers_dialog = None
-
 
 def check():
     with app.APP.lock_playqueues:
@@ -50,6 +70,7 @@ def check():
             return
         playerid = list(app.PLAYSTATE.active_players)[0]
         markers = app.PLAYSTATE.player_states[playerid]['markers']
+        markers_hidden = app.PLAYSTATE.player_states[playerid]['markers_hidden']
     if not markers:
         return
-    skip_markers(markers)
+    skip_markers(markers, markers_hidden)
