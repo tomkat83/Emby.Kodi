@@ -1,3 +1,7 @@
+version 3.10.0:
+- WARNING: You will need to reset the Kodi database!
+- Versions 3.9.1-3.9.6 for everyone
+
 version 3.9.6 (beta only):
 - Fix Base.check_db() got an unexpected keyword argument 'check_by_guid' #2074
 
