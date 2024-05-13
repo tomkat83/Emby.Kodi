@@ -13,11 +13,6 @@
             </animation>
             <control type="group">
                 <height>64</height>
-                <control type="image">
-                    <width>100%</width>
-                    <height>64</height>
-                    <texture colordiffuse="44000000">skipintro-background.png</texture>
-                </control>
                 <control type="group">
                     <top>12</top>
                     <right>20</right>
