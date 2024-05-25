@@ -22,7 +22,10 @@ def skip_markers(markers, markers_hidden):
     marker_definition = None
     for start, end, typus, _ in markers:
         marker_definition = MARKERS[typus]
-        if utils.settings(marker_definition[1]) == "true" and start <= progress < end:
+        # The "-1" is important since timestamps/seeks are not exact and we
+        # could end up in an endless loop within start & end
+        # see https://github.com/croneter/PlexKodiConnect/issues/2002
+        if utils.settings(marker_definition[1]) == "true" and start <= progress < end - 1:
             within_marker = typus
             break
         elif typus in markers_hidden:
