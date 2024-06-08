@@ -156,6 +156,10 @@ def store_timeline_message(data):
         if typus in (v.PLEX_TYPE_CLIP, v.PLEX_TYPE_SET):
             # No need to process extras or trailers
             continue
+        if message.get('sectionID') is not None and \
+            not is_section_synced(message.get('sectionID')):
+            # The item is in a section that is not being synced to kodi
+            continue
         status = int(message['state'])
         if typus == 'playlist' and PLAYLIST_SYNC_ENABLED:
             playlists.websocket(plex_id=str(message['itemID']),
@@ -208,6 +212,10 @@ def store_activity_message(data):
         elif message['Activity']['Context'].get('refreshed') is not None and \
                 message['Activity']['Context']['refreshed'] == False:
             # The item was scanned but not actually refreshed
+            continue
+        elif message['Activity']['Context'].get('librarySectionID') is not None and \
+                not is_section_synced(message['Activity']['Context'].get('librarySectionID')):
+            # The item is in a section that is not being synced to kodi
             continue
         plex_id = PF.GetPlexKeyNumber(message['Activity']['Context']['key'])[1]
         if not plex_id:
@@ -372,3 +380,9 @@ def cache_artwork(plex_id, plex_type, kodi_id=None, kodi_type=None):
     with kodi_db.KODIDB_FROM_PLEXTYPE[plex_type](lock=False) as kodidb:
         for url in kodidb.art_urls(kodi_id, kodi_type):
             artwork.cache_url(url)
+
+def is_section_synced(section_id):
+    """
+    Returns true if the specified section is synced to kodi
+    """
+    return next((section for section in app.SYNC.sections if section.sync_to_kodi and section.section_id == int(section_id)), None) is not None
