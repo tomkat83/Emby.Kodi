@@ -130,7 +130,7 @@ def cache_url(url, should_suspend=None):
             sleeptime += 1
             continue
         except Exception as err:
-            LOG.error('Unknown exception for url %s: %s'.
+            LOG.error('Unknown exception for url %s: %s',
                       double_urldecode(url), err)
             import traceback
             LOG.error("Traceback:\n%s", traceback.format_exc())
