@@ -17,10 +17,6 @@ PKC synchronizes your media from your Plex server to the native Kodi database. H
 
 Have a look at [some screenshots](https://github.com/croneter/PlexKodiConnect/wiki/Some-PKC-Screenshots) to see what's possible. 
 
-### Update Your PKC Repo to Receive Updates!
-
-Unfortunately, the PKC Kodi repository had to move because it stopped working (thanks https://bintray.com). If you installed PKC before December 15, 2017, you need to [**MANUALLY** update the repo once](https://github.com/croneter/PlexKodiConnect/wiki/Update-PKC-Repository).
-
 ### Content
 * [**Download and Installation**](#download-and-installation)
 * [**Warning**](#warning)
