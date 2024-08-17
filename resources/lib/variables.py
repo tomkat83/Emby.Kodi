@@ -705,7 +705,7 @@ def database_paths():
     Will raise RuntimeError if the current Kodi version is not supported or
     if a certain DB is not found.
     '''
-    if KODIVERSION not in (19, 20, 21):
+    if KODIVERSION not in (19, 20, 21, 22):
         raise RuntimeError(f'Kodiversion {KODIVERSION} not supported by PKC')
 
     thismodule = sys.modules[__name__]
