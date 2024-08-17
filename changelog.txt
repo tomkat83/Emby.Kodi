@@ -1,3 +1,7 @@
+version 3.10.4:
+- Preliminary support for Kodi 22 Piers #2100
+- version 3.10.3 for everyone
+
 version 3.10.3 (beta only):
 - Ignore websocket messages for sections that are not being synced #2083 (thanks @Spacetech)
 - Remove transparent background for skip intro button #2082 (thanks @bakkerthehacker)
