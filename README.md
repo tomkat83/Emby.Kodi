@@ -1,13 +1,4 @@
-[![Kodi Nexus stable version](https://img.shields.io/badge/Kodi_Nexus_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Nexus.STABLE.zip)
-[![Kodi Nexus beta version](https://img.shields.io/badge/Kodi_Nexus_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Nexus.BETA.zip)  
-
-[![Kodi Matrix stable version](https://img.shields.io/badge/Kodi_Matrix_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.STABLE.zip)
-[![Kodi Matrix beta version](https://img.shields.io/badge/Kodi_Matrix_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Matrix.BETA.zip)  
-
-[![Kodi Leia stable version](https://img.shields.io/badge/Kodi_Leia_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.STABLE.zip) 
-[![Kodi Leia beta version](https://img.shields.io/badge/Kodi_Leia_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Leia.BETA.zip)  
-
-[![Installation](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
+[![Installation-Instructions](https://img.shields.io/badge/wiki-installation-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/Installation)
 [![FAQ](https://img.shields.io/badge/wiki-FAQ-brightgreen.svg?maxAge=60&style=flat)](https://github.com/croneter/PlexKodiConnect/wiki/faq)
 [![Forum](https://img.shields.io/badge/forum-plex-orange.svg?maxAge=60&style=flat)](https://forums.plex.tv/discussion/210023/plexkodiconnect-let-kodi-talk-to-your-plex)
 [![Donate](https://img.shields.io/badge/donate-kofi-blue.svg)](https://ko-fi.com/A8182EB)
@@ -26,10 +17,6 @@ PKC synchronizes your media from your Plex server to the native Kodi database. H
 
 Have a look at [some screenshots](https://github.com/croneter/PlexKodiConnect/wiki/Some-PKC-Screenshots) to see what's possible. 
 
-### Update Your PKC Repo to Receive Updates!
-
-Unfortunately, the PKC Kodi repository had to move because it stopped working (thanks https://bintray.com). If you installed PKC before December 15, 2017, you need to [**MANUALLY** update the repo once](https://github.com/croneter/PlexKodiConnect/wiki/Update-PKC-Repository).
-
 ### Content
 * [**Download and Installation**](#download-and-installation)
 * [**Warning**](#warning)
@@ -46,12 +33,12 @@ See here for detailed instructions: [Installation](https://github.com/croneter/P
 ### Warning
 Use at your own risk! This plugin assumes that you manage all your videos with Plex (and none with Kodi). You might lose data already stored in the Kodi video and music databases as this plugin directly changes them. Don't worry if you want Plex to manage all your media (like you should ;-)). 
 
-Some people argue that PKC is 'hacky' because of the way it directly accesses the Kodi database. See [here for a more thorough discussion](https://github.com/croneter/PlexKodiConnect/wiki/Is-PKC-'hacky'%3F). 
+Some people argue that PKC is 'hacky' because of the way it directly accesses the Kodi database. See [here for a more thorough discussion](https://github.com/croneter/PlexKodiConnect/wiki/Is-PKC-a-hack). 
 
 ### PKC Features
 
-- Support for Kodi 18 Leia, Kodi 19 Matrix, Kodi 20 Nexus
-- Preliminary support for Kodi 21 Omega. Keep in mind that development for Omega has only reached beta state - any issues you encounter are probably caused by that. Please do not use nightly versions as they tend to break stuff.
+- Support for Kodi 21 Omega, Kodi 20 Nexus, Kodi 19 Matrix, Kodi 18 Leia
+- Preliminary support for Kodi 22 Piers. Keep in mind that Piers is still in early alpha version - any issues you encounter are probably caused by that. Please do not use nightly versions as they tend to break stuff. To install PKC on Kodi Piers, simply use the PKC repo for Kodi Omega
 - [Skip commercials/advertisements](https://support.plex.tv/articles/115003944134-removing-commercials/), [skip intros](https://support.plex.tv/articles/skip-content/) and [skip credits](https://support.plex.tv/articles/credits-detection/)
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)

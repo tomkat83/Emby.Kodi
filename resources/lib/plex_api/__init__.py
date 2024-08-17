@@ -39,8 +39,6 @@ def mass_api(xml, check_by_guid=False):
                     # This will overwrite a weird "guid ratingKey" that
                     # plex set, originally looking e.g. like
                     # ratingKey="5d776883ebdf2200209c104e"
-                    if item['plex_type']:
-                        new_api.xml.set('type', item['plex_type'])
                     new_api.xml.set('ratingKey', str(item['plex_id']))
                     new_api.xml.set('key', f'/library/metadata/{item["plex_id"]}')
                     new_api.check_db(plexdb=plexdb)
