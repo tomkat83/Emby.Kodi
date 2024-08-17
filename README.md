@@ -1,3 +1,6 @@
+[![Kodi Omega stable version](https://img.shields.io/badge/Kodi_Omega_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Omega.STABLE.zip)
+[![Kodi Omega beta version](https://img.shields.io/badge/Kodi_Omega_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Omega.BETA.zip)  
+
 [![Kodi Nexus stable version](https://img.shields.io/badge/Kodi_Nexus_STABLE-latest-blue.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Nexus.STABLE.zip)
 [![Kodi Nexus beta version](https://img.shields.io/badge/Kodi_Nexus_BETA-latest-red.svg?maxAge=60&style=flat) ](https://croneter.github.io/pkc-source/repository.plexkodiconnect.Kodi-Nexus.BETA.zip)  
 
@@ -50,8 +53,8 @@ Some people argue that PKC is 'hacky' because of the way it directly accesses th
 
 ### PKC Features
 
-- Support for Kodi 18 Leia, Kodi 19 Matrix, Kodi 20 Nexus
-- Preliminary support for Kodi 21 Omega. Keep in mind that development for Omega has only reached beta state - any issues you encounter are probably caused by that. Please do not use nightly versions as they tend to break stuff.
+- Support for Kodi 21 Omega, Kodi 20 Nexus, Kodi 19 Matrix, Kodi 18 Leia
+- Preliminary support for Kodi 22 Piers. Keep in mind that development for Piers is still an earl alpha version - any issues you encounter are probably caused by that. Please do not use nightly versions as they tend to break stuff.
 - [Skip commercials/advertisements](https://support.plex.tv/articles/115003944134-removing-commercials/), [skip intros](https://support.plex.tv/articles/skip-content/) and [skip credits](https://support.plex.tv/articles/credits-detection/)
 - [Amazon Alexa voice recognition](https://www.plex.tv/apps/streaming-devices/amazon-alexa)
 - [Cinema Trailers & Extras](https://support.plex.tv/articles/202934883-cinema-trailers-extras/)
