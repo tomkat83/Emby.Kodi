@@ -1696,3 +1696,8 @@ msgstr "Заменить пользовательский рейтинг сче�
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr "Транскодировать AV1"

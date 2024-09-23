@@ -1637,3 +1637,8 @@ msgstr "사용자 등급을 미디어 버전 수로 대체"
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr "AV1 강제 트랜스 코딩"

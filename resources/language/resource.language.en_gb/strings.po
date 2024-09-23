@@ -1555,3 +1555,8 @@ msgstr ""
 msgctxt "#39724"
 msgid "Seconds until skip button is hidden"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr ""
