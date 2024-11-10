@@ -1682,3 +1682,8 @@ msgstr "Erstatt rating med antall versjoner av media"
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr "Tving transkode AV1"

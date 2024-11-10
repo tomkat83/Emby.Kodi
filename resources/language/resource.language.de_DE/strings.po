@@ -1718,3 +1718,8 @@ msgstr "Benutzerbewertungen durch verfügbare Anzahl Versionen ersetzen"
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr "AV1 Codec Transkodierung erzwingen"

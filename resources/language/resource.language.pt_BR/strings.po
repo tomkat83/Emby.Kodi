@@ -1679,3 +1679,8 @@ msgstr ""
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr "Forçar a transcodificação dos codecs AV1"

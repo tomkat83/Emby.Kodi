@@ -1690,3 +1690,8 @@ msgstr "Ersätt användarbetyg med antalet mediaobjekt"
 msgctxt "#39720"
 msgid "Auto skip intro"
 msgstr ""
+
+# PKC Settings - Playback
+msgctxt "#39725"
+msgid "Force transcode AV1"
+msgstr "Tvinga omkodning av AV1"
