@@ -223,8 +223,10 @@ def _must_transcode(api, item):
 
 
 def _transcode_quality():
+    bitrate = get_bitrate()
     return {
-        'maxVideoBitrate': get_bitrate(),
+        'videoBitrate': bitrate,
+        'maxVideoBitrate': bitrate,
         'videoResolution': get_resolution(),
         'videoQuality': 100,
         'mediaBufferSize': int(float(utils.settings('kodi_video_cache')) / 1024.0),
