@@ -3,6 +3,7 @@
 import logging
 import os
 import sys
+import inspect
 
 import xbmcvfs
 import xbmcaddon
@@ -21,24 +22,34 @@ import tmdbscraper.tmdb as tmdb
 
 logger = logging.getLogger('PLEX.metadata_movies')
 PREFER_KODI_COLLECTION_ART = utils.settings('PreferKodiCollectionArt') == 'false'
+
+TMDB_SETTINGS = xbmcaddon.Addon(id='metadata.themoviedb.org.python')
+TMDB_MOVIESCRAPER_API = inspect.signature(tmdb.TMDBMovieScraper).parameters
+if len(TMDB_MOVIESCRAPER_API) not in (4, 5):
+    logger.error('tmdb.TMDBMovieScraper api changed to this: %s',
+                 inspect.signature(tmdb.TMDBMovieScraper).parameters)
+    raise RuntimeError('tmdb.TMDBMovieScraper api changed')
+
 TMDB_SUPPORTED_IDS = ('tmdb', 'imdb')
+
+
+def number_of_function_args(func):
+    """Returns the number of arguments the function func accepts"""
+    return len(inspect.signature(func).parameters)
 
 
 def get_tmdb_scraper(settings):
     language = settings.getSettingString('language')
     certcountry = settings.getSettingString('tmdbcertcountry')
-    # Simplify this in the future
-    # See https://github.com/croneter/PlexKodiConnect/issues/1657
-    search_language = settings.getSettingString('searchlanguage')
-    if search_language:
+    if len(TMDB_MOVIESCRAPER_API) == 5:
+        search_language = settings.getSettingString('searchlanguage')
         return tmdb.TMDBMovieScraper(settings, language, certcountry, search_language)
     else:
         return tmdb.TMDBMovieScraper(settings, language, certcountry)
 
 
 def get_tmdb_details(unique_ids):
-    settings = xbmcaddon.Addon(id='metadata.themoviedb.org.python')
-    details = get_tmdb_scraper(settings).get_details(unique_ids)
+    details = get_tmdb_scraper(TMDB_SETTINGS).get_details(unique_ids)
     if 'error' in details:
         logger.debug('Could not get tmdb details for %s. Error: %s',
                      unique_ids, details)
